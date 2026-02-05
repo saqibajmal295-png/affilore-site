@@ -4,13 +4,13 @@
 <head>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KFHTZ6EJC2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-KFHTZ6EJC2');
-</script>
+      gtag('config', 'G-KFHTZ6EJC2');
+    </script>
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -279,6 +279,11 @@
                 opacity: 0.8;
             }
         }
+        
+        /* Cookie Banner */
+        #cookie-banner {
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
     </style>
 </head>
 
@@ -453,6 +458,11 @@
                     data-filter="travel">
                     ✈️ Travel
                 </button>
+                <button onclick="filterProducts('tools')"
+                    class="filter-btn px-8 py-3 rounded-full border border-glass-border font-semibold text-lg hover:border-neon"
+                    data-filter="tools">
+                    🛠️ Tools
+                </button>
             </div>
 
         </div>
@@ -462,6 +472,27 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
             <div class="masonry-grid" id="product-grid">
+
+                <div class="masonry-item product-card" data-category="tools">
+                    <div class="glass-card rounded-2xl overflow-hidden group">
+                        <div class="h-64 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                            <svg class="w-20 h-20 text-neon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Free Tool</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2">Word Counter Pro</h3>
+                            <p class="text-gray-400 text-sm mb-4">Real-time analysis of words, characters, sentences, and reading time.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-bold text-neon">Free</span>
+                                <a href="/tools/word-counter/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">
+                                    Launch Tool
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="masonry-item product-card" data-category="tech">
                     <div class="glass-card rounded-2xl overflow-hidden">
@@ -746,6 +777,23 @@
         </div>
     </section>
 
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-50 transform translate-y-full">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="text-center sm:text-left">
+                <h4 class="text-white font-bold mb-1">We value your privacy</h4>
+                <p class="text-sm text-gray-400 max-w-2xl">
+                    Affilore uses cookies to personalize content and ads, and to analyze our traffic. 
+                    By clicking "Accept", you consent to our use of cookies.
+                </p>
+            </div>
+            <div class="flex gap-4">
+                <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-neon px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white hover:shadow-lg hover:shadow-neon/25">
+                    Accept Vibes
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="py-12 border-t border-glass-border">
         <div class="max-w-7xl mx-auto px-6 lg:px-12">
             <div class="grid md:grid-cols-4 gap-12 mb-12">
@@ -921,6 +969,24 @@
             card.style.transform = 'translateY(30px)';
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(card);
+        });
+
+        // --- COOKIE BANNER LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptBtn = document.getElementById('accept-cookies');
+
+            // Check if user has already accepted
+            if (!localStorage.getItem('affiloreCookieConsent')) {
+                setTimeout(() => {
+                    cookieBanner.classList.remove('translate-y-full');
+                }, 1000); // 1 second delay before showing
+            }
+
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('affiloreCookieConsent', 'true');
+                cookieBanner.classList.add('translate-y-full');
+            });
         });
     </script>
 
