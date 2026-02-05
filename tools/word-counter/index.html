@@ -1,1 +1,246 @@
+<!DOCTYPE html>
+<html class="light dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Word Counter Pro | Affilore Tools</title>
+    <meta name="description" content="Free online word counter, character counter, and SEO text analysis tool. Calculate reading time and keyword density instantly.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", // Your Neon Yellow
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A"
+                    }, 
+                    fontFamily: {
+                        display: "Outfit"
+                    }
+                }
+            }
+        };
+    </script>
+    
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .glass-header {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            @apply bg-primary;
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-dot {
+            @apply translate-x-5;
+        }
+    </style>
+</head>
+<body class="bg-[#f8f8f5] dark:bg-background-dark font-display min-h-screen text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                 <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <span class="text-xl font-bold text-white">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">Word Counter Pro</h1>
+        </div>
+        
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">
+            Back to Home
+        </a>
+    </div>
+</header>
+
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden pt-24">
+    <main class="flex flex-1 justify-center py-10 px-4">
+        <div class="layout-content-container flex flex-col max-w-[1000px] flex-1 gap-8">
+            
+            <div class="flex flex-col gap-4 bg-white dark:bg-card-dark p-6 rounded-2xl shadow-xl border border-slate-200 dark:border-white/5">
+                <label class="flex flex-col w-full">
+                    <div class="flex justify-between items-center pb-3">
+                        <p class="text-slate-700 dark:text-slate-300 text-base font-semibold leading-normal">Enter your text here</p>
+                        <span class="text-xs text-primary font-medium uppercase tracking-wider">Live Analysis</span>
+                    </div>
+                    <textarea id="text-input" class="form-input flex w-full min-w-0 flex-1 resize-none rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#0a0a0a] focus:border-primary min-h-[320px] placeholder:text-slate-500 p-5 text-lg font-normal leading-relaxed" placeholder="Start typing or paste your content here..."></textarea>
+                </label>
+            </div>
+
+            <div class="flex flex-wrap gap-4">
+                <div class="flex min-w-[200px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-card-dark border border-slate-200 dark:border-white/5 shadow-sm transition-all hover:border-primary/50">
+                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-xl">segment</span>
+                        <p class="text-sm font-semibold uppercase tracking-wider">Words</p>
+                    </div>
+                    <p id="word-count" class="text-slate-900 dark:text-white tracking-tight text-4xl font-bold leading-tight">0</p>
+                </div>
+                <div class="flex min-w-[200px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-card-dark border border-slate-200 dark:border-white/5 shadow-sm transition-all hover:border-primary/50">
+                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-xl">format_size</span>
+                        <p class="text-sm font-semibold uppercase tracking-wider">Characters</p>
+                    </div>
+                    <p id="char-count" class="text-slate-900 dark:text-white tracking-tight text-4xl font-bold leading-tight">0</p>
+                </div>
+                <div class="flex min-w-[200px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-card-dark border border-slate-200 dark:border-white/5 shadow-sm transition-all hover:border-primary/50">
+                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-xl">notes</span>
+                        <p class="text-sm font-semibold uppercase tracking-wider">Sentences</p>
+                    </div>
+                    <p id="sentence-count" class="text-slate-900 dark:text-white tracking-tight text-4xl font-bold leading-tight">0</p>
+                </div>
+                <div class="flex min-w-[200px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-card-dark border border-slate-200 dark:border-white/5 shadow-sm transition-all hover:border-primary/50">
+                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-xl">schedule</span>
+                        <p class="text-sm font-semibold uppercase tracking-wider">Reading Time</p>
+                    </div>
+                    <div class="flex items-baseline gap-1">
+                        <p id="reading-time" class="text-slate-900 dark:text-white tracking-tight text-4xl font-bold leading-tight">0</p>
+                        <span class="text-slate-500 dark:text-slate-400 font-medium">min</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-2">
+                <div class="flex flex-1 gap-4 flex-wrap max-w-[500px] justify-center">
+                    <button id="copy-btn" class="flex min-w-[140px] flex-1 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full h-12 px-6 bg-primary hover:bg-yellow-400 text-black text-base font-bold leading-normal tracking-[0.015em] transition-colors shadow-lg shadow-primary/20">
+                        <span class="material-symbols-outlined text-lg">content_copy</span>
+                        <span>Copy Text</span>
+                    </button>
+                    <button id="clear-btn" class="flex min-w-[140px] flex-1 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full h-12 px-6 bg-white dark:bg-card-dark border border-slate-200 dark:border-white/20 text-slate-700 dark:text-slate-200 text-base font-bold leading-normal tracking-[0.015em] transition-colors hover:bg-slate-50 dark:hover:bg-white/5">
+                        <span class="material-symbols-outlined text-lg">delete</span>
+                        <span>Clear Text</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-6 bg-white dark:bg-card-dark p-8 rounded-2xl shadow-md border border-slate-200 dark:border-white/5 mt-8">
+                <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">How to Use the Affilore Word Counter</h2>
+                    <p class="mb-4">
+                        Whether you are a student working on an essay, a blogger optimizing for SEO, or a professional writer drafting a report, tracking your word count is essential. This free online Word Counter tool is designed to provide real-time statistics on your writing, helping you stay productive and meet your goals.
+                    </p>
+                    
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 mt-6">Key Features</h3>
+                    <ul class="list-disc pl-5 space-y-2 mb-4">
+                        <li><strong>Accurate Word Count:</strong> Perfect for meeting strict submission requirements for assignments or articles.</li>
+                        <li><strong>Character Count:</strong> Essential for social media posts like X (Twitter) or crafting the perfect Google meta description.</li>
+                        <li><strong>Reading Time Estimator:</strong> Automatically calculates how long it will take the average person to read your text (based on 200 WPM).</li>
+                        <li><strong>Privacy Focused:</strong> Unlike other tools, your text is processed 100% in your browser. No data is sent to our servers.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 mt-6">Why is Word Count Important for SEO?</h3>
+                    <p>
+                        Search engines like Google prioritize high-quality, comprehensive content. Using the <strong>Affilore Word Counter</strong> helps you ensure your articles have enough depth to cover the topic thoroughly without "keyword stuffing."
+                    </p>
+                </div>
+            </div>
+
+            <footer class="mt-12 flex flex-col items-center gap-4 text-slate-400 dark:text-slate-500 text-sm pb-20">
+                <div class="flex flex-wrap justify-center gap-4 sm:gap-8">
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">verified</span> Privacy Focused</span>
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">bolt</span> Real-time Analysis</span>
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-base">devices</span> Responsive Design</span>
+                </div>
+                <p class="text-center px-4">© 2026 Affilore Tools. All analysis is performed locally.</p>
+            </footer>
+        </div>
+    </main>
+</div>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-card-dark border-t border-white/10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-[1200px] mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-slate-300 text-center sm:text-left">
+            We use cookies to personalize content and ads. By using our tools, you consent to our use of cookies.
+        </p>
+        <div class="flex gap-3">
+            <button id="accept-cookies" class="bg-primary hover:bg-yellow-400 text-black text-sm font-bold py-2 px-6 rounded-full transition-colors shadow-sm">
+                Accept
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- 1. CORE TOOL LOGIC ---
+        const textInput = document.getElementById('text-input');
+        const wordCountDisplay = document.getElementById('word-count');
+        const charCountDisplay = document.getElementById('char-count');
+        const sentenceCountDisplay = document.getElementById('sentence-count');
+        const readingTimeDisplay = document.getElementById('reading-time');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+
+        function updateStats() {
+            const text = textInput.value;
+
+            // Character Count
+            charCountDisplay.textContent = text.length;
+
+            // Word Count
+            const words = text.trim() === '' ? [] : text.trim().split(/\s+/);
+            const wordCount = words.length;
+            wordCountDisplay.textContent = wordCount;
+
+            // Sentence Count
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            sentenceCountDisplay.textContent = sentences.length;
+
+            // Reading Time (200 wpm)
+            const readingTime = Math.ceil(wordCount / 200);
+            readingTimeDisplay.textContent = readingTime;
+        }
+
+        // Real-time update
+        textInput.addEventListener('input', updateStats);
+
+        // Copy Text
+        copyBtn.addEventListener('click', async () => {
+            if (textInput.value.length > 0) {
+                try {
+                    await navigator.clipboard.writeText(textInput.value);
+                    const originalContent = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<span class="material-symbols-outlined text-lg">check</span><span>Copied!</span>';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalContent;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text:', err);
+                }
+            }
+        });
+
+        // Clear Text
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            updateStats();
+        });
+
+        // --- 2. COOKIE CONSENT LOGIC ---
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptBtn = document.getElementById('accept-cookies');
+
+        // Check if user has already accepted
+        if (!localStorage.getItem('affiloreCookieConsent')) {
+            setTimeout(() => {
+                cookieBanner.classList.remove('translate-y-full');
+            }, 1000);
+        }
+
+        acceptBtn.addEventListener('click', () => {
+            localStorage.setItem('affiloreCookieConsent', 'true');
+            cookieBanner.classList.add('translate-y-full');
+        });
+    });
+</script>
+</body>
+</html>
