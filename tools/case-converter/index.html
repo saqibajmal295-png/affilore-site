@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="light dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Case Converter - Uppercase, Lowercase, Title Case | Affilore Tools</title>
+    <meta name="description" content="Free online case converter tool. Instantly convert text to Uppercase, Lowercase, Title Case, Sentence Case, and more.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A"
+                    }, 
+                    fontFamily: {
+                        display: "Outfit"
+                    }
+                }
+            }
+        };
+    </script>
+    
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .glass-header {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-[#f8f8f5] dark:bg-background-dark font-display min-h-screen text-slate-900 dark:text-slate-100 transition-colors duration-200">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <span class="text-xl font-bold text-white">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">Case Converter</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<div class="relative flex h-auto min-h-screen w-full flex-col pt-24">
+    <main class="flex flex-1 justify-center py-10 px-4">
+        <div class="flex flex-col max-w-[1000px] flex-1 gap-8">
+            
+            <div class="flex flex-col gap-4 bg-white dark:bg-card-dark p-6 rounded-2xl shadow-xl border border-slate-200 dark:border-white/5">
+                <div class="flex justify-between items-center pb-2">
+                    <p class="text-slate-700 dark:text-slate-300 text-base font-semibold">Input Text</p>
+                    <div class="flex gap-2">
+                         <button id="copy-btn" class="text-xs font-bold text-primary hover:text-white transition-colors">COPY RESULT</button>
+                         <span class="text-slate-600">|</span>
+                         <button id="clear-btn" class="text-xs font-bold text-slate-500 hover:text-white transition-colors">CLEAR</button>
+                    </div>
+                </div>
+                <textarea id="text-input" class="form-input w-full resize-none rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#0a0a0a] focus:border-primary min-h-[250px] p-5 text-lg" placeholder="Type or paste your text here to convert it..."></textarea>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                    <button onclick="convertText('upper')" class="py-3 px-4 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black font-semibold transition-all shadow-sm border border-transparent hover:border-primary">UPPERCASE</button>
+                    <button onclick="convertText('lower')" class="py-3 px-4 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black font-semibold transition-all shadow-sm border border-transparent hover:border-primary">lowercase</button>
+                    <button onclick="convertText('title')" class="py-3 px-4 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black font-semibold transition-all shadow-sm border border-transparent hover:border-primary">Title Case</button>
+                    <button onclick="convertText('sentence')" class="py-3 px-4 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black font-semibold transition-all shadow-sm border border-transparent hover:border-primary">Sentence case</button>
+                    <button onclick="convertText('alternating')" class="py-3 px-4 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black font-semibold transition-all shadow-sm border border-transparent hover:border-primary">aLtErNaTiNg</button>
+                    <button onclick="convertText('inverse')" class="py-3 px-4 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black font-semibold transition-all shadow-sm border border-transparent hover:border-primary">iNVERSE cASE</button>
+                    <button onclick="convertText('pascal')" class="py-3 px-4 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black font-semibold transition-all shadow-sm border border-transparent hover:border-primary">PascalCase</button>
+                    <button onclick="convertText('hyphen')" class="py-3 px-4 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-primary hover:text-black dark:hover:bg-primary dark:hover:text-black font-semibold transition-all shadow-sm border border-transparent hover:border-primary">Hyphen-Case</button>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-card-dark p-8 rounded-2xl shadow-md border border-slate-200 dark:border-white/5">
+                <div class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300">
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Master Your Text with the Case Converter</h2>
+                    <p class="mb-4">
+                        Have you ever left Caps Lock on and typed an entire paragraph? Or maybe you need to format a list of blog titles correctly? The Affilore Case Converter is a free utility designed to solve these formatting headaches instantly.
+                    </p>
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 mt-6">Available Transformations</h3>
+                    <ul class="list-disc pl-5 space-y-2 mb-4">
+                        <li><strong>UPPERCASE:</strong> Converts all letters to capitals. Useful for headers or emphasis.</li>
+                        <li><strong>lowercase:</strong> Converts everything to small letters. Great for standardizing data inputs.</li>
+                        <li><strong>Title Case:</strong> Capitalizes the first letter of every major word. Perfect for blog post titles and YouTube headlines.</li>
+                        <li><strong>Sentence case:</strong> Capitalizes only the first letter of the first word (and proper nouns). This is the standard for normal paragraph writing.</li>
+                        <li><strong>Inverse Case:</strong> Flips the case of every letter. Useful if you accidentally typed with Caps Lock on.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="mt-8 text-center text-slate-400 text-sm pb-20">
+                <p>© 2026 Affilore Tools. All conversions happen in your browser.</p>
+            </footer>
+        </div>
+    </main>
+</div>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-card-dark border-t border-white/10 shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-[1200px] mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-slate-300 text-center sm:text-left">We use cookies to ensure you get the best experience on our website.</p>
+        <button id="accept-cookies" class="bg-primary hover:bg-yellow-400 text-black text-sm font-bold py-2 px-6 rounded-full transition-colors">Accept</button>
+    </div>
+</div>
+
+<script>
+    const textInput = document.getElementById('text-input');
+
+    function convertText(type) {
+        let text = textInput.value;
+        let result = '';
+
+        switch(type) {
+            case 'upper':
+                result = text.toUpperCase();
+                break;
+            case 'lower':
+                result = text.toLowerCase();
+                break;
+            case 'title':
+                result = text.toLowerCase().split(' ').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ');
+                break;
+            case 'sentence':
+                result = text.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase());
+                break;
+            case 'alternating':
+                result = text.split('').map((c, i) => 
+                    i % 2 === 0 ? c.toLowerCase() : c.toUpperCase()
+                ).join('');
+                break;
+            case 'inverse':
+                result = text.split('').map(c => 
+                    c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()
+                ).join('');
+                break;
+            case 'pascal':
+                result = text.replace(/(\w)(\w*)/g, (g0,g1,g2) => g1.toUpperCase() + g2.toLowerCase()).replace(/\s/g, '');
+                break;
+            case 'hyphen':
+                result = text.toLowerCase().replace(/\s+/g, '-');
+                break;
+        }
+        textInput.value = result;
+    }
+
+    // Copy Function
+    document.getElementById('copy-btn').addEventListener('click', async () => {
+        if (textInput.value) {
+            await navigator.clipboard.writeText(textInput.value);
+            const originalText = document.getElementById('copy-btn').innerText;
+            document.getElementById('copy-btn').innerText = "COPIED!";
+            setTimeout(() => document.getElementById('copy-btn').innerText = originalText, 1500);
+        }
+    });
+
+    // Clear Function
+    document.getElementById('clear-btn').addEventListener('click', () => {
+        textInput.value = '';
+    });
+
+    // Cookie Banner
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+</script>
+</body>
+</html>
