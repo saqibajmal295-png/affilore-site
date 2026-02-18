@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>BatchPrice - Cottage Food Costing & Compliance | Affilore Tools</title>
+    <meta name="description" content="Free home bakery cost calculator and cottage food law compliance tracker. Price your cookies perfectly and track sales limits for your state.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A",
+                        bakery: "#FF9F43" // Orange/Warm tone for food
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen pt-24 pb-20">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">BatchPrice</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6">
+
+    <div class="glass-card rounded-2xl p-6 mb-8 border-l-4 border-l-primary relative overflow-hidden">
+        <div class="absolute right-0 top-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10"></div>
+        
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6">
+            <div>
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">gavel</span> Compliance Radar
+                </h2>
+                <p class="text-slate-400 text-sm">Track your sales against your state's Cottage Food limit.</p>
+            </div>
+            <select id="state-select" class="bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary min-w-[200px]">
+                <option value="TX">Texas ($50k Limit)</option>
+                <option value="CA">California ($50k Class A)</option>
+                <option value="FL">Florida ($250k Limit)</option>
+                <option value="MN">Minnesota ($78k Limit)</option>
+                <option value="CO">Colorado (No Cap)</option>
+                <option value="CUSTOM">Custom Limit...</option>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            <div class="col-span-2 space-y-4">
+                <div class="flex justify-between text-sm font-bold mb-1">
+                    <span class="text-white">Year-to-Date Sales</span>
+                    <span id="limit-display" class="text-slate-400">Limit: $50,000</span>
+                </div>
+                <div class="h-6 w-full bg-black/50 rounded-full overflow-hidden border border-white/10">
+                    <div id="progress-bar" class="h-full bg-gradient-to-r from-green-500 to-primary w-0 transition-all duration-1000 relative">
+                        <div class="absolute right-0 top-0 bottom-0 w-[2px] bg-white/50 shadow-[0_0_10px_white]"></div>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <input type="number" id="current-sales" placeholder="Enter Total Sales ($)" class="bg-black/50 border-white/10 rounded-lg text-white text-sm w-full">
+                    <button onclick="updateCompliance()" class="px-6 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-bold text-sm transition-colors">Update</button>
+                </div>
+            </div>
+            <div class="text-center md:text-right">
+                <p class="text-xs text-slate-400 uppercase tracking-widest mb-1">Remaining Cap</p>
+                <h3 id="remaining-cap" class="text-4xl font-bold text-primary">$50,000</h3>
+                <p id="alert-msg" class="text-xs text-green-400 mt-2 font-bold">You are safe to sell!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <div class="flex flex-col gap-6">
+            <div class="glass-card rounded-2xl p-6 shadow-xl">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-bakery">grocery</span> Ingredient Costing
+                </h3>
+                <p class="text-xs text-slate-400 mb-4">Enter receipt details (e.g., $5.00 for 5lb Flour).</p>
+                
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <input type="text" id="ing-name" placeholder="Name (e.g. Flour)" class="col-span-3 bg-black/50 border-white/10 rounded-lg text-white">
+                    <input type="number" id="ing-price" placeholder="Price ($)" class="bg-black/50 border-white/10 rounded-lg text-white">
+                    <input type="number" id="ing-qty" placeholder="Total Qty" class="bg-black/50 border-white/10 rounded-lg text-white">
+                    <select id="ing-unit" class="bg-black/50 border-white/10 rounded-lg text-white">
+                        <option value="g">grams (g)</option>
+                        <option value="oz">ounces (oz)</option>
+                        <option value="ml">ml</option>
+                        <option value="cup">cups</option>
+                        <option value="pcs">pieces</option>
+                    </select>
+                </div>
+                <button onclick="addIngredient()" class="w-full py-3 bg-bakery text-black font-bold rounded-lg hover:bg-white transition-all">
+                    Add to Pantry
+                </button>
+
+                <div class="mt-6">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase mb-3">Your Pantry</h4>
+                    <ul id="pantry-list" class="space-y-2 max-h-[200px] overflow-y-auto pr-2">
+                        <li class="text-center text-slate-600 text-sm italic">Pantry is empty.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-6">
+            <div class="glass-card rounded-2xl p-6 shadow-xl bg-gradient-to-b from-white/5 to-transparent">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">cookie</span> Recipe Builder
+                </h3>
+                
+                <div class="flex gap-2 mb-4">
+                    <select id="recipe-ing-select" class="flex-1 bg-black/50 border-white/10 rounded-lg text-white">
+                        <option>Select Ingredient...</option>
+                    </select>
+                    <input type="number" id="recipe-qty" placeholder="Used" class="w-20 bg-black/50 border-white/10 rounded-lg text-white">
+                    <button onclick="addToRecipe()" class="px-4 bg-primary text-black rounded-lg font-bold">+</button>
+                </div>
+
+                <ul id="recipe-list" class="space-y-2 mb-6 min-h-[100px] border border-white/5 rounded-lg p-4 bg-black/20">
+                    <li class="text-center text-slate-600 text-sm italic">Add ingredients to calculate batch cost.</li>
+                </ul>
+
+                <div class="grid grid-cols-2 gap-4 border-t border-white/10 pt-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase">Batch Yield</label>
+                        <input type="number" id="yield" value="12" class="w-full bg-black/50 border-white/10 rounded-lg text-white mt-1" oninput="calculateRecipe()">
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs font-bold text-slate-400 uppercase">Total Batch Cost</p>
+                        <p id="total-batch-cost" class="text-xl font-bold text-white">$0.00</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 bg-primary/10 rounded-xl p-4 border border-primary/20 text-center">
+                    <p class="text-xs font-bold text-primary uppercase tracking-widest">Cost Per Unit</p>
+                    <p id="cost-per-unit" class="text-4xl font-bold text-white mt-1">$0.00</p>
+                    <p class="text-xs text-slate-400 mt-2">Suggested Price (3x): <span id="suggested-price" class="text-white font-bold">$0.00</span></p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-12 max-w-4xl mx-auto text-slate-400 text-sm leading-relaxed text-center">
+        <h2 class="text-xl font-bold text-white mb-2">Cottage Food Law Compliance Made Easy</h2>
+        <p>
+            Most home bakers in the US operate under "Cottage Food Laws," which allow you to sell non-hazardous foods (like cookies, breads, and jams) from your home kitchen. However, states like Texas, California, and Florida have strict <strong>Sales Limits</strong>. 
+        </p>
+        <p class="mt-2">
+            <strong>BatchPrice</strong> helps you stay legal by tracking your sales against your state's cap. Plus, our granular costing calculator ensures you never bake at a loss. Stop guessing—know exactly what that teaspoon of vanilla costs you.
+        </p>
+    </div>
+
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">We store recipes locally in your browser. No cloud, no fees.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept Vibes</button>
+    </div>
+</div>
+
+<script>
+    // --- STATE DATA ---
+    const stateLimits = {
+        'TX': 50000,
+        'CA': 50000, // Class A
+        'FL': 250000,
+        'MN': 78000,
+        'CO': 999999999, // effectively unlimited
+        'CUSTOM': 0
+    };
+
+    // --- VARIABLES ---
+    let pantry = JSON.parse(localStorage.getItem('batchPrice_pantry')) || [];
+    let currentRecipe = [];
+    
+    // --- COMPLIANCE LOGIC ---
+    const stateSelect = document.getElementById('state-select');
+    const salesInput = document.getElementById('current-sales');
+    const progressBar = document.getElementById('progress-bar');
+    const remainingCapEl = document.getElementById('remaining-cap');
+    const alertMsg = document.getElementById('alert-msg');
+    const limitDisplay = document.getElementById('limit-display');
+
+    function updateCompliance() {
+        let limit = stateLimits[stateSelect.value];
+        
+        if (stateSelect.value === 'CUSTOM') {
+            const custom = prompt("Enter your state's limit ($):");
+            limit = parseFloat(custom) || 50000;
+        }
+
+        const sales = parseFloat(salesInput.value) || 0;
+        
+        // Save
+        localStorage.setItem('batchPrice_sales', sales);
+        localStorage.setItem('batchPrice_state', stateSelect.value);
+
+        // UI
+        if(limit > 999999) {
+            limitDisplay.innerText = "Limit: Unlimited";
+            remainingCapEl.innerText = "Unlimited";
+            progressBar.style.width = "0%";
+            alertMsg.innerText = "No sales cap in this state!";
+            return;
+        }
+
+        limitDisplay.innerText = `Limit: $${limit.toLocaleString()}`;
+        const remaining = limit - sales;
+        remainingCapEl.innerText = `$${remaining.toLocaleString()}`;
+
+        const pct = Math.min((sales / limit) * 100, 100);
+        progressBar.style.width = `${pct}%`;
+
+        if (pct >= 100) {
+            progressBar.classList.remove('from-green-500', 'to-primary');
+            progressBar.classList.add('bg-red-500');
+            alertMsg.innerText = "⚠️ LIMIT REACHED! STOP SELLING.";
+            alertMsg.className = "text-xs text-red-500 mt-2 font-bold animate-pulse";
+        } else if (pct > 80) {
+            alertMsg.innerText = "⚠️ Warning: You are nearing your limit.";
+            alertMsg.className = "text-xs text-yellow-500 mt-2 font-bold";
+        } else {
+            alertMsg.innerText = "You are safe to sell!";
+            alertMsg.className = "text-xs text-green-400 mt-2 font-bold";
+        }
+    }
+
+    // --- PANTRY LOGIC ---
+    function addIngredient() {
+        const name = document.getElementById('ing-name').value;
+        const price = parseFloat(document.getElementById('ing-price').value);
+        const qty = parseFloat(document.getElementById('ing-qty').value);
+        const unit = document.getElementById('ing-unit').value;
+
+        if (!name || !price || !qty) return alert("Please fill all fields");
+
+        const costPerUnit = price / qty;
+
+        const item = { id: Date.now(), name, price, qty, unit, costPerUnit };
+        pantry.push(item);
+        
+        savePantry();
+        renderPantry();
+        updateRecipeDropdown();
+        
+        // Clear inputs
+        document.getElementById('ing-name').value = '';
+        document.getElementById('ing-price').value = '';
+        document.getElementById('ing-qty').value = '';
+    }
+
+    function renderPantry() {
+        const list = document.getElementById('pantry-list');
+        list.innerHTML = '';
+        
+        pantry.forEach(item => {
+            const li = document.createElement('li');
+            li.className = "flex justify-between items-center text-sm bg-white/5 p-2 rounded border border-white/5";
+            li.innerHTML = `
+                <span>${item.name} ($${item.costPerUnit.toFixed(3)}/${item.unit})</span>
+                <button onclick="removePantry(${item.id})" class="text-red-400 hover:text-white">&times;</button>
+            `;
+            list.appendChild(li);
+        });
+
+        if(pantry.length === 0) list.innerHTML = '<li class="text-center text-slate-600 text-sm italic">Pantry is empty.</li>';
+    }
+
+    function removePantry(id) {
+        pantry = pantry.filter(i => i.id !== id);
+        savePantry();
+        renderPantry();
+        updateRecipeDropdown();
+    }
+
+    function savePantry() {
+        localStorage.setItem('batchPrice_pantry', JSON.stringify(pantry));
+    }
+
+    function updateRecipeDropdown() {
+        const select = document.getElementById('recipe-ing-select');
+        select.innerHTML = '<option value="">Select Ingredient...</option>';
+        pantry.forEach(item => {
+            const opt = document.createElement('option');
+            opt.value = item.id;
+            opt.innerText = item.name;
+            select.appendChild(opt);
+        });
+    }
+
+    // --- RECIPE LOGIC ---
+    function addToRecipe() {
+        const id = document.getElementById('recipe-ing-select').value;
+        const usedQty = parseFloat(document.getElementById('recipe-qty').value);
+        
+        if(!id || !usedQty) return;
+
+        const ingredient = pantry.find(i => i.id == id);
+        if(!ingredient) return;
+
+        currentRecipe.push({ ...ingredient, usedQty });
+        renderRecipe();
+        calculateRecipe();
+    }
+
+    function renderRecipe() {
+        const list = document.getElementById('recipe-list');
+        list.innerHTML = '';
+        
+        currentRecipe.forEach((item, index) => {
+            const cost = item.costPerUnit * item.usedQty;
+            const li = document.createElement('li');
+            li.className = "flex justify-between items-center text-sm border-b border-white/10 pb-1";
+            li.innerHTML = `
+                <span>${item.usedQty}${item.unit} ${item.name}</span>
+                <span class="font-mono">$${cost.toFixed(2)}</span>
+            `;
+            list.appendChild(li);
+        });
+    }
+
+    function calculateRecipe() {
+        const totalCost = currentRecipe.reduce((sum, item) => sum + (item.costPerUnit * item.usedQty), 0);
+        const yieldCount = parseFloat(document.getElementById('yield').value) || 1;
+        
+        document.getElementById('total-batch-cost').innerText = `$${totalCost.toFixed(2)}`;
+        
+        const perUnit = totalCost / yieldCount;
+        document.getElementById('cost-per-unit').innerText = `$${perUnit.toFixed(2)}`;
+        document.getElementById('suggested-price').innerText = `$${(perUnit * 3).toFixed(2)}`;
+    }
+
+    // --- INITIALIZE ---
+    // Load saved sales
+    const savedSales = localStorage.getItem('batchPrice_sales');
+    if(savedSales) salesInput.value = savedSales;
+    
+    const savedState = localStorage.getItem('batchPrice_state');
+    if(savedState) stateSelect.value = savedState;
+
+    renderPantry();
+    updateRecipeDropdown();
+    updateCompliance();
+
+    // Listeners
+    stateSelect.addEventListener('change', updateCompliance);
+
+    // Cookie Banner
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+
+</script>
+</body>
+</html>
