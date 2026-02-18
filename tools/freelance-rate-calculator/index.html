@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Freelance Day Rate Calculator | Reverse Salary Tool | Affilore Tools</title>
+    <meta name="description" content="Calculate your required freelance hourly and day rates based on your desired lifestyle, taxes, and unbillable admin time. Stop undercharging.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A",
+                        money: "#00C851",
+                        tax: "#FF4444",
+                        admin: "#33b5e5"
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+        /* Custom Range Slider */
+        input[type=range] {
+            height: 26px;
+            -webkit-appearance: none;
+            margin: 10px 0;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #333;
+            border-radius: 5px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #FFBF00;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -6px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pt-24 pb-20">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">Freelance Rate Reverser</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6">
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+                    <span class="material-symbols-outlined text-money text-3xl">payments</span>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">1. Income Goals</h2>
+                        <p class="text-xs text-slate-400">What do you want to take home?</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Desired Annual Net Income ($)</label>
+                        <input type="number" id="target-income" value="80000" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-lg font-bold">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Est. Tax Rate (%)</label>
+                        <div class="flex items-center gap-3">
+                            <input type="range" id="tax-rate-slider" min="0" max="50" value="25" class="flex-1">
+                            <input type="number" id="tax-rate" value="25" class="w-20 bg-black/50 border-white/10 rounded-lg text-white text-center">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Monthly Business Expenses ($)</label>
+                        <input type="number" id="monthly-expenses" value="500" placeholder="Software, Health Ins, etc." class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary">
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+                    <span class="material-symbols-outlined text-admin text-3xl">calendar_month</span>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">2. Reality Check</h2>
+                        <p class="text-xs text-slate-400">Account for unbillable time.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Vacation & Sick Weeks / Year</label>
+                            <span id="vacation-val" class="text-primary font-bold">4 weeks</span>
+                        </div>
+                        <input type="range" id="vacation-weeks" min="0" max="12" value="4">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Admin/Marketing Days / Week</label>
+                            <span id="admin-val" class="text-primary font-bold">1 day</span>
+                        </div>
+                        <input type="range" id="admin-days" min="0" max="4" value="1" step="0.5">
+                        <p class="text-xs text-slate-500 mt-2">Days spent emailing, invoicing, or finding clients (Unpaid).</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-yellow-200 to-primary"></div>
+                
+                <h3 class="text-slate-400 font-bold uppercase tracking-widest text-sm mb-6">Your Required Rates</h3>
+                
+                <div class="grid grid-cols-2 gap-8 mb-8">
+                    <div>
+                        <p class="text-5xl font-extrabold text-white mb-2" id="res-hourly">$0</p>
+                        <p class="text-sm text-slate-400">Hourly Rate</p>
+                    </div>
+                    <div class="border-l border-white/10">
+                        <p class="text-5xl font-extrabold text-primary mb-2" id="res-daily">$0</p>
+                        <p class="text-sm text-slate-400">Day Rate</p>
+                    </div>
+                </div>
+
+                <div class="bg-black/40 rounded-xl p-4 text-sm text-slate-300 border border-white/5 inline-block">
+                    To take home <strong class="text-white" id="res-takehome">$80k</strong>, you must invoice <strong class="text-white" id="res-gross">$112k</strong> per year.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-2xl">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase mb-4 text-center">Where the Money Goes</h4>
+                    <div class="h-48 relative">
+                        <canvas id="moneyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase mb-4 text-center">Your Actual Billable Time</h4>
+                    <div class="h-48 relative">
+                        <canvas id="timeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl text-slate-400 text-sm leading-relaxed">
+                <h2 class="text-xl font-bold text-white mb-4">Why Freelancers Undercharge (And How to Fix It)</h2>
+                <p class="mb-4">
+                    The biggest mistake new freelancers make is calculating their rate like an employee. If you earned $50/hour at your full-time job, you might think $60/hour is a raise. <strong>It is not.</strong>
+                </p>
+                <p class="mb-4">
+                    As a freelancer, you have two hidden costs that employees don't:
+                </p>
+                <ul class="list-disc pl-5 space-y-2 mb-4">
+                    <li><strong>Unbillable Time:</strong> You don't get paid for the time you spend finding clients, writing proposals, or managing invoices. This tool factors that in.</li>
+                    <li><strong>Overhead & Taxes:</strong> You are now the employer <em>and</em> the employee. You pay both halves of FICA taxes, plus your own software and health insurance.</li>
+                </ul>
+                <p>
+                    Use this <strong>Reverse Rate Calculator</strong> to find your "True Hourly Rate"—the number that actually supports your desired lifestyle after taxes and time off.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. By clicking "Accept", you consent to our use of cookies.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept Vibes</button>
+    </div>
+</div>
+
+<script>
+    // --- DOM ELEMENTS ---
+    const targetIncomeInput = document.getElementById('target-income');
+    const taxRateInput = document.getElementById('tax-rate');
+    const taxRateSlider = document.getElementById('tax-rate-slider');
+    const monthlyExpInput = document.getElementById('monthly-expenses');
+    
+    const vacationWeeksInput = document.getElementById('vacation-weeks');
+    const adminDaysInput = document.getElementById('admin-days');
+    
+    // Labels
+    const vacationVal = document.getElementById('vacation-val');
+    const adminVal = document.getElementById('admin-val');
+    
+    // Results
+    const resHourly = document.getElementById('res-hourly');
+    const resDaily = document.getElementById('res-daily');
+    const resTakehome = document.getElementById('res-takehome');
+    const resGross = document.getElementById('res-gross');
+
+    // Charts
+    let moneyChart, timeChart;
+
+    function initCharts() {
+        // Money Chart
+        const ctxMoney = document.getElementById('moneyChart').getContext('2d');
+        moneyChart = new Chart(ctxMoney, {
+            type: 'doughnut',
+            data: {
+                labels: ['Net Income', 'Taxes', 'Expenses'],
+                datasets: [{
+                    data: [60, 25, 15],
+                    backgroundColor: ['#00C851', '#FF4444', '#33b5e5'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+
+        // Time Chart
+        const ctxTime = document.getElementById('timeChart').getContext('2d');
+        timeChart = new Chart(ctxTime, {
+            type: 'pie',
+            data: {
+                labels: ['Billable', 'Admin/Mktg', 'Vacation/Sick'],
+                datasets: [{
+                    data: [70, 20, 10],
+                    backgroundColor: ['#FFBF00', '#333', '#666'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+    }
+
+    function calculate() {
+        // 1. Financials
+        const targetNet = parseFloat(targetIncomeInput.value) || 0;
+        const taxRate = parseFloat(taxRateInput.value) / 100;
+        const annualExpenses = (parseFloat(monthlyExpInput.value) || 0) * 12;
+
+        // Formula: Gross = (Net + Expenses) / (1 - TaxRate)
+        const requiredGross = (targetNet + annualExpenses) / (1 - taxRate);
+        const totalTax = requiredGross * taxRate;
+
+        // 2. Time
+        const totalWeeks = 52;
+        const vacationWeeks = parseFloat(vacationWeeksInput.value);
+        const workWeeks = totalWeeks - vacationWeeks;
+        
+        const adminDaysPerWeek = parseFloat(adminDaysInput.value);
+        const billableDaysPerWeek = 5 - adminDaysPerWeek;
+        
+        const totalBillableDays = workWeeks * billableDaysPerWeek;
+        const totalBillableHours = totalBillableDays * 8; // Assuming 8h day
+
+        // 3. Rates
+        const dayRate = requiredGross / totalBillableDays;
+        const hourlyRate = requiredGross / totalBillableHours;
+
+        // Update UI
+        resHourly.innerText = `$${Math.ceil(hourlyRate)}`;
+        resDaily.innerText = `$${Math.ceil(dayRate)}`;
+        resTakehome.innerText = `$${(targetNet/1000).toFixed(1)}k`;
+        resGross.innerText = `$${(requiredGross/1000).toFixed(1)}k`;
+
+        // Update Slider Labels
+        vacationVal.innerText = `${vacationWeeks} weeks`;
+        adminVal.innerText = `${adminDaysPerWeek} days`;
+
+        // Update Money Chart
+        moneyChart.data.datasets[0].data = [targetNet, totalTax, annualExpenses];
+        moneyChart.update();
+
+        // Update Time Chart (in days)
+        const totalWorkDaysAvailable = 52 * 5;
+        const vacationDays = vacationWeeks * 5;
+        const adminDaysTotal = workWeeks * adminDaysPerWeek;
+        
+        timeChart.data.datasets[0].data = [totalBillableDays, adminDaysTotal, vacationDays];
+        timeChart.update();
+    }
+
+    // Event Listeners
+    [targetIncomeInput, taxRateInput, monthlyExpInput, vacationWeeksInput, adminDaysInput].forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    taxRateSlider.addEventListener('input', (e) => {
+        taxRateInput.value = e.target.value;
+        calculate();
+    });
+    
+    taxRateInput.addEventListener('input', (e) => {
+        taxRateSlider.value = e.target.value;
+        calculate();
+    });
+
+    // Init
+    initCharts();
+    calculate();
+
+    // Cookie Logic
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+
+</script>
+</body>
+</html>
