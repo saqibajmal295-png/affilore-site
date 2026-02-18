@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>TikTok Shop Fee Calculator & Profit Margin Tool | Affilore Tools</title>
+    <meta name="description" content="Calculate your true net profit on TikTok Shop. Account for affiliate commissions, platform fees, and shipping costs instantly. Free for sellers.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A",
+                        tiktok: "#FE2C55", 
+                        tiktok_cyan: "#25F4EE"
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen pt-24 pb-20">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">TikTok Shop Calculator</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+                    <span class="material-symbols-outlined text-primary text-3xl">shopping_bag</span>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Product Details</h2>
+                        <p class="text-xs text-slate-400">Enter your selling price and costs</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Selling Price ($)</label>
+                            <input type="number" id="price" value="50" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-lg font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Cost of Goods ($)</label>
+                            <input type="number" id="cost" value="15" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-lg font-bold">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Shipping Cost (Your Cost)</label>
+                        <input type="number" id="shipping" value="5" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary">
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 shadow-xl">
+                <div class="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+                    <span class="material-symbols-outlined text-tiktok text-3xl">percent</span>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">TikTok Fees</h2>
+                        <p class="text-xs text-slate-400">Customize platform charges</p>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Platform Fee (%)</label>
+                            <span class="text-xs text-primary">Standard: 6% (US)</span>
+                        </div>
+                        <input type="number" id="platform-fee-pct" value="6" step="0.1" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Transaction Fee</label>
+                            <span class="text-xs text-primary">Standard: 2.9% + $0.30</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="number" id="trans-fee-pct" value="2.9" placeholder="%" class="bg-black/50 border-white/10 rounded-lg text-white">
+                            <input type="number" id="trans-fee-fixed" value="0.30" placeholder="$ Fixed" class="bg-black/50 border-white/10 rounded-lg text-white">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-white/10">
+                        <div class="flex items-center justify-between mb-3">
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" id="affiliate-toggle" class="form-checkbox h-5 w-5 text-primary rounded border-white/20 bg-black/50">
+                                <span class="font-bold text-white">Include Affiliate Commission?</span>
+                            </label>
+                        </div>
+                        <div id="affiliate-input-box" class="hidden">
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Commission Rate (%)</label>
+                            <input type="number" id="affiliate-pct" value="15" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary">
+                            <p class="text-xs text-slate-500 mt-2">Typical range: 10% - 20%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-8 bg-gradient-to-br from-primary/10 to-transparent border border-primary/20 relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl"></div>
+                
+                <div class="grid grid-cols-2 gap-8 relative z-10">
+                    <div>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-sm mb-1">Net Profit</p>
+                        <h3 id="net-profit" class="text-5xl md:text-6xl font-extrabold text-white mb-2">$0.00</h3>
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/10">
+                            <span id="net-margin" class="text-primary font-bold text-lg">0%</span>
+                            <span class="text-slate-400 text-xs ml-2 uppercase">Margin</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <div class="h-32 w-32 relative">
+                            <canvas id="profitChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl overflow-hidden">
+                <div class="bg-black/40 px-6 py-4 border-b border-white/10">
+                    <h3 class="font-bold text-white">Cost Breakdown</h3>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                        <span class="text-slate-400">TikTok Platform Fee</span>
+                        <span id="res-platform" class="text-white font-mono">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                        <span class="text-slate-400">Transaction Fee</span>
+                        <span id="res-trans" class="text-white font-mono">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2 hidden" id="row-affiliate">
+                        <span class="text-slate-400">Affiliate Commission</span>
+                        <span id="res-affiliate" class="text-tiktok font-mono font-bold">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                        <span class="text-slate-400">Total Product Costs</span>
+                        <span id="res-cogs" class="text-white font-mono">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-base pt-2">
+                        <span class="text-white font-bold">Total Fees & Costs</span>
+                        <span id="res-total-fees" class="text-red-400 font-mono font-bold">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl text-slate-400 text-sm leading-relaxed">
+                <h2 class="text-lg font-bold text-white mb-2">Why use a TikTok Shop Fee Calculator?</h2>
+                <p class="mb-4">
+                    Selling on TikTok Shop is profitable, but the fees can be confusing. Between the <strong>Referral Fee</strong>, <strong>Affiliate Commissions</strong> (usually 10-20%), and shipping subsidies, your margin can disappear quickly.
+                </p>
+                <p>
+                    Use this free calculator to determine your <strong>True Net Profit</strong> before you launch a product. Stop guessing with spreadsheets and start scaling your TikTok business with data.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. By clicking "Accept", you consent to our use of cookies.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept Vibes</button>
+    </div>
+</div>
+
+<script>
+    // --- DOM ELEMENTS ---
+    const inputs = document.querySelectorAll('input');
+    const affiliateToggle = document.getElementById('affiliate-toggle');
+    const affiliateInputBox = document.getElementById('affiliate-input-box');
+    const affiliateRow = document.getElementById('row-affiliate');
+    
+    // Outputs
+    const netProfitEl = document.getElementById('net-profit');
+    const netMarginEl = document.getElementById('net-margin');
+    const resPlatform = document.getElementById('res-platform');
+    const resTrans = document.getElementById('res-trans');
+    const resAffiliate = document.getElementById('res-affiliate');
+    const resCogs = document.getElementById('res-cogs');
+    const resTotalFees = document.getElementById('res-total-fees');
+
+    // Chart
+    let profitChart;
+
+    function initChart() {
+        const ctx = document.getElementById('profitChart').getContext('2d');
+        profitChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Profit', 'Fees', 'Product Cost'],
+                datasets: [{
+                    data: [30, 20, 50],
+                    backgroundColor: ['#FFBF00', '#FE2C55', '#333333'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: { legend: { display: false }, tooltip: { enabled: true } }
+            }
+        });
+    }
+
+    function calculate() {
+        // Get Values
+        const price = parseFloat(document.getElementById('price').value) || 0;
+        const cost = parseFloat(document.getElementById('cost').value) || 0;
+        const shipping = parseFloat(document.getElementById('shipping').value) || 0;
+        
+        const platformPct = parseFloat(document.getElementById('platform-fee-pct').value) || 0;
+        const transPct = parseFloat(document.getElementById('trans-fee-pct').value) || 0;
+        const transFixed = parseFloat(document.getElementById('trans-fee-fixed').value) || 0;
+        
+        let affiliateCost = 0;
+        if (affiliateToggle.checked) {
+            const affPct = parseFloat(document.getElementById('affiliate-pct').value) || 0;
+            affiliateCost = price * (affPct / 100);
+        }
+
+        // Calculations
+        const platformFee = price * (platformPct / 100);
+        const transactionFee = (price * (transPct / 100)) + transFixed;
+        
+        const totalFees = platformFee + transactionFee + affiliateCost;
+        const totalProductCost = cost + shipping;
+        const totalDeductions = totalFees + totalProductCost;
+        
+        const netProfit = price - totalDeductions;
+        const margin = price > 0 ? ((netProfit / price) * 100) : 0;
+
+        // Update UI
+        netProfitEl.innerText = `$${netProfit.toFixed(2)}`;
+        netMarginEl.innerText = `${margin.toFixed(1)}%`;
+        
+        // Color logic for profit
+        if(netProfit < 0) {
+            netProfitEl.classList.add('text-red-500');
+            netProfitEl.classList.remove('text-white');
+        } else {
+            netProfitEl.classList.remove('text-red-500');
+            netProfitEl.classList.add('text-white');
+        }
+
+        resPlatform.innerText = `-$${platformFee.toFixed(2)}`;
+        resTrans.innerText = `-$${transactionFee.toFixed(2)}`;
+        resAffiliate.innerText = `-$${affiliateCost.toFixed(2)}`;
+        resCogs.innerText = `-$${totalProductCost.toFixed(2)}`;
+        resTotalFees.innerText = `-$${totalDeductions.toFixed(2)}`;
+
+        // Update Chart
+        // Prevent negative values in chart
+        const chartProfit = netProfit > 0 ? netProfit : 0;
+        profitChart.data.datasets[0].data = [chartProfit, totalFees, totalProductCost];
+        profitChart.update();
+    }
+
+    // --- EVENT LISTENERS ---
+    inputs.forEach(input => input.addEventListener('input', calculate));
+    
+    affiliateToggle.addEventListener('change', () => {
+        if(affiliateToggle.checked) {
+            affiliateInputBox.classList.remove('hidden');
+            affiliateRow.classList.remove('hidden');
+        } else {
+            affiliateInputBox.classList.add('hidden');
+            affiliateRow.classList.add('hidden');
+        }
+        calculate();
+    });
+
+    // --- INIT ---
+    initChart();
+    calculate();
+
+    // Cookie Logic
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+</script>
+</body>
+</html>
