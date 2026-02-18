@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>AutoTranscribe - Free AI Voice to Text | Affilore Tools</title>
+    <meta name="description" content="Free online AI speech-to-text converter. Dictate notes, transcribe voice in real-time, and export to text without login.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A"
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        
+        /* Visualizer Bars */
+        .bar {
+            width: 6px;
+            background: #FFBF00;
+            border-radius: 99px;
+            animation: sound 0ms -800ms linear infinite alternate;
+            height: 5px;
+        }
+        @keyframes sound {
+            0% { height: 5px; opacity: 0.3; }
+            100% { height: 40px; opacity: 1; }
+        }
+        .recording .bar { animation-duration: 400ms; }
+    </style>
+</head>
+<body class="min-h-screen pt-24">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">AutoTranscribe</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="flex justify-center py-10 px-4">
+    <div class="flex flex-col max-w-[1000px] flex-1 gap-8">
+        
+        <div class="bg-card-dark p-8 rounded-2xl border border-white/5 shadow-2xl relative overflow-hidden">
+            
+            <div class="flex justify-between items-center mb-6 z-10 relative">
+                <div class="flex items-center gap-3">
+                    <div id="status-dot" class="w-3 h-3 rounded-full bg-slate-500"></div>
+                    <span id="status-text" class="text-slate-400 font-medium text-sm">Ready to listen</span>
+                </div>
+                <select id="language-select" class="bg-black border-white/10 rounded-lg text-sm text-white focus:border-primary focus:ring-primary py-2 px-4">
+                    <option value="en-US">English (US)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="es-ES">Spanish</option>
+                    <option value="fr-FR">French</option>
+                    <option value="de-DE">German</option>
+                    <option value="hi-IN">Hindi</option>
+                    <option value="ur-PK">Urdu</option>
+                </select>
+            </div>
+
+            <textarea id="transcript" class="w-full h-80 bg-black/50 border-white/10 rounded-xl text-white focus:border-primary focus:ring-primary p-6 text-lg leading-relaxed resize-none mb-6 placeholder:text-slate-600" placeholder="Tap the microphone and start speaking... text will appear here."></textarea>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                
+                <div id="visualizer" class="flex gap-1 h-10 items-center opacity-50">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+
+                <div class="flex items-center gap-4 w-full sm:w-auto">
+                    <button id="record-btn" onclick="toggleRecording()" class="flex-1 sm:flex-none h-14 w-14 rounded-full bg-white/10 hover:bg-red-500 text-white hover:text-white flex items-center justify-center transition-all group">
+                        <span id="mic-icon" class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">mic</span>
+                    </button>
+                    
+                    <button onclick="copyText()" class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-primary text-black font-bold hover:bg-yellow-400 transition-all">
+                        Copy Text
+                    </button>
+                    
+                    <button onclick="clearText()" class="flex-1 sm:flex-none px-6 py-3 rounded-xl bg-white/5 text-white font-bold hover:bg-white/10 transition-all border border-white/10">
+                        Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-card-dark p-8 rounded-2xl border border-white/5 text-slate-400">
+            <h2 class="text-2xl font-bold text-white mb-4">Free Online Voice to Text Converter</h2>
+            <p class="mb-4">
+                AutoTranscribe is a free productivity tool that turns your voice into text instantly. Unlike other tools that charge per minute, this uses advanced browser technology to transcribe unlimited audio for free.
+            </p>
+            <h3 class="text-xl font-bold text-white mt-6 mb-2">Use Cases</h3>
+            <ul class="list-disc pl-5 space-y-2">
+                <li><strong>Writers:</strong> Dictate your next blog post or book chapter 3x faster than typing.</li>
+                <li><strong>Students:</strong> Read your notes aloud to create a digital summary.</li>
+                <li><strong>Email:</strong> Draft long emails while walking or multitasking.</li>
+            </ul>
+            <p class="text-sm text-slate-500 mt-6">
+                *Note: This tool uses the Web Speech API. For best results, use Google Chrome, Edge, or Safari.
+            </p>
+        </div>
+    </div>
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. By clicking "Accept", you consent to our use of cookies.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept Vibes</button>
+    </div>
+</div>
+
+<script>
+    // Speech Recognition Setup
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+    let isRecording = false;
+    
+    const transcriptArea = document.getElementById('transcript');
+    const statusDot = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
+    const visualizer = document.getElementById('visualizer');
+    const micIcon = document.getElementById('mic-icon');
+    const recordBtn = document.getElementById('record-btn');
+    const langSelect = document.getElementById('language-select');
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        
+        recognition.onstart = () => {
+            isRecording = true;
+            statusDot.className = "w-3 h-3 rounded-full bg-red-500 animate-pulse";
+            statusText.innerText = "Listening...";
+            statusText.className = "text-red-400 font-medium text-sm animate-pulse";
+            visualizer.classList.add('recording');
+            visualizer.classList.remove('opacity-50');
+            micIcon.innerText = "stop";
+            recordBtn.classList.add('bg-red-500', 'animate-pulse-slow');
+        };
+
+        recognition.onend = () => {
+            isRecording = false;
+            statusDot.className = "w-3 h-3 rounded-full bg-slate-500";
+            statusText.innerText = "Paused";
+            statusText.className = "text-slate-400 font-medium text-sm";
+            visualizer.classList.remove('recording');
+            visualizer.classList.add('opacity-50');
+            micIcon.innerText = "mic";
+            recordBtn.classList.remove('bg-red-500', 'animate-pulse-slow');
+        };
+
+        recognition.onresult = (event) => {
+            let interimTranscript = '';
+            let finalTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
+            
+            // Append final text to existing content or current session
+            if (finalTranscript) {
+                // simple logic to append
+                transcriptArea.value += finalTranscript + ' ';
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error", event.error);
+            statusText.innerText = "Error: " + event.error;
+            isRecording = false;
+        };
+    } else {
+        transcriptArea.value = "Sorry, your browser does not support Speech Recognition. Please try Google Chrome.";
+        recordBtn.disabled = true;
+    }
+
+    function toggleRecording() {
+        if (!recognition) return;
+        
+        if (isRecording) {
+            recognition.stop();
+        } else {
+            recognition.lang = langSelect.value;
+            recognition.start();
+        }
+    }
+
+    function copyText() {
+        navigator.clipboard.writeText(transcriptArea.value);
+        const originalText = document.querySelector('button[onclick="copyText()"]').innerText;
+        document.querySelector('button[onclick="copyText()"]').innerText = "Copied!";
+        setTimeout(() => document.querySelector('button[onclick="copyText()"]').innerText = originalText, 1500);
+    }
+
+    function clearText() {
+        transcriptArea.value = '';
+    }
+
+    // Cookie Logic
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+</script>
+</body>
+</html>
