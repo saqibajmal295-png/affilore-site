@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Global Freelance Tax & Withholding Estimator | Affilore</title>
+    <meta name="description" content="A universal tax calculator for freelancers and independent contractors. Calculate your deductible expenses, taxable income, and safe withholding amounts.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A",
+                        takehome: "#00C851",
+                        tax: "#FF4444",
+                        expense: "#33b5e5"
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen pt-24 pb-20">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">Freelance Tax Planner</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6">
+    
+    <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">Universal Freelance Tax Planner</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">Calculate your taxable income, plan your safe withholding amounts, and see exactly what you get to keep. Works for any country or tax bracket.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-6 shadow-xl border-t-4 border-t-tax">
+                
+                <div class="flex items-center justify-between mb-6 border-b border-white/10 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-tax text-3xl">account_balance</span>
+                        <h2 class="text-xl font-bold text-white">Income & Setup</h2>
+                    </div>
+                    <select id="currency-select" class="bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-sm py-1">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="PKR">PKR (Rs)</option>
+                        <option value="INR">INR (₹)</option>
+                        <option value="CAD">CAD ($)</option>
+                        <option value="AUD">AUD ($)</option>
+                    </select>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Gross Income (Total Earned)</label>
+                            <select id="timeframe-select" class="bg-transparent border-none text-primary text-xs font-bold p-0 focus:ring-0 cursor-pointer">
+                                <option value="annual">Annually</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <input type="number" id="gross-income" value="60000" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-xl font-bold p-3">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Deductible Business Expenses</label>
+                        <input type="number" id="expenses" value="5000" placeholder="Software, internet, equipment..." class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary p-3">
+                        <p class="text-xs text-slate-500 mt-2">Expenses lower your taxable income.</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-white/10">
+                        <div class="flex justify-between mb-2">
+                            <label class="text-xs font-bold text-slate-400 uppercase">Estimated Tax Rate (%)</label>
+                            <span id="tax-rate-label" class="text-primary font-bold">20%</span>
+                        </div>
+                        <input type="range" id="tax-rate-slider" min="0" max="60" value="20" class="w-full accent-primary">
+                        <p class="text-xs text-slate-500 mt-2">Enter the combined percentage of your local income tax and self-employment tax.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-8 relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-64 h-64 bg-tax/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8 relative z-10">
+                    
+                    <div>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs mb-2">Net Take-Home Pay</p>
+                        <h3 id="res-takehome" class="text-4xl md:text-5xl font-extrabold text-takehome">$0.00</h3>
+                        <p class="text-sm text-slate-400 mt-2">What you actually keep to live on.</p>
+                    </div>
+
+                    <div class="border-l border-white/10 pl-0 sm:pl-8 mt-6 sm:mt-0">
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs mb-2">Estimated Tax Owed</p>
+                        <h3 id="res-taxowed" class="text-3xl font-bold text-tax">$0.00</h3>
+                        <div class="mt-3 bg-tax/10 border border-tax/20 rounded-lg p-3">
+                            <p class="text-xs text-slate-300">Set aside <strong class="text-white" id="res-withhold-monthly">$0.00</strong> every month into a separate bank account to pay this bill safely.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10 bg-black/30 p-6 rounded-2xl border border-white/5">
+                    <div class="h-48 relative flex justify-center">
+                        <canvas id="taxChart"></canvas>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-white mb-4 border-b border-white/10 pb-2">Financial Breakdown</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-slate-400">Gross Income</span>
+                                <span id="summary-gross" class="font-medium text-white">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-expense">
+                                <span class="text-sm">- Business Expenses</span>
+                                <span id="summary-expenses" class="font-medium">-$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center border-t border-white/10 pt-2">
+                                <span class="text-sm font-bold text-white">Taxable Income</span>
+                                <span id="summary-taxable" class="font-bold text-white">$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-tax">
+                                <span class="text-sm">- Estimated Taxes</span>
+                                <span id="summary-tax" class="font-medium">-$0.00</span>
+                            </div>
+                            <div class="flex justify-between items-center border-t border-white/10 pt-2 text-takehome">
+                                <span class="text-base font-bold">Net Pay</span>
+                                <span id="summary-net" class="text-lg font-bold">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl text-slate-400 text-sm leading-relaxed mt-2">
+                <h2 class="text-2xl font-bold text-white mb-4">How Freelance Taxes Work</h2>
+                <p class="mb-4">When you are a full-time employee, your company automatically deducts taxes from your paycheck. When you are a freelancer or independent contractor, <strong>you get paid the full gross amount</strong>. It is entirely your responsibility to calculate and save the tax portion.</p>
+                
+                <h3 class="text-lg font-bold text-white mt-6 mb-2">The Golden Rule: The 30% Withholding Account</h3>
+                <p class="mb-4">Regardless of your specific country's tax code, a universal best practice is to open a separate "Tax Savings Account." Every time a client pays you, immediately transfer 20% to 30% of that invoice into your tax account. Do not touch this money. When tax season arrives, you will have the cash ready without stressing your personal finances.</p>
+
+                <h3 class="text-lg font-bold text-white mt-6 mb-2">Lowering Your Bill with Deductions</h3>
+                <p>You are only taxed on your <strong>Profit</strong>, not your total revenue. Keep strict records of all business expenses (internet bills, software subscriptions, freelance platforms fees, equipment). Subtracting these expenses from your gross income gives you your <em>Taxable Income</em>, significantly lowering your final tax bill.</p>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. We do not save your financial data. By clicking "Accept", you consent.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept</button>
+    </div>
+</div>
+
+<script>
+    // Inputs
+    const grossIncomeInput = document.getElementById('gross-income');
+    const expensesInput = document.getElementById('expenses');
+    const taxRateSlider = document.getElementById('tax-rate-slider');
+    const taxRateLabel = document.getElementById('tax-rate-label');
+    const currencySelect = document.getElementById('currency-select');
+    const timeframeSelect = document.getElementById('timeframe-select');
+
+    // Outputs
+    const resTakehome = document.getElementById('res-takehome');
+    const resTaxowed = document.getElementById('res-taxowed');
+    const resWithholdMonthly = document.getElementById('res-withhold-monthly');
+    
+    const summaryGross = document.getElementById('summary-gross');
+    const summaryExpenses = document.getElementById('summary-expenses');
+    const summaryTaxable = document.getElementById('summary-taxable');
+    const summaryTax = document.getElementById('summary-tax');
+    const summaryNet = document.getElementById('summary-net');
+
+    // Currency Symbols Map
+    const currencySymbols = {
+        'USD': '$',
+        'EUR': '€',
+        'GBP': '£',
+        'PKR': 'Rs ',
+        'INR': '₹',
+        'CAD': 'C$',
+        'AUD': 'A$'
+    };
+
+    let taxChart;
+
+    function initChart() {
+        const ctx = document.getElementById('taxChart').getContext('2d');
+        taxChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Net Pay', 'Taxes', 'Expenses'],
+                datasets: [{
+                    data: [60, 30, 10],
+                    backgroundColor: ['#00C851', '#FF4444', '#33b5e5'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+
+    function formatMoney(amount) {
+        const currency = currencySelect.value;
+        const symbol = currencySymbols[currency] || '$';
+        // Using basic locale string for thousands separators
+        return symbol + amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    function calculate() {
+        const ratePct = parseFloat(taxRateSlider.value);
+        taxRateLabel.innerText = `${ratePct}%`;
+
+        let gross = parseFloat(grossIncomeInput.value) || 0;
+        let expenses = parseFloat(expensesInput.value) || 0;
+        
+        // Ensure expenses don't exceed gross
+        if(expenses > gross) expenses = gross;
+
+        const taxableIncome = gross - expenses;
+        const taxOwed = taxableIncome * (ratePct / 100);
+        const netPay = taxableIncome - taxOwed;
+
+        // Withholding logic
+        const isAnnual = timeframeSelect.value === 'annual';
+        const monthlyWithhold = isAnnual ? (taxOwed / 12) : taxOwed;
+
+        // Update UI
+        resTakehome.innerText = formatMoney(netPay);
+        resTaxowed.innerText = formatMoney(taxOwed);
+        resWithholdMonthly.innerText = formatMoney(monthlyWithhold) + (isAnnual ? ' / mo' : '');
+
+        summaryGross.innerText = formatMoney(gross);
+        summaryExpenses.innerText = "-" + formatMoney(expenses);
+        summaryTaxable.innerText = formatMoney(taxableIncome);
+        summaryTax.innerText = "-" + formatMoney(taxOwed);
+        summaryNet.innerText = formatMoney(netPay);
+
+        // Update Chart
+        taxChart.data.datasets[0].data = [netPay, taxOwed, expenses];
+        taxChart.update();
+    }
+
+    // Event Listeners
+    [grossIncomeInput, expensesInput, taxRateSlider, currencySelect, timeframeSelect].forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    // Init
+    initChart();
+    calculate();
+
+    // Cookie Logic
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+</script>
+</body>
+</html>
