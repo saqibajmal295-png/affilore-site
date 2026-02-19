@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Profit Margin & Markup Calculator | Affilore Tools</title>
+    <meta name="description" content="Calculate your gross profit margin, markup percentage, and selling price. The ultimate free financial tool for e-commerce and retail businesses.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A",
+                        profit: "#00C851",
+                        cost: "#FF4444"
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .tab-btn.active { background-color: #FFBF00; color: #121212; font-weight: bold; border-color: #FFBF00; }
+    </style>
+</head>
+<body class="min-h-screen pt-24 pb-20">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">Profit Margin Calculator</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6">
+    
+    <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">Profit Margin Calculator</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">Calculate exactly how much profit you make per item. Avoid the common trap of confusing markup with margin.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-6 shadow-xl border-t-4 border-t-primary">
+                
+                <div class="flex gap-2 mb-6 bg-black/40 p-1 rounded-xl">
+                    <button onclick="switchMode('find-margin')" id="tab-find-margin" class="tab-btn active flex-1 py-2 text-sm rounded-lg text-slate-400 border border-transparent transition-all">Find Margin</button>
+                    <button onclick="switchMode('find-price')" id="tab-find-price" class="tab-btn flex-1 py-2 text-sm rounded-lg text-slate-400 border border-transparent transition-all">Find Selling Price</button>
+                </div>
+
+                <div id="mode-find-margin" class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Cost of Goods Sold (COGS) $</label>
+                        <input type="number" id="cost-input-1" value="50" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-xl font-bold p-3">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Selling Price (Revenue) $</label>
+                        <input type="number" id="price-input-1" value="100" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-xl font-bold p-3">
+                    </div>
+                </div>
+
+                <div id="mode-find-price" class="space-y-5 hidden">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Cost of Goods Sold (COGS) $</label>
+                        <input type="number" id="cost-input-2" value="50" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-xl font-bold p-3">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Target Gross Margin %</label>
+                        <input type="number" id="margin-target-input" value="50" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-xl font-bold p-3">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 relative z-10">
+                    <div class="bg-black/40 p-5 rounded-xl border border-white/5">
+                        <p class="text-slate-400 text-xs font-bold uppercase mb-1">Gross Profit</p>
+                        <p id="res-profit" class="text-3xl font-bold text-profit">$50.00</p>
+                    </div>
+                    <div class="bg-black/40 p-5 rounded-xl border border-white/5">
+                        <p class="text-slate-400 text-xs font-bold uppercase mb-1 flex items-center gap-1">Margin <span class="material-symbols-outlined text-[14px] text-primary" title="Profit as a % of Price">info</span></p>
+                        <p id="res-margin" class="text-3xl font-bold text-white">50.0%</p>
+                    </div>
+                    <div class="bg-black/40 p-5 rounded-xl border border-white/5">
+                        <p class="text-slate-400 text-xs font-bold uppercase mb-1 flex items-center gap-1">Markup <span class="material-symbols-outlined text-[14px] text-primary" title="Profit as a % of Cost">info</span></p>
+                        <p id="res-markup" class="text-3xl font-bold text-slate-300">100.0%</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10">
+                    <div class="h-48 relative flex justify-center">
+                        <canvas id="marginChart"></canvas>
+                    </div>
+                    <div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                <span class="text-sm text-slate-400">Total Cost</span>
+                                <span id="summary-cost" class="font-bold text-cost">$50.00</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-white/10 pb-2">
+                                <span class="text-sm text-slate-400">Gross Profit</span>
+                                <span id="summary-profit" class="font-bold text-profit">$50.00</span>
+                            </div>
+                            <div class="flex justify-between items-center pt-2">
+                                <span class="text-base text-white font-bold">Selling Price</span>
+                                <span id="summary-price" class="text-xl font-bold text-white">$100.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl text-slate-400 text-sm leading-relaxed mt-2">
+                <h2 class="text-2xl font-bold text-white mb-4">Margin vs. Markup: The Business Trap</h2>
+                
+                <p class="mb-4">The most common mathematical error entrepreneurs make is confusing markup with margin. Understanding the difference is critical to pricing your products correctly and staying profitable.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-black/30 p-5 rounded-xl border border-white/5">
+                        <h3 class="text-lg font-bold text-primary mb-2">Gross Margin</h3>
+                        <p class="mb-2">Margin shows the percentage of revenue you keep as profit after paying for the item.</p>
+                        <code class="block bg-black p-2 rounded text-xs text-profit mb-2">Margin = (Profit / Selling Price) × 100</code>
+                        <p class="text-xs">If you buy a shirt for $50 and sell it for $100, your margin is <strong>50%</strong>.</p>
+                    </div>
+                    
+                    <div class="bg-black/30 p-5 rounded-xl border border-white/5">
+                        <h3 class="text-lg font-bold text-primary mb-2">Markup</h3>
+                        <p class="mb-2">Markup shows how much more your selling price is than your original cost.</p>
+                        <code class="block bg-black p-2 rounded text-xs text-slate-300 mb-2">Markup = (Profit / Cost) × 100</code>
+                        <p class="text-xs">If you buy a shirt for $50 and sell it for $100, your markup is <strong>100%</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. We do not save your financial data. By clicking "Accept", you consent.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept</button>
+    </div>
+</div>
+
+<script>
+    // State
+    let currentMode = 'find-margin';
+
+    // UI Elements
+    const tabFindMargin = document.getElementById('tab-find-margin');
+    const tabFindPrice = document.getElementById('tab-find-price');
+    const modeFindMargin = document.getElementById('mode-find-margin');
+    const modeFindPrice = document.getElementById('mode-find-price');
+
+    // Inputs Mode 1
+    const costInput1 = document.getElementById('cost-input-1');
+    const priceInput1 = document.getElementById('price-input-1');
+
+    // Inputs Mode 2
+    const costInput2 = document.getElementById('cost-input-2');
+    const marginTargetInput = document.getElementById('margin-target-input');
+
+    // Outputs
+    const resProfit = document.getElementById('res-profit');
+    const resMargin = document.getElementById('res-margin');
+    const resMarkup = document.getElementById('res-markup');
+    const summaryCost = document.getElementById('summary-cost');
+    const summaryProfit = document.getElementById('summary-profit');
+    const summaryPrice = document.getElementById('summary-price');
+
+    // Chart
+    let marginChart;
+
+    function initChart() {
+        const ctx = document.getElementById('marginChart').getContext('2d');
+        marginChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Cost of Goods', 'Gross Profit'],
+                datasets: [{
+                    data: [50, 50],
+                    backgroundColor: ['#FF4444', '#00C851'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: 'white', font: { family: 'Outfit' } } }
+                }
+            }
+        });
+    }
+
+    function switchMode(mode) {
+        currentMode = mode;
+        if (mode === 'find-margin') {
+            tabFindMargin.classList.add('active');
+            tabFindPrice.classList.remove('active');
+            modeFindMargin.classList.remove('hidden');
+            modeFindPrice.classList.add('hidden');
+        } else {
+            tabFindPrice.classList.add('active');
+            tabFindMargin.classList.remove('active');
+            modeFindPrice.classList.remove('hidden');
+            modeFindMargin.classList.add('hidden');
+        }
+        calculate();
+    }
+
+    function formatMoney(amount) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    }
+
+    function calculate() {
+        let cost = 0, price = 0, profit = 0, margin = 0, markup = 0;
+
+        if (currentMode === 'find-margin') {
+            cost = parseFloat(costInput1.value) || 0;
+            price = parseFloat(priceInput1.value) || 0;
+            
+            profit = price - cost;
+            margin = price > 0 ? (profit / price) * 100 : 0;
+            markup = cost > 0 ? (profit / cost) * 100 : 0;
+
+        } else if (currentMode === 'find-price') {
+            cost = parseFloat(costInput2.value) || 0;
+            margin = parseFloat(marginTargetInput.value) || 0;
+            
+            // Formula: Price = Cost / (1 - Margin%)
+            if (margin >= 100) {
+                // Cannot have 100% margin if there is a cost
+                margin = 99.99; 
+            }
+            price = cost / (1 - (margin / 100));
+            profit = price - cost;
+            markup = cost > 0 ? (profit / cost) * 100 : 0;
+        }
+
+        // Update UI
+        resProfit.innerText = formatMoney(profit);
+        resMargin.innerText = `${margin.toFixed(2)}%`;
+        resMarkup.innerText = `${markup.toFixed(2)}%`;
+        
+        summaryCost.innerText = formatMoney(cost);
+        summaryProfit.innerText = formatMoney(profit);
+        summaryPrice.innerText = formatMoney(price);
+
+        // Colors for negative profit
+        if (profit < 0) {
+            resProfit.classList.replace('text-profit', 'text-cost');
+            summaryProfit.classList.replace('text-profit', 'text-cost');
+        } else {
+            resProfit.classList.replace('text-cost', 'text-profit');
+            summaryProfit.classList.replace('text-cost', 'text-profit');
+        }
+
+        // Update Chart
+        let chartCost = cost > 0 ? cost : 0;
+        let chartProfit = profit > 0 ? profit : 0;
+        marginChart.data.datasets[0].data = [chartCost, chartProfit];
+        marginChart.update();
+    }
+
+    // Listeners
+    [costInput1, priceInput1, costInput2, marginTargetInput].forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    // Init
+    initChart();
+    calculate();
+
+    // Cookie Logic
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+</script>
+</body>
+</html>
