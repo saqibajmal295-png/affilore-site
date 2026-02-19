@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Rule of 72 Calculator | Asset Growth Visualizer | Affilore Tools</title>
+    <meta name="description" content="Use the Rule of 72 to calculate how long it takes to double your money or what return rate you need. Includes exact math comparisons and visual growth charts.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A",
+                        growth: "#00C851"
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .tab-btn.active { background-color: #FFBF00; color: #121212; font-weight: bold; border-color: #FFBF00; }
+    </style>
+</head>
+<body class="min-h-screen pt-24 pb-20">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">Rule of 72</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6">
+    
+    <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">Rule of 72 Asset Visualizer</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">The easiest way to estimate how fast your assets will double. We compare the quick "Rule of 72" math against exact logarithmic formulas.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-6 shadow-xl border-t-4 border-t-growth">
+                
+                <div class="flex gap-2 mb-6 bg-black/40 p-1 rounded-xl">
+                    <button onclick="switchMode('find-years')" id="tab-find-years" class="tab-btn active flex-1 py-2 text-sm rounded-lg text-slate-400 transition-all">Find Years to Double</button>
+                    <button onclick="switchMode('find-rate')" id="tab-find-rate" class="tab-btn flex-1 py-2 text-sm rounded-lg text-slate-400 transition-all">Find Required Rate</button>
+                </div>
+
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Initial Asset Value ($)</label>
+                        <input type="number" id="initial-amount" value="10000" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-xl font-bold p-3">
+                        <p class="text-xs text-slate-500 mt-1">Optional. Just for visualization.</p>
+                    </div>
+
+                    <div id="mode-find-years">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Annual Growth Rate (%)</label>
+                        <div class="relative">
+                            <input type="number" id="growth-rate" value="8" step="0.1" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-xl font-bold p-3">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">%</span>
+                        </div>
+                    </div>
+
+                    <div id="mode-find-rate" class="hidden">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Target Years to Double</label>
+                        <div class="relative">
+                            <input type="number" id="target-years" value="5" step="0.1" class="w-full bg-black/50 border-white/10 rounded-lg text-white focus:border-primary focus:ring-primary text-xl font-bold p-3">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">Years</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-8 bg-gradient-to-br from-growth/10 to-transparent border border-growth/20 relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-64 h-64 bg-growth/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8 relative z-10">
+                    
+                    <div>
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs mb-2">Rule of 72 Estimate</p>
+                        <div class="flex items-baseline gap-2">
+                            <h3 id="res-rule72" class="text-5xl font-extrabold text-white">9</h3>
+                            <span id="res-rule72-label" class="text-lg text-slate-400 font-bold">Years</span>
+                        </div>
+                        <p id="res-math" class="text-sm text-growth mt-2 font-mono bg-growth/10 inline-block px-2 py-1 rounded">72 ÷ 8 = 9.00</p>
+                    </div>
+
+                    <div class="border-l border-white/10 pl-0 sm:pl-8 mt-6 sm:mt-0">
+                        <p class="text-slate-400 font-bold uppercase tracking-widest text-xs mb-2">Exact Mathematical Value</p>
+                        <div class="flex items-baseline gap-2">
+                            <h3 id="res-exact" class="text-4xl font-bold text-slate-300">9.01</h3>
+                            <span id="res-exact-label" class="text-base text-slate-500 font-bold">Years</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">The Rule of 72 is an incredibly accurate mental shortcut.</p>
+                    </div>
+
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl shadow-xl mt-4 relative z-10 bg-black/40 border border-white/5">
+                    <h4 class="text-sm font-bold text-white mb-1">Asset Doubling Timeline</h4>
+                    <p class="text-xs text-slate-400 mb-4">Starting at <span id="chart-start-val" class="font-bold text-white">$10,000</span>, doubling to <span id="chart-end-val" class="font-bold text-growth">$20,000</span>.</p>
+                    <div class="h-56 relative">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl text-slate-400 text-sm leading-relaxed mt-2">
+                <h2 class="text-2xl font-bold text-white mb-4">What is the Rule of 72?</h2>
+                <p class="mb-4">The Rule of 72 is a simplified mental math formula used in finance to estimate the number of years required to double the value of an investment at a fixed annual rate of return.</p>
+                
+                <h3 class="text-lg font-bold text-white mt-6 mb-2">How to use it</h3>
+                <p class="mb-4">Simply divide the number 72 by your annual return rate. For example, if you are buying an asset that yields an 8% return per year, you divide 72 by 8. The result is 9, meaning it will take approximately 9 years for your capital to double.</p>
+                
+                <h3 class="text-lg font-bold text-white mt-6 mb-2">Asset Creation vs. Debt</h3>
+                <p>The Rule of 72 is a double-edged sword. It shows how fast wealth grows, but it also shows how fast debt can crush you. If you have credit card debt at 24% interest, that debt will double in just 3 years (72 ÷ 24 = 3). This highlights the importance of ethical, debt-free wealth building.</p>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. We do not save your financial data. By clicking "Accept", you consent.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept</button>
+    </div>
+</div>
+
+<script>
+    let currentMode = 'find-years';
+
+    // UI
+    const tabFindYears = document.getElementById('tab-find-years');
+    const tabFindRate = document.getElementById('tab-find-rate');
+    const modeFindYears = document.getElementById('mode-find-years');
+    const modeFindRate = document.getElementById('mode-find-rate');
+
+    // Inputs
+    const initialAmountInput = document.getElementById('initial-amount');
+    const growthRateInput = document.getElementById('growth-rate');
+    const targetYearsInput = document.getElementById('target-years');
+
+    // Outputs
+    const resRule72 = document.getElementById('res-rule72');
+    const resRule72Label = document.getElementById('res-rule72-label');
+    const resExact = document.getElementById('res-exact');
+    const resExactLabel = document.getElementById('res-exact-label');
+    const resMath = document.getElementById('res-math');
+    const chartStartVal = document.getElementById('chart-start-val');
+    const chartEndVal = document.getElementById('chart-end-val');
+
+    let growthChart;
+
+    function initChart() {
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        growthChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: [], datasets: [{
+                label: 'Asset Value',
+                data: [],
+                borderColor: '#00C851',
+                backgroundColor: 'rgba(0, 200, 81, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: false, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+                    x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    function switchMode(mode) {
+        currentMode = mode;
+        if (mode === 'find-years') {
+            tabFindYears.classList.add('active');
+            tabFindRate.classList.remove('active');
+            modeFindYears.classList.remove('hidden');
+            modeFindRate.classList.add('hidden');
+        } else {
+            tabFindRate.classList.add('active');
+            tabFindYears.classList.remove('active');
+            modeFindRate.classList.remove('hidden');
+            modeFindYears.classList.add('hidden');
+        }
+        calculate();
+    }
+
+    function formatMoney(amount) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+    }
+
+    function calculate() {
+        const initial = parseFloat(initialAmountInput.value) || 10000;
+        let rule72Val = 0, exactVal = 0, rate = 0, years = 0;
+
+        if (currentMode === 'find-years') {
+            rate = parseFloat(growthRateInput.value) || 0;
+            if (rate > 0) {
+                // Rule of 72
+                rule72Val = 72 / rate;
+                // Exact Logarithmic: t = ln(2) / ln(1 + r)
+                exactVal = Math.log(2) / Math.log(1 + (rate / 100));
+                
+                resRule72Label.innerText = "Years";
+                resExactLabel.innerText = "Years";
+                resMath.innerText = `72 ÷ ${rate}% = ${rule72Val.toFixed(2)}`;
+                years = exactVal;
+            }
+        } else {
+            years = parseFloat(targetYearsInput.value) || 0;
+            if (years > 0) {
+                // Rule of 72
+                rule72Val = 72 / years;
+                // Exact Logarithmic: r = (2^(1/t) - 1) * 100
+                exactVal = (Math.pow(2, 1/years) - 1) * 100;
+                
+                resRule72Label.innerText = "% Return";
+                resExactLabel.innerText = "% Return";
+                resMath.innerText = `72 ÷ ${years} yrs = ${rule72Val.toFixed(2)}%`;
+                rate = exactVal;
+            }
+        }
+
+        // Update UI Text
+        resRule72.innerText = isFinite(rule72Val) ? rule72Val.toFixed(1) : "0";
+        resExact.innerText = isFinite(exactVal) ? exactVal.toFixed(2) : "0";
+        
+        chartStartVal.innerText = formatMoney(initial);
+        chartEndVal.innerText = formatMoney(initial * 2);
+
+        // Update Chart
+        if(years > 0 && rate > 0) {
+            updateChartData(initial, rate, years);
+        }
+    }
+
+    function updateChartData(initial, annualRate, totalYears) {
+        const labels = [];
+        const data = [];
+        const plotYears = Math.min(Math.ceil(totalYears), 50); // Cap at 50 years to prevent overflow
+
+        for (let year = 0; year <= plotYears; year++) {
+            labels.push(`Year ${year}`);
+            data.push(initial * Math.pow(1 + (annualRate/100), year));
+        }
+
+        growthChart.data.labels = labels;
+        growthChart.data.datasets[0].data = data;
+        growthChart.update();
+    }
+
+    // Listeners
+    [initialAmountInput, growthRateInput, targetYearsInput].forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    // Init
+    initChart();
+    calculate();
+
+    // Cookie
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+</script>
+</body>
+</html>
