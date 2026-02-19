@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Advanced 50/30/20 Budget Calculator & Planner | Affilore</title>
+    <meta name="description" content="Calculate your 50/30/20 budget targets and compare them against your actual spending. Optimize your needs, wants, and ethical wealth-building strategies.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A",
+                        needs: "#FF4444",
+                        wants: "#33b5e5",
+                        savings: "#00C851"
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .input-group input { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 0.5rem; padding: 0.5rem 1rem; width: 100%; text-align: right; }
+        .input-group input:focus { border-color: #FFBF00; outline: none; box-shadow: 0 0 0 1px #FFBF00; }
+    </style>
+</head>
+<body class="min-h-screen pt-24 pb-20">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">50/30/20 Planner</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6">
+    
+    <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">The Smart 50/30/20 Planner</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">Don't just calculate targets. Enter your actual expenses below to see if your lifestyle aligns with your wealth-building goals.</p>
+    </div>
+
+    <div class="glass-card rounded-2xl p-6 md:p-8 shadow-xl mb-8 border-t-4 border-t-primary text-center max-w-2xl mx-auto">
+        <label class="block text-sm font-bold text-slate-400 uppercase mb-3">Monthly After-Tax Income</label>
+        <div class="relative max-w-xs mx-auto">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-2xl">$</span>
+            <input type="number" id="income" value="5000" class="w-full bg-black border-white/20 rounded-xl pl-10 pr-4 py-4 text-white focus:border-primary focus:ring-primary text-3xl font-bold text-center transition-colors hover:border-white/40">
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <div class="lg:col-span-7 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-6 border-l-4 border-l-needs">
+                <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Needs (50%)</h3>
+                        <p class="text-sm text-slate-400">Essentials you cannot live without.</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400 uppercase font-bold">Target Limit</p>
+                        <p id="target-needs" class="text-2xl font-bold text-needs">$2,500</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-3 input-group" id="needs-inputs">
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Housing (Rent/Mortgage)</label>
+                        <input type="number" class="actual-input need-val" placeholder="0">
+                    </div>
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Groceries</label>
+                        <input type="number" class="actual-input need-val" placeholder="0">
+                    </div>
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Utilities & Bills</label>
+                        <input type="number" class="actual-input need-val" placeholder="0">
+                    </div>
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Transportation</label>
+                        <input type="number" class="actual-input need-val" placeholder="0">
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
+                    <span class="font-bold text-white">Actual Total:</span>
+                    <div class="flex items-center gap-3">
+                        <span id="actual-needs" class="text-xl font-bold text-white">$0</span>
+                        <span id="status-needs" class="px-2 py-1 text-xs font-bold rounded bg-white/10 text-white">Pending</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 border-l-4 border-l-wants">
+                <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Wants (30%)</h3>
+                        <p class="text-sm text-slate-400">Lifestyle and entertainment.</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400 uppercase font-bold">Target Limit</p>
+                        <p id="target-wants" class="text-2xl font-bold text-wants">$1,500</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-3 input-group" id="wants-inputs">
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Dining Out & Delivery</label>
+                        <input type="number" class="actual-input want-val" placeholder="0">
+                    </div>
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Entertainment & Subs</label>
+                        <input type="number" class="actual-input want-val" placeholder="0">
+                    </div>
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Shopping & Personal</label>
+                        <input type="number" class="actual-input want-val" placeholder="0">
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
+                    <span class="font-bold text-white">Actual Total:</span>
+                    <div class="flex items-center gap-3">
+                        <span id="actual-wants" class="text-xl font-bold text-white">$0</span>
+                        <span id="status-wants" class="px-2 py-1 text-xs font-bold rounded bg-white/10 text-white">Pending</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6 border-l-4 border-l-savings">
+                <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Savings & Assets (20%)</h3>
+                        <p class="text-sm text-slate-400">Building your financial foundation.</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400 uppercase font-bold">Target Minimum</p>
+                        <p id="target-savings" class="text-2xl font-bold text-savings">$1,000</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-3 input-group" id="savings-inputs">
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Emergency Cash Fund</label>
+                        <input type="number" class="actual-input save-val" placeholder="0">
+                    </div>
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Ethical / Asset Investments</label>
+                        <input type="number" class="actual-input save-val" placeholder="0">
+                    </div>
+                    <div class="flex justify-between items-center gap-4">
+                        <label class="text-slate-300 whitespace-nowrap">Extra Debt Paydown</label>
+                        <input type="number" class="actual-input save-val" placeholder="0">
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-white/5 flex justify-between items-center">
+                    <span class="font-bold text-white">Actual Total:</span>
+                    <div class="flex items-center gap-3">
+                        <span id="actual-savings" class="text-xl font-bold text-white">$0</span>
+                        <span id="status-savings" class="px-2 py-1 text-xs font-bold rounded bg-white/10 text-white">Pending</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <div class="glass-card rounded-2xl p-6 shadow-xl sticky top-28">
+                <h3 class="text-center font-bold text-white uppercase tracking-widest text-sm mb-6">Your Real Breakdown</h3>
+                
+                <div class="relative h-64 w-full flex justify-center items-center mb-6">
+                    <canvas id="budgetChart"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <span class="text-slate-400 text-xs uppercase font-bold">Unallocated</span>
+                        <span id="unallocated-funds" class="text-2xl font-bold text-white">$0</span>
+                    </div>
+                </div>
+
+                <div class="bg-black/30 rounded-xl p-4 border border-white/5 space-y-3">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Total Income</span>
+                        <span id="summary-income" class="text-white font-bold">$0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">Total Spent/Saved</span>
+                        <span id="summary-spent" class="text-white font-bold">$0</span>
+                    </div>
+                    <div class="pt-2 border-t border-white/10">
+                        <p id="analysis-msg" class="text-sm text-primary font-medium text-center">Start typing your actual expenses to see your analysis.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mt-16 glass-card p-8 rounded-2xl">
+        <h2 class="text-2xl font-bold text-white mb-6">Mastering the 50/30/20 Rule</h2>
+        
+        <div class="grid md:grid-cols-2 gap-8 text-slate-300 text-sm leading-relaxed">
+            <div>
+                <h3 class="text-lg font-bold text-white mb-3">Why This Rule Works</h3>
+                <p class="mb-4">The 50/30/20 budgeting framework simplifies personal finance. Instead of agonizing over 50 different micro-categories, you group your money into three buckets. This ensures your basic living costs are covered, you get to enjoy your hard-earned money today, while simultaneously building wealth for tomorrow.</p>
+                <p>For the <strong>Savings (20%)</strong> bucket, prioritize building a 3-6 month cash emergency fund first. Once secure, focus on deploying that capital into asset creation or ethical investments that generate long-term value without relying on interest-based debt.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-white mb-3">Adapting for High-Cost Cities</h3>
+                <p class="mb-4">Living in New York, London, or San Francisco? Keeping your "Needs" under 50% can feel impossible when housing costs are astronomical.</p>
+                <p>If your rent pushes your needs to 60%, don't panic. You simply must adjust the other levers. Adopt a <strong>60/20/20</strong> model (reducing your Wants to 20%). The critical factor is protecting the 20% savings rate—never sacrifice your future financial independence to fund current lifestyle inflation.</p>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. We do not save your financial data. By clicking "Accept", you consent.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept Vibes</button>
+    </div>
+</div>
+
+<script>
+    const incomeInput = document.getElementById('income');
+    
+    // Targets
+    const targetNeeds = document.getElementById('target-needs');
+    const targetWants = document.getElementById('target-wants');
+    const targetSavings = document.getElementById('target-savings');
+
+    // Actuals
+    const actualNeedsEl = document.getElementById('actual-needs');
+    const actualWantsEl = document.getElementById('actual-wants');
+    const actualSavingsEl = document.getElementById('actual-savings');
+
+    // Status Badges
+    const statusNeeds = document.getElementById('status-needs');
+    const statusWants = document.getElementById('status-wants');
+    const statusSavings = document.getElementById('status-savings');
+
+    // Summaries
+    const summaryIncome = document.getElementById('summary-income');
+    const summarySpent = document.getElementById('summary-spent');
+    const unallocatedFunds = document.getElementById('unallocated-funds');
+    const analysisMsg = document.getElementById('analysis-msg');
+
+    let budgetChart;
+
+    function initChart() {
+        const ctx = document.getElementById('budgetChart').getContext('2d');
+        budgetChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Needs', 'Wants', 'Savings', 'Unallocated'],
+                datasets: [{
+                    data: [0, 0, 0, 100],
+                    backgroundColor: ['#FF4444', '#33b5e5', '#00C851', '#333333'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '80%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed !== null) {
+                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function calculate() {
+        const income = parseFloat(incomeInput.value) || 0;
+        
+        // Calculate Targets
+        const tNeeds = income * 0.50;
+        const tWants = income * 0.30;
+        const tSavings = income * 0.20;
+
+        targetNeeds.innerText = formatMoney(tNeeds);
+        targetWants.innerText = formatMoney(tWants);
+        targetSavings.innerText = formatMoney(tSavings);
+
+        summaryIncome.innerText = formatMoney(income);
+
+        // Sum up Actuals
+        const sumInputs = (selector) => {
+            let total = 0;
+            document.querySelectorAll(selector).forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            return total;
+        };
+
+        const aNeeds = sumInputs('.need-val');
+        const aWants = sumInputs('.want-val');
+        const aSavings = sumInputs('.save-val');
+
+        actualNeedsEl.innerText = formatMoney(aNeeds);
+        actualWantsEl.innerText = formatMoney(aWants);
+        actualSavingsEl.innerText = formatMoney(aSavings);
+
+        // Update Status Badges
+        updateStatus(statusNeeds, aNeeds, tNeeds, "Limit");
+        updateStatus(statusWants, aWants, tWants, "Limit");
+        updateStatus(statusSavings, aSavings, tSavings, "Minimum", true); // Savings logic is reversed
+
+        // Overall Summary
+        const totalSpent = aNeeds + aWants + aSavings;
+        const unallocated = income - totalSpent;
+        
+        summarySpent.innerText = formatMoney(totalSpent);
+        unallocatedFunds.innerText = formatMoney(Math.max(0, unallocated));
+
+        if(unallocated < 0) {
+            unallocatedFunds.classList.replace('text-white', 'text-needs');
+            analysisMsg.innerText = `You are over budget by ${formatMoney(Math.abs(unallocated))}. Check your Needs or Wants.`;
+            analysisMsg.className = "text-sm text-needs font-bold text-center";
+        } else if (unallocated > 0 && totalSpent > 0) {
+            unallocatedFunds.classList.replace('text-needs', 'text-white');
+            analysisMsg.innerText = `Great! You have ${formatMoney(unallocated)} left. Consider adding it to your savings.`;
+            analysisMsg.className = "text-sm text-primary font-medium text-center";
+        } else {
+            unallocatedFunds.classList.replace('text-needs', 'text-white');
+            analysisMsg.innerText = "Perfectly balanced budget.";
+            analysisMsg.className = "text-sm text-savings font-bold text-center";
+        }
+
+        // Update Chart
+        let chartUnallocated = Math.max(0, unallocated);
+        budgetChart.data.datasets[0].data = [aNeeds, aWants, aSavings, chartUnallocated];
+        budgetChart.update();
+    }
+
+    function updateStatus(element, actual, target, type, isSavings = false) {
+        if(actual === 0) {
+            element.innerText = "Pending";
+            element.className = "px-2 py-1 text-xs font-bold rounded bg-white/10 text-white";
+            return;
+        }
+
+        if(isSavings) {
+            // Savings should be >= target
+            if(actual >= target) {
+                element.innerText = "On Track";
+                element.className = "px-2 py-1 text-xs font-bold rounded bg-savings/20 text-savings";
+            } else {
+                element.innerText = "Below Target";
+                element.className = "px-2 py-1 text-xs font-bold rounded bg-wants/20 text-wants";
+            }
+        } else {
+            // Expenses should be <= target
+            if(actual <= target) {
+                element.innerText = "On Track";
+                element.className = "px-2 py-1 text-xs font-bold rounded bg-savings/20 text-savings";
+            } else {
+                element.innerText = "Over Budget";
+                element.className = "px-2 py-1 text-xs font-bold rounded bg-needs/20 text-needs";
+            }
+        }
+    }
+
+    function formatMoney(amount) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+    }
+
+    // Event Listeners
+    incomeInput.addEventListener('input', calculate);
+    document.querySelectorAll('.actual-input').forEach(input => {
+        input.addEventListener('input', calculate);
+    });
+
+    // Init
+    initChart();
+    calculate();
+
+    // Cookie Logic
+    if (!localStorage.getItem('affiloreCookieConsent')) {
+        setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+    }
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+        localStorage.setItem('affiloreCookieConsent', 'true');
+        document.getElementById('cookie-banner').classList.add('translate-y-full');
+    });
+</script>
+</body>
+</html>
