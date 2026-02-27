@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Diderot Effect Escalation Calculator | Free Behavioral Finance Tool</title>
+    <meta name="description" content="Calculate the true cost of the Diderot Effect on your spending. See how one purchase spirals into cascading expenses with our free behavioral finance calculator.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class", 
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FFBF00", 
+                        "background-dark": "#121212", 
+                        "card-dark": "#1A1A1A",
+                        accent: '#FFBF00',
+                        danger: '#ef4444'
+                    }, 
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: white; }
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+        .glass-input { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        .glass-input:focus { border-color: #FFBF00; box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.12); outline: none; }
+        .cascade-item { animation: slideIn 0.3s ease-out forwards; opacity: 0; transform: translateY(10px); }
+        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 191, 0, 0.15); }
+            50% { box-shadow: 0 0 20px rgba(255, 191, 0, 0.3); }
+        }
+        .stat-card-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .remove-btn { transition: all 0.2s ease; }
+        .remove-btn:hover { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        
+        /* Range slider custom */
+        input[type="range"] { -webkit-appearance: none; height: 6px; background: rgba(255,255,255,0.08); border-radius: 8px; outline: none; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #FFBF00; cursor: pointer; box-shadow: 0 0 8px rgba(255,191,0,0.4); }
+    </style>
+</head>
+<body class="min-h-screen pt-24 pb-20">
+
+<header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+            </a>
+            <div class="h-6 w-px bg-white/10 mx-2"></div>
+            <h1 class="text-slate-400 text-sm font-medium">Diderot Escalation Calculator</h1>
+        </div>
+        <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-6">
+    
+    <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-sm text-primary mb-4">
+            <span class="material-symbols-outlined text-[16px]">psychology</span>
+            Behavioral Finance Tool
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">The Diderot Effect Calculator</h2>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">Discover how one purchase spirals into a cascade of spending. Visualize the true cost of lifestyle creep in real-time.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+
+        <div class="space-y-6">
+            <div class="glass-card rounded-2xl p-6 border-t-4 border-t-primary">
+                <h2 class="text-lg font-bold mb-1 flex items-center gap-2 text-white">
+                    <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-sm font-bold">1</span>
+                    Initial Purchase (Trigger Item)
+                </h2>
+                <p class="text-slate-500 text-sm mb-5">The first purchase that starts the cascade.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="trigger-name" class="block text-xs font-bold text-slate-400 mb-1.5 uppercase tracking-wider">Item Name</label>
+                        <input id="trigger-name" type="text" placeholder='e.g. "New Sofa"' value="New Sofa"
+                            class="glass-input w-full rounded-xl px-4 py-3 text-white placeholder-slate-600 text-sm">
+                    </div>
+                    <div>
+                        <label for="trigger-cost" class="block text-xs font-bold text-slate-400 mb-1.5 uppercase tracking-wider">Cost ($)</label>
+                        <input id="trigger-cost" type="number" placeholder="0.00" value="1200" min="0" step="0.01"
+                            class="glass-input w-full rounded-xl px-4 py-3 text-white placeholder-slate-600 text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-1">
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-sm font-bold">2</span>
+                        Cascading Purchases
+                    </h2>
+                    <button id="add-cascade-btn" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                        + Add Item
+                    </button>
+                </div>
+                <p class="text-slate-500 text-sm mb-5">Additional items bought because of the trigger purchase.</p>
+                <div id="cascade-list" class="space-y-3">
+                    </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6">
+                <h2 class="text-lg font-bold mb-1 flex items-center gap-2 text-white">
+                    <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-sm font-bold">3</span>
+                    Opportunity Cost Settings
+                </h2>
+                <p class="text-slate-500 text-sm mb-5">If the cascaded money had been invested instead.</p>
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label for="invest-years" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Investment Horizon</label>
+                            <span id="invest-years-val" class="text-sm text-primary font-bold">10 years</span>
+                        </div>
+                        <input id="invest-years" type="range" min="1" max="30" value="10" class="w-full">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label for="invest-return" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Avg. Annual Return</label>
+                            <span id="invest-return-val" class="text-sm text-primary font-bold">8%</span>
+                        </div>
+                        <input id="invest-return" type="range" min="1" max="20" value="8" class="w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="glass-card rounded-2xl p-5 stat-card-glow text-center border border-primary/20">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Total Spend</p>
+                    <p id="stat-total" class="text-3xl font-extrabold text-primary">$0</p>
+                </div>
+                <div class="glass-card rounded-2xl p-5 text-center">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Escalation Multiplier</p>
+                    <p id="stat-multiplier" class="text-3xl font-bold text-white">0×</p>
+                </div>
+                <div class="glass-card rounded-2xl p-5 text-center">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Cascading Items</p>
+                    <p id="stat-items" class="text-3xl font-bold text-white">0</p>
+                </div>
+                <div class="glass-card rounded-2xl p-5 text-center">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Opportunity Lost</p>
+                    <p id="stat-opportunity" class="text-3xl font-bold text-danger">$0</p>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="text-sm font-bold text-white uppercase tracking-widest mb-3 text-center">Escalation Severity</h3>
+                <div class="w-full h-4 rounded-full bg-white/5 overflow-hidden mb-3">
+                    <div id="severity-bar" class="h-full rounded-full transition-all duration-500 ease-out" style="width: 0%; background: linear-gradient(90deg, #22c55e, #FFBF00, #ef4444);"></div>
+                </div>
+                <div class="flex justify-between text-xs font-bold text-slate-500">
+                    <span>Minimal</span><span>Moderate</span><span>Severe</span>
+                </div>
+                <p id="severity-text" class="text-sm text-center text-slate-300 mt-3 font-medium"></p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase mb-4 text-center">Spending Breakdown</h3>
+                    <div class="relative h-48">
+                        <canvas id="breakdownChart"></canvas>
+                    </div>
+                </div>
+                <div class="glass-card rounded-2xl p-6">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase mb-4 text-center">Lost Investment Growth</h3>
+                    <div class="relative h-48">
+                        <canvas id="opportunityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <article class="glass-card rounded-3xl p-8 sm:p-12 max-w-4xl mx-auto text-slate-300 leading-relaxed space-y-6">
+        <h2 class="text-2xl font-bold text-white border-b border-white/10 pb-2">What Is the Diderot Effect Escalation Calculator?</h2>
+        <p>The <strong class="text-white">Diderot Effect Escalation Calculator</strong> is a free behavioral finance tool designed to help you visualize and quantify the hidden cost of cascading purchases. Named after the 18th-century French philosopher Denis Diderot, the Diderot Effect describes a powerful psychological phenomenon: acquiring a new possession often creates a spiral of additional consumption as you feel compelled to buy complementary items that "match" your new purchase.</p>
+        
+        <p>Diderot himself experienced this firsthand. After receiving a beautiful new scarlet robe as a gift, he suddenly noticed that all of his other belongings looked shabby by comparison. He replaced his old rug, his desk, his curtains, and his artwork — spending far more than the robe was ever worth. This pattern of <strong class="text-white">spending escalation</strong> is incredibly common in modern consumer culture, yet most people never realize it is happening to them.</p>
+        
+        <h2 class="text-2xl font-bold text-white border-b border-white/10 pb-2 mt-8">How to Use This Calculator (Step-by-Step)</h2>
+        <h3 class="text-lg font-bold text-white mt-4">Step 1: Enter Your Trigger Purchase</h3>
+        <p>Start by entering the name and cost of the initial item — the one purchase that set the cascade in motion. This could be a new phone, a piece of furniture, a car, or even a new outfit. This is the "anchor" of your Diderot spiral.</p>
+
+        <h3 class="text-lg font-bold text-white mt-4">Step 2: Add Your Cascading Purchases</h3>
+        <p>Click the <strong class="text-primary">"+ Add Item"</strong> button to add each subsequent purchase that was directly or indirectly inspired by the trigger item. For example, buying a new sofa might lead to new throw pillows, a new coffee table, a new rug, fresh wall art, and perhaps even repainting the room. Add as many items as necessary — be brutally honest with yourself.</p>
+
+        <h3 class="text-lg font-bold text-white mt-4">Step 3: Set Your Opportunity Cost Parameters</h3>
+        <p>Adjust the investment horizon and the average annual return rate using the sliders. These settings calculate how much your cascading spend would have grown if you had invested it instead.</p>
+
+        <h2 class="text-2xl font-bold text-white border-b border-white/10 pb-2 mt-8">Why You Need to Track the Diderot Effect</h2>
+        <ul class="list-disc pl-5 space-y-2 text-slate-400">
+            <li><strong class="text-white">Awareness Breaks the Cycle:</strong> Simply seeing the escalation multiplier can create a powerful psychological "pause" before your next impulse purchase.</li>
+            <li><strong class="text-white">Quantify Hidden Costs:</strong> A $200 pair of shoes seems affordable. But when it triggers a $150 handbag, a $90 belt, and a $300 jacket, you have actually spent $740.</li>
+            <li><strong class="text-white">Understand Opportunity Cost:</strong> That money invested over 20 years could double or triple. Seeing this number changes how you evaluate purchases forever.</li>
+        </ul>
+        
+        <h2 class="text-2xl font-bold text-white border-b border-white/10 pb-2 mt-8">Frequently Asked Questions</h2>
+        <h3 class="text-lg font-bold text-white mt-4">How do I break the Diderot Effect cycle?</h3>
+        <p>Behavioral finance experts recommend several strategies: implement a 48-hour waiting period before any secondary purchase, set a "cascade budget" that caps how much you will allow yourself to spend beyond the trigger item, and practice the "one in, one out" rule.</p>
+    </article>
+
+</main>
+
+<div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. We do not save your financial data. By clicking "Accept", you consent.</p>
+        <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept</button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        let cascadeItems = [
+            { name: 'Throw Pillows', cost: 180 },
+            { name: 'Coffee Table', cost: 450 },
+            { name: 'Area Rug', cost: 320 },
+            { name: 'Wall Art', cost: 200 },
+        ];
+
+        const triggerNameEl = document.getElementById('trigger-name');
+        const triggerCostEl = document.getElementById('trigger-cost');
+        const cascadeListEl = document.getElementById('cascade-list');
+        const addCascadeBtn = document.getElementById('add-cascade-btn');
+        const investYearsEl = document.getElementById('invest-years');
+        const investReturnEl = document.getElementById('invest-return');
+        const investYearsValEl = document.getElementById('invest-years-val');
+        const investReturnValEl = document.getElementById('invest-return-val');
+
+        const statTotalEl = document.getElementById('stat-total');
+        const statMultiplierEl = document.getElementById('stat-multiplier');
+        const statItemsEl = document.getElementById('stat-items');
+        const statOpportunityEl = document.getElementById('stat-opportunity');
+        const severityBarEl = document.getElementById('severity-bar');
+        const severityTextEl = document.getElementById('severity-text');
+
+        const breakdownCtx = document.getElementById('breakdownChart').getContext('2d');
+        const opportunityCtx = document.getElementById('opportunityChart').getContext('2d');
+
+        const breakdownChart = new Chart(breakdownCtx, {
+            type: 'doughnut',
+            data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderWidth: 0 }] },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '70%',
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        const opportunityChart = new Chart(opportunityCtx, {
+            type: 'line',
+            data: { labels: [], datasets: [
+                { label: 'Spent', data: [], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', borderWidth: 2, fill: true, pointRadius: 0 },
+                { label: 'Invested', data: [], borderColor: '#FFBF00', backgroundColor: 'rgba(255,191,0,0.1)', borderWidth: 2, fill: true, pointRadius: 0 }
+            ]},
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    x: { display: false },
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: {size: 10} } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        const palette = ['#FFBF00', '#FF6B6B', '#4ECDC4', '#A78BFA', '#F472B6', '#34D399', '#60A5FA', '#FBBF24'];
+
+        function renderCascadeList() {
+            cascadeListEl.innerHTML = '';
+            cascadeItems.forEach((item, i) => {
+                const div = document.createElement('div');
+                div.className = 'cascade-item flex items-center gap-3';
+                div.style.animationDelay = `${i * 50}ms`;
+                div.innerHTML = `
+                    <span class="text-primary text-xs font-bold w-4 text-right shrink-0">${i + 1}.</span>
+                    <input type="text" value="${item.name}" placeholder="Item name" data-idx="${i}" data-field="name" class="glass-input flex-1 rounded-lg px-3 py-2 text-white text-sm">
+                    <div class="relative shrink-0 w-24">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
+                        <input type="number" value="${item.cost}" placeholder="0" min="0" step="0.01" data-idx="${i}" data-field="cost" class="glass-input w-full rounded-lg pl-6 pr-2 py-2 text-white text-sm">
+                    </div>
+                    <button data-remove="${i}" class="remove-btn w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 shrink-0"><span class="material-symbols-outlined text-[18px]">close</span></button>
+                `;
+                cascadeListEl.appendChild(div);
+            });
+        }
+
+        function calculate() {
+            const triggerCost = parseFloat(triggerCostEl.value) || 0;
+            const triggerName = triggerNameEl.value || 'Trigger Item';
+            const years = parseInt(investYearsEl.value) || 10;
+            const returnRate = parseInt(investReturnEl.value) || 8;
+
+            investYearsValEl.textContent = `${years} yrs`;
+            investReturnValEl.textContent = `${returnRate}%`;
+
+            const cascadeCost = cascadeItems.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
+            const totalSpend = triggerCost + cascadeCost;
+            const multiplier = triggerCost > 0 ? totalSpend / triggerCost : 0;
+            const cascadeCount = cascadeItems.filter(item => (parseFloat(item.cost) || 0) > 0).length;
+
+            const futureValue = cascadeCost * Math.pow(1 + returnRate / 100, years);
+            const opportunityCost = futureValue - cascadeCost;
+
+            statTotalEl.textContent = `$${totalSpend.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+            statMultiplierEl.textContent = `${multiplier.toFixed(1)}×`;
+            statItemsEl.textContent = cascadeCount;
+            statOpportunityEl.textContent = `$${Math.round(opportunityCost).toLocaleString()}`;
+
+            let severityPct, severityMsg;
+            if (multiplier <= 1) {
+                severityPct = 0; severityMsg = 'No escalation detected.';
+            } else if (multiplier <= 2) {
+                severityPct = Math.min(30, (multiplier - 1) * 30); severityMsg = 'Minimal cascade effect.';
+            } else if (multiplier <= 4) {
+                severityPct = 30 + (multiplier - 2) * 20; severityMsg = 'Moderate escalation pattern.';
+            } else {
+                severityPct = Math.min(100, 70 + (multiplier - 4) * 10); severityMsg = 'Severe spending spiral detected.';
+            }
+            severityBarEl.style.width = `${severityPct}%`;
+            severityTextEl.textContent = severityMsg;
+
+            // Update Charts
+            const allLabels = [triggerName, ...cascadeItems.map(i => i.name || 'Unnamed')];
+            const allData = [triggerCost, ...cascadeItems.map(i => parseFloat(i.cost) || 0)];
+            breakdownChart.data.labels = allLabels;
+            breakdownChart.data.datasets[0].data = allData;
+            breakdownChart.data.datasets[0].backgroundColor = allLabels.map((_, i) => palette[i % palette.length]);
+            breakdownChart.update('none');
+
+            const oppLabels = [], spentLine = [], investLine = [];
+            for (let y = 0; y <= years; y++) {
+                oppLabels.push(`Year ${y}`);
+                spentLine.push(cascadeCost);
+                investLine.push(cascadeCost * Math.pow(1 + returnRate / 100, y));
+            }
+            opportunityChart.data.labels = oppLabels;
+            opportunityChart.data.datasets[0].data = spentLine;
+            opportunityChart.data.datasets[1].data = investLine;
+            opportunityChart.update('none');
+        }
+
+        triggerNameEl.addEventListener('input', calculate);
+        triggerCostEl.addEventListener('input', calculate);
+        investYearsEl.addEventListener('input', calculate);
+        investReturnEl.addEventListener('input', calculate);
+
+        addCascadeBtn.addEventListener('click', () => {
+            cascadeItems.push({ name: '', cost: 0 });
+            renderCascadeList();
+            calculate();
+        });
+
+        cascadeListEl.addEventListener('input', (e) => {
+            const idx = parseInt(e.target.dataset.idx);
+            if (isNaN(idx)) return;
+            if (e.target.dataset.field === 'name') cascadeItems[idx].name = e.target.value;
+            if (e.target.dataset.field === 'cost') cascadeItems[idx].cost = parseFloat(e.target.value) || 0;
+            calculate();
+        });
+
+        cascadeListEl.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('[data-remove]');
+            if (!removeBtn) return;
+            cascadeItems.splice(parseInt(removeBtn.dataset.remove), 1);
+            renderCascadeList();
+            calculate();
+        });
+
+        renderCascadeList();
+        calculate();
+
+        // Cookie logic
+        if (!localStorage.getItem('affiloreCookieConsent')) {
+            setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+        }
+        document.getElementById('accept-cookies').addEventListener('click', () => {
+            localStorage.setItem('affiloreCookieConsent', 'true');
+            document.getElementById('cookie-banner').classList.add('translate-y-full');
+        });
+    })();
+</script>
+</body>
+</html>
