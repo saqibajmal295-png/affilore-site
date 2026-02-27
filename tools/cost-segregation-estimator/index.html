@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Cost Segregation Estimator | Affilore Tools</title>
+    <meta name="description" content="Free cost segregation estimator for real estate investors. Calculate Year 1 accelerated depreciation tax savings for multifamily, commercial, and industrial properties.">
+    <meta name="keywords" content="cost segregation calculator, accelerated depreciation, real estate tax savings, MACRS depreciation, cost segregation study estimator, Section 1245 property">
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        charcoal: '#121212',
+                        card: '#1A1A1A',
+                        primary: '#FFBF00',
+                        accent: '#FFBF00',
+                        wealth: '#00C851',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
+
+        /* Ambient glow */
+        .bg-glow { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .bg-glow::before {
+            content: ''; position: absolute; top: -25%; left: -8%; width: 550px; height: 550px;
+            background: radial-gradient(circle, rgba(255, 191, 0, 0.07) 0%, transparent 70%);
+            border-radius: 50%; animation: glow 9s ease-in-out infinite alternate;
+        }
+        .bg-glow::after {
+            content: ''; position: absolute; bottom: -18%; right: -8%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(0, 200, 81, 0.06) 0%, transparent 70%);
+            border-radius: 50%; animation: glow 11s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes glow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.5; }
+            100% { transform: scale(1.25) translate(25px, -15px); opacity: 1; }
+        }
+
+        /* Nav Header */
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+
+        /* Glass card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: 1rem; transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .glass-card:hover { border-color: rgba(255, 191, 0, 0.12); box-shadow: 0 0 30px rgba(255, 191, 0, 0.03); }
+
+        /* Range slider */
+        input[type="range"] {
+            -webkit-appearance: none; appearance: none; width: 100%; height: 6px;
+            background: linear-gradient(90deg, #FFBF00, #00C851);
+            border-radius: 999px; outline: none; cursor: pointer; margin-top: 8px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 22px; height: 22px;
+            background: #FFBF00; border-radius: 50%; border: 3px solid #121212;
+            box-shadow: 0 0 10px rgba(255, 191, 0, 0.5); cursor: grab; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); box-shadow: 0 0 18px rgba(255, 191, 0, 0.7); }
+
+        /* Select */
+        select {
+            background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff; border-radius: 0.75rem; padding: 0.75rem 1rem;
+            font-family: 'Outfit', sans-serif; font-size: 0.95rem; width: 100%;
+            outline: none; cursor: pointer; transition: border-color 0.3s, box-shadow 0.3s;
+            appearance: none; -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23FFBF00' viewBox='0 0 16 16'%3E%3Cpath d='M8 11.5l-5-5h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center; margin-top: 4px;
+        }
+        select:focus { border-color: rgba(255, 191, 0, 0.4); box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.1); }
+        select option { background-color: #1A1A1A; color: #fff; }
+
+        /* Text input */
+        .price-input {
+            background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff; border-radius: 0.75rem; padding: 0.75rem 1rem 0.75rem 2.5rem;
+            font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 600; width: 100%;
+            outline: none; transition: border-color 0.3s, box-shadow 0.3s; margin-top: 4px;
+        }
+        .price-input:focus { border-color: rgba(255, 191, 0, 0.4); box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.1); }
+
+        /* Gradient text */
+        .text-gold { background: linear-gradient(135deg, #FFBF00, #FFD54F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .text-green { background: linear-gradient(135deg, #00C851, #69F0AE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        /* Stat badge */
+        .stat-badge {
+            background: rgba(255, 191, 0, 0.06); border: 1px solid rgba(255, 191, 0, 0.12);
+            border-radius: 0.75rem; padding: 1.25rem; text-align: center;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .stat-badge:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 191, 0, 0.06); }
+        .stat-badge.green { background: rgba(0, 200, 81, 0.06); border-color: rgba(0, 200, 81, 0.15); }
+        .stat-badge.green:hover { box-shadow: 0 8px 25px rgba(0, 200, 81, 0.06); }
+
+        .input-label { font-size: 0.85rem; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+
+        .chart-container { position: relative; width: 100%; max-height: 320px; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 191, 0, 0.2); border-radius: 999px; }
+
+        /* Hero savings pulse */
+        @keyframes savingsPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 200, 81, 0.25); }
+            50% { box-shadow: 0 0 30px 8px rgba(0, 200, 81, 0.12); }
+        }
+        .savings-hero { animation: savingsPulse 3s ease-in-out infinite; }
+    </style>
+</head>
+
+<body class="font-outfit min-h-screen antialiased pt-24 pb-20">
+
+    <div class="bg-glow"></div>
+
+    <header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-2 group">
+                    <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                    <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                    <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+                </a>
+                <div class="h-6 w-px bg-white/10 mx-2"></div>
+                <h1 class="text-slate-400 text-sm font-medium">Cost Seg Estimator</h1>
+            </div>
+            <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+        </div>
+    </header>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <header class="text-center mb-12 md:mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6">
+                <span class="material-symbols-outlined text-sm">apartment</span>
+                Free Investor Tool
+            </div>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
+                Cost Segregation
+                <span class="block bg-gradient-to-r from-accent to-wealth bg-clip-text text-transparent">Estimator</span>
+            </h2>
+            <p class="mt-4 text-slate-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                Estimate your Year 1 accelerated depreciation tax savings — before you hire an engineer.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+
+            <div class="space-y-6">
+
+                <div class="glass-card p-6">
+                    <label class="input-label" for="priceInput">
+                        <span class="material-symbols-outlined text-accent text-sm">payments</span>
+                        Property Purchase Price / Basis
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-accent font-bold text-lg">$</span>
+                        <input type="text" id="priceInput" class="price-input" value="2,000,000" inputmode="numeric" autocomplete="off">
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Enter your total acquisition cost or adjusted cost basis.</p>
+                </div>
+
+                <div class="glass-card p-6">
+                    <label class="input-label" for="landSlider">
+                        <span class="material-symbols-outlined text-accent text-sm">landscape</span>
+                        Land Value Allocation
+                    </label>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm text-slate-500">0%</span>
+                        <span id="landValue" class="text-2xl font-bold text-accent">20%</span>
+                        <span class="text-sm text-slate-500">50%</span>
+                    </div>
+                    <input type="range" id="landSlider" min="0" max="50" value="20" step="1">
+                    <p class="text-xs text-slate-500 mt-2">Land cannot be depreciated. Typical allocations run 15–25%.</p>
+                </div>
+
+                <div class="glass-card p-6">
+                    <label class="input-label" for="propertyType">
+                        <span class="material-symbols-outlined text-wealth text-sm">business</span>
+                        Property Type
+                    </label>
+                    <select id="propertyType">
+                        <option value="residential">Multifamily / Residential (27.5-Year)</option>
+                        <option value="commercial">Commercial / Office (39-Year)</option>
+                        <option value="industrial">Industrial / Warehouse (39-Year)</option>
+                    </select>
+                </div>
+
+                <div class="glass-card p-6">
+                    <label class="input-label" for="taxSlider">
+                        <span class="material-symbols-outlined text-wealth text-sm">account_balance</span>
+                        Marginal Tax Rate
+                    </label>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm text-slate-500">10%</span>
+                        <span id="taxValue" class="text-2xl font-bold text-accent">32%</span>
+                        <span class="text-sm text-slate-500">50%</span>
+                    </div>
+                    <input type="range" id="taxSlider" min="10" max="50" value="32" step="1">
+                    <p class="text-xs text-slate-500 mt-2">Your combined federal + state ordinary income tax bracket.</p>
+                </div>
+
+            </div>
+
+            <div class="space-y-6">
+
+                <div class="glass-card p-6 lg:p-8 savings-hero" style="background: rgba(0,200,81,0.04); border-color: rgba(0,200,81,0.15);">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-xl bg-wealth/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[#00C851]">savings</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 uppercase tracking-wider font-bold">Estimated Year 1 Additional Tax Savings</p>
+                        </div>
+                    </div>
+                    <p id="heroSavings" class="text-4xl md:text-5xl font-extrabold text-green mt-2">$0</p>
+                    <p class="text-sm text-slate-500 mt-2">Cash kept in your pocket by accelerating depreciation via cost segregation.</p>
+                </div>
+
+                <div class="glass-card p-6 lg:p-8">
+                    <h2 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-accent">pie_chart</span>
+                        Depreciation Breakdown
+                    </h2>
+                    <p class="text-sm text-slate-500 mb-6">How cost segregation reallocates your depreciable basis</p>
+
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="stat-badge col-span-2">
+                            <p class="text-xs text-slate-400 uppercase tracking-wider mb-1 font-bold">Depreciable Basis</p>
+                            <p id="depBasis" class="text-2xl md:text-3xl font-extrabold text-gold">$0</p>
+                            <p class="text-xs text-slate-500 mt-1">Purchase Price − Land Value</p>
+                        </div>
+                        <div class="stat-badge">
+                            <p class="text-xs text-slate-400 uppercase tracking-wider mb-1 font-bold">Standard Year 1</p>
+                            <p id="standardDepr" class="text-xl md:text-2xl font-bold text-gold">$0</p>
+                        </div>
+                        <div class="stat-badge green">
+                            <p class="text-xs text-slate-400 uppercase tracking-wider mb-1 font-bold">Accelerated Year 1</p>
+                            <p id="accelDepr" class="text-xl md:text-2xl font-bold text-green">$0</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider text-center">Reallocation Detail</h3>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="bg-white/[0.02] rounded-lg p-3 text-center border border-white/5">
+                                <p class="text-[10px] text-slate-500 uppercase tracking-wider mb-1 font-bold">5-Year</p>
+                                <p id="fiveYrPct" class="text-sm font-bold text-accent">20%</p>
+                                <p id="fiveYrAmt" class="text-xs text-slate-400 mt-0.5">$0</p>
+                            </div>
+                            <div class="bg-white/[0.02] rounded-lg p-3 text-center border border-white/5">
+                                <p class="text-[10px] text-slate-500 uppercase tracking-wider mb-1 font-bold">15-Year</p>
+                                <p id="fifteenYrPct" class="text-sm font-bold text-accent">10%</p>
+                                <p id="fifteenYrAmt" class="text-xs text-slate-400 mt-0.5">$0</p>
+                            </div>
+                            <div class="bg-white/[0.02] rounded-lg p-3 text-center border border-white/5">
+                                <p class="text-[10px] text-slate-500 uppercase tracking-wider mb-1 font-bold">Remaining</p>
+                                <p id="remainPct" class="text-sm font-bold text-accent">70%</p>
+                                <p id="remainAmt" class="text-xs text-slate-400 mt-0.5">$0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 flex flex-wrap gap-3 justify-center">
+                        <span id="propTag" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-accent/10 text-accent border border-accent/20">27.5-Year</span>
+                        <span id="taxTag" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-wealth/10 text-[#00C851] border border-wealth/20">Tax Rate 32%</span>
+                        <span id="landTag" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-white/5 text-slate-300 border border-white/10">Land 20%</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 lg:p-8">
+                    <h2 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-accent">bar_chart</span>
+                        Year 1 Deduction Comparison
+                    </h2>
+                    <p class="text-sm text-slate-500 mb-6">Standard vs. cost segregation accelerated deduction</p>
+                    <div class="chart-container">
+                        <canvas id="deprChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <article class="mt-20 max-w-4xl mx-auto pb-16 prose prose-invert max-w-none prose-h2:text-white prose-h3:text-primary prose-a:text-accent prose-strong:text-white">
+
+            <div class="flex items-center gap-4 mb-10 not-prose">
+                <div class="flex-1 h-px bg-white/10"></div>
+                <span class="text-xs text-primary uppercase tracking-widest font-bold">Investor Resource</span>
+                <div class="flex-1 h-px bg-white/10"></div>
+            </div>
+
+            <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight mb-4 border-none p-0 mt-0 text-center">
+                The Real Estate Investor's Guide to Cost Segregation
+            </h2>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>What Is a Cost Segregation Study?</h2>
+            <p>
+                A <strong class="text-white">cost segregation study</strong> is an engineering-based tax analysis that reclassifies components of a real estate asset from long-lived building property (27.5 or 39 years) into shorter-lived personal property or land improvement categories (5, 7, or 15 years). The result is dramatically front-loaded depreciation deductions in the early years of ownership — and a material reduction in your taxable income right now.
+            </p>
+            <p>
+                Under the IRS's Modified Accelerated Cost Recovery System (MACRS), not every part of a building ages at the same rate. The carpet in an apartment doesn't last 27.5 years. Neither does the parking lot asphalt, the specialty electrical wiring, or the decorative millwork. A cost seg engineer physically inspects and documents these components, assigning each to the correct asset class.
+            </p>
+            <p>
+                The payoff is immediate: <strong class="text-white">more depreciation in Year 1 means a larger tax deduction today</strong>, which translates directly into cash flow you can redeploy into your next acquisition.
+            </p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>Standard vs. Accelerated Depreciation</h2>
+            <p>
+                The IRS requires you to depreciate income-producing real property. The question is <em>how fast</em>. Standard straight-line depreciation spreads your depreciable basis evenly across the property's assigned recovery period:
+            </p>
+            <ul class="space-y-2 mb-4">
+                <li><strong class="text-white">Multifamily / Residential Rental:</strong> 27.5-year straight-line. A $2M depreciable basis yields roughly $36,364/year — or about $18,182 in Year 1 under the half-year convention.</li>
+                <li><strong class="text-white">Commercial / Industrial:</strong> 39-year straight-line. The same $2M basis yields roughly $25,641/year — just $12,820 in Year 1.</li>
+            </ul>
+
+            <h3>What Cost Segregation Changes</h3>
+            <p>
+                Cost segregation reclassifies a portion of that building basis into:
+            </p>
+            <ul class="space-y-2 mb-4">
+                <li><strong class="text-white">5-year property</strong> (Section 1245): Interior fixtures, carpet, appliances, certain electrical and plumbing systems. MACRS Year 1 rate: 20%.</li>
+                <li><strong class="text-white">15-year property</strong> (Section 1250 land improvements): Parking lots, sidewalks, landscaping, site lighting. MACRS Year 1 rate: 5%.</li>
+            </ul>
+            <p>
+                On a $2M multifamily property with a 20% land allocation, a typical cost seg study might reclassify 20% of the building basis to 5-year property and 10% to 15-year property. That alone can push Year 1 depreciation from roughly $58,000 to over $130,000 — more than doubling the deduction in the first year alone.
+            </p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>How to Use the Cost Segregation Estimator</h2>
+            <p>
+                The <strong class="text-white">Estimator</strong> above gives you a credible planning number in under 60 seconds. Here is how to get the most accurate estimate:
+            </p>
+            <ol class="space-y-4">
+                <li><strong>Enter your purchase price or adjusted cost basis.</strong> Use your actual acquisition cost plus closing costs.</li>
+                <li><strong>Set your land value allocation.</strong> Land is never depreciable. Check your property tax assessment for a land-to-improvement split. Urban infill properties often run 30–40%, while suburban or rural properties may be 10–15%.</li>
+                <li><strong>Select your property type.</strong> Residential rental runs on a 27.5-year schedule. All commercial, office, retail, and industrial fall under the 39-year regime.</li>
+                <li><strong>Enter your marginal tax rate.</strong> Include your combined federal and state ordinary income tax rate. High-earning real estate professionals should use 37%+ federally.</li>
+                <li><strong>Read your Year 1 Tax Savings.</strong> The green hero number is the estimated additional cash you keep in Year 1 over standard depreciation.</li>
+            </ol>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>The Power of Bonus Depreciation</h2>
+            <p>
+                Cost segregation alone is powerful. Cost segregation combined with <strong class="text-white">bonus depreciation</strong> is transformational. Bonus depreciation (IRC §168(k)) allows qualifying property to be fully expensed in the year it is placed in service.
+            </p>
+            <p>
+                The connection to cost seg is direct: once a study identifies your 5-year and 15-year components, those same components typically qualify for bonus depreciation. This means the portion of your building reclassified into shorter-lived categories can be <em>100% expensed in Year 1</em>. (Always confirm current bonus depreciation phase-out rates with a qualified CPA).
+            </p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>Who Should (and Shouldn't) Do Cost Segregation?</h2>
+
+            <h3>Strong Candidates</h3>
+            <ul class="space-y-2 mb-4">
+                <li><strong class="text-white">Properties valued at $750,000 or more.</strong> The general rule: the more you paid, the better the ROI on the study fee.</li>
+                <li><strong class="text-white">Investors with active income to offset.</strong> Real estate professionals (REPs) who qualify under IRC §469 can use unlimited real estate losses against ordinary income.</li>
+                <li><strong class="text-white">Planned holds of 5+ years.</strong> Longer holds maximize the time value of money benefit of early deductions.</li>
+            </ul>
+
+            <h3>When It May Not Be Worth It</h3>
+            <ul class="space-y-2 mb-4">
+                <li><strong class="text-white">Short planned holds (under 3 years).</strong> If you sell quickly, you'll trigger depreciation recapture on the accelerated amounts at ordinary income rates.</li>
+                <li><strong class="text-white">Purely passive investors in high-loss-limitation positions.</strong> If your passive losses are already suspended and you have no offsetting passive income, additional depreciation deductions simply stack up.</li>
+            </ul>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">How accurate is this cost segregation calculator?</h3>
+                <p class="mb-0">The estimator uses published MACRS Year 1 rates and industry-standard reclassification percentages for each property type. It is designed to produce a <strong class="text-white">credible planning range</strong> — not a formal study. Use this tool to determine whether a formal engineered study is worth commissioning.</p>
+            </div>
+
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">Can I do cost segregation on a property I've owned for several years?</h3>
+                <p class="mb-0">Yes. You can commission a <strong class="text-white">"lookback" or "catch-up" study</strong> on any property you already own. Under the §481(a) adjustment rules, you can claim all of the accelerated depreciation you <em>would have taken</em> in prior years in a single tax year, without amending past returns.</p>
+            </div>
+
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">How much does a cost segregation study cost?</h3>
+                <p class="mb-0">Study fees vary by property complexity. Generally: <strong class="text-white">$5,000–$8,000</strong> for properties under $2M; <strong class="text-white">$8,000–$15,000</strong> for $2M–$10M properties. The study fee itself is deductible as an ordinary business expense.</p>
+            </div>
+
+        </article>
+    </div>
+
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. We do not save your financial data. By clicking "Accept", you consent.</p>
+            <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept</button>
+        </div>
+    </div>
+
+    <footer class="text-center pb-12 border-t border-white/5 pt-8">
+        <p class="text-sm text-slate-600 max-w-2xl mx-auto">Built for real estate investors. Estimates are for planning only — consult a CPA or cost segregation engineer for a formal study.</p>
+    </footer>
+
+    <script>
+        // --- DOM ---
+        const priceInput = document.getElementById('priceInput');
+        const landSlider = document.getElementById('landSlider');
+        const propertyType = document.getElementById('propertyType');
+        const taxSlider = document.getElementById('taxSlider');
+
+        const landValue = document.getElementById('landValue');
+        const taxValue = document.getElementById('taxValue');
+
+        const heroSavings = document.getElementById('heroSavings');
+        const depBasis = document.getElementById('depBasis');
+        const standardDepr = document.getElementById('standardDepr');
+        const accelDepr = document.getElementById('accelDepr');
+
+        const fiveYrPct = document.getElementById('fiveYrPct');
+        const fiveYrAmt = document.getElementById('fiveYrAmt');
+        const fifteenYrPct = document.getElementById('fifteenYrPct');
+        const fifteenYrAmt = document.getElementById('fifteenYrAmt');
+        const remainPct = document.getElementById('remainPct');
+        const remainAmt = document.getElementById('remainAmt');
+
+        const propTag = document.getElementById('propTag');
+        const taxTag = document.getElementById('taxTag');
+        const landTag = document.getElementById('landTag');
+
+        // --- MACRS Year-1 rates ---
+        const MACRS_5YR_Y1 = 0.20;   // 20% first year
+        const MACRS_15YR_Y1 = 0.05;   // 5% first year
+
+        // --- Property configs ---
+        const CONFIG = {
+            residential: { life: 27.5, label: '27.5-Year', fiveYr: 0.20, fifteenYr: 0.10 },
+            commercial: { life: 39, label: '39-Year', fiveYr: 0.15, fifteenYr: 0.05 },
+            industrial: { life: 39, label: '39-Year', fiveYr: 0.15, fifteenYr: 0.05 },
+        };
+
+        // --- Formatting ---
+        function fmtCurrency(v) {
+            if (v >= 1e6) return '$' + (v / 1e6).toFixed(2) + 'M';
+            if (v >= 1e4) return '$' + (v / 1e3).toFixed(1) + 'K';
+            return '$' + Math.round(v).toLocaleString('en-US');
+        }
+        function fmtFull(v) {
+            return '$' + Math.round(v).toLocaleString('en-US');
+        }
+
+        function parsePrice(str) {
+            return parseInt(str.replace(/[^0-9]/g, ''), 10) || 0;
+        }
+        function formatPriceInput(v) {
+            return v.toLocaleString('en-US');
+        }
+        priceInput.addEventListener('input', function () {
+            const raw = parsePrice(this.value);
+            const pos = this.selectionStart;
+            const oldLen = this.value.length;
+            this.value = raw > 0 ? formatPriceInput(raw) : '';
+            const newLen = this.value.length;
+            this.setSelectionRange(pos + (newLen - oldLen), pos + (newLen - oldLen));
+            calculate();
+        });
+
+        // --- Chart ---
+        const ctx = document.getElementById('deprChart').getContext('2d');
+        const deprChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Standard Depreciation', 'Cost Segregation'],
+                datasets: [{
+                    label: 'Year 1 Deduction',
+                    data: [0, 0],
+                    backgroundColor: [
+                        'rgba(255,191,0,0.35)',
+                        'rgba(0,200,81,0.55)',
+                    ],
+                    borderColor: [
+                        'rgba(255,191,0,0.8)',
+                        'rgba(0,200,81,0.9)',
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 10,
+                    borderSkipped: false,
+                    barPercentage: 0.55,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'x',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(26,26,26,0.95)',
+                        titleColor: '#fff',
+                        bodyColor: '#94a3b8',
+                        titleFont: { family: 'Outfit', weight: '600', size: 14 },
+                        bodyFont: { family: 'Outfit', size: 13 },
+                        borderColor: 'rgba(255,191,0,0.2)',
+                        borderWidth: 1,
+                        cornerRadius: 10,
+                        padding: 14,
+                        callbacks: {
+                            label: function (ctx) { return 'Deduction: ' + fmtFull(ctx.parsed.y); }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8', font: { family: 'Outfit', size: 12, weight: '500' } },
+                        border: { display: false }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+                        ticks: {
+                            color: '#64748b',
+                            font: { family: 'Outfit', size: 11 },
+                            callback: function (v) { return fmtCurrency(v); }
+                        },
+                        border: { display: false }
+                    }
+                }
+            }
+        });
+
+        // --- Main Calculation ---
+        function calculate() {
+            const price = parsePrice(priceInput.value);
+            const landPct = parseInt(landSlider.value) / 100;
+            const type = propertyType.value;
+            const taxRate = parseInt(taxSlider.value) / 100;
+            const cfg = CONFIG[type];
+
+            landValue.textContent = landSlider.value + '%';
+            taxValue.textContent = taxSlider.value + '%';
+
+            const basis = price * (1 - landPct);
+
+            const stdFullYear = basis / cfg.life;
+            const stdYr1 = stdFullYear / 2;
+
+            const fiveYrBasis = basis * cfg.fiveYr;
+            const fifteenYrBasis = basis * cfg.fifteenYr;
+            const remainBasis = basis * (1 - cfg.fiveYr - cfg.fifteenYr);
+
+            const accelFiveYr = fiveYrBasis * MACRS_5YR_Y1;
+            const accelFifteenYr = fifteenYrBasis * MACRS_15YR_Y1;
+            const accelRemain = (remainBasis / cfg.life) / 2;
+
+            const totalAccelYr1 = accelFiveYr + accelFifteenYr + accelRemain;
+
+            const additionalDepr = totalAccelYr1 - stdYr1;
+            const taxSavings = Math.max(0, additionalDepr * taxRate);
+
+            heroSavings.textContent = fmtFull(Math.round(taxSavings));
+            depBasis.textContent = fmtFull(Math.round(basis));
+            standardDepr.textContent = fmtFull(Math.round(stdYr1));
+            accelDepr.textContent = fmtFull(Math.round(totalAccelYr1));
+
+            fiveYrPct.textContent = Math.round(cfg.fiveYr * 100) + '%';
+            fiveYrAmt.textContent = fmtFull(Math.round(fiveYrBasis));
+            fifteenYrPct.textContent = Math.round(cfg.fifteenYr * 100) + '%';
+            fifteenYrAmt.textContent = fmtFull(Math.round(fifteenYrBasis));
+            remainPct.textContent = Math.round((1 - cfg.fiveYr - cfg.fifteenYr) * 100) + '%';
+            remainAmt.textContent = fmtFull(Math.round(remainBasis));
+
+            propTag.textContent = cfg.label;
+            taxTag.textContent = 'Tax Rate ' + taxSlider.value + '%';
+            landTag.textContent = 'Land ' + landSlider.value + '%';
+
+            deprChart.data.datasets[0].data = [Math.round(stdYr1), Math.round(totalAccelYr1)];
+            deprChart.update('none');
+        }
+
+        landSlider.addEventListener('input', calculate);
+        propertyType.addEventListener('change', calculate);
+        taxSlider.addEventListener('input', calculate);
+
+        calculate();
+
+        // Cookie Logic
+        if (!localStorage.getItem('affiloreCookieConsent')) {
+            setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+        }
+        document.getElementById('accept-cookies').addEventListener('click', () => {
+            localStorage.setItem('affiloreCookieConsent', 'true');
+            document.getElementById('cookie-banner').classList.add('translate-y-full');
+        });
+    </script>
+</body>
+</html>
