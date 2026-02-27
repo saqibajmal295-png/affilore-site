@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Border Freelance Arbitrage Calculator | Geo-Arbitrage Tool | Affilore</title>
+    <meta name="description" content="Calculate your geo-arbitrage advantage. See how much further your foreign freelance income stretches when living in a lower cost-of-living country.">
+    <meta name="keywords" content="geo-arbitrage calculator, cross border freelance arbitrage, freelance purchasing power parity, earning USD in developing countries, digital nomad arbitrage, freelance exchange rate leverage">
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        charcoal: '#121212',
+                        card: '#1A1A1A',
+                        primary: '#FFBF00',
+                        accent: '#FFBF00',
+                        wealth: '#00C851',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background glow */
+        .bg-glow { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .bg-glow::before {
+            content: ''; position: absolute; top: -30%; left: -20%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(255,191,0,0.06) 0%, transparent 70%);
+            border-radius: 50%; animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+        .bg-glow::after {
+            content: ''; position: absolute; bottom: -30%; right: -20%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(0,200,81,0.04) 0%, transparent 70%);
+            border-radius: 50%; animation: pulseGlow 10s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.15); opacity: 1; }
+        }
+
+        /* Nav Header */
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+
+        /* Glass card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-radius: 1rem; transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 30px rgba(255, 191, 0, 0.03); }
+
+        /* Custom inputs */
+        .input-field {
+            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 0.75rem; padding: 0.75rem 1rem; color: #fff;
+            font-family: 'Outfit', sans-serif; font-size: 0.95rem; width: 100%;
+            transition: all 0.3s ease; outline: none; appearance: none; -webkit-appearance: none;
+        }
+        .input-field:focus {
+            border-color: rgba(255, 191, 0, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.08), 0 0 20px rgba(255, 191, 0, 0.05);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .input-field::placeholder { color: rgba(255, 255, 255, 0.25); }
+
+        select.input-field {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23FFBF00' d='M6 8.825a.5.5 0 0 1-.354-.146l-4-4a.5.5 0 0 1 .708-.708L6 7.617l3.646-3.646a.5.5 0 0 1 .708.708l-4 4A.5.5 0 0 1 6 8.825z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 1rem center; background-size: 12px; padding-right: 2.5rem;
+        }
+        select.input-field option { background: #1a1a1a; color: #fff; }
+
+        /* Metric card */
+        .metric-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 0.875rem; padding: 1.25rem 1.5rem; transition: all 0.3s ease;
+        }
+        .metric-card:hover { border-color: rgba(255, 255, 255, 0.1); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
+
+        /* Value animation */
+        .value-animate { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .value-pop { transform: scale(1.05); }
+
+        /* Label tag */
+        .label-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+        /* Chart container */
+        .chart-wrap { position: relative; max-width: 280px; margin: 0 auto; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+        /* Number input hide arrows */
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+
+        /* Pulse badge */
+        .pulse-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: #00C851;
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+        @keyframes pulseDot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 200, 81, 0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(0, 200, 81, 0); }
+        }
+
+        /* Leverage bar */
+        .leverage-bar-bg { height: 8px; background: rgba(255, 255, 255, 0.06); border-radius: 4px; overflow: hidden; }
+        .leverage-bar-fill {
+            height: 100%; border-radius: 4px;
+            background: linear-gradient(90deg, #FFBF00, #00C851);
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+
+<body class="font-outfit antialiased">
+
+    <div class="bg-glow"></div>
+
+    <header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-2 group">
+                    <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                    <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                    <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+                </a>
+                <div class="h-6 w-px bg-white/10 mx-2"></div>
+                <h1 class="text-slate-400 text-sm font-medium">Geo-Arbitrage Calculator</h1>
+            </div>
+            <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+        </div>
+    </header>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12">
+        
+        <header class="text-center mb-10 sm:mb-14">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/5 bg-white/[0.03] mb-5">
+                <span class="pulse-dot"></span>
+                <span class="text-xs text-slate-400 font-medium tracking-wide uppercase">Free Geo-Arbitrage Tool</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+                Cross-Border Freelance<br>
+                <span class="bg-gradient-to-r from-accent to-wealth bg-clip-text text-transparent">Arbitrage Calculator</span>
+            </h1>
+            <p class="mt-4 text-slate-400 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed">
+                Earn in strong currencies, live in affordable economies. Instantly visualize your geo-arbitrage leverage and savings potential.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+            <div class="lg:col-span-5">
+                <div class="glass-card p-6 sm:p-8 sticky top-28">
+                    <div class="flex items-center gap-3 mb-7">
+                        <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">Your Income Details</h2>
+                            <p class="text-xs text-slate-500">All fields update results in real time</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div>
+                            <label for="foreignRevenue" class="label-tag text-slate-400 mb-1.5 block">Foreign Client Revenue</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-accent font-semibold text-sm" id="revenueCurrencySymbol">$</span>
+                                <input type="number" id="foreignRevenue" class="input-field pl-8 font-bold text-lg" placeholder="3000" value="3000" min="0">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="clientCurrency" class="label-tag text-slate-400 mb-1.5 block">Client Currency</label>
+                            <select id="clientCurrency" class="input-field">
+                                <option value="USD" selected>USD — US Dollar</option>
+                                <option value="GBP">GBP — British Pound</option>
+                                <option value="EUR">EUR — Euro</option>
+                                <option value="AUD">AUD — Australian Dollar</option>
+                                <option value="CAD">CAD — Canadian Dollar</option>
+                                <option value="SGD">SGD — Singapore Dollar</option>
+                                <option value="CHF">CHF — Swiss Franc</option>
+                                <option value="JPY">JPY — Japanese Yen</option>
+                                <option value="AED">AED — UAE Dirham</option>
+                                <option value="NZD">NZD — New Zealand Dollar</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="localCurrency" class="label-tag text-slate-400 mb-1.5 block">Your Home Currency</label>
+                            <select id="localCurrency" class="input-field">
+                                <option value="PKR" selected>PKR — Pakistani Rupee</option>
+                                <option value="INR">INR — Indian Rupee</option>
+                                <option value="BDT">BDT — Bangladeshi Taka</option>
+                                <option value="PHP">PHP — Philippine Peso</option>
+                                <option value="NGN">NGN — Nigerian Naira</option>
+                                <option value="ZAR">ZAR — South African Rand</option>
+                                <option value="EGP">EGP — Egyptian Pound</option>
+                                <option value="MXN">MXN — Mexican Peso</option>
+                                <option value="BRL">BRL — Brazilian Real</option>
+                                <option value="COP">COP — Colombian Peso</option>
+                                <option value="ARS">ARS — Argentine Peso</option>
+                                <option value="TRY">TRY — Turkish Lira</option>
+                                <option value="IDR">IDR — Indonesian Rupiah</option>
+                                <option value="MYR">MYR — Malaysian Ringgit</option>
+                                <option value="THB">THB — Thai Baht</option>
+                                <option value="VND">VND — Vietnamese Dong</option>
+                                <option value="KES">KES — Kenyan Shilling</option>
+                                <option value="GHS">GHS — Ghanaian Cedi</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="exchangeRate" class="label-tag text-slate-400 mb-1.5 block">Exchange Rate <span class="text-slate-500 lowercase" id="rateLabel">(1 USD → PKR)</span></label>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-accent/60 text-sm">currency_exchange</span>
+                                <input type="number" id="exchangeRate" class="input-field pl-10 font-bold" step="0.01" min="0" value="278.50">
+                            </div>
+                            <p class="text-[0.65rem] text-slate-500 mt-1.5 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[10px]">info</span>
+                                Auto-populated default. Manually adjust for today's live rate.
+                            </p>
+                        </div>
+
+                        <div>
+                            <label for="localExpenses" class="label-tag text-slate-400 mb-1.5 block">Monthly Local Living Expenses</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 font-semibold text-xs" id="expenseCurrencyLabel">PKR</span>
+                                <input type="number" id="localExpenses" class="input-field pl-12 font-bold" placeholder="80000" value="80000" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-7 p-4 rounded-xl bg-accent/[0.04] border border-accent/10">
+                        <div class="flex items-start gap-2.5">
+                            <span class="material-symbols-outlined text-accent text-sm mt-0.5">lightbulb</span>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                <span class="text-accent font-semibold">Geo-Arbitrage</span> is the strategy of earning in a strong currency while living in a country with a lower cost of living, maximizing your purchasing power and savings.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+                <div class="glass-card p-5 sm:p-6 border-accent/10 relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-accent/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 relative z-10">
+                        <div>
+                            <p class="label-tag text-accent mb-1">Your Arbitrage Advantage</p>
+                            <p class="text-3xl sm:text-4xl font-extrabold value-animate" id="leverageDisplay">
+                                <span class="bg-gradient-to-r from-accent to-wealth bg-clip-text text-transparent">10.44×</span>
+                            </p>
+                            <p class="text-xs text-slate-400 mt-1">One month of foreign work covers <span id="leverageMonthsText" class="text-white font-medium">10.44</span> months of local expenses</p>
+                        </div>
+                        <div class="sm:text-right mt-2 sm:mt-0">
+                            <p class="label-tag text-wealth mb-1">Savings Rate</p>
+                            <p class="text-2xl sm:text-3xl font-extrabold text-wealth value-animate" id="savingsRateDisplay">90.4%</p>
+                        </div>
+                    </div>
+                    <div class="mt-5 relative z-10">
+                        <div class="leverage-bar-bg">
+                            <div class="leverage-bar-fill" id="leverageBar" style="width: 90%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="metric-card">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-accent text-sm">language</span>
+                            </div>
+                            <span class="label-tag text-slate-400">Converted Revenue</span>
+                        </div>
+                        <p class="text-2xl font-bold text-white value-animate" id="convertedRevenue">835,500</p>
+                        <p class="text-xs text-slate-500 mt-1" id="convertedRevenueLabel">In PKR</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-wealth/10 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-wealth text-sm">savings</span>
+                            </div>
+                            <span class="label-tag text-slate-400">Local Net Profit</span>
+                        </div>
+                        <p class="text-2xl font-bold text-wealth value-animate" id="netProfit">755,500</p>
+                        <p class="text-xs text-slate-500 mt-1" id="netProfitLabel">Monthly savings in PKR</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-purple-400 text-sm">rocket_launch</span>
+                            </div>
+                            <span class="label-tag text-slate-400">Leverage Multiplier</span>
+                        </div>
+                        <p class="text-2xl font-bold text-purple-400 value-animate" id="multiplier">10.44×</p>
+                        <p class="text-xs text-slate-500 mt-1">Months of local expenses covered</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-sky-500/10 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-sky-400 text-sm">monitoring</span>
+                            </div>
+                            <span class="label-tag text-slate-400">Annual Savings</span>
+                        </div>
+                        <p class="text-2xl font-bold text-sky-400 value-animate" id="annualSavings">9,066,000</p>
+                        <p class="text-xs text-slate-500 mt-1" id="annualSavingsLabel">Projected yearly savings in PKR</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 sm:p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-accent">pie_chart</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Where Your Money Goes</h3>
+                            <p class="text-xs text-slate-500">Monthly breakdown of expenses vs. retained profit</p>
+                        </div>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="doughnutChart"></canvas>
+                    </div>
+                    <div class="flex items-center justify-center gap-6 mt-6">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#FFBF00]"></span>
+                            <span class="text-xs text-slate-400">Living Expenses</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#00C851]"></span>
+                            <span class="text-xs text-slate-400">Retained Profit</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 sm:p-6 border-wealth/20 bg-wealth/5">
+                    <div class="flex items-start gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-wealth/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <span class="material-symbols-outlined text-wealth text-sm">done_all</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white mb-1">Arbitrage Insight</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed font-medium" id="insightText">
+                                By earning in USD and living in Pakistan, you retain 90.4% of your converted income. Your foreign earnings cover 10.44 months of local living expenses per month worked.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <article class="mt-20 max-w-4xl mx-auto pb-16 prose prose-invert max-w-none prose-h2:text-white prose-h3:text-primary prose-a:text-accent prose-strong:text-white">
+            
+            <div class="flex items-center gap-4 mb-10 not-prose">
+                <div class="h-px flex-1 bg-white/10"></div>
+                <span class="text-xs text-primary uppercase tracking-widest font-bold">In-Depth Guide</span>
+                <div class="h-px flex-1 bg-white/10"></div>
+            </div>
+
+            <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight mb-4 border-none p-0 mt-0 text-center">
+                The Complete Guide to Cross-Border Freelance Arbitrage
+            </h2>
+            <p class="text-slate-400 text-lg leading-relaxed text-center mb-12">
+                The global remote work revolution has handed independent freelancers one of the most powerful financial tools in history. If you're not deliberately engineering your income around <strong class="text-white">geo-arbitrage</strong>, you're leaving a massive wealth advantage on the table.
+            </p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>What Is Cross-Border Freelance Arbitrage?</h2>
+            <p>
+                <strong class="text-white">Geo-arbitrage</strong>, in its simplest form, is the practice of exploiting the geographical disparity between where you <em>earn</em> money and where you <em>spend</em> it. For freelancers and digital nomads, this means billing clients in USD, GBP, EUR, or other major currencies — and then converting those earnings into a local currency where the cost of living is a fraction of the source economy.
+            </p>
+            <p>
+                Consider a Pakistani web developer charging a US client $3,000/month. At an exchange rate of ~278 PKR per USD, that translates to roughly <strong class="text-white">PKR 834,000 per month</strong>. A comfortable middle-class lifestyle in Pakistan — including rent, food, transport, utilities, and leisure — can cost anywhere from PKR 60,000 to PKR 150,000. The math is staggering: the same income that might give you a modest life in San Francisco allows you to live affluently and save aggressively in Lahore or Karachi.
+            </p>
+            <p>
+                This is not a loophole. It is a legitimate financial strategy embraced by millions of freelancers across South Asia, Southeast Asia, Africa, Latin America, and Eastern Europe.
+            </p>
+
+            <h3>Who Benefits Most from Freelance Geo-Arbitrage?</h3>
+            <ul class="space-y-2 text-slate-300">
+                <li><strong class="text-white">Remote developers, designers, and writers</strong> billing clients in the US, UK, EU, or Gulf region.</li>
+                <li><strong class="text-white">Digital nomads</strong> who travel between low-cost countries while maintaining high-billing client relationships.</li>
+                <li><strong class="text-white">Locally based freelancers</strong> in emerging economies who serve an international clientele via platforms like Upwork or Toptal.</li>
+                <li><strong class="text-white">Agency owners</strong> in developing countries who hire local talent at local wages while invoicing clients at Western market rates.</li>
+            </ul>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>The Power of Purchasing Power Parity (PPP)</h2>
+            <p>
+                <strong class="text-white">Purchasing Power Parity (PPP)</strong> is an economic theory that compares the relative value of currencies by measuring what a given basket of goods costs in different countries. For freelancers, PPP is not an abstract academic concept — it is the foundation upon which their entire financial advantage is built.
+            </p>
+            <p>
+                According to World Bank PPP data, $1 in the United States has the purchasing power equivalent of roughly <strong class="text-white">₨8–10 in Pakistan, ₹4–5 in India, or ₦500+ in Nigeria</strong> in real terms. This means that a freelancer earning $3,000/month in USD isn't just earning the nominal equivalent in local currency — they are accessing a radically superior standard of living relative to local wage earners.
+            </p>
+
+            <h3>The Arbitrage Leverage Multiplier Explained</h3>
+            <p>
+                The <strong class="text-white">Leverage Multiplier</strong> shown in the calculator above (Converted Revenue ÷ Monthly Expenses) is arguably the most telling number in geo-arbitrage analysis. A multiplier of <strong class="text-white">10×</strong> means one month of foreign-billed freelance work covers ten full months of your local cost of living.
+            </p>
+            <p>
+                Most salaried employees in developing economies have a leverage multiplier of <strong class="text-white">1.0×</strong> — their entire monthly income barely covers monthly expenses. International freelancers routinely achieve multipliers of 4× to 15×, creating the conditions for rapid wealth accumulation.
+            </p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>How to Use the Geo-Arbitrage Calculator</h2>
+            <p>
+                The calculator at the top of this page is designed for immediate, real-world use. Here is exactly how to get the most accurate result:
+            </p>
+            <ol class="space-y-4">
+                <li><strong>Enter Your Foreign Client Revenue:</strong> Input your gross monthly billing amount in the client's currency. Use your average monthly income.</li>
+                <li><strong>Select Currencies:</strong> The calculator supports 10 foreign billing currencies and 18 local spending currencies. Select your pair.</li>
+                <li><strong>Verify the Exchange Rate:</strong> The default rate is a reference point. For the most accurate analysis, check the live interbank rate on Google and manually update the field.</li>
+                <li><strong>Enter Living Expenses:</strong> Be thorough. Include rent, food, utilities, transport, subscriptions, healthcare, and a realistic discretionary budget.</li>
+                <li><strong>Analyze Results:</strong> The dashboard instantly displays your Converted Revenue, Net Profit, Leverage Multiplier, Savings Rate, and Annual Projection.</li>
+            </ol>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>Managing Currency Fluctuation Risk</h2>
+            <p>
+                The primary financial risk of freelance exchange rate leverage is currency volatility. Smart international freelancers treat currency risk as a manageable variable, not a paralyzing threat.
+            </p>
+
+            <h3>Use Multi-Currency Accounts</h3>
+            <ul class="space-y-2 text-slate-300">
+                <li><strong class="text-white">Wise (formerly TransferWise)</strong> — Offers a real borderless account that can hold and convert 40+ currencies at mid-market rates.</li>
+                <li><strong class="text-white">Payoneer</strong> — The dominant platform for freelancers in emerging markets. Provides a US, EU, and UK receiving account.</li>
+                <li><strong class="text-white">Remitly</strong> — Best for transferring money from a foreign account to local family or business accounts at competitive rates.</li>
+                <li><strong class="text-white">Elevate</strong> — Designed for high-earning freelancers, offers business tools layered on top of international payment infrastructure.</li>
+            </ul>
+
+            <div class="bg-primary/10 border border-primary/20 rounded-xl p-6 my-8">
+                <p class="m-0 text-slate-300">💡 <strong>Pro Tip:</strong> Dollar-cost average your conversions. Convert a fixed portion of your foreign income to local currency each week rather than all at once after each payment to smooth out rate volatility over time.</p>
+            </div>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>The Ethical Wealth Advantage</h2>
+            <p>
+                A frequently overlooked dimension of geo-arbitrage is its positive economic impact. When freelancers in developing economies earn in foreign currencies and spend locally, they act as a private-sector version of foreign direct investment. Every dollar earned abroad and converted locally feeds into the domestic economy — stimulating demand and supporting local businesses.
+            </p>
+
+            <h3>Building Debt-Free Wealth</h3>
+            <p>
+                The single most powerful long-term wealth outcome of geo-arbitrage is the ability to accumulate assets with <strong class="text-white">zero leverage.</strong>
+            </p>
+            <ul>
+                <li>A freelancer saving <strong>PKR 600,000/month</strong> for 24 months accumulates PKR 14.4 million — enough to purchase property outright without a mortgage.</li>
+                <li>A local salaried employee saving PKR 16,000/month would build wealth 37× slower.</li>
+            </ul>
+            <p>This compounding velocity makes freelance geo-arbitrage one of the fastest legitimate wealth-building paths available.</p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">Is geo-arbitrage legal? Do I need to pay taxes in both countries?</h3>
+                <p class="mb-0">Geo-arbitrage is entirely legal. Tax obligations depend on your country of residence and citizenship. Most countries tax residents on worldwide income, so you will typically owe tax on your foreign earnings in your home country. Always consult a qualified local tax professional.</p>
+            </div>
+
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">What exchange rate should I use in the calculator?</h3>
+                <p class="mb-0">Use the interbank (mid-market) rate as a baseline. For practical planning, subtract 0.5–2% to account for conversion fees on platforms like Wise or Payoneer. Never use a bank's advertised retail rate as your benchmark.</p>
+            </div>
+
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">What is a "good" Leverage Multiplier?</h3>
+                <p class="mb-0">A multiplier of <strong>3× or above</strong> is considered a meaningful advantage. A multiplier between <strong>5× and 10×</strong> is excellent, enabling aggressive savings. Above 10× is exceptional and typically requires either very high billing rates or an extremely low cost-of-living location.</p>
+            </div>
+            
+        </article>
+
+    </div>
+
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. We do not save your financial data. By clicking "Accept", you consent.</p>
+            <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept</button>
+        </div>
+    </div>
+
+    <footer class="text-center pb-12 border-t border-white/5 pt-8">
+        <p class="text-sm text-slate-600 max-w-2xl mx-auto">Exchange rates are indicative defaults. Always verify with live market rates before making financial decisions. This tool does not constitute financial or tax advice.</p>
+    </footer>
+
+    <script>
+        // Exchange rates dictionary
+        const foreignToUSD = {
+            USD: 1.0, GBP: 1.27, EUR: 1.09, AUD: 0.65, CAD: 0.74,
+            SGD: 0.75, CHF: 1.13, JPY: 0.0067, AED: 0.2723, NZD: 0.61
+        };
+
+        const USDtoLocal = {
+            PKR: 278.50, INR: 83.50, BDT: 110.00, PHP: 56.20, NGN: 1550.00,
+            ZAR: 18.60, EGP: 50.50, MXN: 17.20, BRL: 4.95, COP: 3950.00,
+            ARS: 870.00, TRY: 32.50, IDR: 15650.00, MYR: 4.72, THB: 35.80,
+            VND: 24500.00, KES: 153.00, GHS: 14.80
+        };
+
+        const currencySymbols = {
+            USD: '$', GBP: '£', EUR: '€', AUD: 'A$', CAD: 'C$',
+            SGD: 'S$', CHF: 'Fr', JPY: '¥', AED: 'د.إ', NZD: 'NZ$',
+            PKR: '₨', INR: '₹', BDT: '৳', PHP: '₱', NGN: '₦',
+            ZAR: 'R', EGP: 'E£', MXN: 'Mex$', BRL: 'R$', COP: 'COL$',
+            ARS: 'AR$', TRY: '₺', IDR: 'Rp', MYR: 'RM', THB: '฿',
+            VND: '₫', KES: 'KSh', GHS: 'GH₵'
+        };
+
+        // DOM refs
+        const elForeignRevenue = document.getElementById('foreignRevenue');
+        const elClientCurrency = document.getElementById('clientCurrency');
+        const elLocalCurrency = document.getElementById('localCurrency');
+        const elExchangeRate = document.getElementById('exchangeRate');
+        const elLocalExpenses = document.getElementById('localExpenses');
+        const elRevenueCurrencySymbol = document.getElementById('revenueCurrencySymbol');
+        const elExpenseCurrencyLabel = document.getElementById('expenseCurrencyLabel');
+        const elRateLabel = document.getElementById('rateLabel');
+
+        // Output refs
+        const elConvertedRevenue = document.getElementById('convertedRevenue');
+        const elConvertedRevenueLabel = document.getElementById('convertedRevenueLabel');
+        const elNetProfit = document.getElementById('netProfit');
+        const elNetProfitLabel = document.getElementById('netProfitLabel');
+        const elMultiplier = document.getElementById('multiplier');
+        const elLeverageDisplay = document.getElementById('leverageDisplay');
+        const elLeverageMonthsText = document.getElementById('leverageMonthsText');
+        const elSavingsRateDisplay = document.getElementById('savingsRateDisplay');
+        const elLeverageBar = document.getElementById('leverageBar');
+        const elAnnualSavings = document.getElementById('annualSavings');
+        const elAnnualSavingsLabel = document.getElementById('annualSavingsLabel');
+        const elInsightText = document.getElementById('insightText');
+
+        // Chart
+        let doughnutChart;
+        function initChart() {
+            const ctx = document.getElementById('doughnutChart').getContext('2d');
+            doughnutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Living Expenses', 'Retained Profit'],
+                    datasets: [{
+                        data: [10, 90],
+                        backgroundColor: ['#FFBF00', '#00C851'],
+                        borderColor: ['rgba(255,191,0,0.2)', 'rgba(0,200,81,0.2)'],
+                        borderWidth: 2,
+                        hoverBorderColor: ['#FFBF00', '#00C851'],
+                        hoverBorderWidth: 3,
+                        spacing: 4,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: '72%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(26,26,26,0.95)',
+                            titleColor: '#fff',
+                            bodyColor: '#94a3b8',
+                            titleFont: { family: 'Outfit', weight: '600', size: 13 },
+                            bodyFont: { family: 'Outfit', size: 12 },
+                            padding: { x: 14, y: 10 },
+                            cornerRadius: 10,
+                            borderColor: 'rgba(255,255,255,0.08)',
+                            borderWidth: 1,
+                            displayColors: true,
+                            boxWidth: 10,
+                            boxHeight: 10,
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label + ': ' + context.parsed.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    },
+                    animation: { animateRotate: true, duration: 600, easing: 'easeOutQuart' }
+                }
+            });
+        }
+
+        function fmt(n) {
+            if (Math.abs(n) >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+            if (Math.abs(n) >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+            return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        }
+
+        function getCrossRate(foreign, local) {
+            const fToUSD = foreignToUSD[foreign] || 1;
+            const uToL = USDtoLocal[local] || 1;
+            return fToUSD * uToL;
+        }
+
+        function updateDefaultRate() {
+            const foreign = elClientCurrency.value;
+            const local = elLocalCurrency.value;
+            const rate = getCrossRate(foreign, local);
+            elExchangeRate.value = rate.toFixed(2);
+            elRateLabel.textContent = `(1 ${foreign} → ${local})`;
+        }
+
+        function popAnimate(el) {
+            el.classList.add('value-pop');
+            setTimeout(() => el.classList.remove('value-pop'), 300);
+        }
+
+        function calculate() {
+            const revenue = parseFloat(elForeignRevenue.value) || 0;
+            const rate = parseFloat(elExchangeRate.value) || 0;
+            const expenses = parseFloat(elLocalExpenses.value) || 0;
+            const local = elLocalCurrency.value;
+            const foreign = elClientCurrency.value;
+
+            const converted = revenue * rate;
+            const profit = converted - expenses;
+            const multiplier = expenses > 0 ? converted / expenses : 0;
+            const savingsRate = converted > 0 ? (profit / converted) * 100 : 0;
+            const annual = profit * 12;
+
+            elConvertedRevenue.textContent = fmt(Math.round(converted));
+            elConvertedRevenueLabel.textContent = `In ${local}`;
+            popAnimate(elConvertedRevenue);
+
+            elNetProfit.textContent = (profit >= 0 ? '' : '−') + fmt(Math.abs(Math.round(profit)));
+            elNetProfit.className = `text-2xl font-bold value-animate ${profit >= 0 ? 'text-wealth' : 'text-red-400'}`;
+            elNetProfitLabel.textContent = `Monthly ${profit >= 0 ? 'savings' : 'deficit'} in ${local}`;
+            popAnimate(elNetProfit);
+
+            const multVal = multiplier.toFixed(2);
+            elMultiplier.textContent = `${multVal}×`;
+            popAnimate(elMultiplier);
+
+            elLeverageDisplay.innerHTML = `<span class="bg-gradient-to-r from-accent to-wealth bg-clip-text text-transparent">${multVal}×</span>`;
+            elLeverageMonthsText.textContent = multVal;
+
+            const sr = Math.max(0, savingsRate).toFixed(1);
+            elSavingsRateDisplay.textContent = `${sr}%`;
+            elSavingsRateDisplay.className = `text-2xl sm:text-3xl font-extrabold value-animate ${savingsRate >= 0 ? 'text-wealth' : 'text-red-400'}`;
+            popAnimate(elSavingsRateDisplay);
+
+            const barWidth = Math.min(100, Math.max(0, savingsRate));
+            elLeverageBar.style.width = `${barWidth}%`;
+
+            elAnnualSavings.textContent = (annual >= 0 ? '' : '−') + fmt(Math.abs(Math.round(annual)));
+            elAnnualSavings.className = `text-2xl font-bold value-animate ${annual >= 0 ? 'text-sky-400' : 'text-red-400'}`;
+            elAnnualSavingsLabel.textContent = `Projected yearly ${annual >= 0 ? 'savings' : 'deficit'} in ${local}`;
+            popAnimate(elAnnualSavings);
+
+            const foreignName = elClientCurrency.options[elClientCurrency.selectedIndex].text.split('—')[1]?.trim() || foreign;
+            const localName = elLocalCurrency.options[elLocalCurrency.selectedIndex].text.split('—')[1]?.trim() || local;
+            if (converted > 0 && expenses > 0) {
+                elInsightText.textContent = `By earning in ${foreign} and living on ${localName}, you retain ${Math.max(0, savingsRate).toFixed(1)}% of your converted income. Your foreign earnings cover ${multVal} months of local living expenses per month worked.`;
+            } else {
+                elInsightText.textContent = 'Enter your income and expenses above to see your geo-arbitrage insight.';
+            }
+
+            const expPct = converted > 0 ? (expenses / converted) * 100 : 50;
+            const profPct = converted > 0 ? Math.max(0, (profit / converted) * 100) : 50;
+            doughnutChart.data.datasets[0].data = [
+                parseFloat(Math.min(100, expPct).toFixed(1)),
+                parseFloat(Math.max(0, profPct).toFixed(1))
+            ];
+            doughnutChart.update('none');
+        }
+
+        function updateLabels() {
+            const foreign = elClientCurrency.value;
+            const local = elLocalCurrency.value;
+            elRevenueCurrencySymbol.textContent = currencySymbols[foreign] || foreign;
+            elExpenseCurrencyLabel.textContent = local;
+        }
+
+        function onCurrencyChange() {
+            updateDefaultRate();
+            updateLabels();
+            calculate();
+        }
+
+        elClientCurrency.addEventListener('change', onCurrencyChange);
+        elLocalCurrency.addEventListener('change', onCurrencyChange);
+        elForeignRevenue.addEventListener('input', calculate);
+        elExchangeRate.addEventListener('input', calculate);
+        elLocalExpenses.addEventListener('input', calculate);
+
+        initChart();
+        updateLabels();
+        calculate();
+
+        // Cookie Logic
+        if (!localStorage.getItem('affiloreCookieConsent')) {
+            setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+        }
+        document.getElementById('accept-cookies').addEventListener('click', () => {
+            localStorage.setItem('affiloreCookieConsent', 'true');
+            document.getElementById('cookie-banner').classList.add('translate-y-full');
+        });
+    </script>
+</body>
+</html>
