@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faceless Channel ROI & Burn Rate Forecaster | Affilore Tools</title>
+    <meta name="description" content="Calculate your faceless YouTube channel's ROI, burn rate, and break-even point. Free 12-month projection tool with real-time cost vs revenue analysis.">
+    <meta name="keywords" content="faceless channel calculator, youtube roi calculator, burn rate forecaster, break even point youtube, faceless youtube channel costs, youtube revenue calculator">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="icon" type="image/png" href="/logo.png">
+    
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        charcoal: '#121212',
+                        card: '#1A1A1A',
+                        primary: '#FFBF00',
+                        accent: '#FFBF00',
+                        danger: '#FF4444',
+                        success: '#00C851',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: #121212; color: #fff; min-height: 100vh; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #1A1A1A; }
+        ::-webkit-scrollbar-thumb { background: #FFBF00; border-radius: 3px; }
+        
+        .glass-header { background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #fff;
+            width: 100%;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .input-field:focus { border-color: #FFBF00; box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.1); }
+        
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; outline: none; margin-top: 8px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #FFBF00; cursor: pointer; box-shadow: 0 0 10px rgba(255,191,0,0.4); transition: transform 0.2s; }
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+        
+        .glow-accent { box-shadow: 0 0 30px rgba(255, 191, 0, 0.08); }
+        .glow-danger { box-shadow: 0 0 30px rgba(255, 68, 68, 0.12); }
+        .glow-success { box-shadow: 0 0 30px rgba(0, 200, 81, 0.12); }
+
+        .stat-card { position: relative; overflow: hidden; transition: transform 0.3s ease; }
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 16px 16px 0 0; }
+        .stat-card.burn::before { background: linear-gradient(90deg, #FF4444, #FF6B6B); }
+        .stat-card.revenue::before { background: linear-gradient(90deg, #FFBF00, #FFD54F); }
+        .stat-card.profit::before { background: linear-gradient(90deg, #00C851, #69F0AE); }
+        .stat-card.loss::before { background: linear-gradient(90deg, #FF4444, #FF6B6B); }
+        .stat-card.breakeven::before { background: linear-gradient(90deg, #7C4DFF, #B388FF); }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(124, 77, 255, 0.15); }
+            50% { box-shadow: 0 0 40px rgba(124, 77, 255, 0.3); }
+        }
+        .pulse-glow { animation: pulse-glow 2.5s ease-in-out infinite; }
+
+        .bg-grid {
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .cost-bar { height: 8px; border-radius: 4px; transition: width 0.5s ease; }
+        .chart-container { position: relative; width: 100%; height: 320px; }
+    </style>
+</head>
+<body class="bg-charcoal bg-grid pt-24 pb-20">
+
+    <header class="fixed top-0 w-full z-50 glass-header px-6 py-4 text-white">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center gap-2 group">
+                    <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                    <img src="/logo.png" alt="Affilore Logo" class="h-8 w-auto object-contain">
+                    <span class="text-xl font-bold">Affi<span class="text-primary">lore</span></span>
+                </a>
+                <div class="h-6 w-px bg-white/10 mx-2"></div>
+                <h1 class="text-slate-400 text-sm font-medium">Channel Forecaster</h1>
+            </div>
+            <a href="/" class="hidden sm:block text-sm font-bold text-primary hover:text-white transition-colors">Back to Home</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-6">
+        
+        <div class="text-center mb-10 mt-6">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-xs text-accent font-semibold tracking-widest uppercase mb-5">
+                <span class="material-symbols-outlined text-sm">smart_display</span>
+                Creator Tool
+            </div>
+            <h2 class="text-3xl md:text-5xl font-extrabold leading-tight mb-4 text-white">
+                Faceless Channel<br>
+                <span class="text-accent">ROI & Burn Rate</span> Forecaster
+            </h2>
+            <p class="text-slate-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                Know exactly when your faceless YouTube channel becomes profitable. Model costs, revenue, and find your break-even point with a 12-month projection.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
+
+            <div class="lg:col-span-5 space-y-6">
+
+                <div class="glass-card p-6 border-t-4 border-t-danger">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-danger/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-danger">payments</span>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">Monthly Production Costs</h2>
+                            <p class="text-xs text-slate-500">Your recurring content expenses</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div>
+                            <label class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-300">Scriptwriting</span>
+                                <span class="text-sm text-accent font-bold" id="labelScriptwriting">$50</span>
+                            </label>
+                            <input type="range" id="costScriptwriting" min="0" max="1000" step="10" value="150">
+                        </div>
+                        <div>
+                            <label class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-300">Voiceover / AI Voice</span>
+                                <span class="text-sm text-accent font-bold" id="labelVoiceover">$30</span>
+                            </label>
+                            <input type="range" id="costVoiceover" min="0" max="1000" step="10" value="50">
+                        </div>
+                        <div>
+                            <label class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-300">Video Editing</span>
+                                <span class="text-sm text-accent font-bold" id="labelEditing">$100</span>
+                            </label>
+                            <input type="range" id="costEditing" min="0" max="2000" step="10" value="300">
+                        </div>
+                        <div>
+                            <label class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-300">Thumbnails</span>
+                                <span class="text-sm text-accent font-bold" id="labelThumbnails">$25</span>
+                            </label>
+                            <input type="range" id="costThumbnails" min="0" max="500" step="5" value="80">
+                        </div>
+                        <div>
+                            <label class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-300">Software Subscriptions</span>
+                                <span class="text-sm text-accent font-bold" id="labelSoftware">$40</span>
+                            </label>
+                            <input type="range" id="costSoftware" min="0" max="500" step="5" value="40">
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-5 border-t border-white/10">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Total Burn Rate</span>
+                            <span class="text-sm text-danger font-bold" id="totalCostLabel">$620/mo</span>
+                        </div>
+                        <div class="flex gap-1 rounded-full overflow-hidden bg-white/5 h-3">
+                            <div class="cost-bar bg-red-500" id="barScriptwriting"></div>
+                            <div class="cost-bar bg-orange-400" id="barVoiceover"></div>
+                            <div class="cost-bar bg-yellow-400" id="barEditing"></div>
+                            <div class="cost-bar bg-emerald-400" id="barThumbnails"></div>
+                            <div class="cost-bar bg-blue-400" id="barSoftware"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 border-t-4 border-t-accent">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-accent">trending_up</span>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-white">Channel Metrics</h2>
+                            <p class="text-xs text-slate-500">Performance & revenue inputs</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div>
+                            <label class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-300">Videos Published / Month</span>
+                                <span class="text-sm text-accent font-bold" id="labelVideos">8</span>
+                            </label>
+                            <input type="range" id="metricVideos" min="1" max="60" step="1" value="8">
+                        </div>
+                        <div>
+                            <label class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-300">Avg Views per Video</span>
+                                <span class="text-sm text-accent font-bold" id="labelViews">5,000</span>
+                            </label>
+                            <input type="range" id="metricViews" min="100" max="500000" step="500" value="15000">
+                        </div>
+                        <div>
+                            <label class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-300">Estimated RPM ($)</span>
+                                <span class="text-sm text-accent font-bold" id="labelRPM">$4.00</span>
+                            </label>
+                            <input type="range" id="metricRPM" min="0.5" max="30" step="0.25" value="6.50">
+                        </div>
+                        <div>
+                            <label class="block mb-2">
+                                <span class="text-sm font-semibold text-slate-300">Extra Monthly Income (Affiliates / Sponsors)</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                                <input type="number" id="metricExtra" value="0" min="0" step="10" class="input-field pl-9 text-lg font-bold">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="material-symbols-outlined text-purple-400">rocket_launch</span>
+                        <h2 class="text-lg font-bold text-white">Growth Scenario</h2>
+                    </div>
+                    <div>
+                        <label class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-semibold text-slate-300">Monthly View Growth Rate</span>
+                            <span class="text-sm text-purple-400 font-bold" id="labelGrowth">10%</span>
+                        </label>
+                        <input type="range" id="metricGrowth" min="0" max="100" step="1" value="15">
+                        <p class="text-xs text-slate-500 mt-2">Used for the 12-month projection chart.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="glass-card stat-card burn p-5 glow-danger">
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Monthly Burn Rate</p>
+                        <div class="text-3xl font-extrabold text-danger" id="kpiBurn">$0</div>
+                        <p class="text-xs text-slate-500 mt-1">Total monthly production costs</p>
+                    </div>
+
+                    <div class="glass-card stat-card revenue p-5 glow-accent">
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Est. Revenue</p>
+                        <div class="text-3xl font-extrabold text-accent" id="kpiRevenue">$0</div>
+                        <p class="text-xs text-slate-500 mt-1">AdSense + extra income</p>
+                    </div>
+
+                    <div class="glass-card stat-card profit p-5 glow-success" id="profitCard">
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2" id="profitLabel">Net Profit / Loss</p>
+                        <div class="text-3xl font-extrabold" id="kpiProfit">$0</div>
+                        <p class="text-xs text-slate-500 mt-1" id="profitSubtext">Revenue minus all costs</p>
+                    </div>
+
+                    <div class="glass-card stat-card breakeven p-5 pulse-glow">
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">Break-Even Point</p>
+                        <div class="text-3xl font-extrabold text-purple-400" id="kpiBreakeven">0</div>
+                        <p class="text-xs text-slate-500 mt-1" id="breakevenSubtext">Views per video needed to break even</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-white">12-Month Projection</h2>
+                            <p class="text-xs text-slate-500">Cumulative costs vs cumulative revenue</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="flex items-center gap-2 text-xs font-bold text-slate-300"><span class="w-3 h-1 rounded bg-danger inline-block"></span>Costs</span>
+                            <span class="flex items-center gap-2 text-xs font-bold text-slate-300"><span class="w-3 h-1 rounded bg-success inline-block"></span>Revenue</span>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="projectionChart"></canvas>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 text-center" id="chartInsight">
+                        <p class="text-sm text-slate-400"></p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6">
+                    <h2 class="text-lg font-bold text-white mb-4">Monthly Financial Snapshot</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-white/10">
+                                    <th class="text-left py-3 px-3 text-slate-400 font-bold uppercase tracking-wider text-xs">Month</th>
+                                    <th class="text-right py-3 px-3 text-slate-400 font-bold uppercase tracking-wider text-xs">Views</th>
+                                    <th class="text-right py-3 px-3 text-slate-400 font-bold uppercase tracking-wider text-xs">Rev</th>
+                                    <th class="text-right py-3 px-3 text-slate-400 font-bold uppercase tracking-wider text-xs">Cost</th>
+                                    <th class="text-right py-3 px-3 text-slate-400 font-bold uppercase tracking-wider text-xs">Net</th>
+                                    <th class="text-right py-3 px-3 text-slate-400 font-bold uppercase tracking-wider text-xs">Cum. P/L</th>
+                                </tr>
+                            </thead>
+                            <tbody id="breakdownBody" class="text-slate-300"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <article class="glass-card rounded-3xl p-8 sm:p-12 mt-12 prose prose-invert max-w-none prose-h2:text-white prose-h3:text-primary prose-a:text-accent prose-strong:text-white">
+            <h2>What Is the Faceless Channel ROI &amp; Burn Rate Forecaster?</h2>
+            <p>
+                The <strong>Faceless Channel ROI &amp; Burn Rate Forecaster</strong> is a free, browser-based financial modeling tool built specifically for YouTube automation creators. Unlike generic spreadsheet templates, this tool gives you <strong>real-time, interactive projections</strong> — no formulas to set up, no downloads required.
+            </p>
+            <p>
+                You input your monthly production costs (scriptwriting, voiceover, editing, thumbnails, and software), your channel metrics (videos per month, average views, RPM, and affiliate/sponsorship income), and a growth rate. The tool instantly outputs:
+            </p>
+            <ul class="space-y-2 mb-6">
+                <li><strong>Monthly Burn Rate</strong> — your total spending per month on content production</li>
+                <li><strong>Estimated Monthly Revenue</strong> — AdSense income + any additional streams</li>
+                <li><strong>Net Profit or Loss</strong> — the real bottom line after every expense</li>
+                <li><strong>Break-Even Views per Video</strong> — exactly how many views each video must pull to cover your costs</li>
+                <li><strong>12-Month Cumulative Projection Chart</strong> — a visual line chart showing when your revenue line overtakes your cost line</li>
+            </ul>
+            <p>
+                Think of it as your <strong>YouTube automation business simulator</strong>. Before you hire another editor or order more scripts, run the numbers here first. It is the fastest <strong>faceless YouTube channel cost calculator</strong> available — and it is completely free.
+            </p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>The True Cost of YouTube Automation</h2>
+            <p>
+                One of the most common mistakes new faceless channel creators make is <strong>underestimating their monthly expenses</strong>. They focus on the revenue potential shown in YouTube income screenshots and fail to map out the full production cost stack. Here is what a realistic budget breakdown looks like.
+            </p>
+
+            <h3>Scriptwriting: $30–$300+ per Month</h3>
+            <p>
+                Script quality is directly correlated with watch time, and watch time drives algorithmic growth. Hiring a freelance writer on Upwork or Fiverr typically costs <strong>$15–$100 per script</strong>, depending on niche research depth and word count. AI-assisted scriptwriting using tools like ChatGPT or Claude can slash this to near zero, but you still need a human editor to add genuine expertise, structure hooks, and prevent AI-detectable patterns that harm audience retention.
+            </p>
+            <p>Realistically, plan for <strong>$3–$15 per video</strong> for AI-assisted scripts with light human editing, or <strong>$30–$80 per video</strong> for fully human-written content in competitive niches.</p>
+
+            <h3>Voiceover: $20–$250+ per Month</h3>
+            <p>
+                The voiceover landscape has transformed. <strong>AI voice tools</strong> like ElevenLabs, PlayHT, and Murf AI cost <strong>$5–$50/month</strong> as subscriptions and produce broadcast-quality output. Hiring a human voiceover artist on Voices.com or through a private arrangement costs <strong>$30–$150 per video</strong>, but delivers authentic engagement that many audiences prefer. The right choice depends on your niche — educational and explainer channels often perform well with AI voice, while storytelling and documentary-style formats may benefit from a human narrator.
+            </p>
+
+            <h3>Video Editing: $50–$1,500+ per Month</h3>
+            <p>
+                Editing is typically the <strong>largest single cost</strong> for most faceless channels. A dedicated video editor hired on Upwork or through a YouTube automation agency charges <strong>$5–$40 per video</strong>, depending on complexity. Stock footage sourcing, B-roll selection, captions, sound design, and motion graphics all add time and therefore cost. AI video editors like Descript, Opus Clip, or CapCut Pro can automate portions, but human oversight is still required at scale.
+            </p>
+
+            <h3>Thumbnails: $10–$150 per Month</h3>
+            <p>
+                A thumbnail determines whether someone clicks — or keeps scrolling. Hiring a professional thumbnail designer costs <strong>$5–$25 per thumbnail</strong>. Tools like Canva Pro or Adobe Express reduce this to <strong>$13–$55/month</strong> as a flat subscription, ideal for creators who design their own. High-CTR thumbnails follow a consistent visual formula: bold contrast, a single focal point, and legible text at small sizes.
+            </p>
+
+            <h3>Software Subscriptions: $30–$120 per Month</h3>
+            <p>
+                A typical faceless channel tech stack includes: a script assistant (ChatGPT Plus at $20/month), an AI voice tool, a stock footage platform (Storyblocks at $15–$25/month), and a project management tool (Notion or ClickUp). Budget <strong>$40–$120/month</strong> for software before production even begins.
+            </p>
+
+            <div class="bg-primary/10 border border-primary/20 rounded-xl p-6 my-8 text-center">
+                <p class="m-0 text-slate-300">💡 <strong>Benchmark:</strong> A lean faceless channel producing 8 videos per month typically spends <strong>$200–$500/month</strong>. A full-scale operation with 20–30 videos can exceed <strong>$2,000–$4,000/month</strong>. Use the calculator above to model your exact scenario.</p>
+            </div>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>Understanding YouTube Burn Rate vs. Runway</h2>
+            <p>
+                The startup world popularized two concepts every faceless YouTube creator needs to internalize: <strong>burn rate</strong> and <strong>runway</strong>. Applying them to your channel turns an emotional creative project into a fundable, scalable media business.
+            </p>
+
+            <h3>What Is Burn Rate?</h3>
+            <p>
+                Your <strong>burn rate</strong> is the total amount of money you spend on channel operations each month before revenue. If you spend $150 on scripts, $80 on editing, and $40 on software — your burn rate is <strong>$270/month</strong>. This is the number the calculator's "Monthly Burn Rate" card displays in real time.
+            </p>
+            <p>A high burn rate is not inherently bad — it signals investment. The critical question is: <strong>how long can you sustain that burn before revenue covers it?</strong></p>
+
+            <h3>What Is Channel Runway?</h3>
+            <p>
+                Runway is how many months you can keep operating at your current burn rate before you run out of money. If you have a <strong>$1,000 budget</strong> saved for your channel and your burn rate is $250/month, your runway is <strong>4 months</strong>. If your channel is not generating meaningful revenue by month 4, you face a decision: reduce costs, find outside income, or scale down.
+            </p>
+
+            <h3>Net Burn vs. Gross Burn</h3>
+            <p>
+                <strong>Gross burn</strong> is total spending. <strong>Net burn</strong> is total spending minus any revenue coming in. Once your channel starts generating AdSense income, your net burn decreases. The moment net burn hits zero, you have reached <strong>break-even</strong> — the most important milestone in early-stage YouTube automation.
+            </p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>How to Calculate Your Break-Even Point</h2>
+            <p>
+                The break-even point is the exact number of views per video you need to generate enough AdSense revenue to cover all your monthly production costs. The calculator solves this automatically, but understanding the underlying math makes you a smarter creator.
+            </p>
+
+            <h3>The Core Formula</h3>
+            <ul class="space-y-2">
+                <li><strong>Monthly AdSense Revenue</strong> = (Total Monthly Views ÷ 1,000) × RPM</li>
+                <li><strong>Break-Even Monthly Views</strong> = (Monthly Costs ÷ RPM) × 1,000</li>
+                <li><strong>Break-Even Views per Video</strong> = Break-Even Monthly Views ÷ Videos per Month</li>
+            </ul>
+
+            <h3>Why RPM Matters More Than Views</h3>
+            <p>
+                Many creators obsess over view counts while ignoring <strong>RPM (Revenue Per Mille)</strong> — the amount YouTube pays per 1,000 views <em>after</em> its revenue share cut. RPM varies enormously by niche. <strong>Finance and investing channels</strong> routinely see RPMs of $12–$30. <strong>Entertainment and gaming</strong> channels may earn as little as $1–$3 RPM. Choosing a high-CPM niche dramatically reduces the number of views you need to break even.
+            </p>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>5 Ways to Lower Your Burn Rate While Growing</h2>
+            <ol class="space-y-4">
+                <li><strong>Batch-Produce Content:</strong> Produce content in batches of 4–8 videos. Freelancers charge less per video when given bulk orders. Batching reduces per-video cost by 15–30%.</li>
+                <li><strong>Standardize Your Video Format:</strong> Build a reusable video template in After Effects or DaVinci Resolve with your intro, lower thirds, and outro baked in to cut editing time.</li>
+                <li><strong>Use Tiered Outsourcing:</strong> Use AI tools for first drafts and budget editors on Fiverr for straightforward cuts. Reserve premium talent for your highest-potential videos.</li>
+                <li><strong>Diversify Revenue Before You Scale:</strong> Add non-AdSense revenue. Even $100/month from an affiliate program reduces your net burn by 33% on a $300 budget.</li>
+                <li><strong>Track and Audit Monthly:</strong> The biggest hidden cost is subscription creep. Do a monthly audit of every recurring charge and cancel any tool you have not logged into in 30 days.</li>
+            </ol>
+
+            <hr class="border-white/10 my-10">
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">How much does it cost to start a faceless YouTube channel?</h3>
+                <p class="mb-0">A minimal faceless YouTube channel can be started for as little as <strong>$50–$150/month</strong> using AI voiceover tools, AI-assisted scripts, and a Fiverr editor. A professional-quality operation capable of competing in mid-to-high competition niches typically requires <strong>$300–$800/month</strong>. Use the calculator above to model your exact scenario.</p>
+            </div>
+
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">What is a good RPM for a faceless YouTube channel?</h3>
+                <p class="mb-0">RPM depends entirely on your niche. <strong>Finance, investing, and business channels</strong> typically earn $8–$30 RPM. <strong>Health and wellness</strong> channels earn $4–$12 RPM. <strong>General entertainment</strong> channels often earn only $1–$4 RPM.</p>
+            </div>
+
+            <div class="bg-black/30 border border-white/5 rounded-xl p-6 mb-6">
+                <h3 class="mt-0 text-white">How long does it take a faceless YouTube channel to become profitable?</h3>
+                <p class="mb-0">Most faceless channels that publish consistently (6–12 videos/month) and target a high-RPM niche reach month-to-month break-even within <strong>6–18 months</strong>. Channels that post only 2–4 videos/month or operate in low-RPM niches can take 2–3 years or longer.</p>
+            </div>
+
+        </article>
+    </main>
+
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. We do not save your financial data. By clicking "Accept", you consent.</p>
+            <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept</button>
+        </div>
+    </div>
+
+    <footer class="text-center py-8 border-t border-white/5">
+        <p class="text-sm text-slate-600">Faceless Channel ROI & Burn Rate Forecaster — Built for data-driven creators.</p>
+    </footer>
+
+    <script>
+        // ── Elements ─────────────────────────────────────────
+        const els = {
+            costScriptwriting: document.getElementById('costScriptwriting'),
+            costVoiceover: document.getElementById('costVoiceover'),
+            costEditing: document.getElementById('costEditing'),
+            costThumbnails: document.getElementById('costThumbnails'),
+            costSoftware: document.getElementById('costSoftware'),
+            metricVideos: document.getElementById('metricVideos'),
+            metricViews: document.getElementById('metricViews'),
+            metricRPM: document.getElementById('metricRPM'),
+            metricExtra: document.getElementById('metricExtra'),
+            metricGrowth: document.getElementById('metricGrowth'),
+        };
+
+        const labels = {
+            labelScriptwriting: document.getElementById('labelScriptwriting'),
+            labelVoiceover: document.getElementById('labelVoiceover'),
+            labelEditing: document.getElementById('labelEditing'),
+            labelThumbnails: document.getElementById('labelThumbnails'),
+            labelSoftware: document.getElementById('labelSoftware'),
+            labelVideos: document.getElementById('labelVideos'),
+            labelViews: document.getElementById('labelViews'),
+            labelRPM: document.getElementById('labelRPM'),
+            labelGrowth: document.getElementById('labelGrowth'),
+        };
+
+        const bars = {
+            barScriptwriting: document.getElementById('barScriptwriting'),
+            barVoiceover: document.getElementById('barVoiceover'),
+            barEditing: document.getElementById('barEditing'),
+            barThumbnails: document.getElementById('barThumbnails'),
+            barSoftware: document.getElementById('barSoftware'),
+        };
+
+        // ── Formatter ────────────────────────────────────────
+        const fmt = (n) => {
+            if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+            if (Math.abs(n) >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
+            return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        };
+        const fmtFull = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        const fmtNum = (n) => n.toLocaleString('en-US');
+
+        // ── Chart Setup ──────────────────────────────────────
+        const ctx = document.getElementById('projectionChart').getContext('2d');
+        const projectionChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'],
+                datasets: [
+                    {
+                        label: 'Cumulative Cost',
+                        data: [],
+                        borderColor: '#FF4444',
+                        backgroundColor: 'rgba(255, 68, 68, 0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#FF4444',
+                        pointBorderColor: '#121212',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                    },
+                    {
+                        label: 'Cumulative Revenue',
+                        data: [],
+                        borderColor: '#00C851',
+                        backgroundColor: 'rgba(0, 200, 81, 0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#00C851',
+                        pointBorderColor: '#121212',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(26,26,26,0.95)',
+                        titleColor: '#fff',
+                        bodyColor: '#94a3b8',
+                        borderColor: 'rgba(255,255,255,0.1)',
+                        borderWidth: 1,
+                        cornerRadius: 10,
+                        padding: 12,
+                        titleFont: { family: 'Outfit', size: 13, weight: 600 },
+                        bodyFont: { family: 'Outfit', size: 12 },
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + fmtFull(Math.round(context.parsed.y));
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.03)', drawBorder: false },
+                        ticks: { color: '#64748b', font: { family: 'Outfit', size: 11 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.03)', drawBorder: false },
+                        ticks: {
+                            color: '#64748b',
+                            font: { family: 'Outfit', size: 11 },
+                            callback: function(value) { return fmt(value); }
+                        }
+                    }
+                }
+            }
+        });
+
+        // ── Calculation Engine ───────────────────────────────
+        function calculate() {
+            // Read costs
+            const cScript = +els.costScriptwriting.value;
+            const cVoice  = +els.costVoiceover.value;
+            const cEdit   = +els.costEditing.value;
+            const cThumb  = +els.costThumbnails.value;
+            const cSoft   = +els.costSoftware.value;
+            const totalCost = cScript + cVoice + cEdit + cThumb + cSoft;
+
+            // Read metrics
+            const videos  = +els.metricVideos.value;
+            const views   = +els.metricViews.value;
+            const rpm     = +els.metricRPM.value;
+            const extra   = +els.metricExtra.value;
+            const growth  = +els.metricGrowth.value / 100;
+
+            // Monthly AdSense revenue
+            const totalMonthlyViews = videos * views;
+            const adRevenue = (totalMonthlyViews / 1000) * rpm;
+            const monthlyRevenue = adRevenue + extra;
+
+            // Net
+            const netProfit = monthlyRevenue - totalCost;
+
+            // Break-even views per video
+            let breakEvenViews;
+            if (videos > 0 && rpm > 0) {
+                const needed = ((totalCost - extra) / rpm) * 1000;
+                breakEvenViews = Math.max(0, Math.ceil(needed / videos));
+            } else {
+                breakEvenViews = Infinity;
+            }
+
+            // ── Update Labels ────────────────────────────────
+            labels.labelScriptwriting.textContent = fmtFull(cScript);
+            labels.labelVoiceover.textContent = fmtFull(cVoice);
+            labels.labelEditing.textContent = fmtFull(cEdit);
+            labels.labelThumbnails.textContent = fmtFull(cThumb);
+            labels.labelSoftware.textContent = fmtFull(cSoft);
+            labels.labelVideos.textContent = videos;
+            labels.labelViews.textContent = fmtNum(views);
+            labels.labelRPM.textContent = '$' + parseFloat(rpm).toFixed(2);
+            labels.labelGrowth.textContent = Math.round(growth * 100) + '%';
+
+            // ── Cost Breakdown Bar ───────────────────────────
+            document.getElementById('totalCostLabel').textContent = fmtFull(totalCost) + '/mo';
+            const costs = [cScript, cVoice, cEdit, cThumb, cSoft];
+            const barIds = ['barScriptwriting','barVoiceover','barEditing','barThumbnails','barSoftware'];
+            barIds.forEach((id, i) => {
+                const pct = totalCost > 0 ? (costs[i] / totalCost * 100) : 0;
+                document.getElementById(id).style.width = pct + '%';
+            });
+
+            // ── KPI Cards ────────────────────────────────────
+            document.getElementById('kpiBurn').textContent = fmtFull(totalCost);
+            document.getElementById('kpiRevenue').textContent = fmtFull(Math.round(monthlyRevenue));
+
+            const profitEl = document.getElementById('kpiProfit');
+            const profitCard = document.getElementById('profitCard');
+            const profitIconWrap = document.getElementById('profitIconWrap');
+
+            if (netProfit >= 0) {
+                profitEl.textContent = '+' + fmtFull(Math.round(netProfit));
+                profitEl.className = 'text-3xl font-extrabold text-success';
+                profitCard.className = 'glass-card stat-card profit p-5 glow-success';
+                profitIconWrap.innerHTML = `<span class="material-symbols-outlined text-success">trending_up</span>`;
+                profitIconWrap.className = 'w-7 h-7 rounded-lg bg-success/10 flex items-center justify-center';
+                document.getElementById('profitSubtext').textContent = 'You are profitable this month';
+            } else {
+                profitEl.textContent = '-' + fmtFull(Math.abs(Math.round(netProfit)));
+                profitEl.className = 'text-3xl font-extrabold text-danger';
+                profitCard.className = 'glass-card stat-card loss p-5 glow-danger';
+                profitIconWrap.innerHTML = `<span class="material-symbols-outlined text-danger">trending_down</span>`;
+                profitIconWrap.className = 'w-7 h-7 rounded-lg bg-danger/10 flex items-center justify-center';
+                document.getElementById('profitSubtext').textContent = 'You are losing money this month';
+            }
+
+            const breakevenEl = document.getElementById('kpiBreakeven');
+            const breakevenSub = document.getElementById('breakevenSubtext');
+            if (breakEvenViews === Infinity || breakEvenViews <= 0) {
+                if (totalCost - extra <= 0) {
+                    breakevenEl.textContent = '0';
+                    breakevenSub.textContent = 'Extra income covers all costs';
+                } else {
+                    breakevenEl.textContent = '∞';
+                    breakevenSub.textContent = 'Cannot break even with current RPM';
+                }
+            } else {
+                breakevenEl.textContent = fmtNum(breakEvenViews);
+                breakevenSub.textContent = 'Views per video needed to break even';
+            }
+
+            // ── 12-Month Projection ──────────────────────────
+            const cumCosts = [];
+            const cumRevenues = [];
+            const monthlyData = [];
+            let runCost = 0, runRevenue = 0;
+            let crossoverMonth = -1;
+
+            for (let m = 0; m < 12; m++) {
+                const growthMultiplier = Math.pow(1 + growth, m);
+                const mViews = Math.round(totalMonthlyViews * growthMultiplier);
+                const mAdRev = (mViews / 1000) * rpm;
+                const mRev = mAdRev + extra;
+
+                runCost += totalCost;
+                runRevenue += mRev;
+
+                cumCosts.push(Math.round(runCost));
+                cumRevenues.push(Math.round(runRevenue));
+
+                const mNet = mRev - totalCost;
+                monthlyData.push({
+                    month: m + 1,
+                    views: mViews,
+                    revenue: Math.round(mRev),
+                    costs: totalCost,
+                    net: Math.round(mNet),
+                    cumPL: Math.round(runRevenue - runCost),
+                });
+
+                if (crossoverMonth === -1 && runRevenue >= runCost) {
+                    crossoverMonth = m + 1;
+                }
+            }
+
+            // Update chart
+            projectionChart.data.datasets[0].data = cumCosts;
+            projectionChart.data.datasets[1].data = cumRevenues;
+            projectionChart.update('none');
+
+            // Chart insight
+            const insightEl = document.getElementById('chartInsight').querySelector('p');
+            if (crossoverMonth > 0) {
+                insightEl.innerHTML = `<strong class="text-success">Break-even reached at Month ${crossoverMonth}.</strong> After that, your channel generates net positive returns.`;
+            } else if (netProfit >= 0) {
+                insightEl.innerHTML = `<strong class="text-success">You are profitable from Month 1!</strong> Cumulative revenue outpaces costs from the start.`;
+            } else {
+                insightEl.innerHTML = `<strong class="text-danger">Break-even not reached within 12 months.</strong> Consider increasing views, RPM, or reducing costs.`;
+            }
+
+            // ── Monthly Breakdown Table ──────────────────────
+            const tbody = document.getElementById('breakdownBody');
+            tbody.innerHTML = '';
+            monthlyData.forEach(d => {
+                const netClass = d.net >= 0 ? 'text-success' : 'text-danger';
+                const cumClass = d.cumPL >= 0 ? 'text-success' : 'text-danger';
+                const netPrefix = d.net >= 0 ? '+' : '-';
+                const cumPrefix = d.cumPL >= 0 ? '+' : '-';
+                const row = document.createElement('tr');
+                row.className = 'border-b border-white/5 hover:bg-white/[0.02] transition-colors';
+                row.innerHTML = `
+                    <td class="py-3 px-3 font-semibold text-white">M${d.month}</td>
+                    <td class="py-3 px-3 text-right">${fmtNum(d.views)}</td>
+                    <td class="py-3 px-3 text-right text-accent font-semibold">${fmtFull(d.revenue)}</td>
+                    <td class="py-3 px-3 text-right text-danger">${fmtFull(d.costs)}</td>
+                    <td class="py-3 px-3 text-right font-bold ${netClass}">${netPrefix}${fmtFull(Math.abs(d.net))}</td>
+                    <td class="py-3 px-3 text-right font-bold ${cumClass}">${cumPrefix}${fmtFull(Math.abs(d.cumPL))}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // ── Event Listeners ──────────────────────────────────
+        Object.values(els).forEach(el => {
+            el.addEventListener('input', calculate);
+        });
+
+        // ── Initial Calculation ──────────────────────────────
+        calculate();
+
+        // Cookie Logic
+        if (!localStorage.getItem('affiloreCookieConsent')) {
+            setTimeout(() => document.getElementById('cookie-banner').classList.remove('translate-y-full'), 1000);
+        }
+        document.getElementById('accept-cookies').addEventListener('click', () => {
+            localStorage.setItem('affiloreCookieConsent', 'true');
+            document.getElementById('cookie-banner').classList.add('translate-y-full');
+        });
+    </script>
+</body>
+</html>
