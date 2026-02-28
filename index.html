@@ -1,1244 +1,350 @@
 <!DOCTYPE html>
-<html lang="en">
-    
+<html class="dark" lang="en">
 <head>
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KFHTZ6EJC2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-KFHTZ6EJC2');
-    </script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Discover your perfect vibe with our curated collection of Tech, Home, and Travel essentials.">
-    <title>Affilore | Discover the Lore of Modern Living</title>
-
+    <title>Affilore | Premium Free Tools & Calculators</title>
+    <meta name="description" content="Discover premium, free online tools, calculators, and AI apps designed for creators, freelancers, and entrepreneurs.">
     <link rel="icon" type="image/png" href="logo.png">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: "class",
             theme: {
                 extend: {
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] },
                     colors: {
                         charcoal: '#121212',
-                        neon: '#FFBF00',
-                        'neon-dim': '#D4A000',
-                        'glass': 'rgba(255, 255, 255, 0.08)',
-                        'glass-border': 'rgba(255, 255, 255, 0.15)',
-                    },
-                    fontFamily: {
-                        outfit: ['Outfit', 'sans-serif'],
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'glow': 'glow 2s ease-in-out infinite alternate',
-                        'pulse-neon': 'pulse-neon 2s ease-in-out infinite',
-                        'slide-up': 'slide-up 0.6s ease-out forwards',
-                        'fade-in': 'fade-in 0.8s ease-out forwards',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px) rotateY(0deg)' },
-                            '50%': { transform: 'translateY(-20px) rotateY(10deg)' },
-                        },
-                        glow: {
-                            '0%': { boxShadow: '0 0 20px rgba(255, 191, 0, 0.3)' },
-                            '100%': { boxShadow: '0 0 40px rgba(255, 191, 0, 0.6)' },
-                        },
-                        'pulse-neon': {
-                            '0%, 100%': { opacity: '1', textShadow: '0 0 20px rgba(255, 191, 0, 0.8)' },
-                            '50%': { opacity: '0.8', textShadow: '0 0 40px rgba(255, 191, 0, 1)' },
-                        },
-                        'slide-up': {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        'fade-in': {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                    },
-                },
-            },
+                        card: '#1A1A1A',
+                        primary: '#FFBF00',
+                        accent: '#FFBF00',
+                    }
+                }
+            }
         }
     </script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #121212;
-            color: white;
-            overflow-x: hidden;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #121212;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #FFBF00;
-            border-radius: 4px;
-        }
-
-        /* Glassmorphism Card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 191, 0, 0.4);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(255, 191, 0, 0.15);
-        }
-
-        /* Navbar Transition */
-        .navbar {
-            transition: all 0.4s ease;
-        }
-
-        .navbar.scrolled {
-            background-color: rgba(18, 18, 18, 0.95) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        /* 3D Placeholder */
-        .hero-3d-placeholder {
-            background: linear-gradient(135deg, rgba(255, 191, 0, 0.1) 0%, rgba(255, 191, 0, 0.02) 100%);
-            border: 2px solid rgba(255, 191, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-3d-placeholder::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 191, 0, 0.1), transparent 30%);
-            animation: rotate 8s linear infinite;
-        }
-
-        @keyframes rotate {
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Masonry Layout */
-        .masonry-grid {
-            column-count: 3;
-            column-gap: 1.5rem;
-        }
-
-        @media (max-width: 1024px) {
-            .masonry-grid {
-                column-count: 2;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .masonry-grid {
-                column-count: 1;
-            }
-        }
-
-        .masonry-item {
-            break-inside: avoid;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Filter Button Active State */
-        .filter-btn {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 191, 0, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .filter-btn:hover::before {
-            left: 100%;
-        }
-
-        .filter-btn.active {
-            background-color: #FFBF00;
-            color: #121212;
-            box-shadow: 0 0 30px rgba(255, 191, 0, 0.5);
-        }
-
-        /* Gradient Text - Gold */
-        .gradient-text {
-            background: linear-gradient(135deg, #ffffff 0%, #FFBF00 50%, #ffffff 100%);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shine 3s linear infinite;
-        }
-
-        @keyframes shine {
-            to {
-                background-position: 200% center;
-            }
-        }
-
-        /* Hide cards animation */
-        .product-card {
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .product-card.hidden {
-            opacity: 0;
-            transform: scale(0.8);
-            display: none;
-        }
-
-        /* Neon line */
-        .neon-line {
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #FFBF00, transparent);
-            box-shadow: 0 0 10px #FFBF00, 0 0 20px rgba(255, 191, 0, 0.5);
-        }
-
-        /* Floating particles */
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #FFBF00;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float-particle 10s infinite ease-in-out;
-        }
-
-        @keyframes float-particle {
-
-            0%,
-            100% {
-                transform: translateY(0) translateX(0);
-                opacity: 0.6;
-            }
-
-            25% {
-                transform: translateY(-50px) translateX(20px);
-                opacity: 1;
-            }
-
-            50% {
-                transform: translateY(-20px) translateX(-20px);
-                opacity: 0.4;
-            }
-
-            75% {
-                transform: translateY(-60px) translateX(10px);
-                opacity: 0.8;
-            }
-        }
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: #ffffff; overflow-x: hidden; }
         
-        /* Cookie Banner */
-        #cookie-banner {
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        /* Glassmorphism */
+        .glass-nav { background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); border-radius: 1.25rem; transition: all 0.3s ease; }
+        .glass-card:hover { border-color: rgba(255, 191, 0, 0.2); box-shadow: 0 10px 40px -10px rgba(255, 191, 0, 0.05); }
+        
+        /* Form Inputs */
+        .glass-input { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
+        .glass-input:focus { border-color: #FFBF00; outline: none; box-shadow: 0 0 0 2px rgba(255, 191, 0, 0.1); }
+
+        /* Masonry Grid */
+        .masonry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; align-items: start; }
+        
+        /* Floating particles */
+        .particle { position: absolute; border-radius: 50%; background: #FFBF00; opacity: 0.2; pointer-events: none; }
     </style>
 </head>
+<body class="antialiased selection:bg-primary selection:text-charcoal relative">
 
-<body class="bg-charcoal min-h-screen">
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="particle w-2 h-2 top-[10%] left-[15%] shadow-[0_0_10px_#FFBF00]"></div>
+        <div class="particle w-1.5 h-1.5 top-[25%] right-[20%] shadow-[0_0_10px_#FFBF00]"></div>
+        <div class="particle w-3 h-3 top-[60%] left-[5%] shadow-[0_0_10px_#FFBF00]"></div>
+        <div class="particle w-2 h-2 bottom-[15%] right-[10%] shadow-[0_0_10px_#FFBF00]"></div>
+    </div>
 
-    <div id="particles" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
-
-    <nav id="navbar" class="navbar fixed top-0 left-0 right-0 z-50 bg-transparent py-4 px-6 lg:px-12">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2 group">
-                <img src="logo.png" alt="Affilore Logo" class="h-10 w-auto object-contain transform group-hover:scale-110 transition-transform duration-300">
-                <span class="text-2xl font-bold tracking-tight">Affi<span class="text-neon">lore</span></span>
+    <nav class="glass-nav fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            
+            <a href="#" class="flex items-center gap-3 group">
+                <img src="logo.png" alt="Affilore" class="h-8 w-auto">
+                <span class="text-2xl font-black tracking-tight text-white group-hover:text-primary transition-colors">Affilore<span class="text-primary">.</span></span>
             </a>
 
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#products"
-                    class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">Products</a>
-                <a href="#vibe-matcher"
-                    class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">Vibe Matcher</a>
-                <a href="#about" class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">About</a>
-                <a href="#contact" class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">Contact</a>
+            <div class="hidden lg:flex items-center gap-8 font-medium text-sm text-slate-300">
+                <a href="#tools" class="hover:text-primary transition-colors">Tools</a>
+                <a href="#" class="hover:text-primary transition-colors">Compress</a>
+                <a href="#" class="hover:text-primary transition-colors">Convert</a>
+                <a href="#" class="hover:text-primary transition-colors">Merge</a>
+                <a href="#" class="hover:text-primary transition-colors">Edit</a>
+                <a href="#" class="hover:text-primary transition-colors">Sign</a>
+                <a href="#" class="flex items-center gap-1 text-primary hover:text-white transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">auto_awesome</span> AI Tools
+                </a>
             </div>
 
             <div class="flex items-center gap-4">
-                <button
-                    class="hidden sm:block px-6 py-2.5 bg-neon text-charcoal font-semibold rounded-full hover:shadow-lg hover:shadow-neon/30 transform hover:scale-105 transition-all duration-300">
-                    Get Started
+                <button aria-label="Search" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary hover:text-charcoal flex items-center justify-center transition-all duration-300 text-slate-300">
+                    <span class="material-symbols-outlined">search</span>
                 </button>
-
-                <button id="mobile-menu-btn" class="md:hidden p-2 text-white hover:text-neon transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+                <button class="lg:hidden text-slate-300 hover:text-primary">
+                    <span class="material-symbols-outlined">menu</span>
                 </button>
-            </div>
-        </div>
-
-        <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-glass-border">
-            <div class="flex flex-col gap-4 pt-4">
-                <a href="#products"
-                    class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">Products</a>
-                <a href="#vibe-matcher"
-                    class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">Vibe Matcher</a>
-                <a href="#about" class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">About</a>
-                <a href="#contact" class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">Contact</a>
             </div>
         </div>
     </nav>
 
-    <section class="min-h-screen flex items-center pt-20 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12 w-full">
+    <main class="relative z-10 pt-32 pb-20">
+        
+        <section class="max-w-7xl mx-auto px-6 mb-24">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
-
-                <div class="z-10">
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6 animate-fade-in"
-                        style="animation-delay: 0.2s;">
-                        <span class="w-2 h-2 bg-neon rounded-full animate-pulse"></span>
-                        <span class="text-sm text-gray-300">New Collection 2026</span>
-                    </div>
-
-                    <h1 class="text-5xl lg:text-7xl font-bold leading-tight mb-6 animate-slide-up"
-                        style="animation-delay: 0.3s;">
-                        Discover the Lore of
-                        <span class="block gradient-text">Modern Living.</span>
-                    </h1>
-
-                    <p class="text-lg lg:text-xl text-gray-400 mb-8 max-w-lg animate-slide-up"
-                        style="animation-delay: 0.5s;">
-                        Expertly vetted tech, decor, and travel gear for the informed buyer.
-                    </p>
-
-                    <div class="flex flex-wrap gap-4 animate-slide-up" style="animation-delay: 0.7s;">
-                        <a href="#vibe-matcher"
-                            class="px-8 py-4 bg-neon text-charcoal font-bold rounded-full hover:shadow-2xl hover:shadow-neon/40 transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
-                            <span>Explore Now</span>
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </a>
-                        <a href="#products"
-                            class="px-8 py-4 glass-card rounded-full font-semibold hover:bg-white/10 transition-all duration-300">
-                            Browse Products
-                        </a>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-8 mt-12 pt-8 border-t border-glass-border animate-fade-in"
-                        style="animation-delay: 0.9s;">
-                        <div>
-                            <div class="text-3xl font-bold text-neon">500+</div>
-                            <div class="text-sm text-gray-400">Products</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold text-neon">50K+</div>
-                            <div class="text-sm text-gray-400">Happy Customers</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold text-neon">4.9</div>
-                            <div class="text-sm text-gray-400">Rating</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative flex items-center justify-center animate-fade-in" style="animation-delay: 0.5s;">
-                    <div
-                        class="hero-3d-placeholder w-full aspect-square max-w-lg rounded-3xl animate-float flex items-center justify-center">
-                        <div class="text-center p-8">
-                            <div
-                                class="w-32 h-32 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-neon/20 to-transparent flex items-center justify-center">
-                                <svg class="w-16 h-16 text-neon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                                </svg>
-                            </div>
-                            <p class="text-gray-400 text-lg">3D Product Showcase</p>
-                            <p class="text-gray-500 text-sm mt-2">Interactive 3D model placeholder</p>
-                        </div>
-                    </div>
-
-                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-neon/10 rounded-full blur-3xl"></div>
-                    <div class="absolute -bottom-10 -left-10 w-60 h-60 bg-neon/5 rounded-full blur-3xl"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div class="w-6 h-10 rounded-full border-2 border-gray-500 flex items-start justify-center p-2">
-                <div class="w-1 h-2 bg-neon rounded-full animate-pulse"></div>
-            </div>
-        </div>
-    </section>
-
-    <div class="neon-line w-full"></div>
-
-    <section id="vibe-matcher" class="py-24 relative">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-
-            <div class="text-center mb-16">
-                <h2 class="text-4xl lg:text-5xl font-bold mb-4">
-                    The <span class="text-neon animate-pulse-neon">Vibe</span> Matcher
-                </h2>
-                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
-                    Select your vibe and discover products curated just for you. Click a category to filter the
-                    collection.
-                </p>
-            </div>
-
-            <div class="flex flex-wrap justify-center gap-4 mb-16">
-                <button onclick="filterProducts('all')"
-                    class="filter-btn active px-8 py-3 rounded-full border border-neon font-semibold text-lg"
-                    data-filter="all">
-                    All Vibes ✨
-                </button>
-                <button onclick="filterProducts('tech')"
-                    class="filter-btn px-8 py-3 rounded-full border border-glass-border font-semibold text-lg hover:border-neon"
-                    data-filter="tech">
-                    🔌 Tech
-                </button>
-                <button onclick="filterProducts('home')"
-                    class="filter-btn px-8 py-3 rounded-full border border-glass-border font-semibold text-lg hover:border-neon"
-                    data-filter="home">
-                    🏠 Home
-                </button>
-                <button onclick="filterProducts('kitchen')"
-                    class="filter-btn px-8 py-3 rounded-full border border-glass-border font-semibold text-lg hover:border-neon"
-                    data-filter="kitchen">
-                    🍳 Kitchen
-                </button>
-                <button onclick="filterProducts('travel')"
-                    class="filter-btn px-8 py-3 rounded-full border border-glass-border font-semibold text-lg hover:border-neon"
-                    data-filter="travel">
-                    ✈️ Travel
-                </button>
-                <button onclick="filterProducts('tools')"
-                    class="filter-btn px-8 py-3 rounded-full border border-glass-border font-semibold text-lg hover:border-neon"
-                    data-filter="tools">
-                    🛠️ Tools
-                </button>
-            </div>
-
-        </div>
-    </section>
-
-    <section id="products" class="pb-24">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-
-            <div class="masonry-grid" id="product-grid">
-
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="cost-segregation-thumb.png" 
-                 alt="Real Estate Cost Segregation Estimator" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Real Estate</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Cost Segregation Estimator</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate Year 1 accelerated depreciation tax savings for multifamily and commercial properties.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/cost-segregation-estimator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="sponsorship-pricer-thumb.png" 
-                 alt="Podcast & Avatar Sponsorship Pricer" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Creator Tool</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Sponsorship Pricer</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate your exact brand deal rate based on views, niche CPM, and ad placement.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/sponsorship-pricer/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="freelance-tax-thumb.png" 
-                 alt="Universal Freelance Tax Planner" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Taxes & Finance</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Global Freelance Tax Planner</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate deductible expenses and find out exactly how much to save for tax season in any currency.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/freelance-tax-estimator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="geo-arbitrage-thumb.png" 
-                 alt="Cross-Border Freelance Arbitrage Calculator" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Global Finance</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Geo-Arbitrage Calculator</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate how much further your foreign freelance income stretches in your local economy.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/geo-arbitrage-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="diderot-effect-thumb.png" 
-                 alt="Diderot Effect Escalation Calculator" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Psychology</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Diderot Escalation Tool</h3>
-            <p class="text-gray-400 text-sm mb-4">Discover how one purchase spirals into a cascade of spending and visualize your true opportunity cost.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/diderot-effect-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="faceless-roi-thumb.png" 
-                 alt="Faceless Channel ROI Forecaster" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Creator Tool</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Faceless ROI Forecaster</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate your exact YouTube automation burn rate, profit margins, and break-even point.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/youtube-roi-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="rule-of-72-thumb.png" 
-                 alt="Rule of 72 Asset Calculator" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Investing</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Rule of 72 Calculator</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate how fast your assets will double. Compare the mental math against exact formulas.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/rule-of-72-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="word-counter-thumb.png" 
-                                 alt="Word Counter Pro" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Free Tool</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Word Counter Pro</h3>
-                            <p class="text-gray-400 text-sm mb-4">Real-time analysis of words, characters, sentences, and reading time.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/word-counter/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="case-converter-thumb.png" 
-                                 alt="Case Converter" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Formatting Tool</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Case Converter</h3>
-                            <p class="text-gray-400 text-sm mb-4">Instantly switch between UPPERCASE, lowercase, and Title Case.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/case-converter/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="503020-thumb.png" 
-                 alt="50/30/20 Budget Calculator" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Finance Tool</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Advanced 50/30/20 Planner</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate your budget targets and track your actual spending to ensure you are building wealth.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/50-30-20-budget-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-            <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden text-safe">
-            <img src="emergency-fund-thumb.png" 
-                 alt="Emergency Fund Calculator" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Finance Tool</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Emergency Fund Planner</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate your safety net target and find out exactly how long it will take to reach it.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/emergency-fund-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="lorem-ipsum-thumb.png" 
-                                 alt="Lorem Ipsum Generator" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Design Tool</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Lorem Ipsum Generator</h3>
-                            <p class="text-gray-400 text-sm mb-4">Generate professional placeholder text for your projects.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/lorem-ipsum/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="masonry-item product-card" data-category="tools">
-    <div class="glass-card rounded-2xl overflow-hidden group">
-        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-            <img src="profit-margin-thumb.png" 
-                 alt="Business Profit Margin Calculator" 
-                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-        </div>
-        <div class="p-6">
-            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Business Tool</span>
-            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Profit Margin Calculator</h3>
-            <p class="text-gray-400 text-sm mb-4">Calculate Gross Margin vs. Markup to perfectly price your products and services.</p>
-            <div class="flex items-center justify-between">
-                <span class="text-2xl font-bold text-neon">Free</span>
-                <a href="/tools/profit-margin-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="autotranscribe-thumb.png" 
-                                 alt="AutoTranscribe AI" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">AI Tool</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">AutoTranscribe</h3>
-                            <p class="text-gray-400 text-sm mb-4">Instant voice-to-text dictation. Turn your speech into notes automatically.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/auto-transcribe/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="spendpilot-thumb.png" 
-                                 alt="SpendPilot Finance Tracker" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Finance Tool</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">SpendPilot</h3>
-                            <p class="text-gray-400 text-sm mb-4">Track expenses, visualize your budget, and calculate the "Time Cost" of every purchase.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/spend-pilot/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="batchprice-thumb.png" 
-                                 alt="BatchPrice Calculator" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Cottage Food</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">BatchPrice Calculator</h3>
-                            <p class="text-gray-400 text-sm mb-4">Calculate home bakery recipe costs and track state sales limit compliance.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/batch-price/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="freelancer-rate-thumb.png" 
-                                 alt="Freelance Rate Calculator" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Career Tool</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Freelance Rate Reverser</h3>
-                            <p class="text-gray-400 text-sm mb-4">Calculate your true hourly rate based on lifestyle, taxes, and unbillable time.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/freelance-rate-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="youtube-thumb.png" 
-                                 alt="YouTube Thumbnail Grabber" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Creator Tool</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">YouTube Thumbnail Grabber</h3>
-                            <p class="text-gray-400 text-sm mb-4">Download 4K & HD thumbnails from any YouTube video instantly.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/youtube-thumbnail-downloader/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="masonry-item product-card" data-category="tools">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-64 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="tiktok-fee-thumb.png" 
-                                 alt="TikTok Shop Fee Calculator" 
-                                 class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">E-Commerce</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">TikTok Shop Fee Calculator</h3>
-                            <p class="text-gray-400 text-sm mb-4">Calculate true net profit after affiliate commissions and platform fees.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/tools/tiktok-fee-calculator/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">Launch Tool</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="masonry-item product-card" data-category="kitchen">
-                    <div class="glass-card rounded-2xl overflow-hidden">
-                        <div class="h-64 flex items-center justify-center bg-black/50">
-                            <img src="blog-breville.png?v=2" alt="Breville Precision Brewer" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Kitchen</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2">Breville Precision Brewer</h3>
-                            <p class="text-gray-400 text-sm mb-4">The science of perfect coffee. PID control & customizable brewing.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">$688</span>
-                                <a href="review-breville.html" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">
-                                    Read Review
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="masonry-item product-card" data-category="kitchen">
-                    <div class="glass-card rounded-2xl overflow-hidden">
-                        <div class="h-56 flex items-center justify-center bg-black/50">
-                            <img src="blog-cosori.png" alt="Cosori TurboBlaze" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Kitchen</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2">Cosori TurboBlaze Air Fryer</h3>
-                            <p class="text-gray-400 text-sm mb-4">DC Motor technology for variable fan speeds and silent operation.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">$119</span>
-                                <a href="review-cosori.html" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">
-                                    Read Review
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="masonry-item product-card" data-category="kitchen">
-                    <div class="glass-card rounded-2xl overflow-hidden">
-                        <div class="h-56 flex items-center justify-center bg-black/50">
-                            <img src="bella-thumb.png" alt="Bella Slim Toaster" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-300">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Kitchen</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2">Bella 2-Slice Slim Toaster</h3>
-                            <p class="text-gray-400 text-sm mb-4">The viral "Oatmilk" aesthetic meets sourdough reality. Is it worth the hype?</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">$25</span>
-                                <a href="/kitchen/bella-toaster-review/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">
-                                    Read Review
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="masonry-item product-card" data-category="travel">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-56 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="teton-thumb.png" alt="TETON Sports Explorer 75L" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Travel</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2">TETON Sports Explorer 75L</h3>
-                            <p class="text-gray-400 text-sm mb-4">The ultimate budget behemoth. 75 Liters of rugged capacity for multi-day backcountry trips.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">$89</span>
-                                <a href="/travel/teton-explorer-75l/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">
-                                    Read Review
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="masonry-item product-card" data-category="tech">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-56 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="oura-thumb.png" alt="Oura Ring Gen 3" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-                        </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Tech</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white">Oura Ring Gen 3</h3>
-                            <p class="text-gray-400 text-sm mb-4">The ultimate smart ring for health. We tested its sleep accuracy, HRV tracking, and the $5.99 subscription.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">$349</span>
-                                <a href="/tech/oura-ring-review/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all duration-300">
-                                    Read Review
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-
-        </div>
-    </section>
-
-    <section id="about" class="py-24 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div>
-                    <span class="text-neon font-bold tracking-wider uppercase text-sm">Who We Are</span>
-                    <h2 class="text-4xl lg:text-5xl font-bold mt-4 mb-6">More Than Just <span class="gradient-text">Reviews.</span></h2>
-                    <p class="text-gray-400 text-lg leading-relaxed mb-6">
-                        At <strong>Affilore</strong>, we believe that modern living shouldn't be complicated. The internet is flooded with cheap gadgets and fast fashion. We exist to filter out the noise.
-                    </p>
-                    <p class="text-gray-400 text-lg leading-relaxed mb-8">
-                        We don't just list products; we uncover the "Lore" behind them—the specs, the durability, and the design philosophy. If it's on our site, it's because it upgrades your reality.
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-semibold tracking-wide text-slate-300 mb-6">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        New Tools Added for 2026
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-6 text-white">
+                        Discover the Power of <span class="text-primary">Smart Tools.</span>
+                    </h1>
+                    
+                    <p class="text-lg text-slate-400 mb-8 max-w-lg leading-relaxed">
+                        Expertly engineered calculators, converters, and AI utilities designed to simplify your workflow and upgrade your reality. 
                     </p>
                     
-                    <div class="flex gap-8 border-t border-glass-border pt-8">
-                        <div>
-                            <h3 class="text-3xl font-bold text-white">100%</h3>
-                            <p class="text-sm text-gray-500">Vetted Gear</p>
-                        </div>
-                        <div>
-                            <h3 class="text-3xl font-bold text-white">24/7</h3>
-                            <p class="text-sm text-gray-500">Trend Watch</p>
-                        </div>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#tools" class="px-8 py-3.5 bg-primary text-charcoal font-bold rounded-full hover:bg-white transition-all transform hover:scale-105 flex items-center gap-2">
+                            Explore Tools <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </a>
                     </div>
                 </div>
 
-                <div class="relative">
-                    <div class="glass-card p-8 rounded-3xl relative z-10 transform rotate-2 hover:rotate-0 transition-all duration-500">
-                        <div class="h-64 bg-gradient-to-br from-charcoal to-black rounded-2xl flex items-center justify-center border border-glass-border">
-                            <div class="text-center">
-                                <svg class="w-16 h-16 text-neon mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <h3 class="text-xl font-bold text-white">The Affilore Standard</h3>
-                                <p class="text-gray-500 text-sm mt-2">Quality over Quantity.</p>
+                <div class="glass-card p-8 relative overflow-hidden">
+                    <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/20 blur-[80px] rounded-full pointer-events-none"></div>
+                    
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">new_releases</span>
+                        Latest Releases
+                    </h3>
+                    
+                    <div class="space-y-4 relative z-10">
+                        <a href="/tools/cost-segregation-estimator/" class="block p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-colors group">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined">apartment</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white group-hover:text-primary transition-colors">Cost Segregation Estimator</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Calculate Year 1 accelerated depreciation.</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
+                        <a href="/tools/geo-arbitrage-calculator/" class="block p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-colors group">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined">public</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white group-hover:text-primary transition-colors">Geo-Arbitrage Calculator</h4>
+                                    <p class="text-xs text-slate-400 mt-1">See how far your USD stretches globally.</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/tools/sponsorship-pricer/" class="block p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-colors group">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined">campaign</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white group-hover:text-primary transition-colors">Sponsorship Pricer</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Calculate fair brand deal rates based on CPM.</p>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                    <div class="absolute inset-0 bg-neon/10 blur-3xl rounded-full -z-10"></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <div class="neon-line w-full opacity-30"></div>
-
-    <section id="contact" class="py-24 relative">
-        <div class="max-w-4xl mx-auto px-6 lg:px-12 text-center">
-            <span class="text-neon font-bold tracking-wider uppercase text-sm">Get In Touch</span>
-            <h2 class="text-4xl lg:text-5xl font-bold mt-4 mb-8">Got a <span class="text-neon">Product</span> Tip?</h2>
-            <p class="text-gray-400 text-lg mb-12">
-                Found a gadget we need to see? Want to collaborate? Or just want to say hi?
-                Drop us a line. We read every email.
-            </p>
-
-            <div class="flex justify-center">
-                <a href="mailto:affilore4@gmail.com" class="glass-card p-8 rounded-2xl group hover:border-neon transition-all duration-300 w-full max-w-md text-center">
-                    <div class="w-12 h-12 bg-neon/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-neon group-hover:text-charcoal transition-colors">
-                        <svg class="w-6 h-6 text-neon group-hover:text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Email Us</h3>
-                    <p class="text-neon">affilore4@gmail.com</p>
-                </a>
+        <section id="tools" class="max-w-7xl mx-auto px-6 mb-24">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl font-extrabold text-white mb-4">Tool <span class="text-primary">Categories</span></h2>
+                <p class="text-slate-400 max-w-xl mx-auto">Select a category and discover tools curated just for you. Click a tag to filter the collection.</p>
             </div>
-        </div>
-    </section>
 
-    <section class="py-24 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-r from-neon/5 to-transparent"></div>
-        <div class="max-w-4xl mx-auto px-6 lg:px-12 text-center relative z-10">
-            <div class="glass-card rounded-3xl p-12">
-                <h2 class="text-3xl lg:text-4xl font-bold mb-4">Stay in the Loop</h2>
-                <p class="text-gray-400 mb-8 max-w-lg mx-auto">Get exclusive access to new drops, special offers, and
-                    vibe-matching recommendations straight to your inbox.</p>
-                <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                    <input type="email" placeholder="Enter your email"
-                        class="flex-1 px-6 py-4 rounded-full bg-charcoal border border-glass-border focus:border-neon focus:outline-none transition-colors duration-300"
-                        required>
-                    <button type="submit"
-                        class="px-8 py-4 bg-neon text-charcoal font-bold rounded-full hover:shadow-lg hover:shadow-neon/30 transform hover:scale-105 transition-all duration-300">
-                        Subscribe
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-glass-border shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-50 transform translate-y-full">
-        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="text-center sm:text-left">
-                <h4 class="text-white font-bold mb-1">We value your privacy</h4>
-                <p class="text-sm text-gray-400 max-w-2xl">
-                    Affilore uses cookies to personalize content and ads, and to analyze our traffic. 
-                    By clicking "Accept", you consent to our use of cookies.
-                </p>
-            </div>
-            <div class="flex gap-4">
-                <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-neon px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white hover:shadow-lg hover:shadow-neon/25">
-                    Accept Vibes
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="px-6 py-2.5 rounded-full bg-primary text-charcoal font-bold flex items-center gap-2 hover:bg-white transition-colors">
+                    All Tools <span class="material-symbols-outlined text-[18px]">apps</span>
+                </button>
+                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">account_balance</span> Finance
+                </button>
+                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">videocam</span> Creators
+                </button>
+                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">psychology</span> Psychology
+                </button>
+                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">auto_awesome</span> AI Apps
+                </button>
+                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">article</span> Blog
                 </button>
             </div>
-        </div>
-    </div>
 
-    <footer class="py-12 border-t border-glass-border">
-        <div class="max-w-7xl mx-auto px-6 lg:px-12">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
-                <div class="md:col-span-2">
-                    <a href="#" class="flex items-center gap-2 mb-4">
-                        <img src="logo.png" alt="Affilore Logo" class="h-10 w-auto object-contain">
-                        <span class="text-2xl font-bold">Affi<span class="text-neon">lore</span></span>
-                    </a>
-                    <p class="text-gray-400 max-w-xs">Premium discovery platform for expertly vetted tech, decor, and
-                        travel gear. Curated for the informed buyer.</p>
-                </div>
-
-                <div>
-                    <h4 class="font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-neon transition-colors">Products</a></li>
-                        <li><a href="#about" class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">About</a></li>
-                        <li><a href="#contact" class="text-gray-300 hover:text-neon transition-colors duration-300 font-medium">Contact</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-neon transition-colors">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="font-semibold mb-4">Connect</h4>
-                    <div class="flex gap-4">
-                        
-                        <a href="https://www.youtube.com/channel/UCqEwTebsYNUBR0vdKA0OMtQ" target="_blank"
-                            class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-neon hover:text-charcoal transition-all duration-300">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.498-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                            </svg>
-                        </a>
-
-                        <a href="https://www.instagram.com/affilore_?igsh=a3JrZnNra28wZWZk" target="_blank"
-                            class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-neon hover:text-charcoal transition-all duration-300">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                            </svg>
-                        </a>
-
-                        <a href="https://www.tiktok.com/@affilore?_r=1&_t=ZS-93bpX5U6WRt" target="_blank"
-                            class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:bg-neon hover:text-charcoal transition-all duration-300">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v6.16c0 2.52-1.12 4.84-2.98 6.37-2.14 1.76-5.13 2.38-7.79 1.64-4.56-1.28-7.07-5.84-5.63-10.35 1.19-3.73 4.65-6.19 8.58-6.09v4.22c-2.38.25-4.48 2.05-4.82 4.41-.35 2.5.94 4.96 3.1 5.86 2.45 1.02 5.37-.32 6.27-2.87.05-.14.07-.29.1-.43v-17h-.91z"/>
-                            </svg>
-                        </a>
-
+            <div class="masonry-grid">
+                
+                <div class="glass-card overflow-hidden group">
+                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                        <img src="faceless-roi-thumb.png" alt="Faceless ROI Forecaster" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-primary font-bold uppercase tracking-wider">Creators</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-white">Faceless ROI Forecaster</h3>
+                        <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate your exact YouTube automation burn rate, profit margins, and break-even point.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">Free</span>
+                            <a href="/tools/youtube-roi-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch Tool</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="pt-8 border-t border-glass-border flex flex-col sm:flex-row justify-between items-center gap-4">
-                <p class="text-gray-500 text-sm">© 2026 Affilore. All rights reserved.</p>
-                <div class="flex gap-6">
-                    <a href="privacy.html" class="text-gray-500 hover:text-neon text-sm transition-colors">Privacy Policy</a>
-                    <a href="terms.html" class="text-gray-500 hover:text-neon text-sm transition-colors">Terms of Service</a>
+                <div class="glass-card overflow-hidden group">
+                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                        <img src="cost-segregation-thumb.png" alt="Cost Segregation Estimator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-white">Cost Segregation Estimator</h3>
+                        <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate Year 1 accelerated depreciation tax savings for multifamily and commercial real estate.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">Free</span>
+                            <a href="/tools/cost-segregation-estimator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch Tool</a>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="glass-card overflow-hidden group">
+                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                        <img src="geo-arbitrage-thumb.png" alt="Geo-Arbitrage Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-white">Geo-Arbitrage Calculator</h3>
+                        <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate how much further your foreign freelance income stretches in your local economy.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">Free</span>
+                            <a href="/tools/geo-arbitrage-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch Tool</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card overflow-hidden group">
+                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                        <img src="diderot-effect-thumb.png" alt="Diderot Effect Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-primary font-bold uppercase tracking-wider">Psychology</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-white">Diderot Escalation Tool</h3>
+                        <p class="text-slate-400 text-sm mb-5 leading-relaxed">Discover how one purchase spirals into a cascade of spending and visualize your opportunity cost.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">Free</span>
+                            <a href="/tools/diderot-effect-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch Tool</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-6 mb-24">
+            <div class="glass-card p-10 lg:p-16 flex flex-col lg:flex-row gap-12 items-center">
+                <div class="flex-1">
+                    <span class="text-primary font-bold tracking-widest uppercase text-xs mb-3 block">Who We Are</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">More Than Just <span class="text-primary">Software.</span></h2>
+                    
+                    <p class="text-slate-300 text-lg mb-4 leading-relaxed">
+                        At <strong class="text-white">Affilore</strong>, we believe that your workflow shouldn't be complicated. The internet is flooded with expensive paywalls, bloated software, and clunky interfaces. We exist to build clean, instant solutions.
+                    </p>
+                    <p class="text-slate-300 text-lg leading-relaxed">
+                        We don't just list tools; we engineer the "Lore" behind them—the underlying math, the user experience, and the business strategy. Every calculator and app on our site is completely free, runs instantly in your browser, and is designed for one purpose: to save you time or make you money.
+                    </p>
+                </div>
+                <div class="flex-1 w-full bg-[#1A1A1A] rounded-2xl p-10 border border-white/5 text-center flex flex-col items-center justify-center min-h-[300px]">
+                    <span class="material-symbols-outlined text-5xl text-primary mb-4">verified</span>
+                    <h3 class="text-2xl font-bold text-white mb-2">The Affilore Standard</h3>
+                    <p class="text-slate-400">Fast. Accurate. Free forever.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto px-6 mb-24 text-center">
+            <span class="text-primary font-bold tracking-widest uppercase text-xs mb-3 block">Enterprise Services</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">Need a <span class="text-primary">Custom Tool?</span></h2>
+            <p class="text-slate-400 text-lg mb-10 leading-relaxed">
+                Can't find exactly what you need? We build specialized calculators, custom AI apps, and dedicated internal web tools for businesses at highly competitive flat rates. Drop us a line to discuss your project requirements.
+            </p>
+            
+            <div class="glass-card p-10 max-w-md mx-auto hover:bg-white/[0.04] transition-colors cursor-pointer border-primary/20">
+                <span class="material-symbols-outlined text-4xl text-primary mb-4 block">mail</span>
+                <h3 class="text-xl font-bold text-white mb-1">Email Our Dev Team</h3>
+                <a href="mailto:affilore4@gmail.com" class="text-primary hover:text-white transition-colors font-medium">affilore4@gmail.com</a>
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto px-6 mb-20">
+            <div class="glass-card p-10 md:p-16 text-center bg-gradient-to-b from-white/[0.05] to-transparent">
+                <h2 class="text-3xl font-extrabold text-white mb-4">Stay in the Loop</h2>
+                <p class="text-slate-400 mb-8 max-w-lg mx-auto">Get exclusive access to new tool drops, custom AI scripts, and business growth strategies straight to your inbox.</p>
+                
+                <form id="subscribeForm" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="event.preventDefault(); alert('Success! You are now subscribed to Affilore updates.'); this.reset();">
+                    <input type="email" placeholder="Enter your email" required class="glass-input flex-1 rounded-full px-6 py-3.5 focus:outline-none focus:ring-2 focus:ring-primary/50 text-white placeholder-slate-500">
+                    <button type="submit" class="bg-primary text-charcoal font-bold rounded-full px-8 py-3.5 hover:bg-white transition-colors">Subscribe</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-white/10 bg-[#0A0A0A] pt-16 pb-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            
+            <div class="col-span-1 md:col-span-2">
+                <a href="#" class="flex items-center gap-2 mb-4">
+                    <img src="logo.png" alt="Affilore" class="h-6 w-auto opacity-90">
+                    <span class="text-xl font-black text-white">Affilore<span class="text-primary">.</span></span>
+                </a>
+                <p class="text-slate-400 text-sm leading-relaxed max-w-sm">
+                    The ultimate collection of free, high-performance calculators, estimators, and AI tools. Built to empower creators, investors, and digital entrepreneurs to make data-driven decisions.
+                </p>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-bold mb-4">Quick Links</h4>
+                <ul class="space-y-2 text-sm text-slate-400">
+                    <li><a href="#tools" class="hover:text-primary transition-colors">All Tools</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Custom Development</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">About Us</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-bold mb-4">Connect</h4>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">smart_display</span></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">music_note</span></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+            <p>&copy; 2026 Affilore. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-primary transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-primary transition-colors">Terms of Service</a>
             </div>
         </div>
     </footer>
 
-    <script>
-        // Navbar Scroll Effect
-        const navbar = document.getElementById('navbar');
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Product Filter Function
-        function filterProducts(category) {
-            const buttons = document.querySelectorAll('.filter-btn');
-            const cards = document.querySelectorAll('.product-card');
-
-            // Update active button
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.filter === category) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // Filter cards with animation
-            cards.forEach((card, index) => {
-                const cardCategory = card.dataset.category;
-
-                if (category === 'all' || cardCategory === category) {
-                    setTimeout(() => {
-                        card.classList.remove('hidden');
-                        card.style.opacity = '0';
-                        card.style.transform = 'scale(0.8)';
-
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'scale(1)';
-                        }, 50);
-                    }, index * 50);
-                } else {
-                    card.style.opacity = '0';
-                    card.style.transform = 'scale(0.8)';
-                    setTimeout(() => {
-                        card.classList.add('hidden');
-                    }, 300);
-                }
-            });
-        }
-
-        // Generate Floating Particles
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 20;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 10 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                container.appendChild(particle);
-            }
-        }
-
-        // Initialize particles
-        createParticles();
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Close mobile menu if open
-                    mobileMenu.classList.add('hidden');
-                }
-            });
-        });
-
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all product cards
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
-
-        // --- COOKIE BANNER LOGIC ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const cookieBanner = document.getElementById('cookie-banner');
-            const acceptBtn = document.getElementById('accept-cookies');
-
-            // Check if user has already accepted
-            if (!localStorage.getItem('affiloreCookieConsent')) {
-                setTimeout(() => {
-                    cookieBanner.classList.remove('translate-y-full');
-                }, 1000); // 1 second delay before showing
-            }
-
-            acceptBtn.addEventListener('click', () => {
-                localStorage.setItem('affiloreCookieConsent', 'true');
-                cookieBanner.classList.add('translate-y-full');
-            });
-        });
-    </script>
-
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
