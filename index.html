@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KFHTZ6EJC2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KFHTZ6EJC2');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affilore | Premium Free Tools & Calculators</title>
@@ -25,6 +33,7 @@
                         card: '#1A1A1A',
                         primary: '#FFBF00',
                         accent: '#FFBF00',
+                        neon: '#FFBF00'
                     }
                 }
             }
@@ -33,11 +42,12 @@
 
     <style>
         body { font-family: 'Outfit', sans-serif; background-color: #121212; color: #ffffff; overflow-x: hidden; }
+        html { scroll-behavior: smooth; }
         
         /* Glassmorphism */
         .glass-nav { background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); border-radius: 1.25rem; transition: all 0.3s ease; }
-        .glass-card:hover { border-color: rgba(255, 191, 0, 0.2); box-shadow: 0 10px 40px -10px rgba(255, 191, 0, 0.05); }
+        .glass-card:hover { border-color: rgba(255, 191, 0, 0.2); box-shadow: 0 10px 40px -10px rgba(255, 191, 0, 0.05); transform: translateY(-5px); }
         
         /* Form Inputs */
         .glass-input { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
@@ -48,6 +58,11 @@
         
         /* Floating particles */
         .particle { position: absolute; border-radius: 50%; background: #FFBF00; opacity: 0.2; pointer-events: none; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #121212; }
+        ::-webkit-scrollbar-thumb { background: #FFBF00; border-radius: 4px; }
     </style>
 </head>
 <body class="antialiased selection:bg-primary selection:text-charcoal relative">
@@ -67,25 +82,32 @@
                 <span class="text-2xl font-black tracking-tight text-white group-hover:text-primary transition-colors">Affilore<span class="text-primary">.</span></span>
             </a>
 
-            <div class="hidden lg:flex items-center gap-8 font-medium text-sm text-slate-300">
+            <div class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-300">
                 <a href="#tools" class="hover:text-primary transition-colors">Tools</a>
-                <a href="#" class="hover:text-primary transition-colors">Compress</a>
-                <a href="#" class="hover:text-primary transition-colors">Convert</a>
-                <a href="#" class="hover:text-primary transition-colors">Merge</a>
-                <a href="#" class="hover:text-primary transition-colors">Edit</a>
-                <a href="#" class="hover:text-primary transition-colors">Sign</a>
-                <a href="#" class="flex items-center gap-1 text-primary hover:text-white transition-colors">
+                <a href="#tools" class="hover:text-primary transition-colors">Compress</a>
+                <a href="#tools" class="hover:text-primary transition-colors">Convert</a>
+                <a href="#tools" class="hover:text-primary transition-colors">Merge</a>
+                <a href="#tools" class="hover:text-primary transition-colors">Edit</a>
+                <a href="#tools" class="flex items-center gap-1 text-primary hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-[18px]">auto_awesome</span> AI Tools
                 </a>
             </div>
 
             <div class="flex items-center gap-4">
-                <button aria-label="Search" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary hover:text-charcoal flex items-center justify-center transition-all duration-300 text-slate-300">
+                <button id="navSearchBtn" aria-label="Search" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary hover:text-charcoal flex items-center justify-center transition-all duration-300 text-slate-300">
                     <span class="material-symbols-outlined">search</span>
                 </button>
-                <button class="lg:hidden text-slate-300 hover:text-primary">
+                <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-primary">
                     <span class="material-symbols-outlined">menu</span>
                 </button>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-white/10 bg-[#121212] px-6">
+            <div class="flex flex-col gap-4 pt-4">
+                <a href="#tools" class="text-gray-300 hover:text-primary transition-colors font-medium">Tools</a>
+                <a href="about.html" class="text-gray-300 hover:text-primary transition-colors font-medium">About Us</a>
+                <a href="mailto:affilore4@gmail.com" class="text-gray-300 hover:text-primary transition-colors font-medium">Contact</a>
             </div>
         </div>
     </nav>
@@ -163,91 +185,338 @@
             </div>
         </section>
 
-        <section id="tools" class="max-w-7xl mx-auto px-6 mb-24">
-            <div class="text-center mb-10">
+        <section id="tools" class="max-w-7xl mx-auto px-6 mb-24 pt-10">
+            <div class="text-center mb-8">
                 <h2 class="text-4xl font-extrabold text-white mb-4">Tool <span class="text-primary">Categories</span></h2>
-                <p class="text-slate-400 max-w-xl mx-auto">Select a category and discover tools curated just for you. Click a tag to filter the collection.</p>
-            </div>
-
-            <div class="flex flex-wrap justify-center gap-3 mb-12">
-                <button class="px-6 py-2.5 rounded-full bg-primary text-charcoal font-bold flex items-center gap-2 hover:bg-white transition-colors">
-                    All Tools <span class="material-symbols-outlined text-[18px]">apps</span>
-                </button>
-                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">account_balance</span> Finance
-                </button>
-                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">videocam</span> Creators
-                </button>
-                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">psychology</span> Psychology
-                </button>
-                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">auto_awesome</span> AI Apps
-                </button>
-                <button class="px-6 py-2.5 rounded-full bg-white/5 text-slate-300 border border-white/10 font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
-                    <span class="material-symbols-outlined text-[18px]">article</span> Blog
-                </button>
-            </div>
-
-            <div class="masonry-grid">
+                <p class="text-slate-400 max-w-xl mx-auto mb-8">Discover tools curated just for you. Use the search bar to find exactly what you need.</p>
                 
-                <div class="glass-card overflow-hidden group">
-                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                        <img src="faceless-roi-thumb.png" alt="Faceless ROI Forecaster" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
-                    </div>
-                    <div class="p-6">
-                        <span class="text-xs text-primary font-bold uppercase tracking-wider">Creators</span>
-                        <h3 class="text-xl font-bold mt-2 mb-2 text-white">Faceless ROI Forecaster</h3>
-                        <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate your exact YouTube automation burn rate, profit margins, and break-even point.</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold text-primary">Free</span>
-                            <a href="/tools/youtube-roi-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch Tool</a>
+                <div class="relative max-w-lg mx-auto mb-10">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                    <input type="text" id="liveSearchInput" placeholder="Search tools (e.g., 'Tax', 'Calculator')..." class="glass-input w-full pl-12 pr-4 py-3.5 rounded-full text-white font-medium focus:ring-2 focus:ring-primary/50 outline-none">
+                </div>
+            </div>
+
+            <div class="masonry-grid" id="toolsGrid">
+                
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="faceless-roi-thumb.png" alt="Faceless ROI Forecaster" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Creators</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Faceless ROI Forecaster</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate your exact YouTube automation burn rate, profit margins, and break-even point.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/youtube-roi-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-card overflow-hidden group">
-                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                        <img src="cost-segregation-thumb.png" alt="Cost Segregation Estimator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
-                    </div>
-                    <div class="p-6">
-                        <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
-                        <h3 class="text-xl font-bold mt-2 mb-2 text-white">Cost Segregation Estimator</h3>
-                        <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate Year 1 accelerated depreciation tax savings for multifamily and commercial real estate.</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold text-primary">Free</span>
-                            <a href="/tools/cost-segregation-estimator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch Tool</a>
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="cost-segregation-thumb.png" alt="Cost Segregation Estimator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Real Estate</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Cost Segregation Estimator</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate Year 1 accelerated depreciation tax savings for multifamily and commercial properties.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/cost-segregation-estimator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-card overflow-hidden group">
-                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                        <img src="geo-arbitrage-thumb.png" alt="Geo-Arbitrage Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
-                    </div>
-                    <div class="p-6">
-                        <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
-                        <h3 class="text-xl font-bold mt-2 mb-2 text-white">Geo-Arbitrage Calculator</h3>
-                        <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate how much further your foreign freelance income stretches in your local economy.</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold text-primary">Free</span>
-                            <a href="/tools/geo-arbitrage-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch Tool</a>
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="geo-arbitrage-thumb.png" alt="Geo-Arbitrage Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Global Finance</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Geo-Arbitrage Calculator</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate how much further your foreign freelance income stretches in your local economy.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/geo-arbitrage-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-card overflow-hidden group">
-                    <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                        <img src="diderot-effect-thumb.png" alt="Diderot Effect Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="diderot-effect-thumb.png" alt="Diderot Effect Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Psychology</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Diderot Escalation Tool</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Discover how one purchase spirals into a cascade of spending and visualize opportunity cost.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/diderot-effect-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6">
-                        <span class="text-xs text-primary font-bold uppercase tracking-wider">Psychology</span>
-                        <h3 class="text-xl font-bold mt-2 mb-2 text-white">Diderot Escalation Tool</h3>
-                        <p class="text-slate-400 text-sm mb-5 leading-relaxed">Discover how one purchase spirals into a cascade of spending and visualize your opportunity cost.</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold text-primary">Free</span>
-                            <a href="/tools/diderot-effect-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch Tool</a>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="sponsorship-pricer-thumb.png" alt="Podcast Sponsorship Pricer" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Creators</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Sponsorship Pricer</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate your exact brand deal rate based on views, niche CPM, and ad placement.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/sponsorship-pricer/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="freelance-tax-thumb.png" alt="Global Freelance Tax Planner" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Taxes</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Global Tax Planner</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate deductible expenses and find out exactly how much to save for tax season globally.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/freelance-tax-estimator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="rule-of-72-thumb.png" alt="Rule of 72 Asset Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Investing</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Rule of 72 Calculator</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate how fast your assets will double. Compare the mental math against exact formulas.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/rule-of-72-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="word-counter-thumb.png" alt="Word Counter Pro" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Writing</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Word Counter Pro</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Real-time analysis of words, characters, sentences, and reading time.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/word-counter/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="case-converter-thumb.png" alt="Case Converter" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Formatting</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Case Converter</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Instantly switch text between UPPERCASE, lowercase, and Title Case format.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/case-converter/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="503020-thumb.png" alt="50/30/20 Budget Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">50/30/20 Planner</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate your budget targets and track your actual spending to ensure you are building wealth.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/50-30-20-budget-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="emergency-fund-thumb.png" alt="Emergency Fund Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Emergency Fund Planner</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate your safety net target and find out exactly how long it will take to reach it.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/emergency-fund-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="lorem-ipsum-thumb.png" alt="Lorem Ipsum Generator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Design</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Lorem Ipsum Generator</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Generate professional placeholder text for your web and design projects.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/lorem-ipsum/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="profit-margin-thumb.png" alt="Profit Margin Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Business</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Profit Margin Calculator</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate Gross Margin vs. Markup to perfectly price your products and services.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/profit-margin-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="autotranscribe-thumb.png" alt="AutoTranscribe AI" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">AI Apps</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">AutoTranscribe</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Instant voice-to-text dictation. Turn your speech into notes automatically.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/auto-transcribe/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="spendpilot-thumb.png" alt="SpendPilot Finance Tracker" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">SpendPilot</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Track expenses, visualize budgets, and calculate the "Time Cost" of every purchase.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/spend-pilot/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="batchprice-thumb.png" alt="BatchPrice Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Business</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">BatchPrice Calculator</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate home bakery recipe costs and track state sales limit compliance.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/batch-price/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="freelancer-rate-thumb.png" alt="Freelance Rate Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Business</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Freelance Rate Reverser</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate your true hourly rate based on lifestyle, taxes, and unbillable time.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/freelance-rate-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="youtube-thumb.png" alt="YouTube Thumbnail Grabber" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Creators</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">YouTube Thumb Grabber</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Download 4K & HD thumbnails from any YouTube video instantly.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/youtube-thumbnail-downloader/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="masonry-item product-card">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="tiktok-fee-thumb.png" alt="TikTok Shop Fee Calculator" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">E-Commerce</span>
+                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">TikTok Shop Calculator</h3>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate true net profit after affiliate commissions and platform fees.</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="/tools/tiktok-fee-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -280,14 +549,14 @@
             <span class="text-primary font-bold tracking-widest uppercase text-xs mb-3 block">Enterprise Services</span>
             <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-6">Need a <span class="text-primary">Custom Tool?</span></h2>
             <p class="text-slate-400 text-lg mb-10 leading-relaxed">
-                Can't find exactly what you need? We build specialized calculators, custom AI apps, and dedicated internal web tools for businesses at highly competitive flat rates. Drop us a line to discuss your project requirements.
+                Can't find exactly what you need? We build specialized calculators, custom AI apps, and dedicated internal web tools for businesses at highly competitive rates. Drop us a line to discuss your project.
             </p>
             
-            <div class="glass-card p-10 max-w-md mx-auto hover:bg-white/[0.04] transition-colors cursor-pointer border-primary/20">
-                <span class="material-symbols-outlined text-4xl text-primary mb-4 block">mail</span>
+            <a href="mailto:affilore4@gmail.com" class="glass-card p-10 max-w-md mx-auto hover:bg-white/[0.04] transition-colors cursor-pointer border-primary/20 block group">
+                <span class="material-symbols-outlined text-4xl text-primary mb-4 block group-hover:scale-110 transition-transform">mail</span>
                 <h3 class="text-xl font-bold text-white mb-1">Email Our Dev Team</h3>
-                <a href="mailto:affilore4@gmail.com" class="text-primary hover:text-white transition-colors font-medium">affilore4@gmail.com</a>
-            </div>
+                <span class="text-primary font-medium">affilore4@gmail.com</span>
+            </a>
         </section>
 
         <section class="max-w-4xl mx-auto px-6 mb-20">
@@ -321,18 +590,30 @@
                 <h4 class="text-white font-bold mb-4">Quick Links</h4>
                 <ul class="space-y-2 text-sm text-slate-400">
                     <li><a href="#tools" class="hover:text-primary transition-colors">All Tools</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">Custom Development</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">About Us</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">Contact</a></li>
+                    <li><a href="mailto:affilore4@gmail.com" class="hover:text-primary transition-colors">Custom Development</a></li>
+                    <li><a href="about.html" class="hover:text-primary transition-colors">About Us</a></li>
+                    <li><a href="mailto:affilore4@gmail.com" class="hover:text-primary transition-colors">Contact</a></li>
                 </ul>
             </div>
             
             <div>
                 <h4 class="text-white font-bold mb-4">Connect</h4>
                 <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">smart_display</span></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">music_note</span></a>
+                    <a href="https://www.youtube.com/channel/UCqEwTebsYNUBR0vdKA0OMtQ" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.498-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/affilore_?igsh=a3JrZnNra28wZWZk" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@affilore?_r=1&_t=ZS-93bpX5U6WRt" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-charcoal transition-all">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v6.16c0 2.52-1.12 4.84-2.98 6.37-2.14 1.76-5.13 2.38-7.79 1.64-4.56-1.28-7.07-5.84-5.63-10.35 1.19-3.73 4.65-6.19 8.58-6.09v4.22c-2.38.25-4.48 2.05-4.82 4.41-.35 2.5.94 4.96 3.1 5.86 2.45 1.02 5.37-.32 6.27-2.87.05-.14.07-.29.1-.43v-17h-.91z"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -340,11 +621,71 @@
         <div class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
             <p>&copy; 2026 Affilore. All rights reserved.</p>
             <div class="flex gap-6">
-                <a href="#" class="hover:text-primary transition-colors">Privacy Policy</a>
-                <a href="#" class="hover:text-primary transition-colors">Terms of Service</a>
+                <a href="privacy.html" class="hover:text-primary transition-colors">Privacy Policy</a>
+                <a href="terms.html" class="hover:text-primary transition-colors">Terms of Service</a>
             </div>
         </div>
     </footer>
 
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-white/10 shadow-2xl z-50 transform translate-y-full transition-transform duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic and personalize content. We do not save your financial data. By clicking "Accept", you consent.</p>
+            <button id="accept-cookies" class="whitespace-nowrap rounded-full bg-primary px-8 py-3 text-sm font-bold text-charcoal transition hover:bg-white">Accept</button>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Search Functionality
+        const searchBtn = document.getElementById('navSearchBtn');
+        const searchInput = document.getElementById('liveSearchInput');
+        const toolCards = document.querySelectorAll('.product-card');
+
+        // Scroll to search when nav icon clicked
+        searchBtn.addEventListener('click', () => {
+            const toolsSection = document.getElementById('tools');
+            toolsSection.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                searchInput.focus();
+            }, 600);
+        });
+
+        // Live filtering logic
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            toolCards.forEach(card => {
+                const title = card.querySelector('.tool-title').textContent.toLowerCase();
+                if (title.includes(term)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Cookie Banner Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const cookieBanner = document.getElementById('cookie-banner');
+            const acceptBtn = document.getElementById('accept-cookies');
+
+            if (!localStorage.getItem('affiloreCookieConsent')) {
+                setTimeout(() => {
+                    cookieBanner.classList.remove('translate-y-full');
+                }, 1000);
+            }
+
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('affiloreCookieConsent', 'true');
+                cookieBanner.classList.add('translate-y-full');
+            });
+        });
+    </script>
 </body>
 </html>
