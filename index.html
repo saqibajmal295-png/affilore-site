@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affilore | Premium Free Tools & Calculators</title>
-    <meta name="description" content="Discover premium, free online tools, calculators, and AI apps designed for creators and entrepreneurs.">
+    <meta name="description" content="Discover premium, free online tools, calculators, and AI apps.">
     <link rel="icon" type="image/png" href="logo.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -40,7 +40,7 @@
         .glass-input { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
         .glass-input:focus { border-color: #FFBF00; outline: none; box-shadow: 0 0 0 2px rgba(255, 191, 0, 0.1); }
         .masonry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-        .filter-btn { padding: 8px 20px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; transition: 0.3s; }
+        .filter-btn { padding: 8px 20px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; transition: 0.3s; cursor: pointer; }
         .filter-btn.active { background: #FFBF00; color: #121212; font-weight: bold; }
         .product-card { transition: 0.4s ease; }
         .product-card.hidden { display: none; opacity: 0; }
@@ -76,62 +76,50 @@
     </nav>
 
     <main class="relative z-10 pt-32 pb-20">
-        <section class="max-w-7xl mx-auto px-6 mb-24">
+        <section class="max-w-7xl mx-auto px-6 mb-24 text-center lg:text-left">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 text-xs font-bold text-slate-300 mb-6">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> New Tools 2026
-                    </div>
                     <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-6 text-white">
-                        Discover the Power of <span class="text-primary">Smart Tools.</span>
+                        Power Your Productivity with <span class="text-primary">Free Tools.</span>
                     </h1>
-                    <p class="text-lg text-slate-400 mb-8 max-w-lg leading-relaxed">
+                    <p class="text-lg text-slate-400 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed">
                         Expertly engineered calculators and utilities to simplify your workflow and upgrade your reality.
                     </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#tools" class="px-8 py-3.5 bg-primary text-charcoal font-bold rounded-full hover:bg-white transition-all transform hover:scale-105 flex items-center gap-2">Explore Tools</a>
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                        <a href="#tools" class="px-8 py-3.5 bg-primary text-charcoal font-bold rounded-full hover:bg-white transition-all transform hover:scale-105">Explore Tools</a>
                         <a href="mailto:affilore4@gmail.com" class="px-8 py-3.5 border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-all">Custom Solutions</a>
                     </div>
                 </div>
 
-                <div class="glass-card p-8 relative overflow-hidden">
+                <div class="glass-card p-8">
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary">new_releases</span> Latest Releases
                     </h3>
                     <div class="space-y-4">
                         <a href="tools/emergency-fund-planner/index.html" class="block p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-colors group">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                                    <span class="material-symbols-outlined">shield</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-white group-hover:text-primary transition-colors">Emergency Fund Planner</h4>
-                                    <p class="text-xs text-slate-400 mt-1">Calculate your security net instantly.</p>
-                                </div>
-                            </div>
+                            <h4 class="font-bold text-white group-hover:text-primary transition-colors text-left">Emergency Fund Planner</h4>
+                            <p class="text-xs text-slate-400 mt-1 text-left text-safe">Calculate your security net instantly.</p>
                         </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="tools" class="max-w-7xl mx-auto px-6 mb-24 pt-10">
-            <div class="text-center mb-8">
-                <h2 class="text-4xl font-extrabold text-white mb-4">Tool <span class="text-primary">Directory</span></h2>
-                
-                <div class="relative max-w-lg mx-auto mb-10">
-                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                    <input type="text" id="liveSearchInput" placeholder="Search tools..." class="glass-input w-full pl-12 pr-4 py-3.5 rounded-full outline-none">
-                </div>
+        <section id="tools" class="max-w-7xl mx-auto px-6 mb-24 pt-10 text-center">
+            <h2 class="text-4xl font-extrabold text-white mb-8">Tool <span class="text-primary">Directory</span></h2>
+            
+            <div class="relative max-w-lg mx-auto mb-10 text-safe">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                <input type="text" id="liveSearchInput" placeholder="Search tools..." class="glass-input w-full pl-12 pr-4 py-3.5 rounded-full outline-none">
+            </div>
 
-                <div class="flex flex-wrap justify-center gap-3 mb-12">
-                    <button class="filter-btn active" data-filter="all">All Tools</button>
-                    <button class="filter-btn" data-filter="finance">Finance</button>
-                    <button class="filter-btn" data-filter="creators">Creators</button>
-                    <button class="filter-btn" data-filter="business">Business</button>
-                    <button class="filter-btn" data-filter="real-estate">Real Estate</button>
-                    <button class="filter-btn" data-filter="psychology">Psychology</button>
-                </div>
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="filter-btn active" data-filter="all">All Tools</button>
+                <button class="filter-btn" data-filter="finance">Finance</button>
+                <button class="filter-btn" data-filter="creators">Creators</button>
+                <button class="filter-btn" data-filter="business">Business</button>
+                <button class="filter-btn" data-filter="real-estate">Real Estate</button>
+                <button class="filter-btn" data-filter="psychology">Psychology</button>
             </div>
 
             <div class="masonry-grid" id="toolsGrid">
@@ -158,7 +146,7 @@
                         <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
                             <img src="faceless-roi-thumb.png" alt="ROI Forecaster" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-500">
                         </div>
-                        <div class="p-6 text-left">
+                        <div class="p-6 text-left text-safe">
                             <span class="text-xs text-primary font-bold uppercase tracking-wider">Creators</span>
                             <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Faceless ROI Forecaster</h3>
                             <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate YouTube automation burn rates and profit margins.</p>
@@ -170,68 +158,22 @@
                     </div>
                 </div>
 
-                <div class="masonry-item product-card" data-category="real-estate">
-                    <div class="glass-card overflow-hidden group">
-                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                            <img src="cost-segregation-thumb.png" alt="Cost Seg" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-500">
-                        </div>
-                        <div class="p-6 text-left">
-                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Real Estate</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Cost Segregation Estimator</h3>
-                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate Year 1 accelerated depreciation tax savings.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-primary">Free</span>
-                                <a href="tools/cost-segregation-estimator/index.html" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-                <div class="masonry-item product-card" data-category="finance">
-                    <div class="glass-card overflow-hidden group">
-                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                            <img src="geo-arbitrage-thumb.png" alt="Geo-Arbitrage" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-500">
-                        </div>
-                        <div class="p-6 text-left">
-                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
-                            <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Geo-Arbitrage Calculator</h3>
-                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate income stretch across global local economies.</p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-xl font-bold text-primary">Free</span>
-                                <a href="tools/geo-arbitrage-calculator/index.html" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            
-            <div class="flex justify-center items-center gap-4 mt-20 font-bold text-slate-500">
-                <span class="text-primary border-b-2 border-primary">1</span> <span>2</span> <span>3</span> <span>4</span> <span>Next &rarr;</span>
-            </div>
         </section>
     </main>
 
     <footer class="border-t border-white/10 bg-[#0A0A0A] pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div class="col-span-2 text-left">
-                <span class="text-xl font-black text-white">Affilore<span class="text-primary">.</span></span>
-                <p class="text-slate-400 text-sm mt-4 leading-relaxed max-w-sm">Premium collection of free, high-performance calculators and AI tools for creators and digital entrepreneurs.</p>
+                <span class="text-xl font-black text-white text-safe">Affilore<span class="text-primary">.</span></span>
+                <p class="text-slate-400 text-sm mt-4 max-w-sm leading-relaxed">Premium collection of free, high-performance calculators and AI tools.</p>
             </div>
             <div class="text-left">
                 <h4 class="text-white font-bold mb-4">Quick Links</h4>
                 <ul class="space-y-2 text-sm text-slate-400">
                     <li><a href="about.html" class="hover:text-primary">About Us</a></li>
                     <li><a href="mailto:affilore4@gmail.com" class="hover:text-primary">Contact</a></li>
-                    <li><a href="mailto:affilore4@gmail.com" class="hover:text-primary">Custom Development</a></li>
                 </ul>
-            </div>
-            <div class="text-left text-white">
-                <h4 class="font-bold mb-4 text-white">Connect</h4>
-                <div class="flex gap-4">
-                    <a href="https://www.youtube.com/channel/UCqEwTebsYNUBR0vdKA0OMtQ" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">smart_display</span></a>
-                    <a href="https://www.instagram.com/affilore_?igsh=a3JrZnNra28wZWZk" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a>
-                </div>
             </div>
         </div>
         <div class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex justify-between text-xs text-slate-500">
@@ -248,7 +190,7 @@
         const toolCards = document.querySelectorAll('.product-card');
         const filterBtns = document.querySelectorAll('.filter-btn');
 
-        // Search Engine
+        // Working Search engine
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             toolCards.forEach(card => {
@@ -257,7 +199,7 @@
             });
         });
 
-        // Filter Logic
+        // Working Filter logic
         function filterTools(category) {
             filterBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === category));
             toolCards.forEach(card => {
