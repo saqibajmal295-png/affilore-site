@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KFHTZ6EJC2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-KFHTZ6EJC2');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Fund Target Planner | Financial Safety Net Calculator | Affilore</title>
+    <meta name="description" content="Calculate your ideal emergency savings, track your progress, and forecast your time to financial security with our free planner.">
+    <link rel="icon" type="image/png" href="../../logo.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { outfit: ['Outfit', 'sans-serif'] },
+                    colors: { charcoal: '#121212', primary: '#FFBF00', wealth: '#00C851' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #121212; color: #fff; overflow-x: hidden; }
+        .glass-nav { background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 16px; transition: all 0.3s ease; }
+        .input-field { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px 16px 12px 40px; color: #fff; width: 100%; outline: none; }
+        .range-slider { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1); }
+        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #FFBF00; cursor: pointer; border: 3px solid #121212; }
+        .progress-track { background: rgba(255, 255, 255, 0.06); border-radius: 999px; height: 18px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #FFBF00, #00C851); transition: width 0.8s ease; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="glass-nav fixed w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3 group">
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">arrow_back</span>
+                <img src="../../logo.png" alt="Affilore" class="h-8 w-auto">
+                <span class="text-2xl font-black text-white group-hover:text-primary transition-colors">Affilore<span class="text-primary">.</span></span>
+            </a>
+            <div class="hidden md:block text-xs font-bold text-slate-500 uppercase tracking-widest">Emergency Fund Planner</div>
+        </div>
+    </nav>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-white">Emergency Fund <span class="text-primary">Target Planner</span></h1>
+            <p class="text-slate-400 text-lg max-w-2xl mx-auto">Calculate your exact bare-bones expenses and forecast your path to financial freedom.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20">
+            <div class="lg:col-span-5 space-y-6">
+                <div class="glass-card p-6">
+                    <h3 class="text-primary font-bold uppercase text-xs tracking-widest mb-4">1. Monthly Expenses</h3>
+                    <div class="space-y-4">
+                        <div class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">home</span><input type="number" id="housing" class="input-field" value="1500"></div>
+                        <div class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">bolt</span><input type="number" id="utilities" class="input-field" value="300"></div>
+                        <div class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">shopping_cart</span><input type="number" id="groceries" class="input-field" value="400"></div>
+                    </div>
+                </div>
+                <div class="glass-card p-6">
+                    <h3 class="text-primary font-bold uppercase text-xs tracking-widest mb-4">2. Target & Savings</h3>
+                    <input type="range" id="coverageSlider" min="1" max="12" value="6" class="range-slider">
+                    <div class="flex justify-between mt-4">
+                        <input type="number" id="currentSavings" class="input-field w-[48%]" placeholder="Current" value="2000">
+                        <input type="number" id="contribution" class="input-field w-[48%]" placeholder="Monthly" value="500">
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="glass-card p-6 border-primary/20 text-center">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Fund Target</p>
+                        <p id="fundTarget" class="text-3xl font-black text-primary">$0</p>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Time to Goal</p>
+                        <p id="timeToGoal" class="text-3xl font-black text-wealth">Calculated Pace</p>
+                    </div>
+                </div>
+                <div class="glass-card p-6">
+                    <div class="progress-track"><div id="progressBar" class="progress-fill" style="width: 0%"></div></div>
+                    <p id="progressPct" class="text-center text-primary font-bold mt-4">0% Funded</p>
+                </div>
+                <div class="glass-card p-6 h-64"><canvas id="expenseChart"></canvas></div>
+            </div>
+        </div>
+
+        <article class="prose prose-invert max-w-4xl mx-auto border-t border-white/10 pt-16">
+            <h2 class="text-white text-3xl font-bold mb-6">Emergency Fund Guide: Building Your Safety Net</h2>
+            <p class="text-slate-300">The <strong>Emergency Fund Target Planner</strong> helps you define your true bare-bones survival budget. Financial experts typically recommend 3 to 6 months of coverage, but for freelancers, 12 months is often safer.</p>
+            <h3 class="text-primary mt-8">Where to keep your fund?</h3>
+            <p class="text-slate-300">Keep it liquid. High-Yield Savings Accounts (HYSA) are ideal as they offer safety and accessibility during a crisis.</p>
+        </article>
+    </div>
+
+    <script>
+        const expenseInputs = ['housing', 'utilities', 'groceries'];
+        const coverageSlider = document.getElementById('coverageSlider');
+        const currentSavingsInput = document.getElementById('currentSavings');
+        const contributionInput = document.getElementById('contribution');
+        const fundTargetEl = document.getElementById('fundTarget');
+        const progressBarEl = document.getElementById('progressBar');
+        const progressPctEl = document.getElementById('progressPct');
+        const timeToGoalEl = document.getElementById('timeToGoal');
+
+        // Simple Chart implementation for demo
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        const expenseChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: { labels: ['Housing', 'Utilities', 'Food'], datasets: [{ data: [1500, 300, 400], backgroundColor: ['#FFBF00', '#FF8C42', '#00C851'] }] },
+            options: { plugins: { legend: { position: 'bottom' } }, cutout: '80%' }
+        });
+
+        function calculate() {
+            let totalExpenses = 0;
+            const values = expenseInputs.map(id => {
+                const val = parseFloat(document.getElementById(id).value) || 0;
+                totalExpenses += val;
+                return val;
+            });
+            const target = totalExpenses * parseInt(coverageSlider.value);
+            const current = parseFloat(currentSavingsInput.value) || 0;
+            const monthly = parseFloat(contributionInput.value) || 0;
+            const pct = target > 0 ? Math.min(100, (current / target) * 100) : 0;
+
+            fundTargetEl.textContent = '$' + target.toLocaleString();
+            progressBarEl.style.width = pct + '%';
+            progressPctEl.textContent = Math.round(pct) + '% Funded';
+            
+            if (target <= current) { timeToGoalEl.textContent = "Funded!"; }
+            else if (monthly > 0) { timeToGoalEl.textContent = Math.ceil((target - current) / monthly) + " Mos"; }
+            else { timeToGoalEl.textContent = "—"; }
+
+            expenseChart.data.datasets[0].data = values;
+            expenseChart.update();
+        }
+
+        [...expenseInputs, 'currentSavings', 'contribution'].forEach(id => document.getElementById(id).addEventListener('input', calculate));
+        coverageSlider.addEventListener('input', calculate);
+        calculate();
+    </script>
+</body>
+</html>
