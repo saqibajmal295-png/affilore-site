@@ -12,12 +12,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affilore | Premium Free Tools & Calculators</title>
-    <meta name="description" content="Discover premium, free online tools, calculators, and AI apps designed for creators, freelancers, and entrepreneurs.">
+    <meta name="description" content="Discover premium, free online tools, calculators, and AI apps designed for creators and entrepreneurs.">
     <link rel="icon" type="image/png" href="logo.png">
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700" rel="stylesheet"/>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -27,12 +25,7 @@
             theme: {
                 extend: {
                     fontFamily: { outfit: ['Outfit', 'sans-serif'] },
-                    colors: {
-                        charcoal: '#121212',
-                        card: '#1A1A1A',
-                        primary: '#FFBF00',
-                        neon: '#FFBF00',
-                    }
+                    colors: { charcoal: '#121212', card: '#1A1A1A', primary: '#FFBF00' }
                 }
             }
         }
@@ -43,56 +36,41 @@
         html { scroll-behavior: smooth; }
         .glass-nav { background: rgba(18, 18, 18, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px); border-radius: 1.25rem; transition: all 0.3s ease; }
-        .glass-card:hover { border-color: rgba(255, 191, 0, 0.2); box-shadow: 0 10px 40px -10px rgba(255, 191, 0, 0.05); transform: translateY(-5px); }
+        .glass-card:hover { border-color: rgba(255, 191, 0, 0.3); transform: translateY(-5px); }
         .glass-input { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s ease; }
         .glass-input:focus { border-color: #FFBF00; outline: none; box-shadow: 0 0 0 2px rgba(255, 191, 0, 0.1); }
-        .masonry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; align-items: start; }
-        .filter-btn { transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); }
-        .filter-btn.active { background-color: #FFBF00; color: #121212; border-color: #FFBF00; font-weight: 700; }
-        .product-card { transition: all 0.4s ease; }
-        .product-card.hidden { opacity: 0; transform: scale(0.9); display: none; }
-        .particle { position: absolute; border-radius: 50%; background: #FFBF00; opacity: 0.2; pointer-events: none; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #121212; }
-        ::-webkit-scrollbar-thumb { background: #FFBF00; border-radius: 4px; }
+        .masonry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+        .filter-btn { padding: 8px 20px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; transition: 0.3s; }
+        .filter-btn.active { background: #FFBF00; color: #121212; font-weight: bold; }
+        .product-card { transition: 0.4s ease; }
+        .product-card.hidden { display: none; opacity: 0; }
     </style>
 </head>
-<body class="antialiased">
-
-    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="particle w-2 h-2 top-[10%] left-[15%]"></div>
-        <div class="particle w-1.5 h-1.5 top-[25%] right-[20%]"></div>
-    </div>
+<body>
 
     <nav class="glass-nav fixed w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="/" class="flex items-center gap-3 group">
                 <img src="logo.png" alt="Affilore" class="h-8 w-auto">
-                <span class="text-2xl font-black text-white group-hover:text-primary transition-colors">Affilore<span class="text-primary">.</span></span>
+                <span class="text-2xl font-black text-white">Affilore<span class="text-primary">.</span></span>
             </a>
+
             <div class="hidden lg:flex items-center gap-8 font-medium text-sm text-slate-300">
                 <a href="#tools" class="text-white font-bold border-b-2 border-primary pb-1">Directory</a>
-                <button onclick="document.querySelector('[data-filter=\'finance\']').click()" class="hover:text-primary">Finance</button>
-                <button onclick="document.querySelector('[data-filter=\'creators\']').click()" class="hover:text-primary">Creators</button>
-                <button onclick="document.querySelector('[data-filter=\'business\']').click()" class="hover:text-primary">Business</button>
-                <a href="/ai-tools/" class="flex items-center gap-1 text-primary hover:text-white">
+                <button onclick="filterTools('finance')" class="hover:text-primary transition-colors">Finance</button>
+                <button onclick="filterTools('creators')" class="hover:text-primary transition-colors">Creators</button>
+                <button onclick="filterTools('business')" class="hover:text-primary transition-colors">Business</button>
+                <button onclick="filterTools('real-estate')" class="hover:text-primary transition-colors">Real Estate</button>
+                <a href="/ai-tools/" class="flex items-center gap-1 text-primary hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-[18px]">auto_awesome</span> AI Tools
                 </a>
             </div>
+
             <div class="flex items-center gap-4">
-                <button id="navSearchBtn" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary hover:text-charcoal flex items-center justify-center transition-all">
+                <button onclick="document.getElementById('tools').scrollIntoView(); document.getElementById('liveSearchInput').focus();" class="w-10 h-10 rounded-full bg-white/5 hover:bg-primary hover:text-charcoal flex items-center justify-center transition-all">
                     <span class="material-symbols-outlined">search</span>
                 </button>
-                <button id="mobile-menu-btn" class="lg:hidden text-slate-300">
-                    <span class="material-symbols-outlined">menu</span>
-                </button>
-            </div>
-        </div>
-        <div id="mobile-menu" class="hidden lg:hidden pb-4 bg-[#121212] px-6 border-t border-white/10">
-            <div class="flex flex-col gap-4 pt-4">
-                <a href="#tools" class="text-gray-300 hover:text-primary">Directory</a>
-                <a href="/about/" class="text-gray-300 hover:text-primary">About Us</a>
-                <a href="/contact/" class="text-gray-300 hover:text-primary">Contact</a>
+                <button id="mobile-menu-btn" class="lg:hidden text-slate-300"><span class="material-symbols-outlined">menu</span></button>
             </div>
         </div>
     </nav>
@@ -101,70 +79,75 @@
         <section class="max-w-7xl mx-auto px-6 mb-24">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 text-xs text-slate-300 mb-6">
-                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                        New Tools Added for 2026
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 text-xs font-bold text-slate-300 mb-6">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> New Tools 2026
                     </div>
                     <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-6 text-white">
                         Discover the Power of <span class="text-primary">Smart Tools.</span>
                     </h1>
-                    <p class="text-lg text-slate-400 mb-8 max-w-lg">Expertly engineered calculators and AI utilities to simplify your workflow.</p>
+                    <p class="text-lg text-slate-400 mb-8 max-w-lg leading-relaxed">
+                        Expertly engineered calculators and utilities to simplify your workflow and upgrade your reality.
+                    </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="#tools" class="px-8 py-3.5 bg-primary text-charcoal font-bold rounded-full hover:bg-white transition-all transform hover:scale-105">Browse Directory</a>
-                        <a href="/contact/" class="px-8 py-3.5 border border-white/20 text-white font-bold rounded-full hover:bg-white/10">Custom Solutions</a>
+                        <a href="#tools" class="px-8 py-3.5 bg-primary text-charcoal font-bold rounded-full hover:bg-white transition-all transform hover:scale-105 flex items-center gap-2">Explore Tools</a>
+                        <a href="mailto:affilore4@gmail.com" class="px-8 py-3.5 border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-all">Custom Solutions</a>
                     </div>
                 </div>
+
                 <div class="glass-card p-8 relative overflow-hidden">
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary">new_releases</span> Latest Releases
                     </h3>
                     <div class="space-y-4">
-                        <a href="/finance/emergency-fund-planner/" class="block p-4 rounded-xl bg-white/5 hover:bg-white/10 group transition-colors">
+                        <a href="tools/emergency-fund-planner/index.html" class="block p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 transition-colors group">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
                                     <span class="material-symbols-outlined">shield</span>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-white group-hover:text-primary">Emergency Fund Planner</h4>
-                                    <p class="text-xs text-slate-400">Calculate your safety net target.</p>
+                                    <h4 class="font-bold text-white group-hover:text-primary transition-colors">Emergency Fund Planner</h4>
+                                    <p class="text-xs text-slate-400 mt-1">Calculate your security net instantly.</p>
                                 </div>
                             </div>
                         </a>
-                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="tools" class="max-w-7xl mx-auto px-6 mb-24 pt-10">
             <div class="text-center mb-8">
-                <h2 class="text-4xl font-extrabold text-white mb-4">Tool <span class="text-primary">Categories</span></h2>
+                <h2 class="text-4xl font-extrabold text-white mb-4">Tool <span class="text-primary">Directory</span></h2>
+                
                 <div class="relative max-w-lg mx-auto mb-10">
                     <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                    <input type="text" id="liveSearchInput" placeholder="Search tools..." class="glass-input w-full pl-12 pr-4 py-3.5 rounded-full">
+                    <input type="text" id="liveSearchInput" placeholder="Search tools..." class="glass-input w-full pl-12 pr-4 py-3.5 rounded-full outline-none">
                 </div>
+
                 <div class="flex flex-wrap justify-center gap-3 mb-12">
-                    <button class="filter-btn active px-6 py-2.5 rounded-full text-slate-300" data-filter="all">All Tools</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-full text-slate-300" data-filter="finance">Finance</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-full text-slate-300" data-filter="creators">Creators</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-full text-slate-300" data-filter="business">Business</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-full text-slate-300" data-filter="real-estate">Real Estate</button>
-                    <button class="filter-btn px-6 py-2.5 rounded-full text-slate-300" data-filter="psychology">Psychology</button>
+                    <button class="filter-btn active" data-filter="all">All Tools</button>
+                    <button class="filter-btn" data-filter="finance">Finance</button>
+                    <button class="filter-btn" data-filter="creators">Creators</button>
+                    <button class="filter-btn" data-filter="business">Business</button>
+                    <button class="filter-btn" data-filter="real-estate">Real Estate</button>
+                    <button class="filter-btn" data-filter="psychology">Psychology</button>
                 </div>
             </div>
 
             <div class="masonry-grid" id="toolsGrid">
+                
                 <div class="masonry-item product-card" data-category="finance">
-                    <div class="glass-card rounded-2xl overflow-hidden group">
-                        <div class="h-56 flex items-center justify-center bg-black/50 overflow-hidden">
-                            <img src="emergency-fund-thumb.png" alt="Emergency Fund Target Planner" class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-all duration-500">
+                    <div class="glass-card overflow-hidden group">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="emergency-fund-thumb.png" alt="Emergency Fund" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-500">
                         </div>
-                        <div class="p-6">
-                            <span class="text-xs text-neon font-semibold uppercase tracking-wider">Finance</span>
+                        <div class="p-6 text-left">
+                            <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
                             <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Emergency Fund Planner</h3>
-                            <p class="text-gray-400 text-sm mb-4">Calculate your safety net target and forecast your path to security.</p>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate your exact security target and path to funding.</p>
                             <div class="flex items-center justify-between">
-                                <span class="text-2xl font-bold text-neon">Free</span>
-                                <a href="/finance/emergency-fund-planner/" class="px-4 py-2 bg-neon/10 text-neon rounded-lg hover:bg-neon hover:text-charcoal transition-all">Launch</a>
+                                <span class="text-xl font-bold text-primary">Free</span>
+                                <a href="tools/emergency-fund-planner/index.html" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
                             </div>
                         </div>
                     </div>
@@ -172,16 +155,16 @@
 
                 <div class="masonry-item product-card" data-category="creators">
                     <div class="glass-card overflow-hidden group">
-                        <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                            <img src="faceless-roi-thumb.png" alt="Faceless ROI Forecaster" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="faceless-roi-thumb.png" alt="ROI Forecaster" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-500">
                         </div>
-                        <div class="p-6">
+                        <div class="p-6 text-left">
                             <span class="text-xs text-primary font-bold uppercase tracking-wider">Creators</span>
                             <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Faceless ROI Forecaster</h3>
-                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate exact YouTube automation burn rate and margins.</p>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate YouTube automation burn rates and profit margins.</p>
                             <div class="flex items-center justify-between">
                                 <span class="text-xl font-bold text-primary">Free</span>
-                                <a href="/tools/youtube-roi-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                                <a href="tools/youtube-roi-calculator/index.html" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
                             </div>
                         </div>
                     </div>
@@ -189,16 +172,16 @@
 
                 <div class="masonry-item product-card" data-category="real-estate">
                     <div class="glass-card overflow-hidden group">
-                        <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                            <img src="cost-segregation-thumb.png" alt="Cost Segregation Estimator" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="cost-segregation-thumb.png" alt="Cost Seg" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-500">
                         </div>
-                        <div class="p-6">
+                        <div class="p-6 text-left">
                             <span class="text-xs text-primary font-bold uppercase tracking-wider">Real Estate</span>
                             <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Cost Segregation Estimator</h3>
                             <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate Year 1 accelerated depreciation tax savings.</p>
                             <div class="flex items-center justify-between">
                                 <span class="text-xl font-bold text-primary">Free</span>
-                                <a href="/tools/cost-segregation-estimator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                                <a href="tools/cost-segregation-estimator/index.html" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
                             </div>
                         </div>
                     </div>
@@ -206,95 +189,84 @@
 
                 <div class="masonry-item product-card" data-category="finance">
                     <div class="glass-card overflow-hidden group">
-                        <div class="h-56 bg-black/40 flex items-center justify-center relative overflow-hidden">
-                            <img src="geo-arbitrage-thumb.png" alt="Geo-Arbitrage Calculator" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all">
+                        <div class="h-48 bg-black/40 flex items-center justify-center relative overflow-hidden">
+                            <img src="geo-arbitrage-thumb.png" alt="Geo-Arbitrage" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-500">
                         </div>
-                        <div class="p-6">
+                        <div class="p-6 text-left">
                             <span class="text-xs text-primary font-bold uppercase tracking-wider">Finance</span>
                             <h3 class="text-xl font-bold mt-2 mb-2 text-white tool-title">Geo-Arbitrage Calculator</h3>
-                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Visualize your income stretch in local economies.</p>
+                            <p class="text-slate-400 text-sm mb-5 leading-relaxed">Calculate income stretch across global local economies.</p>
                             <div class="flex items-center justify-between">
                                 <span class="text-xl font-bold text-primary">Free</span>
-                                <a href="/tools/geo-arbitrage-calculator/" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
+                                <a href="tools/geo-arbitrage-calculator/index.html" class="px-4 py-2 bg-white/5 hover:bg-primary text-white hover:text-charcoal font-semibold rounded-lg transition-colors">Launch</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                </div>
+            </div>
+            
+            <div class="flex justify-center items-center gap-4 mt-20 font-bold text-slate-500">
+                <span class="text-primary border-b-2 border-primary">1</span> <span>2</span> <span>3</span> <span>4</span> <span>Next &rarr;</span>
+            </div>
         </section>
     </main>
 
-    <footer class="border-t border-white/10 bg-[#0A0A0A] pt-16 pb-8 relative z-10">
+    <footer class="border-t border-white/10 bg-[#0A0A0A] pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            <div class="col-span-1 md:col-span-2">
-                <a href="/" class="flex items-center gap-2 mb-4">
-                    <img src="logo.png" alt="Affilore" class="h-6 w-auto opacity-90">
-                    <span class="text-xl font-black text-white">Affilore<span class="text-primary">.</span></span>
-                </a>
-                <p class="text-slate-400 text-sm max-w-sm">Premium free tools to empower creators and entrepreneurs to make data-driven decisions.</p>
+            <div class="col-span-2 text-left">
+                <span class="text-xl font-black text-white">Affilore<span class="text-primary">.</span></span>
+                <p class="text-slate-400 text-sm mt-4 leading-relaxed max-w-sm">Premium collection of free, high-performance calculators and AI tools for creators and digital entrepreneurs.</p>
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-4">Links</h4>
+            <div class="text-left">
+                <h4 class="text-white font-bold mb-4">Quick Links</h4>
                 <ul class="space-y-2 text-sm text-slate-400">
-                    <li><a href="/about/" class="hover:text-primary">About Us</a></li>
-                    <li><a href="/contact/" class="hover:text-primary">Contact</a></li>
+                    <li><a href="about.html" class="hover:text-primary">About Us</a></li>
+                    <li><a href="mailto:affilore4@gmail.com" class="hover:text-primary">Contact</a></li>
+                    <li><a href="mailto:affilore4@gmail.com" class="hover:text-primary">Custom Development</a></li>
                 </ul>
             </div>
+            <div class="text-left text-white">
+                <h4 class="font-bold mb-4 text-white">Connect</h4>
+                <div class="flex gap-4">
+                    <a href="https://www.youtube.com/channel/UCqEwTebsYNUBR0vdKA0OMtQ" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">smart_display</span></a>
+                    <a href="https://www.instagram.com/affilore_?igsh=a3JrZnNra28wZWZk" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-charcoal transition-all"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a>
+                </div>
+            </div>
         </div>
-        <div class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-6 border-t border-white/5 pt-8 flex justify-between text-xs text-slate-500">
             <p>&copy; 2026 Affilore. All rights reserved.</p>
+            <div class="flex gap-4">
+                <a href="privacy.html" class="hover:text-primary">Privacy Policy</a>
+                <a href="terms.html" class="hover:text-primary">Terms of Service</a>
+            </div>
         </div>
     </footer>
 
-    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-white/10 z-50 transform translate-y-full transition-transform duration-300">
-        <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-            <p class="text-sm text-gray-400">Affilore uses cookies to analyze traffic. By clicking "Accept", you consent.</p>
-            <button id="accept-cookies" class="bg-primary px-8 py-3 rounded-full font-bold text-charcoal">Accept</button>
-        </div>
-    </div>
-
     <script>
-        // Mobile Menu Toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        menuBtn.addEventListener('click', () => menu.classList.toggle('hidden'));
-
-        // Search & Filtering
         const searchInput = document.getElementById('liveSearchInput');
         const toolCards = document.querySelectorAll('.product-card');
         const filterBtns = document.querySelectorAll('.filter-btn');
 
+        // Search Engine
         searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            filterBtns.forEach(b => b.classList.remove('active'));
             toolCards.forEach(card => {
                 const title = card.querySelector('.tool-title').textContent.toLowerCase();
-                card.style.display = title.includes(term) ? 'block' : 'none';
+                card.classList.toggle('hidden', !title.includes(term));
             });
         });
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                searchInput.value = '';
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const category = btn.dataset.filter;
-                toolCards.forEach(card => {
-                    card.style.display = (category === 'all' || card.dataset.category === category) ? 'block' : 'none';
-                });
+        // Filter Logic
+        function filterTools(category) {
+            filterBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.filter === category));
+            toolCards.forEach(card => {
+                const show = category === 'all' || card.dataset.category === category;
+                card.classList.toggle('hidden', !show);
             });
-        });
-
-        // Cookie logic
-        const banner = document.getElementById('cookie-banner');
-        if (!localStorage.getItem('affiloreCookieConsent')) {
-            setTimeout(() => banner.classList.remove('translate-y-full'), 1000);
         }
-        document.getElementById('accept-cookies').addEventListener('click', () => {
-            localStorage.setItem('affiloreCookieConsent', 'true');
-            banner.classList.add('translate-y-full');
-        });
+
+        filterBtns.forEach(btn => btn.addEventListener('click', () => filterTools(btn.dataset.filter)));
     </script>
 </body>
 </html>
