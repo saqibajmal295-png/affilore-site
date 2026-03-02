@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Tools — Best Accounting & Budgeting Software | AFFILORE</title>
+    <meta name="description"
+        content="Discover the best SEO and marketing tools for keyword research, rank tracking, content marketing, and competitor analysis. Expert reviews and comparisons.">
+    <link rel="canonical" href="https://affilore.com/seo-marketing-tools.html">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 'inter': ['Inter', 'sans-serif'] },
+                    colors: { brand: { 50: '#fefce8', 100: '#fef9c3', 200: '#fef08a', 300: '#fde047', 400: '#facc15', 500: '#eab308', 600: '#ca8a04', 700: '#a16207', 800: '#854d0e', 900: '#713f12', 950: '#422006' }, dark: { 950: '#0a0a0a', 900: '#111111', 850: '#161616', 800: '#1a1a1a', 700: '#262626', 600: '#333333', 500: '#404040' } },
+                    animation: { 'fade-in-up': 'fadeInUp 0.6s ease-out forwards' },
+                    keyframes: { 'fadeInUp': { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass { @apply backdrop-blur-xl bg-white/5 border border-white/10; }
+            .glass-strong { @apply backdrop-blur-2xl bg-white/[0.07] border border-white/[0.12]; }
+            .glass-card { @apply backdrop-blur-xl bg-white/[0.04] border border-white/[0.08] hover:border-brand-400/30 transition-all duration-500; }
+            .glow-yellow { box-shadow: 0 0 20px rgba(250,204,21,0.15), 0 0 60px rgba(250,204,21,0.05); }
+            .text-gradient { @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-300 via-brand-400 to-brand-500; }
+            .line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        }
+    </style>
+</head>
+
+<body class="bg-dark-950 text-gray-200 font-inter antialiased overflow-x-hidden">
+    <!-- HEADER -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="glass-strong">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16 lg:h-20">
+                    <a href="index.html" class="flex items-center gap-3 group flex-shrink-0">
+                        <div
+                            class="w-9 h-9 lg:w-10 lg:h-10 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-400/20">
+                            <svg class="w-5 h-5 lg:w-6 lg:h-6 text-dark-950" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg></div><span
+                            class="text-xl lg:text-2xl font-extrabold tracking-wider text-white group-hover:text-brand-400 transition-colors">AFFILORE</span>
+                    </a>
+                    <div class="hidden md:flex flex-1 max-w-md mx-8">
+                        <div class="relative w-full group"><input type="text"
+                                placeholder="Search tools, categories, reviews..."
+                                class="w-full px-5 py-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-400/50 focus:bg-white/[0.08] focus:shadow-[0_0_20px_rgba(250,204,21,0.1)] transition-all duration-300"><svg
+                                class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-brand-400 transition-colors"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg></div>
+                    </div>
+                    <nav class="hidden lg:flex items-center gap-1">
+                        <a href="index.html"
+                            class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.06] transition-all">Home</a>
+                        <div class="relative" id="categories-dropdown"><button id="categories-btn"
+                                class="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-brand-400 bg-brand-400/10 transition-all">Categories
+                                <svg class="w-4 h-4 transition-transform duration-200" id="dropdown-arrow" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg></button>
+                            <div id="dropdown-menu"
+                                class="absolute top-full right-0 mt-2 w-64 rounded-2xl glass-strong glow-yellow p-2 opacity-0 invisible translate-y-2 transition-all duration-300 z-50">
+                                <a href="finance-tools.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-brand-400 bg-brand-400/10"><span
+                                        class="text-lg">💰</span> Finance Tools</a>
+                                <a href="real-estate-tools.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-brand-400 hover:bg-brand-400/10 transition-all"><span
+                                        class="text-lg">🏠</span> Real Estate Tools</a>
+                                <a href="seo-marketing-tools.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-brand-400 hover:bg-brand-400/10 transition-all"><span
+                                        class="text-lg">📈</span> SEO & Marketing Tools</a>
+                                <a href="ai-content-creation.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-brand-400 hover:bg-brand-400/10 transition-all"><span
+                                        class="text-lg">🤖</span> AI Content Creation</a>
+                                <a href="developer-productivity.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-brand-400 hover:bg-brand-400/10 transition-all"><span
+                                        class="text-lg">⚡</span> Developer Productivity</a>
+                            </div>
+                        </div>
+                        <a href="about.html"
+                            class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.06] transition-all">About
+                            Us</a>
+                        <a href="contact.html"
+                            class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/[0.06] transition-all">Contact</a>
+                    </nav>
+                    <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg hover:bg-white/[0.06]"><svg
+                            class="w-6 h-6 text-gray-300" id="menu-icon" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg><svg class="w-6 h-6 text-gray-300 hidden" id="close-icon" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg></button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="lg:hidden hidden border-t border-white/10">
+                <div class="max-w-7xl mx-auto px-4 py-4 space-y-2">
+                    <div class="relative mb-4"><input type="text" placeholder="Search tools..."
+                            class="w-full px-5 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-brand-400/50 transition-all">
+                    </div>
+                    <a href="index.html"
+                        class="block px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/[0.06]">Home</a>
+                    <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Categories</div>
+                    <a href="finance-tools.html"
+                        class="block px-4 py-3 rounded-xl text-sm text-brand-400 bg-brand-400/10">💰 Finance Tools</a>
+                    <a href="real-estate-tools.html"
+                        class="block px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-brand-400 hover:bg-brand-400/10 transition-all">🏠
+                        Real Estate Tools</a>
+                    <a href="seo-marketing-tools.html"
+                        class="block px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-brand-400 hover:bg-brand-400/10 transition-all">📈
+                        SEO & Marketing Tools</a>
+                    <a href="ai-content-creation.html"
+                        class="block px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-brand-400 hover:bg-brand-400/10 transition-all">🤖
+                        AI Content Creation</a>
+                    <a href="developer-productivity.html"
+                        class="block px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-brand-400 hover:bg-brand-400/10 transition-all">⚡
+                        Developer Productivity</a>
+                    <div class="border-t border-white/10 pt-2 mt-2">
+                        <a href="about.html"
+                            class="block px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/[0.06]">About
+                            Us</a>
+                        <a href="contact.html"
+                            class="block px-4 py-3 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/[0.06]">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="pt-24 lg:pt-28 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex items-center gap-2 text-sm text-gray-500 mb-8"><a href="index.html"
+                    class="hover:text-brand-400 transition-colors">Home</a><svg class="w-4 h-4" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg><span class="text-gray-300">Finance Tools</span></nav>
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- SIDEBAR -->
+                <aside class="lg:w-72 flex-shrink-0">
+                    <div class="lg:sticky lg:top-28">
+                        <div class="glass-strong rounded-2xl glow-yellow p-5">
+                            <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4 px-2">
+                                Categories</h3>
+                            <nav class="space-y-1">
+                                <a href="finance-tools.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-brand-400 bg-brand-400/10 border border-brand-400/20 transition-all"><span
+                                        class="text-lg">💰</span><span>Finance Tools</span><span
+                                        class="ml-auto text-xs bg-brand-400/20 text-brand-400 px-2 py-0.5 rounded-full">32</span></a>
+                                <a href="real-estate-tools.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all"><span
+                                        class="text-lg">🏠</span><span>Real Estate Tools</span><span
+                                        class="ml-auto text-xs text-gray-600 px-2 py-0.5 rounded-full">28</span></a>
+                                <a href="seo-marketing-tools.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all"><span
+                                        class="text-lg">📈</span><span>SEO & Marketing</span><span
+                                        class="ml-auto text-xs text-gray-600 px-2 py-0.5 rounded-full">35</span></a>
+                                <a href="ai-content-creation.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all"><span
+                                        class="text-lg">🤖</span><span>AI Content Creation</span><span
+                                        class="ml-auto text-xs text-gray-600 px-2 py-0.5 rounded-full">30</span></a>
+                                <a href="developer-productivity.html"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all"><span
+                                        class="text-lg">⚡</span><span>Developer Productivity</span><span
+                                        class="ml-auto text-xs text-gray-600 px-2 py-0.5 rounded-full">25</span></a>
+                            </nav>
+                            <div class="mt-6 pt-6 border-t border-white/10">
+                                <div
+                                    class="w-full h-[250px] rounded-xl glass flex items-center justify-center text-gray-600 text-xs tracking-wider uppercase border-dashed border-gray-700">
+                                    Ad Space — 300 × 250</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- CONTENT -->
+                <div class="flex-1 min-w-0">
+                    <div class="mb-8">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-brand-400/10 border border-brand-400/20 flex items-center justify-center">
+                                <span class="text-3xl">💰</span></div>
+                            <div>
+                                <h1 class="text-3xl sm:text-4xl font-bold text-white">Finance Tools</h1>
+                                <p class="text-sm text-gray-500 mt-1">32 tools available</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed max-w-2xl">Discover the best financial tools for
+                            budgeting, accounting, invoicing, tax preparation, and investment tracking. Expert reviews
+                            to help you manage your money smarter.</p>
+                    </div>
+
+                    <!-- AdSense Slot 2 -->
+                    <div class="mb-8">
+                        <div
+                            class="w-full h-[90px] rounded-xl glass flex items-center justify-center text-gray-600 text-xs tracking-wider uppercase border-dashed border-gray-700">
+                            <!-- AdSense Slot 2 --> Ad Space — 728 × 90</div>
+                    </div>
+
+                    <!-- Filter Bar -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <button
+                                class="px-4 py-2 rounded-lg text-xs font-semibold bg-brand-400/10 text-brand-400 border border-brand-400/20">All</button>
+                            <button
+                                class="px-4 py-2 rounded-lg text-xs font-medium text-gray-400 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/10 transition-all">Free</button>
+                            <button
+                                class="px-4 py-2 rounded-lg text-xs font-medium text-gray-400 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/10 transition-all">Premium</button>
+                            <button
+                                class="px-4 py-2 rounded-lg text-xs font-medium text-gray-400 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/10 transition-all">Top
+                                Rated</button>
+                        </div>
+                        <select
+                            class="px-4 py-2 rounded-lg bg-white/[0.06] border border-white/10 text-xs text-gray-300 focus:outline-none focus:border-brand-400/50">
+                            <option>Sort: Popular</option>
+                            <option>Sort: Newest</option>
+                            <option>Sort: Rating</option>
+                            <option>Sort: Price Low-High</option>
+                        </select>
+                    </div>
+
+                    <!-- TOOLS GRID -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-brand-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-brand-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">📊</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★★</div><span
+                                        class="text-xs text-gray-500">4.9</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    QuickBooks Online</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Complete accounting solution for
+                                    small businesses. Track expenses, manage payroll, and generate financial reports.
+                                </p>
+                                <div class="flex items-center justify-between"><span class="text-xs text-gray-500">From
+                                        $30/mo</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-green-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-green-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">💳</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★★</div><span
+                                        class="text-xs text-gray-500">4.8</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    FreshBooks</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Invoicing and expense management
+                                    built for freelancers and service-based businesses.</p>
+                                <div class="flex items-center justify-between"><span class="text-xs text-gray-500">From
+                                        $17/mo</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-teal-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-teal-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">🏦</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★☆</div><span
+                                        class="text-xs text-gray-500">4.6</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    Wave Financial</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Free accounting software with
+                                    professional invoicing, receipt scanning, and financial reporting.</p>
+                                <div class="flex items-center justify-between"><span
+                                        class="text-xs text-green-400 font-medium">Free</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-orange-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-orange-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">📈</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★★</div><span
+                                        class="text-xs text-gray-500">4.9</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    Mint by Intuit</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Personal finance dashboard that
+                                    tracks spending, creates budgets, and monitors credit scores.</p>
+                                <div class="flex items-center justify-between"><span
+                                        class="text-xs text-green-400 font-medium">Free</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-violet-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-violet-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">🧾</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★★</div><span
+                                        class="text-xs text-gray-500">4.7</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    Xero</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Cloud-based accounting for growing
+                                    businesses. Bank reconciliation, invoicing, and payroll.</p>
+                                <div class="flex items-center justify-between"><span class="text-xs text-gray-500">From
+                                        $13/mo</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-sky-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-sky-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">💰</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★★</div><span
+                                        class="text-xs text-gray-500">4.8</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    YNAB</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Award-winning budgeting app using the
+                                    envelope method to break the paycheck-to-paycheck cycle.</p>
+                                <div class="flex items-center justify-between"><span
+                                        class="text-xs text-gray-500">$14.99/mo</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-amber-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-amber-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">💹</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★☆</div><span
+                                        class="text-xs text-gray-500">4.5</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    Stripe Atlas</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Start your internet business.
+                                    Incorporate, set up banking, and start accepting payments globally.</p>
+                                <div class="flex items-center justify-between"><span class="text-xs text-gray-500">$500
+                                        one-time</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-indigo-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-indigo-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">🔐</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★★</div><span
+                                        class="text-xs text-gray-500">4.7</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    TurboTax</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Leading tax preparation software.
+                                    Maximize deductions and file taxes online with expert help.</p>
+                                <div class="flex items-center justify-between"><span class="text-xs text-gray-500">From
+                                        $0</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+
+                        <article
+                            class="group glass-card rounded-2xl overflow-hidden hover:glow-yellow transition-all duration-500 transform hover:-translate-y-1">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-dark-800 to-dark-900 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-red-400/10 to-transparent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div
+                                        class="w-14 h-14 rounded-2xl bg-red-400/20 flex items-center justify-center backdrop-blur-sm">
+                                        <span class="text-2xl">🏧</span></div>
+                                </div><span
+                                    class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-brand-400/90 text-dark-950 text-[10px] font-bold tracking-wider uppercase">Finance</span>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="flex text-brand-400 text-xs gap-0.5">★★★★☆</div><span
+                                        class="text-xs text-gray-500">4.4</span>
+                                </div>
+                                <h3
+                                    class="text-base font-bold text-white group-hover:text-brand-400 transition-colors mb-1.5">
+                                    Plaid</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 mb-3">Financial infrastructure API for
+                                    payments, data, and identity verification.</p>
+                                <div class="flex items-center justify-between"><span class="text-xs text-gray-500">Pay
+                                        per use</span><a href="#"
+                                        class="text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors">Details
+                                        →</a></div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- PAGINATION -->
+                    <nav class="mt-12 flex items-center justify-center" aria-label="Pagination">
+                        <div class="flex items-center gap-1">
+                            <button class="px-3 py-2 rounded-lg text-sm text-gray-500 cursor-not-allowed opacity-50"
+                                disabled><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 19l-7-7 7-7" />
+                                </svg></button>
+                            <button
+                                class="w-10 h-10 rounded-lg text-sm font-bold bg-brand-400 text-dark-950 shadow-lg shadow-brand-400/20"
+                                aria-current="page">1</button>
+                            <button
+                                class="w-10 h-10 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.08] transition-all">2</button>
+                            <button
+                                class="w-10 h-10 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.08] transition-all">3</button>
+                            <button
+                                class="w-10 h-10 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.08] transition-all">4</button>
+                            <span class="w-10 h-10 flex items-center justify-center text-gray-600 text-sm">…</span>
+                            <button
+                                class="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-brand-400 hover:text-brand-300 hover:bg-brand-400/10 transition-all">Next
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7" />
+                                </svg></button>
+                        </div>
+                    </nav>
+
+                    <div class="mt-12">
+                        <div
+                            class="w-full h-[90px] rounded-xl glass flex items-center justify-center text-gray-600 text-xs tracking-wider uppercase border-dashed border-gray-700">
+                            Ad Space — 728 × 90</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/[0.06] mt-8">
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                <div class="sm:col-span-2 lg:col-span-1"><a href="index.html" class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-9 h-9 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-400/20">
+                            <svg class="w-5 h-5 text-dark-950" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg></div><span class="text-xl font-extrabold tracking-wider text-white">AFFILORE</span>
+                    </a>
+                    <p class="text-sm text-gray-500 leading-relaxed mb-6">Discover, compare, and choose the best tools
+                        to grow your business.</p>
+                    <div class="flex items-center gap-3"><a href="#"
+                            class="w-9 h-9 rounded-lg glass flex items-center justify-center text-gray-400 hover:text-brand-400 hover:border-brand-400/30 transition-all"
+                            aria-label="Twitter"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                            </svg></a><a href="#"
+                            class="w-9 h-9 rounded-lg glass flex items-center justify-center text-gray-400 hover:text-brand-400 hover:border-brand-400/30 transition-all"
+                            aria-label="YouTube"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                            </svg></a><a href="#"
+                            class="w-9 h-9 rounded-lg glass flex items-center justify-center text-gray-400 hover:text-brand-400 hover:border-brand-400/30 transition-all"
+                            aria-label="LinkedIn"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg></a></div>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-5">Categories</h4>
+                    <ul class="space-y-3">
+                        <li><a href="finance-tools.html" class="text-sm text-brand-400 transition-colors">Finance
+                                Tools</a></li>
+                        <li><a href="real-estate-tools.html"
+                                class="text-sm text-gray-400 hover:text-brand-400 transition-colors">Real Estate
+                                Tools</a></li>
+                        <li><a href="seo-marketing-tools.html"
+                                class="text-sm text-gray-400 hover:text-brand-400 transition-colors">SEO & Marketing</a>
+                        </li>
+                        <li><a href="ai-content-creation.html"
+                                class="text-sm text-gray-400 hover:text-brand-400 transition-colors">AI Content
+                                Creation</a></li>
+                        <li><a href="developer-productivity.html"
+                                class="text-sm text-gray-400 hover:text-brand-400 transition-colors">Developer
+                                Productivity</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-5">Company</h4>
+                    <ul class="space-y-3">
+                        <li><a href="about.html"
+                                class="text-sm text-gray-400 hover:text-brand-400 transition-colors">About Us</a></li>
+                        <li><a href="contact.html"
+                                class="text-sm text-gray-400 hover:text-brand-400 transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-5">Legal</h4>
+                    <ul class="space-y-3">
+                        <li><a href="privacy.html"
+                                class="text-sm text-gray-400 hover:text-brand-400 transition-colors">Privacy Policy</a>
+                        </li>
+                        <li><a href="terms.html"
+                                class="text-sm text-gray-400 hover:text-brand-400 transition-colors">Terms of
+                                Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div
+                class="border-t border-white/[0.06] mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-gray-600">© 2026 AFFILORE. All rights reserved.</p>
+                <p class="text-xs text-gray-600">Built with ❤️ for entrepreneurs & creators.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- COOKIE BANNER -->
+    <div id="cookie-banner"
+        class="fixed bottom-0 left-0 right-0 z-[60] p-4 transition-all duration-500 translate-y-full">
+        <div class="max-w-4xl mx-auto">
+            <div
+                class="glass-strong rounded-2xl glow-yellow px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3"><span class="text-2xl flex-shrink-0">🍪</span>
+                    <p class="text-sm text-gray-300">We use cookies to enhance your experience. By clicking "Accept",
+                        you consent to our use of cookies.</p>
+                </div>
+                <div class="flex items-center gap-3 flex-shrink-0"><button id="cookie-decline"
+                        class="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/[0.06] transition-all">Decline</button><button
+                        id="cookie-accept"
+                        class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-400 to-brand-500 text-dark-950 text-sm font-bold hover:shadow-[0_0_20px_rgba(250,204,21,0.25)] transition-all">Accept
+                        Cookies</button></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+            (function () { const b = document.getElementById('cookie-banner'); if (!localStorage.getItem('affilore_cookies')) setTimeout(() => b.classList.remove('translate-y-full'), 1000); document.getElementById('cookie-accept').addEventListener('click', () => { localStorage.setItem('affilore_cookies', 'accepted'); b.classList.add('translate-y-full') }); document.getElementById('cookie-decline').addEventListener('click', () => { localStorage.setItem('affilore_cookies', 'declined'); b.classList.add('translate-y-full') }) })();
+        (function () { const b = document.getElementById('mobile-menu-btn'), m = document.getElementById('mobile-menu'), mi = document.getElementById('menu-icon'), ci = document.getElementById('close-icon'); let o = false; b.addEventListener('click', () => { o = !o; m.classList.toggle('hidden', !o); mi.classList.toggle('hidden', o); ci.classList.toggle('hidden', !o) }) })();
+        (function () { const b = document.getElementById('categories-btn'), m = document.getElementById('dropdown-menu'), a = document.getElementById('dropdown-arrow'); let o = false; b.addEventListener('click', e => { e.stopPropagation(); o = !o; m.classList.toggle('opacity-0', !o); m.classList.toggle('invisible', !o); m.classList.toggle('translate-y-2', !o); m.classList.toggle('opacity-100', o); m.classList.toggle('visible', o); m.classList.toggle('translate-y-0', o); a.classList.toggle('rotate-180', o) }); document.addEventListener('click', () => { if (o) { o = false; m.classList.add('opacity-0', 'invisible', 'translate-y-2'); m.classList.remove('opacity-100', 'visible', 'translate-y-0'); a.classList.remove('rotate-180') } }) })();
+        (function () { const h = document.getElementById('main-header'); window.addEventListener('scroll', () => { h.classList.toggle('shadow-lg', window.scrollY > 50); h.classList.toggle('shadow-black/20', window.scrollY > 50) }) })();
+    </script>
+</body>
+
+</html>
