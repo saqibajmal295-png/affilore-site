@@ -866,11 +866,19 @@
         // ---- Header Scroll Effect ----
         (function () {
             const header = document.getElementById('main-header');
+            let ticking = false;
+
             window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('shadow-lg', 'shadow-black/20');
-                } else {
-                    header.classList.remove('shadow-lg', 'shadow-black/20');
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        if (window.scrollY > 50) {
+                            header.classList.add('shadow-lg', 'shadow-black/20');
+                        } else {
+                            header.classList.remove('shadow-lg', 'shadow-black/20');
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
                 }
             });
         })();

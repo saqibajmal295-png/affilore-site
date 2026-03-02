@@ -637,7 +637,21 @@
             (function () { const b = document.getElementById('cookie-banner'); if (!localStorage.getItem('affilore_cookies')) setTimeout(() => b.classList.remove('translate-y-full'), 1000); document.getElementById('cookie-accept').addEventListener('click', () => { localStorage.setItem('affilore_cookies', 'accepted'); b.classList.add('translate-y-full') }); document.getElementById('cookie-decline').addEventListener('click', () => { localStorage.setItem('affilore_cookies', 'declined'); b.classList.add('translate-y-full') }) })();
         (function () { const b = document.getElementById('mobile-menu-btn'), m = document.getElementById('mobile-menu'), mi = document.getElementById('menu-icon'), ci = document.getElementById('close-icon'); let o = false; b.addEventListener('click', () => { o = !o; m.classList.toggle('hidden', !o); mi.classList.toggle('hidden', o); ci.classList.toggle('hidden', !o) }) })();
         (function () { const b = document.getElementById('categories-btn'), m = document.getElementById('dropdown-menu'), a = document.getElementById('dropdown-arrow'); let o = false; b.addEventListener('click', e => { e.stopPropagation(); o = !o; m.classList.toggle('opacity-0', !o); m.classList.toggle('invisible', !o); m.classList.toggle('translate-y-2', !o); m.classList.toggle('opacity-100', o); m.classList.toggle('visible', o); m.classList.toggle('translate-y-0', o); a.classList.toggle('rotate-180', o) }); document.addEventListener('click', () => { if (o) { o = false; m.classList.add('opacity-0', 'invisible', 'translate-y-2'); m.classList.remove('opacity-100', 'visible', 'translate-y-0'); a.classList.remove('rotate-180') } }) })();
-        (function () { const h = document.getElementById('main-header'); window.addEventListener('scroll', () => { h.classList.toggle('shadow-lg', window.scrollY > 50); h.classList.toggle('shadow-black/20', window.scrollY > 50) }) })();
+        (function () {
+            const h = document.getElementById('main-header');
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const isScrolled = window.scrollY > 50;
+                        h.classList.toggle('shadow-lg', isScrolled);
+                        h.classList.toggle('shadow-black/20', isScrolled);
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        })();
     </script>
 </body>
 
