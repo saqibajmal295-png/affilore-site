@@ -917,7 +917,7 @@
                 <h2>Send a Message</h2>
                 <p>Tell us what you're working on. We generally reply within 24 hours.</p>
                 <form id="contactForm"
-                    onsubmit="event.preventDefault(); window.location.href='mailto:affilore4@gmail.com?subject=' + encodeURIComponent('Affilore Hub: ' + document.getElementById('subject').value) + '&body=' + encodeURIComponent('From: ' + document.getElementById('name').value + '
+                    onsubmit="event.preventDefault(); window.open('https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com&su=Custom%20Tool%20Request' + '&su=' + encodeURIComponent('Affilore Hub: ' + document.getElementById('subject').value) + '&body=' + encodeURIComponent('From: ' + document.getElementById('name').value + '
 
 ' + document.getElementById('message').value);.value) + '&body=' + encodeURIComponent('From: ' + document.getElementById('name').value + '\n\n' + document.getElementById('message').value);">
                     <div class="form-group">
@@ -1001,9 +1001,7 @@
                 <button class="btn-copy"
                     onclick="navigator.clipboard.writeText('affilore4@gmail.com');this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000)">Copy</button>
             </div>
-            <a href="mailto:affilore4@gmail.com"
-                style="display:block; text-align:center; background-color:#FFBF00; color:#000; padding:10px; border-radius:5px; text-decoration:none; font-weight:bold;">Open
-                in Mail</a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com&su=Custom%20Tool%20Request" target="_blank" rel="noopener noreferrer" style="display:block; text-align:center; background-color:#FFBF00; color:#000; padding:10px; border-radius:5px; text-decoration:none; font-weight:bold;">Open in Mail</a>
         </div>
     </div>
 
