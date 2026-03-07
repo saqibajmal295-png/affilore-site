@@ -18,13 +18,13 @@
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC">    </script>
-        
-<script>
+
+    <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-YRKMHHSYBC');
-        </script>
+    </script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -983,20 +983,101 @@
             clip: rect(0, 0, 0, 0);
             border: 0;
         }
-            /* ─── Modal ─── */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--transition); }
-        .modal-overlay.open { opacity: 1; pointer-events: auto; }
-        .modal-content { background: var(--black-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; max-width: 400px; width: 90%; position: relative; transform: translateY(20px); transition: transform var(--transition); text-align: center; }
-        .modal-overlay.open .modal-content { transform: translateY(0); }
-        .modal-close { position: absolute; top: 16px; right: 16px; font-size: 1.5rem; color: var(--text-muted); transition: color var(--transition); }
-        .modal-close:hover { color: var(--text-primary); }
-        .modal-content h3 { font-family: 'Outfit', sans-serif; font-size: 1.25rem; color: var(--text-primary); margin-bottom: 8px; }
-        .modal-content p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
-        .modal-email-box { display: flex; align-items: center; justify-content: space-between; background: var(--black-card); border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; }
-        .modal-email-box span { font-size: 0.9rem; color: var(--text-primary); }
-        .btn-copy { color: var(--yellow); font-size: 0.8rem; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: rgba(255,191,0,0.1); transition: background var(--transition); }
-        .btn-copy:hover { background: rgba(255,191,0,0.2); }
-</style>
+
+        /* ─── Modal ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition);
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--black-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform var(--transition);
+            text-align: center;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: color var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-content h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .modal-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal-email-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .modal-email-box span {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .btn-copy {
+            color: var(--yellow);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(255, 191, 0, 0.1);
+            transition: background var(--transition);
+        }
+
+        .btn-copy:hover {
+            background: rgba(255, 191, 0, 0.2);
+        }
+    </style>
 </head>
 
 <body>
@@ -1026,11 +1107,12 @@
                         </svg>
                     </button>
                     <div class="dropdown-menu" role="menu">
-                        <button class="dropdown-item" role="menuitem">💰 Finance</button>
-                        <button class="dropdown-item" role="menuitem">🏠 Real Estate</button>
-                        <button class="dropdown-item" role="menuitem">📈 SEO & Marketing</button>
-                        <button class="dropdown-item" role="menuitem">🤖 AI Content Creation</button>
-                        <button class="dropdown-item" role="menuitem">⚡ Developer Productivity</button>
+                        <a href="/finance/" class="dropdown-item" role="menuitem">💰 Finance</a>
+                        <a href="/real-estate/" class="dropdown-item" role="menuitem">🏠 Real Estate</a>
+                        <a href="/seo-marketing/" class="dropdown-item" role="menuitem">📈 SEO & Marketing</a>
+                        <a href="/ai-content-creation/" class="dropdown-item" role="menuitem">🤖 AI Content Creation</a>
+                        <a href="/developer-productivity/" class="dropdown-item" role="menuitem">⚡ Developer
+                            Productivity</a>
                     </div>
                 </div>
             </nav>
@@ -1083,11 +1165,21 @@
     <!-- Mobile Nav -->
     <div class="mobile-nav" id="mobileNav">
         <a href="../index.html" class="nav-link">Home</a>
-        <a href="../index.html" class="nav-link">💰 Finance</a>
-        <a href="../index.html" class="nav-link">🏠 Real Estate</a>
-        <a href="../index.html" class="nav-link">📈 SEO & Marketing</a>
-        <a href="../index.html" class="nav-link active">🤖 AI Content Creation</a>
-        <a href="../index.html" class="nav-link">⚡ Developer Productivity</a>
+        <a href="/finance/" class="nav-link"
+            style="width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;font-size:1rem;color:#999;display:block;">💰
+            Finance</a>
+        <a href="/real-estate/" class="nav-link"
+            style="width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;font-size:1rem;color:#999;display:block;">🏠
+            Real Estate</a>
+        <a href="/seo-marketing/" class="nav-link"
+            style="width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;font-size:1rem;color:#999;display:block;">📈
+            SEO & Marketing</a>
+        <a href="/ai-content-creation/" class="nav-link"
+            style="width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;font-size:1rem;color:#999;display:block;">🤖
+            AI Content Creation</a>
+        <a href="/developer-productivity/" class="nav-link"
+            style="width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;font-size:1rem;color:#999;display:block;">⚡
+            Developer Productivity</a>
         <div class="mobile-social">
             <a href="https://www.instagram.com/affilore_/" target="_blank" rel="noopener noreferrer" class="social-icon"
                 aria-label="Instagram">
@@ -1287,8 +1379,8 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <!--  JAVASCRIPT                                                        -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
-        
-<script>
+
+    <script>
         (() => {
             'use strict';
 
@@ -1462,7 +1554,7 @@
             });
 
         })();
-        </script>
+    </script>
 
     <style>
         @keyframes spin {
@@ -1470,20 +1562,101 @@
                 transform: rotate(360deg);
             }
         }
-            /* ─── Modal ─── */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--transition); }
-        .modal-overlay.open { opacity: 1; pointer-events: auto; }
-        .modal-content { background: var(--black-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; max-width: 400px; width: 90%; position: relative; transform: translateY(20px); transition: transform var(--transition); text-align: center; }
-        .modal-overlay.open .modal-content { transform: translateY(0); }
-        .modal-close { position: absolute; top: 16px; right: 16px; font-size: 1.5rem; color: var(--text-muted); transition: color var(--transition); }
-        .modal-close:hover { color: var(--text-primary); }
-        .modal-content h3 { font-family: 'Outfit', sans-serif; font-size: 1.25rem; color: var(--text-primary); margin-bottom: 8px; }
-        .modal-content p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
-        .modal-email-box { display: flex; align-items: center; justify-content: space-between; background: var(--black-card); border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; }
-        .modal-email-box span { font-size: 0.9rem; color: var(--text-primary); }
-        .btn-copy { color: var(--yellow); font-size: 0.8rem; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: rgba(255,191,0,0.1); transition: background var(--transition); }
-        .btn-copy:hover { background: rgba(255,191,0,0.2); }
-</style>
+
+        /* ─── Modal ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition);
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--black-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform var(--transition);
+            text-align: center;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: color var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-content h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .modal-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal-email-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .modal-email-box span {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .btn-copy {
+            color: var(--yellow);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(255, 191, 0, 0.1);
+            transition: background var(--transition);
+        }
+
+        .btn-copy:hover {
+            background: rgba(255, 191, 0, 0.2);
+        }
+    </style>
 
 
     <!-- Request Custom Tool Modal -->
@@ -1494,9 +1667,12 @@
             <p>Need a specific tool designed for your workflow? Send us an email with your core requirements.</p>
             <div class="modal-email-box">
                 <span>affilore4@gmail.com</span>
-                <button class="btn-copy" onclick="navigator.clipboard.writeText('affilore4@gmail.com');this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000)">Copy</button>
+                <button class="btn-copy"
+                    onclick="navigator.clipboard.writeText('affilore4@gmail.com');this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000)">Copy</button>
             </div>
-            <a href="mailto:affilore4@gmail.com" class="btn-cta" style="width:100%; justify-content:center;">Open in Mail</a>
+            <a href="mailto:affilore4@gmail.com"
+                style="display:block; text-align:center; background-color:#FFBF00; color:#000; padding:10px; border-radius:5px; text-decoration:none; font-weight:bold;">Open
+                in Mail</a>
         </div>
     </div>
     <script>

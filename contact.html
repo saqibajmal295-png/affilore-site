@@ -4,78 +4,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us — Affilore</title>
+    <title>Contact Affilore — Let's Build Together</title>
     <meta name="description"
-        content="Get in touch with Affilore. Request a custom tool, report an issue, or share feedback.">
-    <link rel="canonical" href="https://affilore.com/contact.html">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC">    </script>
-    
-    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-YRKMHHSYBC');    </script>
+        content="Get in touch with Affilore. Request custom tools, report bugs, or inquire about business partnerships.">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-YRKMHHSYBC');
+    </script>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
         rel="stylesheet">
+
     <style>
         *,
         *::before,
         *::after {
             box-sizing: border-box;
             margin: 0;
-            padding: 0
+            padding: 0;
         }
 
         html {
-            scroll-behavior: smooth
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: #0a0a0a;
             background-image: radial-gradient(rgba(255, 191, 0, 0.07) 1px, transparent 1px);
             background-size: 28px 28px;
-            color: #FFF;
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased
+            color: #FFFFFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         a {
             color: inherit;
-            text-decoration: none
+            text-decoration: none;
         }
 
         button {
             cursor: pointer;
             border: none;
             background: none;
-            font-family: inherit
+            font-family: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        input,
+        textarea {
+            font-family: inherit;
         }
 
         :root {
             --black: #0a0a0a;
-            --black-light: #111;
+            --black-light: #111111;
             --black-card: #141414;
             --black-elevated: #1a1a1a;
             --yellow: #FFBF00;
             --yellow-dim: #d9a300;
             --yellow-glow: rgba(255, 191, 0, 0.15);
             --yellow-glow-strong: rgba(255, 191, 0, 0.3);
-            --text-primary: #FFF;
+            --text-primary: #FFFFFF;
             --text-secondary: #b0b0b0;
-            --text-muted: #666;
+            --text-muted: #666666;
             --border: rgba(255, 255, 255, 0.07);
             --border-hover: rgba(255, 191, 0, 0.3);
             --radius: 12px;
             --radius-lg: 16px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --max-width: 1280px
+            --max-width: 1280px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--yellow-dim);
         }
 
         .bg-glow {
             position: fixed;
             inset: 0;
             pointer-events: none;
-            z-index: 0
+            z-index: 0;
         }
 
         .bg-glow::before {
@@ -87,16 +127,29 @@
             width: 800px;
             height: 800px;
             background: radial-gradient(circle, rgba(255, 191, 0, 0.05) 0%, transparent 70%);
-            border-radius: 50%
+            border-radius: 50%;
         }
 
+        .bg-glow::after {
+            content: '';
+            position: absolute;
+            bottom: -300px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 191, 0, 0.04) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        /* ─── Header ─── */
         .site-header {
             position: sticky;
             top: 0;
             z-index: 1000;
             background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border)
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
         }
 
         .header-inner {
@@ -107,13 +160,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px
+            gap: 16px;
         }
 
         .logo-group {
             display: flex;
             align-items: center;
-            gap: 12px
+            gap: 12px;
+            flex-shrink: 0;
         }
 
         .logo-text {
@@ -121,7 +175,7 @@
             font-size: 1.65rem;
             font-weight: 800;
             color: var(--yellow);
-            letter-spacing: -0.5px
+            letter-spacing: -0.5px;
         }
 
         .tagline {
@@ -131,24 +185,25 @@
             border-left: 1px solid var(--text-muted);
             padding-left: 12px;
             line-height: 1.3;
-            max-width: 160px
+            max-width: 160px;
         }
 
-        @media(min-width:768px) {
+        @media (min-width: 768px) {
             .tagline {
-                display: block
+                display: block;
             }
         }
 
+        /* Nav */
         .nav-links {
             display: none;
             align-items: center;
-            gap: 4px
+            gap: 4px;
         }
 
-        @media(min-width:1024px) {
+        @media (min-width: 1024px) {
             .nav-links {
-                display: flex
+                display: flex;
             }
         }
 
@@ -158,31 +213,86 @@
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--text-secondary);
-            transition: all var(--transition)
+            transition: color var(--transition), background var(--transition);
         }
 
         .nav-link:hover,
         .nav-link.active {
             color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.04)
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            min-width: 220px;
+            padding: 8px;
+            background: var(--black-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all var(--transition);
+            z-index: 100;
+        }
+
+        .dropdown:hover .dropdown-menu,
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            text-align: left;
+            transition: all var(--transition);
+        }
+
+        .dropdown-item:hover {
+            color: var(--yellow);
+            background: rgba(255, 191, 0, 0.06);
+        }
+
+        .chevron-down {
+            width: 14px;
+            height: 14px;
+            margin-left: 4px;
+            transition: transform var(--transition);
+        }
+
+        .dropdown:hover .chevron-down {
+            transform: rotate(180deg);
         }
 
         .header-right {
             display: flex;
             align-items: center;
             gap: 12px;
-            flex-shrink: 0
+            flex-shrink: 0;
         }
 
         .social-icons {
             display: none;
             align-items: center;
-            gap: 6px
+            gap: 6px;
         }
 
-        @media(min-width:1024px) {
+        @media (min-width: 1024px) {
             .social-icons {
-                display: flex
+                display: flex;
             }
         }
 
@@ -194,17 +304,17 @@
             height: 34px;
             border-radius: 8px;
             color: var(--text-muted);
-            transition: all var(--transition)
+            transition: color var(--transition), background var(--transition);
         }
 
         .social-icon:hover {
             color: var(--yellow);
-            background: rgba(255, 191, 0, 0.08)
+            background: rgba(255, 191, 0, 0.08);
         }
 
         .social-icon svg {
             width: 18px;
-            height: 18px
+            height: 18px;
         }
 
         .btn-cta {
@@ -218,15 +328,16 @@
             font-weight: 700;
             border-radius: 50px;
             transition: all var(--transition);
-            white-space: nowrap
+            white-space: nowrap;
         }
 
         .btn-cta:hover {
             background: var(--yellow-dim);
             box-shadow: 0 0 20px var(--yellow-glow-strong);
-            transform: translateY(-1px)
+            transform: translateY(-1px);
         }
 
+        /* Mobile Nav */
         .mobile-toggle {
             display: flex;
             align-items: center;
@@ -234,18 +345,18 @@
             width: 40px;
             height: 40px;
             border-radius: 8px;
-            color: var(--text-secondary)
+            color: var(--text-secondary);
         }
 
-        @media(min-width:1024px) {
+        @media (min-width: 1024px) {
             .mobile-toggle {
-                display: none
+                display: none;
             }
         }
 
         .mobile-toggle svg {
             width: 22px;
-            height: 22px
+            height: 22px;
         }
 
         .mobile-nav {
@@ -259,64 +370,19 @@
             backdrop-filter: blur(20px);
             z-index: 999;
             padding: 24px;
-            overflow-y: auto
+            overflow-y: auto;
         }
 
         .mobile-nav.open {
-            display: block
-        }
-
-        .mobile-nav .nav-link {
             display: block;
-            padding: 14px 0;
-            font-size: 1rem;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border)
         }
 
-        .mobile-social {
-            display: flex;
-            gap: 12px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-            margin-top: 20px
-        }
-
-        .mobile-social .social-icon {
-            width: 40px;
-            height: 40px
-        }
-
-        .adsense-slot {
-            max-width: var(--max-width);
-            margin: 0 auto 32px;
-            padding: 0 24px
-        }
-
-        .adsense-inner {
-            background: var(--black-card);
-            border: 1px dashed rgba(255, 255, 255, 0.04);
-            border-radius: var(--radius);
-            padding: 16px;
-            text-align: center;
-            min-height: 90px;
-            display: flex;
-            align-items: center;
-            justify-content: center
-        }
-
-        .adsense-inner span {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            text-transform: uppercase
-        }
-
+        /* ─── Page Hero ─── */
         .page-hero {
             max-width: var(--max-width);
             margin: 0 auto;
             padding: 60px 24px 32px;
-            text-align: center
+            text-align: center;
         }
 
         .page-hero h1 {
@@ -324,232 +390,44 @@
             font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 800;
             color: var(--text-primary);
-            margin-bottom: 12px
+            margin-bottom: 12px;
         }
 
         .page-hero h1 span {
-            color: var(--yellow)
+            color: var(--yellow);
         }
 
         .page-hero p {
             font-size: 1rem;
             color: var(--text-secondary);
             max-width: 560px;
-            margin: 0 auto
-        }
-
-        .content-section {
-            max-width: 800px;
             margin: 0 auto;
-            padding: 0 24px 60px
         }
 
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px
-        }
-
-        .contact-card {
-            background: var(--black-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            text-align: center;
-            transition: all var(--transition)
-        }
-
-        .contact-card:hover {
-            border-color: var(--border-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(255, 191, 0, 0.05)
-        }
-
-        .contact-card .icon {
-            width: 52px;
-            height: 52px;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--yellow-glow);
-            border-radius: 50%;
-            color: var(--yellow)
-        }
-
-        .contact-card .icon svg {
-            width: 24px;
-            height: 24px
-        }
-
-        .contact-card h3 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 8px
-        }
-
-        .contact-card p {
-            font-size: 0.84rem;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            line-height: 1.5
-        }
-
-        .contact-card a.link {
-            color: var(--yellow);
-            font-weight: 600;
-            font-size: 0.88rem;
-            transition: opacity var(--transition)
-        }
-
-        .contact-card a.link:hover {
-            opacity: 0.8
-        }
-
-        .site-footer {
-            background: var(--black-light);
-            border-top: 1px solid var(--border);
-            padding: 48px 24px 24px
-        }
-
-        .footer-inner {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 32px
-        }
-
-        @media(min-width:768px) {
-            .footer-inner {
-                grid-template-columns: 2fr 1fr 1fr
-            }
-        }
-
-        .footer-brand .footer-logo {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--yellow);
-            margin-bottom: 12px
-        }
-
-        .footer-brand p {
-            font-size: 0.84rem;
-            color: var(--text-muted);
-            max-width: 320px;
-            line-height: 1.6
-        }
-
-        .footer-social {
-            display: flex;
-            gap: 8px;
-            margin-top: 16px
-        }
-
-        .footer-col h4 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px
-        }
-
-        .footer-col a {
-            display: block;
-            font-size: 0.84rem;
-            color: var(--text-muted);
-            padding: 4px 0;
-            transition: color var(--transition)
-        }
-
-        .footer-col a:hover {
-            color: var(--yellow)
-        }
-
-        .footer-bottom {
-            max-width: var(--max-width);
-            margin: 32px auto 0;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--text-muted)
-        }
-
-        .cookie-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--black-elevated);
-            border-top: 1px solid var(--border);
-            padding: 16px 24px;
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            backdrop-filter: blur(20px)
-        }
-
-        .cookie-banner.hidden {
-            display: none
-        }
-
-        .cookie-banner p {
-            font-size: 0.82rem;
-            color: var(--text-secondary)
-        }
-
-        .cookie-banner a {
-            color: var(--yellow);
-            text-decoration: underline
-        }
-
-        .cookie-accept {
-            padding: 8px 20px;
-            background: var(--yellow);
-            color: var(--black);
-            font-size: 0.8rem;
-            font-weight: 700;
-            border-radius: 50px;
-            transition: background var(--transition)
-        }
-
-        .cookie-accept:hover {
-            background: var(--yellow-dim)
-        }
-
+        /* ─── Contact Section ─── */
         .content-section {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 0 24px 60px
+            padding: 0 24px 60px;
         }
 
         .contact-layout {
             display: grid;
             grid-template-columns: 1fr;
             gap: 40px;
-            margin-bottom: 32px
+            margin-bottom: 32px;
         }
 
-        @media(min-width:768px) {
+        @media (min-width: 768px) {
             .contact-layout {
-                grid-template-columns: 1fr 1.5fr
+                grid-template-columns: 1fr 1.5fr;
             }
         }
 
         .contact-info {
             display: flex;
             flex-direction: column;
-            gap: 20px
+            gap: 20px;
         }
 
         .contact-card {
@@ -558,13 +436,13 @@
             border-radius: var(--radius-lg);
             padding: 32px;
             text-align: left;
-            transition: all var(--transition)
+            transition: all var(--transition);
         }
 
         .contact-card:hover {
             border-color: var(--border-hover);
             transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(255, 191, 0, 0.05)
+            box-shadow: 0 8px 30px rgba(255, 191, 0, 0.05);
         }
 
         .contact-card .icon {
@@ -576,12 +454,12 @@
             justify-content: center;
             background: var(--yellow-glow);
             border-radius: 12px;
-            color: var(--yellow)
+            color: var(--yellow);
         }
 
         .contact-card .icon svg {
             width: 24px;
-            height: 24px
+            height: 24px;
         }
 
         .contact-card h3 {
@@ -589,49 +467,49 @@
             font-size: 1.15rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 8px
+            margin-bottom: 8px;
         }
 
         .contact-card p {
             font-size: 0.9rem;
             color: var(--text-secondary);
             margin-bottom: 16px;
-            line-height: 1.5
+            line-height: 1.5;
         }
 
         .contact-card a.link {
             color: var(--yellow);
             font-weight: 600;
             font-size: 0.9rem;
-            transition: opacity var(--transition)
+            transition: opacity var(--transition);
         }
 
         .contact-card a.link:hover {
-            opacity: 0.8
+            opacity: 0.8;
         }
 
         .contact-form-wrapper {
             background: var(--black-card);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
-            padding: 40px
+            padding: 40px;
         }
 
         .contact-form-wrapper h2 {
             font-family: 'Outfit', sans-serif;
             font-size: 1.4rem;
             color: var(--text-primary);
-            margin-bottom: 8px
+            margin-bottom: 8px;
         }
 
         .contact-form-wrapper p {
             font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: 24px
+            margin-bottom: 24px;
         }
 
         .form-group {
-            margin-bottom: 20px
+            margin-bottom: 20px;
         }
 
         .form-group label {
@@ -639,7 +517,7 @@
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--text-secondary);
-            margin-bottom: 8px
+            margin-bottom: 8px;
         }
 
         .form-control {
@@ -652,17 +530,17 @@
             font-size: 0.95rem;
             font-family: inherit;
             transition: all var(--transition);
-            outline: none
+            outline: none;
         }
 
         .form-control:focus {
             border-color: var(--yellow-dim);
-            box-shadow: 0 0 0 3px var(--yellow-glow)
+            box-shadow: 0 0 0 3px var(--yellow-glow);
         }
 
         textarea.form-control {
             resize: vertical;
-            min-height: 120px
+            min-height: 120px;
         }
 
         .btn-submit {
@@ -677,21 +555,121 @@
             font-weight: 700;
             border-radius: 8px;
             transition: all var(--transition);
-            margin-top: 8px
+            margin-top: 8px;
         }
 
         .btn-submit:hover {
             background: var(--yellow-dim);
-            box-shadow: 0 0 20px var(--yellow-glow-strong)
+            box-shadow: 0 0 20px var(--yellow-glow-strong);
         }
 
         .btn-submit svg {
             margin-left: 8px;
             width: 18px;
-            height: 18px
+            height: 18px;
         }
 
-        /* ─── Modal ─── */
+        /* ─── Footer ─── */
+        .site-footer {
+            background: var(--black-light);
+            border-top: 1px solid var(--border);
+            padding: 48px 24px 24px;
+        }
+
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .footer-inner {
+                grid-template-columns: 2fr 1fr 1fr;
+            }
+        }
+
+        .footer-brand .footer-logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--yellow);
+            margin-bottom: 12px;
+        }
+
+        .footer-brand p {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            max-width: 320px;
+            line-height: 1.6;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .footer-col h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            padding: 4px 0;
+            transition: color var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--yellow);
+        }
+
+        .footer-bottom {
+            max-width: var(--max-width);
+            margin: 32px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Adsense slots */
+        .adsense-slot {
+            max-width: var(--max-width);
+            margin: 0 auto 32px;
+            padding: 0 24px;
+        }
+
+        .adsense-inner {
+            background: var(--black-card);
+            border: 1px dashed rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .adsense-inner span {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Modal */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -789,94 +767,145 @@
 
 <body>
     <div class="bg-glow" aria-hidden="true"></div>
+
+    <!-- ─── Header ─── -->
     <header class="site-header">
         <div class="header-inner">
-            <div class="logo-group"><a href="index.html" class="logo-text">Affilore</a><span class="tagline">Premium
-                    Tools for<br>Digital Growth</span></div>
-            <nav class="nav-links"><a href="index.html" class="nav-link">Home</a><a href="about.html"
-                    class="nav-link">About</a></nav>
+            <div class="logo-group">
+                <a href="/" class="logo-text">Affilore</a>
+                <span class="tagline">Premium Tools for<br>Digital Growth</span>
+            </div>
+
+            <nav class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <div class="dropdown">
+                    <button class="nav-link" aria-haspopup="true" aria-expanded="false">
+                        Categories
+                        <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu" role="menu">
+                        <a href="/finance/" class="dropdown-item" role="menuitem">💰 Finance</a>
+                        <a href="/real-estate/" class="dropdown-item" role="menuitem">🏠 Real Estate</a>
+                        <a href="/seo-marketing/" class="dropdown-item" role="menuitem">📈 SEO & Marketing</a>
+                        <a href="/ai-content-creation/" class="dropdown-item" role="menuitem">🤖 AI Content Creation</a>
+                        <a href="/developer-productivity/" class="dropdown-item" role="menuitem">⚡ Developer
+                            Productivity</a>
+                    </div>
+                </div>
+            </nav>
+
             <div class="header-right">
                 <div class="social-icons">
                     <a href="https://www.instagram.com/affilore_/" target="_blank" rel="noopener noreferrer"
-                        class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        class="social-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                             <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
                             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                         </svg></a>
                     <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank"
-                        rel="noopener noreferrer" class="social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24"
-                            fill="currentColor">
+                        rel="noopener noreferrer" class="social-icon"><svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
                         </svg></a>
                     <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer"
-                        class="social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor">
+                        class="social-icon"><svg viewBox="0 0 24 24" fill="currentColor">
                             <path
                                 d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                         </svg></a>
                 </div>
-                <a href="mailto:affilore4@gmail.com" class="btn-cta"><svg width="14" height="14" viewBox="0 0 20 20"
-                        fill="currentColor">
+                <a href="#requestModal" class="btn-cta">
+                    <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
                         <path
                             d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                    </svg> Request Custom Tool</a>
-                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu"><svg viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    </svg>
+                    Request Custom Tool
+                </a>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                         <line x1="3" y1="6" x2="21" y2="6" />
                         <line x1="3" y1="12" x2="21" y2="12" />
                         <line x1="3" y1="18" x2="21" y2="18" />
-                    </svg></button>
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
-    <div class="mobile-nav" id="mobileNav"><a href="index.html" class="nav-link">Home</a><a href="about.html"
-            class="nav-link">About</a><a href="mailto:affilore4@gmail.com" class="nav-link">Contact</a>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/finance/" class="nav-link"
+            style="display:block; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">💰 Finance</a>
+        <a href="/real-estate/" class="nav-link"
+            style="display:block; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">🏠 Real Estate</a>
+        <a href="/seo-marketing/" class="nav-link"
+            style="display:block; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">📈 SEO &
+            Marketing</a>
+        <a href="/ai-content-creation/" class="nav-link"
+            style="display:block; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">🤖 AI Content
+            Creation</a>
+        <a href="/developer-productivity/" class="nav-link"
+            style="display:block; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">⚡ Developer
+            Productivity</a>
+        <a href="about.html" class="nav-link"
+            style="display:block; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">About Us</a>
+        <a href="contact.html" class="nav-link"
+            style="display:block; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.06);">Contact</a>
         <div class="mobile-social">
-            <a href="https://www.instagram.com/affilore_/" target="_blank" rel="noopener noreferrer" class="social-icon"
-                aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+            <a href="https://www.instagram.com/affilore_/" target="_blank" class="social-icon"><svg viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" />
                     <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                 </svg></a>
-            <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" rel="noopener noreferrer"
-                class="social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor">
+            <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" class="social-icon"><svg
+                    viewBox="0 0 24 24" fill="currentColor">
                     <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
                 </svg></a>
-            <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer" class="social-icon"
-                aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor">
+            <a href="https://www.youtube.com/@affilore4" target="_blank" class="social-icon"><svg viewBox="0 0 24 24"
+                    fill="currentColor">
                     <path
                         d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                 </svg></a>
         </div>
     </div>
 
+    <!-- ─── Body Content ─── -->
     <section class="page-hero">
         <h1>Contact <span>Us</span></h1>
         <p>We'd love to hear from you. Whether it's a tool request, a partnership inquiry, or just feedback — reach out
             anytime.</p>
     </section>
+
     <div class="adsense-slot">
         <div class="adsense-inner"><span>— Advertisement —</span></div>
     </div>
+
     <div class="content-section">
         <div class="contact-layout">
             <div class="contact-info">
                 <div class="contact-card">
-                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                             <polyline points="22,6 12,13 2,6" />
-                        </svg></div>
+                        </svg>
+                    </div>
                     <h3>Direct Email</h3>
                     <p>For urgent business inquiries or if you prefer to email us directly from your client.</p>
                     <a href="mailto:affilore4@gmail.com" class="link">affilore4@gmail.com →</a>
                 </div>
                 <div class="contact-card" style="margin-top:auto;">
-                    <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
                             <path
                                 d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                        </svg></div>
+                        </svg>
+                    </div>
                     <h3>Watch Us Build</h3>
                     <p>Subscribe to our YouTube channel for tutorials, tool demos, and digital growth strategies.</p>
                     <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer"
@@ -903,64 +932,61 @@
                         <textarea id="message" class="form-control" placeholder="Describe what you need help with..."
                             required></textarea>
                     </div>
-                    <button type="submit" class="btn-submit">Open in Mail Client <svg viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button type="submit" class="btn-submit">
+                        Open in Mail Client
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
                             <line x1="22" y1="2" x2="11" y2="13" />
                             <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                        </svg></button>
+                        </svg>
+                    </button>
                 </form>
             </div>
         </div>
     </div>
+
     <div class="adsense-slot">
         <div class="adsense-inner"><span>— Advertisement —</span></div>
     </div>
 
+    <!-- ─── Footer ─── -->
     <footer class="site-footer">
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-logo">Affilore</div>
                 <p>Premium digital tools crafted for ambitious professionals.</p>
                 <div class="footer-social">
-                    <a href="https://www.instagram.com/affilore_/" target="_blank" rel="noopener noreferrer"
-                        class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <a href="https://www.instagram.com/affilore_/" target="_blank" class="social-icon"><svg
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" />
                             <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
                             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
                         </svg></a>
                     <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank"
-                        rel="noopener noreferrer" class="social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24"
-                            fill="currentColor">
+                        class="social-icon"><svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
                         </svg></a>
-                    <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer"
-                        class="social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor">
+                    <a href="https://www.youtube.com/@affilore4" target="_blank" class="social-icon"><svg
+                            viewBox="0 0 24 24" fill="currentColor">
                             <path
                                 d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                         </svg></a>
                 </div>
             </div>
             <div class="footer-col">
-                <h4>Company</h4><a href="about.html">About Us</a><a href="mailto:affilore4@gmail.com">Contact Us</a><a
-                    href="mailto:affilore4@gmail.com">Request Custom Tool</a>
+                <h4>Company</h4>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+                <a href="#requestModal">Request Custom Tool</a>
             </div>
             <div class="footer-col">
-                <h4>Legal</h4><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms & Conditions</a>
+                <h4>Legal</h4>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms & Conditions</a>
             </div>
         </div>
         <div class="footer-bottom">&copy; 2026 Affilore. All rights reserved.</div>
     </footer>
-
-    <div class="cookie-banner" id="cookieBanner">
-        <p>🍪 We use cookies to enhance your experience. By continuing, you agree to our <a href="privacy.html">Privacy
-                Policy</a>.</p><button class="cookie-accept" id="cookieAccept">Accept Cookies</button>
-    </div>
-    
-    <script>
-        document.getElementById('mobileToggle').addEventListener('click', () => { const n = document.getElementById('mobileNav'); n.classList.toggle('open'); document.body.style.overflow = n.classList.contains('open') ? 'hidden' : ''; });
-        const cb = document.getElementById('cookieBanner'); if (localStorage.getItem('affilore_cookies_accepted') === 'true') cb.classList.add('hidden'); document.getElementById('cookieAccept').addEventListener('click', () => { localStorage.setItem('affilore_cookies_accepted', 'true'); cb.classList.add('hidden'); });
-        </script>
 
     <!-- Request Custom Tool Modal -->
     <div class="modal-overlay" id="requestModal">
@@ -970,16 +996,26 @@
             <p>Need a specific tool designed for your workflow? Send us an email with your core requirements.</p>
             <div class="modal-email-box">
                 <span>affilore4@gmail.com</span>
-                <button class="btn-copy" onclick="navigator.clipboard.writeText('affilore4@gmail.com');this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000)">Copy</button>
+                <button class="btn-copy"
+                    onclick="navigator.clipboard.writeText('affilore4@gmail.com');this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000)">Copy</button>
             </div>
-            <a href="mailto:affilore4@gmail.com" class="btn-cta" style="width:100%; justify-content:center;">Open in Mail</a>
+            <a href="mailto:affilore4@gmail.com"
+                style="display:block; text-align:center; background-color:#FFBF00; color:#000; padding:10px; border-radius:5px; text-decoration:none; font-weight:bold;">Open
+                in Mail</a>
         </div>
     </div>
+
     <script>
+        document.getElementById('mobileToggle').addEventListener('click', () => {
+            const n = document.getElementById('mobileNav');
+            n.classList.toggle('open');
+            document.body.style.overflow = n.classList.contains('open') ? 'hidden' : '';
+        });
+
         // Global Modal Handler
         const reqModal = document.getElementById('requestModal');
         document.querySelectorAll('a').forEach(a => {
-            if (a.textContent.includes('Request Custom Tool')) {
+            if (a.getAttribute('href') === '#requestModal' || a.textContent.includes('Request Custom Tool')) {
                 a.addEventListener('click', e => { e.preventDefault(); reqModal.classList.add('open'); document.body.style.overflow = 'hidden'; });
             }
         });
@@ -987,6 +1023,5 @@
         reqModal.addEventListener('click', e => { if (e.target === reqModal) { reqModal.classList.remove('open'); document.body.style.overflow = ''; } });
     </script>
 </body>
-
 
 </html>
