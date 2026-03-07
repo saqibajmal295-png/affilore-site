@@ -1295,7 +1295,7 @@
             <!-- Quick Links -->
             <div class="footer-col">
                 <h4>Company</h4>
-                <a href="/about.html">About Us</a>
+                <a href="/about/">About Us</a>
                 <a href="mailto:affilore4@gmail.com">Contact Us</a>
                 <a href="mailto:affilore4@gmail.com">Request Custom Tool</a>
             </div>
@@ -1303,8 +1303,8 @@
             <!-- Legal -->
             <div class="footer-col">
                 <h4>Legal</h4>
-                <a href="/privacy.html">Privacy Policy</a>
-                <a href="/terms.html">Terms & Conditions</a>
+                <a href="/privacy/">Privacy Policy</a>
+                <a href="/terms/">Terms & Conditions</a>
             </div>
         </div>
 
@@ -1317,7 +1317,7 @@
     <!--  COOKIE BANNER                                                     -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div class="cookie-banner" id="cookieBanner">
-        <p>🍪 We use cookies to enhance your experience. By continuing, you agree to our <a href="/privacy.html">Privacy
+        <p>🍪 We use cookies to enhance your experience. By continuing, you agree to our <a href="/privacy/">Privacy
                 Policy</a>.</p>
         <button class="cookie-accept" id="cookieAccept">Accept Cookies</button>
     </div>
@@ -1427,17 +1427,18 @@
 
                 // Category filter
                 if (activeCategory !== 'all') {
-                    tools = tools.filter(t => t.category === activeCategory);
+                    tools = tools.filter(t => Array.isArray(t.category) ? t.category.includes(activeCategory) : t.category === activeCategory);
                 }
 
                 // Search filter
                 if (searchQuery.trim()) {
                     const q = searchQuery.toLowerCase();
-                    tools = tools.filter(t =>
-                        t.title.toLowerCase().includes(q) ||
+                    tools = tools.filter(t => {
+                        const catStr = Array.isArray(t.category) ? t.category.join(' ') : t.category;
+                        return t.title.toLowerCase().includes(q) ||
                         t.description.toLowerCase().includes(q) ||
-                        t.category.toLowerCase().includes(q)
-                    );
+                        catStr.toLowerCase().includes(q);
+                    });
                 }
 
                 filteredTools = tools;
@@ -1478,7 +1479,7 @@
                     <img src="${tool.thumbnail}" alt="${tool.title}" loading="lazy">
                 </div>
                 <div class="tool-card-body">
-                    <span class="tool-card-category">${tool.category}</span>
+                    <span class="tool-card-category">${Array.isArray(tool.category) ? tool.category[0] : tool.category}</span>
                     <h2 class="tool-card-title">${tool.title}</h2>
                     <p class="tool-card-desc">${tool.description}</p>
                 </div>
