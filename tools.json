@@ -1,0 +1,122 @@
+[
+  {
+    "id": "compound-interest-calc",
+    "title": "Compound Interest Calculator",
+    "category": "Finance",
+    "description": "Visualize how your investments grow over time with adjustable rates, compounding periods, and contribution schedules.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Compound+Interest&font=inter"
+  },
+  {
+    "id": "emergency-fund-planner",
+    "title": "Emergency Fund Planner",
+    "category": "Finance",
+    "description": "Calculate your ideal emergency fund target based on expenses, income stability, and dependents.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Emergency+Fund&font=inter"
+  },
+  {
+    "id": "sip-calculator",
+    "title": "SIP Investment Calculator",
+    "category": "Finance",
+    "description": "Systematic Investment Plan calculator with projections for monthly contributions and expected returns.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=SIP+Calculator&font=inter"
+  },
+  {
+    "id": "debt-payoff-planner",
+    "title": "Debt Payoff Planner",
+    "category": "Finance",
+    "description": "Avalanche vs Snowball strategy comparison. See which payoff method saves you the most in interest.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Debt+Payoff&font=inter"
+  },
+  {
+    "id": "mortgage-calculator",
+    "title": "Mortgage Affordability Calculator",
+    "category": "Real Estate",
+    "description": "Estimate monthly mortgage payments, total interest, and affordability based on income and down payment.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Mortgage+Calc&font=inter"
+  },
+  {
+    "id": "rental-yield-analyzer",
+    "title": "Rental Yield Analyzer",
+    "category": "Real Estate",
+    "description": "Calculate gross and net rental yields for investment properties, including vacancy and maintenance costs.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Rental+Yield&font=inter"
+  },
+  {
+    "id": "property-roi-tracker",
+    "title": "Property ROI Tracker",
+    "category": "Real Estate",
+    "description": "Track return on investment for real estate portfolios with appreciation, cash flow, and equity analysis.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Property+ROI&font=inter"
+  },
+  {
+    "id": "keyword-density-checker",
+    "title": "Keyword Density Checker",
+    "category": "SEO & Marketing",
+    "description": "Analyze keyword frequency and density across your content. Get optimization recommendations instantly.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Keyword+Density&font=inter"
+  },
+  {
+    "id": "meta-tag-generator",
+    "title": "Meta Tag Generator",
+    "category": "SEO & Marketing",
+    "description": "Generate optimized meta titles, descriptions, and Open Graph tags for maximum CTR and social sharing.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Meta+Tags&font=inter"
+  },
+  {
+    "id": "backlink-checker",
+    "title": "Backlink Profile Analyzer",
+    "category": "SEO & Marketing",
+    "description": "Audit your website's backlink profile, identify toxic links, and discover competitor link-building strategies.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Backlink+Checker&font=inter"
+  },
+  {
+    "id": "ai-podcast-hook",
+    "title": "AI Podcast Hook Generator",
+    "category": "AI Content Creation",
+    "description": "Generate 5 high-retention podcast intro hooks instantly. Enter your topic or guest and get scroll-stopping openers.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Podcast+Hooks&font=inter",
+    "url": "tools/ai-podcast-hook.html"
+  },
+  {
+    "id": "ai-blog-writer",
+    "title": "AI Blog Post Writer",
+    "category": "AI Content Creation",
+    "description": "Generate SEO-optimized, long-form blog posts from a single prompt. Supports tone, structure, and keyword targeting.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=AI+Blog+Writer&font=inter"
+  },
+  {
+    "id": "social-caption-generator",
+    "title": "Social Caption Generator",
+    "category": "AI Content Creation",
+    "description": "AI-powered captions for Instagram, TikTok, LinkedIn, and Twitter — optimized for engagement and reach.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Caption+Gen&font=inter"
+  },
+  {
+    "id": "ai-thumbnail-maker",
+    "title": "AI Thumbnail Maker",
+    "category": "AI Content Creation",
+    "description": "Create click-worthy YouTube and blog thumbnails using AI-driven layouts, text overlays, and color schemes.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Thumbnail+Maker&font=inter"
+  },
+  {
+    "id": "json-formatter",
+    "title": "JSON Formatter & Validator",
+    "category": "Developer Productivity",
+    "description": "Beautify, minify, and validate JSON with syntax highlighting, error detection, and tree view exploration.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=JSON+Formatter&font=inter"
+  },
+  {
+    "id": "regex-tester",
+    "title": "Regex Pattern Tester",
+    "category": "Developer Productivity",
+    "description": "Test regular expressions in real-time with match highlighting, capture groups, and multi-language syntax.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=Regex+Tester&font=inter"
+  },
+  {
+    "id": "api-response-mocker",
+    "title": "API Response Mocker",
+    "category": "Developer Productivity",
+    "description": "Mock REST API endpoints with custom status codes, headers, delays, and JSON response bodies for frontend testing.",
+    "thumbnail": "https://placehold.co/400x240/1a1a1a/F5C518?text=API+Mocker&font=inter"
+  }
+]
