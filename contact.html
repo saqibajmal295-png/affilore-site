@@ -8,8 +8,9 @@
     <meta name="description"
         content="Get in touch with Affilore. Request a custom tool, report an issue, or share feedback.">
     <link rel="canonical" href="https://affilore.com/contact.html">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
-    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-YRKMHHSYBC');</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC">    </script>
+    
+    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-YRKMHHSYBC');    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -525,6 +526,264 @@
         .cookie-accept:hover {
             background: var(--yellow-dim)
         }
+
+        .content-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px 60px
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 32px
+        }
+
+        @media(min-width:768px) {
+            .contact-layout {
+                grid-template-columns: 1fr 1.5fr
+            }
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px
+        }
+
+        .contact-card {
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: left;
+            transition: all var(--transition)
+        }
+
+        .contact-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 191, 0, 0.05)
+        }
+
+        .contact-card .icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--yellow-glow);
+            border-radius: 12px;
+            color: var(--yellow)
+        }
+
+        .contact-card .icon svg {
+            width: 24px;
+            height: 24px
+        }
+
+        .contact-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px
+        }
+
+        .contact-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5
+        }
+
+        .contact-card a.link {
+            color: var(--yellow);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: opacity var(--transition)
+        }
+
+        .contact-card a.link:hover {
+            opacity: 0.8
+        }
+
+        .contact-form-wrapper {
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 40px
+        }
+
+        .contact-form-wrapper h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin-bottom: 8px
+        }
+
+        .contact-form-wrapper p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px
+        }
+
+        .form-group {
+            margin-bottom: 20px
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--black-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all var(--transition);
+            outline: none
+        }
+
+        .form-control:focus {
+            border-color: var(--yellow-dim);
+            box-shadow: 0 0 0 3px var(--yellow-glow)
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px
+        }
+
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 14px 24px;
+            background: var(--yellow);
+            color: var(--black);
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: all var(--transition);
+            margin-top: 8px
+        }
+
+        .btn-submit:hover {
+            background: var(--yellow-dim);
+            box-shadow: 0 0 20px var(--yellow-glow-strong)
+        }
+
+        .btn-submit svg {
+            margin-left: 8px;
+            width: 18px;
+            height: 18px
+        }
+
+        /* ─── Modal ─── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition);
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--black-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform var(--transition);
+            text-align: center;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: color var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-content h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .modal-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal-email-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .modal-email-box span {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .btn-copy {
+            color: var(--yellow);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(255, 191, 0, 0.1);
+            transition: background var(--transition);
+        }
+
+        .btn-copy:hover {
+            background: rgba(255, 191, 0, 0.2);
+        }
     </style>
 </head>
 
@@ -601,48 +860,55 @@
         <div class="adsense-inner"><span>— Advertisement —</span></div>
     </div>
     <div class="content-section">
-        <div class="contact-grid">
-            <div class="contact-card">
-                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                        <polyline points="22,6 12,13 2,6" />
-                    </svg></div>
-                <h3>Email Us</h3>
-                <p>For tool requests, business inquiries, or general feedback.</p>
-                <a href="mailto:affilore4@gmail.com" class="link">affilore4@gmail.com →</a>
+        <div class="contact-layout">
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <polyline points="22,6 12,13 2,6" />
+                        </svg></div>
+                    <h3>Direct Email</h3>
+                    <p>For urgent business inquiries or if you prefer to email us directly from your client.</p>
+                    <a href="mailto:affilore4@gmail.com" class="link">affilore4@gmail.com →</a>
+                </div>
+                <div class="contact-card" style="margin-top:auto;">
+                    <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                        </svg></div>
+                    <h3>Watch Us Build</h3>
+                    <p>Subscribe to our YouTube channel for tutorials, tool demos, and digital growth strategies.</p>
+                    <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer"
+                        class="link">Visit YouTube Channel →</a>
+                </div>
             </div>
-            <div class="contact-card">
-                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                        <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                    </svg></div>
-                <h3>Instagram</h3>
-                <p>Follow us for updates, tips, and behind-the-scenes content.</p>
-                <a href="https://www.instagram.com/affilore_/" target="_blank" rel="noopener noreferrer"
-                    class="link">@affilore_ →</a>
-            </div>
-            <div class="contact-card">
-                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                    </svg></div>
-                <h3>Facebook</h3>
-                <p>Join our community and stay in the loop on new tool launches.</p>
-                <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank"
-                    rel="noopener noreferrer" class="link">Affilore on Facebook →</a>
-            </div>
-            <div class="contact-card">
-                <div class="icon"><svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                    </svg></div>
-                <h3>YouTube</h3>
-                <p>Watch tutorials, tool demos, and digital growth strategies.</p>
-                <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer"
-                    class="link">@affilore4 →</a>
+
+            <div class="contact-form-wrapper">
+                <h2>Send a Message</h2>
+                <p>Tell us what you're working on. We generally reply within 24 hours.</p>
+                <form id="contactForm"
+                    onsubmit="event.preventDefault(); window.location.href='mailto:affilore4@gmail.com?subject=' + encodeURIComponent('Affilore Hub: ' + document.getElementById('subject').value) + '&body=' + encodeURIComponent('From: ' + document.getElementById('name').value + '\n\n' + document.getElementById('message').value);">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject / Tool Idea</label>
+                        <input type="text" id="subject" class="form-control" placeholder="I need a tool for..."
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" placeholder="Describe what you need help with..."
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Open in Mail Client <svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg></button>
+                </form>
             </div>
         </div>
     </div>
@@ -690,10 +956,37 @@
         <p>🍪 We use cookies to enhance your experience. By continuing, you agree to our <a href="privacy.html">Privacy
                 Policy</a>.</p><button class="cookie-accept" id="cookieAccept">Accept Cookies</button>
     </div>
+    
     <script>
         document.getElementById('mobileToggle').addEventListener('click', () => { const n = document.getElementById('mobileNav'); n.classList.toggle('open'); document.body.style.overflow = n.classList.contains('open') ? 'hidden' : ''; });
         const cb = document.getElementById('cookieBanner'); if (localStorage.getItem('affilore_cookies_accepted') === 'true') cb.classList.add('hidden'); document.getElementById('cookieAccept').addEventListener('click', () => { localStorage.setItem('affilore_cookies_accepted', 'true'); cb.classList.add('hidden'); });
+        </script>
+
+    <!-- Request Custom Tool Modal -->
+    <div class="modal-overlay" id="requestModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal" aria-label="Close modal">&times;</button>
+            <h3>Request a Custom Tool</h3>
+            <p>Need a specific tool designed for your workflow? Send us an email with your core requirements.</p>
+            <div class="modal-email-box">
+                <span>affilore4@gmail.com</span>
+                <button class="btn-copy" onclick="navigator.clipboard.writeText('affilore4@gmail.com');this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000)">Copy</button>
+            </div>
+            <a href="mailto:affilore4@gmail.com" class="btn-cta" style="width:100%; justify-content:center;">Open in Mail</a>
+        </div>
+    </div>
+    <script>
+        // Global Modal Handler
+        const reqModal = document.getElementById('requestModal');
+        document.querySelectorAll('a').forEach(a => {
+            if (a.textContent.includes('Request Custom Tool')) {
+                a.addEventListener('click', e => { e.preventDefault(); reqModal.classList.add('open'); document.body.style.overflow = 'hidden'; });
+            }
+        });
+        document.getElementById('closeModal').addEventListener('click', () => { reqModal.classList.remove('open'); document.body.style.overflow = ''; });
+        reqModal.addEventListener('click', e => { if (e.target === reqModal) { reqModal.classList.remove('open'); document.body.style.overflow = ''; } });
     </script>
 </body>
+
 
 </html>

@@ -7,8 +7,9 @@
     <title>Terms & Conditions — Affilore</title>
     <meta name="description" content="Read the Terms and Conditions for using Affilore's free premium digital tools.">
     <link rel="canonical" href="https://affilore.com/terms.html">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
-    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-YRKMHHSYBC');</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC">    </script>
+        
+<script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-YRKMHHSYBC');    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -507,7 +508,20 @@
         .cookie-accept:hover {
             background: var(--yellow-dim)
         }
-    </style>
+            /* ─── Modal ─── */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 3000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity var(--transition); }
+        .modal-overlay.open { opacity: 1; pointer-events: auto; }
+        .modal-content { background: var(--black-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; max-width: 400px; width: 90%; position: relative; transform: translateY(20px); transition: transform var(--transition); text-align: center; }
+        .modal-overlay.open .modal-content { transform: translateY(0); }
+        .modal-close { position: absolute; top: 16px; right: 16px; font-size: 1.5rem; color: var(--text-muted); transition: color var(--transition); }
+        .modal-close:hover { color: var(--text-primary); }
+        .modal-content h3 { font-family: 'Outfit', sans-serif; font-size: 1.25rem; color: var(--text-primary); margin-bottom: 8px; }
+        .modal-content p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
+        .modal-email-box { display: flex; align-items: center; justify-content: space-between; background: var(--black-card); border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; }
+        .modal-email-box span { font-size: 0.9rem; color: var(--text-primary); }
+        .btn-copy { color: var(--yellow); font-size: 0.8rem; font-weight: 600; padding: 4px 8px; border-radius: 4px; background: rgba(255,191,0,0.1); transition: background var(--transition); }
+        .btn-copy:hover { background: rgba(255,191,0,0.2); }
+</style>
 </head>
 
 <body>
@@ -699,10 +713,37 @@
         <p>🍪 We use cookies to enhance your experience. By continuing, you agree to our <a href="privacy.html">Privacy
                 Policy</a>.</p><button class="cookie-accept" id="cookieAccept">Accept Cookies</button>
     </div>
-    <script>
+        
+<script>
         document.getElementById('mobileToggle').addEventListener('click', () => { const n = document.getElementById('mobileNav'); n.classList.toggle('open'); document.body.style.overflow = n.classList.contains('open') ? 'hidden' : ''; });
         const cb = document.getElementById('cookieBanner'); if (localStorage.getItem('affilore_cookies_accepted') === 'true') cb.classList.add('hidden'); document.getElementById('cookieAccept').addEventListener('click', () => { localStorage.setItem('affilore_cookies_accepted', 'true'); cb.classList.add('hidden'); });
+        </script>
+
+    <!-- Request Custom Tool Modal -->
+    <div class="modal-overlay" id="requestModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal" aria-label="Close modal">&times;</button>
+            <h3>Request a Custom Tool</h3>
+            <p>Need a specific tool designed for your workflow? Send us an email with your core requirements.</p>
+            <div class="modal-email-box">
+                <span>affilore4@gmail.com</span>
+                <button class="btn-copy" onclick="navigator.clipboard.writeText('affilore4@gmail.com');this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000)">Copy</button>
+            </div>
+            <a href="mailto:affilore4@gmail.com" class="btn-cta" style="width:100%; justify-content:center;">Open in Mail</a>
+        </div>
+    </div>
+    <script>
+        // Global Modal Handler
+        const reqModal = document.getElementById('requestModal');
+        document.querySelectorAll('a').forEach(a => {
+            if (a.textContent.includes('Request Custom Tool')) {
+                a.addEventListener('click', e => { e.preventDefault(); reqModal.classList.add('open'); document.body.style.overflow = 'hidden'; });
+            }
+        });
+        document.getElementById('closeModal').addEventListener('click', () => { reqModal.classList.remove('open'); document.body.style.overflow = ''; });
+        reqModal.addEventListener('click', e => { if (e.target === reqModal) { reqModal.classList.remove('open'); document.body.style.overflow = ''; } });
     </script>
 </body>
+
 
 </html>
