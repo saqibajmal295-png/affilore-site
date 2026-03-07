@@ -50,7 +50,7 @@
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: #0a0a0a;
-            background-image: radial-gradient(rgba(255, 191, 0, 0.07) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(255, 191, 0, 0.35) 1px, transparent 1px);
             background-size: 28px 28px;
             color: #FFFFFF;
             line-height: 1.6;
@@ -95,8 +95,8 @@
             --yellow-glow: rgba(255, 191, 0, 0.15);
             --yellow-glow-strong: rgba(255, 191, 0, 0.3);
             --text-primary: #FFFFFF;
-            --text-secondary: #b0b0b0;
-            --text-muted: #666666;
+            --text-secondary: #F0F0F0;
+            --text-muted: #CCCCCC;
             --border: rgba(255, 255, 255, 0.07);
             --border-hover: rgba(255, 191, 0, 0.3);
             --radius: 12px;
@@ -139,7 +139,7 @@
             transform: translateX(-50%);
             width: 800px;
             height: 800px;
-            background: radial-gradient(circle, rgba(255, 191, 0, 0.05) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 191, 0, 0.30) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -150,7 +150,7 @@
             right: -200px;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(255, 191, 0, 0.04) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 191, 0, 0.25) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -194,7 +194,7 @@
         .tagline {
             display: none;
             font-size: 0.7rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             border-left: 1px solid var(--text-muted);
             padding-left: 12px;
             line-height: 1.3;
@@ -225,7 +225,7 @@
             border-radius: 8px;
             font-size: 0.85rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             transition: color var(--transition), background var(--transition);
         }
 
@@ -269,7 +269,7 @@
             padding: 10px 14px;
             border-radius: 8px;
             font-size: 0.84rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             text-align: left;
             transition: all var(--transition);
         }
@@ -359,7 +359,7 @@
             width: 40px;
             height: 40px;
             border-radius: 8px;
-            color: var(--text-secondary);
+            color: #FFFFFF;
         }
 
         @media (min-width: 1024px) {
@@ -396,7 +396,7 @@
             display: block;
             padding: 14px 0;
             font-size: 1rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             border-bottom: 1px solid var(--border);
         }
 
@@ -457,7 +457,7 @@
         }
 
         .tool-breadcrumb a {
-            color: var(--text-secondary);
+            color: #FFFFFF;
             transition: color var(--transition);
         }
 
@@ -520,7 +520,7 @@
 
         .tool-hero p {
             font-size: 1rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             max-width: 560px;
             margin: 0 auto;
         }
@@ -547,7 +547,7 @@
             display: block;
             font-size: 0.82rem;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             margin-bottom: 12px;
@@ -722,7 +722,7 @@
             border-radius: 8px;
             font-size: 0.75rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             transition: all var(--transition);
         }
 
@@ -770,7 +770,7 @@
             font-family: 'Outfit', sans-serif;
             font-size: 1.05rem;
             font-weight: 700;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             margin-bottom: 6px;
         }
 
@@ -951,7 +951,7 @@
 
         .cookie-banner p {
             font-size: 0.82rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
         }
 
         .cookie-banner a {
@@ -1043,7 +1043,7 @@
 
         .modal-content p {
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             margin-bottom: 24px;
             line-height: 1.5;
         }
@@ -1091,12 +1091,12 @@
     <header class="site-header">
         <div class="header-inner">
             <div class="logo-group">
-                <a href="../index.html" class="logo-text">Affilore</a>
+                <a href="/" class="logo-text">Affilore</a>
                 <span class="tagline">Premium Tools for<br>Digital Growth</span>
             </div>
 
             <nav class="nav-links" aria-label="Main navigation">
-                <a href="../index.html" class="nav-link">Home</a>
+                <a href="/" class="nav-link">Home</a>
                 <div class="dropdown">
                     <button class="nav-link" aria-haspopup="true" aria-expanded="false">
                         Categories
@@ -1164,7 +1164,7 @@
 
     <!-- Mobile Nav -->
     <div class="mobile-nav" id="mobileNav">
-        <a href="../index.html" class="nav-link">Home</a>
+        <a href="/" class="nav-link">Home</a>
         <a href="/finance/" class="nav-link"
             style="width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;font-size:1rem;color:#999;display:block;">💰
             Finance</a>
@@ -1211,11 +1211,11 @@
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <section class="tool-hero">
         <div class="tool-breadcrumb">
-            <a href="../index.html">Home</a>
+            <a href="/">Home</a>
             <span class="sep">›</span>
-            <a href="../index.html">AI Content Creation</a>
+            <a href="/">AI Content Creation</a>
             <span class="sep">›</span>
-            <span style="color: var(--text-secondary);">Podcast Hook Generator</span>
+            <span style="color: #FFFFFF;">Podcast Hook Generator</span>
         </div>
         <div class="tool-badge">
             <span class="pulse-dot"></span>
@@ -1622,7 +1622,7 @@
 
         .modal-content p {
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             margin-bottom: 24px;
             line-height: 1.5;
         }

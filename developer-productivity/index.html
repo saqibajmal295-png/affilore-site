@@ -51,7 +51,7 @@
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: #0a0a0a;
-            background-image: radial-gradient(rgba(255, 191, 0, 0.07) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(255, 191, 0, 0.35) 1px, transparent 1px);
             background-size: 28px 28px;
             color: #FFFFFF;
             line-height: 1.6;
@@ -95,8 +95,8 @@
             --yellow-glow: rgba(255, 191, 0, 0.15);
             --yellow-glow-strong: rgba(255, 191, 0, 0.3);
             --text-primary: #FFFFFF;
-            --text-secondary: #b0b0b0;
-            --text-muted: #666666;
+            --text-secondary: #F0F0F0;
+            --text-muted: #CCCCCC;
             --border: rgba(255, 255, 255, 0.07);
             --border-hover: rgba(255, 191, 0, 0.3);
             --radius: 12px;
@@ -139,7 +139,7 @@
             transform: translateX(-50%);
             width: 800px;
             height: 800px;
-            background: radial-gradient(circle, rgba(255, 191, 0, 0.05) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 191, 0, 0.30) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -150,7 +150,7 @@
             right: -200px;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(255, 191, 0, 0.04) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 191, 0, 0.25) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -194,7 +194,7 @@
         .tagline {
             display: none;
             font-size: 0.7rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             border-left: 1px solid var(--text-muted);
             padding-left: 12px;
             line-height: 1.3;
@@ -225,7 +225,7 @@
             border-radius: 8px;
             font-size: 0.85rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             transition: color var(--transition), background var(--transition);
         }
 
@@ -270,7 +270,7 @@
             padding: 10px 14px;
             border-radius: 8px;
             font-size: 0.84rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             text-align: left;
             transition: all var(--transition);
         }
@@ -406,7 +406,7 @@
             width: 40px;
             height: 40px;
             border-radius: 8px;
-            color: var(--text-secondary);
+            color: #FFFFFF;
         }
 
         @media (min-width: 1024px) {
@@ -443,7 +443,7 @@
             display: block;
             padding: 14px 0;
             font-size: 1rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             border-bottom: 1px solid var(--border);
         }
 
@@ -535,7 +535,7 @@
 
         .hero p {
             font-size: 1.05rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             max-width: 580px;
             margin: 0 auto;
         }
@@ -587,7 +587,7 @@
             border-radius: 50px;
             font-size: 0.82rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             background: var(--black-card);
             border: 1px solid var(--border);
             transition: all var(--transition);
@@ -597,7 +597,7 @@
         .filter-pill:hover {
             color: var(--text-primary);
             border-color: var(--border-hover);
-            background: rgba(255, 191, 0, 0.05);
+            background: rgba(255, 191, 0, 0.30);
         }
 
         .filter-pill.active {
@@ -691,7 +691,7 @@
 
         .tool-card-desc {
             font-size: 0.84rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             line-height: 1.55;
         }
 
@@ -711,7 +711,7 @@
 
         .no-results h3 {
             font-size: 1.1rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             margin-bottom: 8px;
         }
 
@@ -783,7 +783,7 @@
             border-radius: 50px;
             font-size: 0.88rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             transition: all var(--transition);
         }
 
@@ -917,7 +917,7 @@
 
         .cookie-banner p {
             font-size: 0.82rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
         }
 
         .cookie-banner a {
@@ -998,7 +998,7 @@
 
         .modal-content p {
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            color: #FFFFFF;
             margin-bottom: 24px;
             line-height: 1.5;
         }
@@ -1059,13 +1059,13 @@
         <div class="header-inner">
             <!-- Logo -->
             <div class="logo-group">
-                <a href="index.html" class="logo-text">Affilore</a>
+                <a href="/" class="logo-text">Affilore</a>
                 <span class="tagline">Premium Tools for<br>Digital Growth</span>
             </div>
 
             <!-- Desktop Nav -->
             <nav class="nav-links" aria-label="Main navigation">
-                <a href="index.html" class="nav-link active">Home</a>
+                <a href="/" class="nav-link active">Home</a>
                 <div class="dropdown">
                     <button class="nav-link" aria-haspopup="true" aria-expanded="false">
                         Categories
@@ -1150,7 +1150,7 @@
     <!-- Mobile Nav -->
     <div class="mobile-nav" id="mobileNav">
         <input type="text" class="search-mobile" id="searchMobile" placeholder="Search tools...">
-        <a href="index.html" class="nav-link active">Home</a>
+        <a href="/" class="nav-link active">Home</a>
         <a href="/finance/" class="nav-link"
             style="width:100%;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);padding:14px 0;font-size:1rem;color:#999;display:block;">💰
             Finance</a>
@@ -1221,12 +1221,12 @@
     <main class="main-content" id="mainContent">
         <!-- Category Filters -->
         <div class="filter-bar" id="filterBar">
-            <a href="index.html" class="filter-pill active">All Tools</a>
+            <a href="/" class="filter-pill">All Tools</a>
             <a href="/finance/" class="filter-pill">💰 Finance</a>
             <a href="/real-estate/" class="filter-pill">🏠 Real Estate</a>
             <a href="/seo-marketing/" class="filter-pill">📈 SEO & Marketing</a>
             <a href="/ai-content-creation/" class="filter-pill">🤖 AI Content Creation</a>
-            <a href="/developer-productivity/" class="filter-pill">⚡ Developer Productivity</a>
+            <a href="/developer-productivity/" class="filter-pill active">⚡ Developer Productivity</a>
         </div>
 
         <!-- Tool Grid -->
@@ -1295,7 +1295,7 @@
             <!-- Quick Links -->
             <div class="footer-col">
                 <h4>Company</h4>
-                <a href="about.html">About Us</a>
+                <a href="/about.html">About Us</a>
                 <a href="mailto:affilore4@gmail.com">Contact Us</a>
                 <a href="mailto:affilore4@gmail.com">Request Custom Tool</a>
             </div>
@@ -1303,8 +1303,8 @@
             <!-- Legal -->
             <div class="footer-col">
                 <h4>Legal</h4>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="terms.html">Terms & Conditions</a>
+                <a href="/privacy.html">Privacy Policy</a>
+                <a href="/terms.html">Terms & Conditions</a>
             </div>
         </div>
 
@@ -1317,7 +1317,7 @@
     <!--  COOKIE BANNER                                                     -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <div class="cookie-banner" id="cookieBanner">
-        <p>🍪 We use cookies to enhance your experience. By continuing, you agree to our <a href="privacy.html">Privacy
+        <p>🍪 We use cookies to enhance your experience. By continuing, you agree to our <a href="/privacy.html">Privacy
                 Policy</a>.</p>
         <button class="cookie-accept" id="cookieAccept">Accept Cookies</button>
     </div>
