@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Audit Tool — Affilore</title>
+    <meta name="description"
+        content="Free SaaS Audit Tool. Calculate your Net Burn, Runway, and Burn Multiple, then get an AI-powered VC Strategic Verdict instantly.">
+    <link rel="canonical" href="https://affilore.com/tools/saas-audit.html">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-YRKMHHSYBC');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0a0a0a;
+            background-image: radial-gradient(rgba(255, 191, 0, 0.30) 1px, transparent 1px);
+            background-size: 28px 28px;
+            color: #FFF;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        input {
+            font-family: inherit;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --black-light: #111;
+            --black-card: #141414;
+            --black-elevated: #1a1a1a;
+            --yellow: #FFBF00;
+            --yellow-dim: #d9a300;
+            --yellow-glow: rgba(255, 191, 0, 0.15);
+            --yellow-glow-strong: rgba(255, 191, 0, 0.3);
+            --text-primary: #FFFFFF;
+            --text-secondary: #F0F0F0;
+            --text-muted: #CCCCCC;
+            --border: rgba(255, 255, 255, 0.07);
+            --border-hover: rgba(255, 191, 0, 0.3);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --max-width: 1280px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Header */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--yellow);
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            display: none;
+            font-size: 0.7rem;
+            color: #FFF;
+            border-left: 1px solid var(--text-muted);
+            padding-left: 12px;
+            line-height: 1.3;
+            max-width: 160px;
+        }
+
+        @media(min-width:768px) {
+            .tagline {
+                display: block;
+            }
+        }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        @media(min-width:1024px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #FFF;
+            transition: all var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            min-width: 220px;
+            padding: 8px;
+            background: #1a1a1a;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all var(--transition);
+            z-index: 100;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            color: #FFF;
+            transition: all var(--transition);
+        }
+
+        .dropdown-item:hover {
+            color: var(--yellow);
+            background: rgba(255, 191, 0, 0.06);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .social-icons {
+            display: none;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media(min-width:1024px) {
+            .social-icons {
+                display: flex;
+            }
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            transition: all var(--transition);
+        }
+
+        .social-icon:hover {
+            color: var(--yellow);
+            background: rgba(255, 191, 0, 0.08);
+        }
+
+        .social-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: var(--yellow);
+            color: var(--black);
+            font-size: 0.82rem;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-cta:hover {
+            background: var(--yellow-dim);
+            box-shadow: 0 0 20px var(--yellow-glow-strong);
+            transform: translateY(-1px);
+        }
+
+        .mobile-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            color: #FFF;
+        }
+
+        @media(min-width:1024px) {
+            .mobile-toggle {
+                display: none;
+            }
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 10, 0.97);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.open {
+            display: block;
+        }
+
+        .mobile-nav .nav-link {
+            display: block;
+            padding: 14px 0;
+            font-size: 1rem;
+            color: #FFF;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-social {
+            display: flex;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .mobile-social .social-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* AdSense */
+        .adsense-slot {
+            max-width: var(--max-width);
+            margin: 0 auto 32px;
+            padding: 0 24px;
+        }
+
+        .adsense-inner {
+            background: var(--black-card);
+            border: 1px dashed rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .adsense-inner span {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 24px 24px 0;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--yellow);
+        }
+
+        .breadcrumb span {
+            margin: 0 6px;
+        }
+
+        /* Hero */
+        .tool-hero {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 32px 24px 24px;
+            text-align: center;
+        }
+
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(255, 191, 0, 0.1);
+            border: 1px solid rgba(255, 191, 0, 0.2);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--yellow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .tool-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: #FFF;
+            margin-bottom: 12px;
+        }
+
+        .tool-hero h1 span {
+            color: var(--yellow);
+        }
+
+        .tool-hero p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Tool Container */
+        .tool-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+            display: grid;
+            gap: 24px;
+        }
+
+        @media(min-width:768px) {
+            .tool-wrap {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+        }
+
+        .panel h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--yellow);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--black-elevated);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px 12px 32px;
+            font-size: 0.95rem;
+            color: #FFF;
+            transition: all var(--transition);
+        }
+
+        .form-input.no-prefix {
+            padding-left: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(255, 191, 0, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 191, 0, 0.08);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-audit {
+            width: 100%;
+            margin-top: 8px;
+            padding: 14px;
+            background: var(--yellow);
+            color: var(--black);
+            font-size: 1rem;
+            font-weight: 800;
+            border-radius: 50px;
+            transition: all var(--transition);
+            letter-spacing: 0.3px;
+        }
+
+        .btn-audit:hover {
+            background: var(--yellow-dim);
+            box-shadow: 0 0 30px var(--yellow-glow-strong);
+            transform: translateY(-2px);
+        }
+
+        .btn-audit:active {
+            transform: translateY(0);
+        }
+
+        /* Results */
+        .results-panel {
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            display: none;
+        }
+
+        .results-panel.visible {
+            display: block;
+        }
+
+        @media(min-width:768px) {
+            .results-panel {
+                grid-column: 1/-1;
+            }
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background: var(--black-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            transition: all var(--transition);
+        }
+
+        .metric-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .metric-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--yellow);
+        }
+
+        .metric-unit {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .metric-card.danger .metric-value {
+            color: #ff6b6b;
+        }
+
+        .metric-card.warning .metric-value {
+            color: #ffaa44;
+        }
+
+        .metric-card.good .metric-value {
+            color: #44cc88;
+        }
+
+        /* Verdict */
+        .verdict-wrap {
+            background: var(--black-elevated);
+            border: 1px solid rgba(255, 191, 0, 0.15);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .verdict-wrap::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--yellow), transparent);
+        }
+
+        .verdict-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .verdict-badge {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .verdict-badge.elite {
+            background: rgba(68, 204, 136, 0.15);
+            color: #44cc88;
+            border: 1px solid rgba(68, 204, 136, 0.3);
+        }
+
+        .verdict-badge.efficient {
+            background: rgba(255, 191, 0, 0.15);
+            color: var(--yellow);
+            border: 1px solid rgba(255, 191, 0, 0.3);
+        }
+
+        .verdict-badge.inefficient {
+            background: rgba(255, 106, 106, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 106, 106, 0.3);
+        }
+
+        .verdict-vc-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .verdict-text {
+            font-size: 0.95rem;
+            color: #FFF;
+            line-height: 1.75;
+            margin-bottom: 20px;
+        }
+
+        .next-steps-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--yellow);
+            margin-bottom: 12px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 191, 0, 0.15);
+            border: 1px solid rgba(255, 191, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--yellow);
+        }
+
+        .step-text {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .json-block {
+            margin-top: 24px;
+        }
+
+        .json-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .json-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-copy-json {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--yellow);
+            padding: 4px 12px;
+            border-radius: 6px;
+            background: rgba(255, 191, 0, 0.1);
+            transition: all var(--transition);
+        }
+
+        .btn-copy-json:hover {
+            background: rgba(255, 191, 0, 0.2);
+        }
+
+        .json-output {
+            background: #0d0d0d;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #a8e6cf;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.7;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        /* Footer */
+        .site-footer {
+            background: var(--black-light);
+            border-top: 1px solid var(--border);
+            padding: 48px 24px 24px;
+        }
+
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+
+        @media(min-width:768px) {
+            .footer-inner {
+                grid-template-columns: 2fr 1fr 1fr;
+            }
+        }
+
+        .footer-brand .footer-logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--yellow);
+            margin-bottom: 12px;
+        }
+
+        .footer-brand p {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            max-width: 320px;
+            line-height: 1.6;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .footer-col h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #FFF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            padding: 4px 0;
+            transition: color var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: var(--yellow);
+        }
+
+        .footer-bottom {
+            max-width: var(--max-width);
+            margin: 32px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Cookie */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--black-elevated);
+            border-top: 1px solid var(--border);
+            padding: 16px 24px;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            backdrop-filter: blur(20px);
+        }
+
+        .cookie-banner.hidden {
+            display: none;
+        }
+
+        .cookie-banner p {
+            font-size: 0.82rem;
+            color: #FFF;
+        }
+
+        .cookie-banner a {
+            color: var(--yellow);
+            text-decoration: underline;
+        }
+
+        .cookie-accept {
+            padding: 8px 20px;
+            background: var(--yellow);
+            color: var(--black);
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition);
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--black-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform var(--transition);
+            text-align: center;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .modal-content h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            color: #FFF;
+            margin-bottom: 8px;
+        }
+
+        .modal-content p {
+            font-size: 0.9rem;
+            color: #FFF;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal-email-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--black-card);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .modal-email-box span {
+            font-size: 0.9rem;
+            color: #FFF;
+        }
+
+        .btn-copy {
+            color: var(--yellow);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(255, 191, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="logo-group">
+                <a href="/" class="logo-text">Affilore</a>
+                <span class="tagline">Premium Tools for<br>Digital Growth</span>
+            </div>
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="/" class="nav-link">Home</a>
+                <div class="dropdown">
+                    <button class="nav-link dropdown-toggle">Tools <svg width="10" height="10" viewBox="0 0 10 10"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M2.5 4L5 6.5L7.5 4" />
+                        </svg></button>
+                    <div class="dropdown-menu">
+                        <a href="/finance/" class="dropdown-item">💰 Finance</a>
+                        <a href="/real-estate/" class="dropdown-item">🏠 Real Estate</a>
+                        <a href="/seo-marketing/" class="dropdown-item">📈 SEO &amp; Marketing</a>
+                        <a href="/ai-content-creation/" class="dropdown-item">🤖 AI Content Creation</a>
+                        <a href="/developer-productivity/" class="dropdown-item">⚡ Developer Productivity</a>
+                    </div>
+                </div>
+            </nav>
+            <div class="header-right">
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/affilore_/" target="_blank" rel="noopener noreferrer"
+                        class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                        </svg></a>
+                    <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank"
+                        rel="noopener noreferrer" class="social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                        </svg></a>
+                    <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer"
+                        class="social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                        </svg></a>
+                </div>
+                <a href="#" class="btn-cta"><svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                    </svg> Request Custom Tool</a>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu"><svg viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/finance/" class="nav-link">💰 Finance</a>
+        <a href="/real-estate/" class="nav-link">🏠 Real Estate</a>
+        <a href="/seo-marketing/" class="nav-link">📈 SEO &amp; Marketing</a>
+        <a href="/ai-content-creation/" class="nav-link">🤖 AI Content Creation</a>
+        <a href="/developer-productivity/" class="nav-link">⚡ Developer Productivity</a>
+        <div class="mobile-social">
+            <a href="https://www.instagram.com/affilore_/" target="_blank" rel="noopener noreferrer" class="social-icon"
+                aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg></a>
+            <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" rel="noopener noreferrer"
+                class="social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                </svg></a>
+            <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer" class="social-icon"
+                aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg></a>
+        </div>
+    </div>
+
+    <div class="breadcrumb"><a href="/">Home</a><span>›</span><span style="color:#FFF;">SaaS Audit</span></div>
+
+    <section class="tool-hero">
+        <div class="tool-badge">🏦 Finance &amp; SaaS</div>
+        <h1>SaaS <span>Audit Tool</span></h1>
+        <p>Enter your financials. Get your Net Burn, Runway, and Burn Multiple — plus an instant <strong
+                style="color:var(--yellow)">VC Strategic Verdict</strong> on your company's health.</p>
+    </section>
+
+    <div class="adsense-slot">
+        <div class="adsense-inner"><span>— Advertisement —</span></div>
+    </div>
+
+    <div class="tool-wrap">
+        <!-- Input Panel -->
+        <div class="panel">
+            <h2>📊 Financial Inputs</h2>
+            <div class="form-group">
+                <label>Cash on Hand</label>
+                <div class="input-wrap">
+                    <span class="input-prefix">$</span>
+                    <input type="number" class="form-input" id="cashOnHand" placeholder="250000" min="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Monthly Expenses</label>
+                <div class="input-wrap">
+                    <span class="input-prefix">$</span>
+                    <input type="number" class="form-input" id="monthlyExpenses" placeholder="80000" min="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Monthly Revenue</label>
+                <div class="input-wrap">
+                    <span class="input-prefix">$</span>
+                    <input type="number" class="form-input" id="monthlyRevenue" placeholder="30000" min="0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Monthly Growth %</label>
+                <div class="input-wrap">
+                    <input type="number" class="form-input no-prefix" id="monthlyGrowth" placeholder="12" min="0">
+                    <span class="input-suffix">%</span>
+                </div>
+            </div>
+            <button class="btn-audit" id="auditBtn">⚡ Run SaaS Audit</button>
+            <p id="errorMsg" style="margin-top:12px;font-size:0.82rem;color:#ff6b6b;display:none;text-align:center;">
+            </p>
+        </div>
+
+        <!-- How It Works -->
+        <div class="panel">
+            <h2>🧠 How It Works</h2>
+            <div style="margin-bottom:16px;">
+                <p
+                    style="font-size:0.82rem;color:var(--text-muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
+                    Net Burn</p>
+                <p style="font-size:0.88rem;color:#FFF;">Monthly Expenses − Monthly Revenue. How much cash you consume
+                    per month.</p>
+            </div>
+            <div style="margin-bottom:16px;">
+                <p
+                    style="font-size:0.82rem;color:var(--text-muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
+                    Runway</p>
+                <p style="font-size:0.88rem;color:#FFF;">Cash on Hand ÷ Net Burn. Months until you run out of money.</p>
+            </div>
+            <div style="margin-bottom:16px;">
+                <p
+                    style="font-size:0.82rem;color:var(--text-muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
+                    Burn Multiple</p>
+                <p style="font-size:0.88rem;color:#FFF;">Net Burn ÷ New Revenue Added. How much you burn to generate
+                    each dollar of new ARR.</p>
+            </div>
+            <div
+                style="background:rgba(255,191,0,0.06);border:1px solid rgba(255,191,0,0.15);border-radius:10px;padding:16px;margin-top:8px;">
+                <p style="font-size:0.8rem;color:var(--yellow);font-weight:700;margin-bottom:4px;">VC Benchmark</p>
+                <p style="font-size:0.82rem;color:#FFF;">🟢 &lt;1.0 = Elite &nbsp;|&nbsp; 🟡 1.0–2.5 = Acceptable
+                    &nbsp;|&nbsp; 🔴 &gt;2.5 = Fix immediately</p>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="resultsPanel">
+            <h2
+                style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;color:var(--yellow);margin-bottom:24px;display:flex;align-items:center;gap:8px;">
+                📈 Audit Results</h2>
+
+            <div class="metrics-grid" id="metricsGrid"></div>
+
+            <div class="verdict-wrap" id="verdictWrap">
+                <div class="verdict-header">
+                    <span class="verdict-vc-label">🏦 VC Strategic Verdict</span>
+                    <span class="verdict-badge" id="verdictBadge"></span>
+                </div>
+                <p class="verdict-text" id="verdictText"></p>
+                <p class="next-steps-title">Next Steps</p>
+                <div id="nextSteps"></div>
+            </div>
+
+            <div class="json-block">
+                <div class="json-header">
+                    <span class="json-label">JSON Output</span>
+                    <button class="btn-copy-json" id="copyJsonBtn">Copy JSON</button>
+                </div>
+                <pre class="json-output" id="jsonOutput"></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="adsense-slot">
+        <div class="adsense-inner"><span>— Advertisement —</span></div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">Affilore</div>
+                <p>Premium digital tools crafted for ambitious professionals. Supercharge your workflow with
+                    enterprise-grade calculators, analyzers, and AI-powered generators.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/affilore_/" target="_blank" rel="noopener noreferrer"
+                        class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                        </svg></a>
+                    <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank"
+                        rel="noopener noreferrer" class="social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                        </svg></a>
+                    <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer"
+                        class="social-icon" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                        </svg></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="/about/">About Us</a>
+                <a href="/contact/">Contact Us</a>
+                <a href="#">Request Custom Tool</a>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="/privacy/">Privacy Policy</a>
+                <a href="/terms/">Terms &amp; Conditions</a>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2026 Affilore. All rights reserved. Designed for digital excellence.</div>
+    </footer>
+
+    <div class="cookie-banner" id="cookieBanner">
+        <p>🍪 We use cookies to enhance your experience. By continuing, you agree to our <a href="/privacy/">Privacy
+                Policy</a>.</p>
+        <button class="cookie-accept" id="cookieAccept">Accept Cookies</button>
+    </div>
+
+    <div class="modal-overlay" id="requestModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal" aria-label="Close">&times;</button>
+            <h3>Request a Custom Tool</h3>
+            <p>Need a specific tool designed for your workflow? Send us an email with your core requirements.</p>
+            <div class="modal-email-box">
+                <span>affilore4@gmail.com</span>
+                <button class="btn-copy"
+                    onclick="navigator.clipboard.writeText('affilore4@gmail.com');this.innerText='Copied!';setTimeout(()=>this.innerText='Copy',2000)">Copy</button>
+            </div>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com&su=Custom%20Tool%20Request"
+                target="_blank" rel="noopener noreferrer" class="btn-cta"
+                style="width:100%;justify-content:center;">Open in Mail</a>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu
+        document.getElementById('mobileToggle').addEventListener('click', () => {
+            const nav = document.getElementById('mobileNav');
+            nav.classList.toggle('open');
+            document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+        });
+
+        // Cookie
+        const cb = document.getElementById('cookieBanner');
+        if (localStorage.getItem('affilore_cookies_accepted') === 'true') cb.classList.add('hidden');
+        document.getElementById('cookieAccept').addEventListener('click', () => {
+            localStorage.setItem('affilore_cookies_accepted', 'true');
+            cb.classList.add('hidden');
+        });
+
+        // Modal
+        const reqModal = document.getElementById('requestModal');
+        document.querySelectorAll('a').forEach(a => {
+            if (a.textContent.includes('Request Custom Tool')) {
+                a.addEventListener('click', e => { e.preventDefault(); reqModal.classList.add('open'); document.body.style.overflow = 'hidden'; });
+            }
+        });
+        document.getElementById('closeModal').addEventListener('click', () => { reqModal.classList.remove('open'); document.body.style.overflow = ''; });
+        reqModal.addEventListener('click', e => { if (e.target === reqModal) { reqModal.classList.remove('open'); document.body.style.overflow = ''; } });
+
+        // ═══════════════════════════════════════
+        //  SAAS AUDIT LOGIC
+        // ═══════════════════════════════════════
+        function fmt(n) { return n.toLocaleString('en-US', { maximumFractionDigits: 0 }); }
+        function fmtDec(n, d = 2) { return n.toFixed(d); }
+
+        function getVerdict(burnMultiple, runway, netBurn) {
+            let badge, badgeClass, text, steps;
+
+            if (burnMultiple <= 0) {
+                // Profitable or break-even
+                badge = '⚡ Cash-Flow Positive';
+                badgeClass = 'elite';
+                text = `Your business is operating at break-even or profitability — a position most founders spend years chasing. Your expenses are being fully covered by revenue, meaning you are building equity without burning investor capital. This is the foundation from which sustainable, long-term compounding growth is born.`;
+                steps = [
+                    'Aggressively reinvest the surplus into your highest-performing acquisition channel — double down on what is already working, not what sounds strategic.',
+                    'Model a controlled growth experiment by increasing spend by 20% in one channel and monitoring the incremental revenue impact before scaling further.'
+                ];
+            } else if (burnMultiple < 1.0) {
+                badge = '🟢 Elite Efficiency';
+                badgeClass = 'elite';
+                text = `Congratulations — a Burn Multiple under 1.0 is exceptional and places you in the top tier of capital-efficient SaaS companies. You are generating more new revenue than you are burning each month, which means every dollar of investor capital is working at a positive return. VCs love this profile. With ${runway < 18 ? 'only ' + fmtDec(runway, 1) + ' months of runway' : 'strong runway ahead'}, you have earned the right to push the accelerator harder.`;
+                steps = [
+                    'Begin modeling a Series A raise now — your metrics would be extremely compelling to growth-stage VCs. A Burn Multiple below 1.0 is a top-tier signal.',
+                    'Identify your single highest-ROI growth lever and increase budget allocation to it by 30%, anchoring the decision to this month\'s Burn Multiple as your guardrail.'
+                ];
+            } else if (burnMultiple <= 2.5) {
+                badge = '🟡 Acceptable Range';
+                badgeClass = 'efficient';
+                text = `Your Burn Multiple of ${fmtDec(burnMultiple)} sits in the "acceptable" zone — you are spending to grow, but the return on that spend needs tightening. With ${fmtDec(runway, 1)} months of runway, you have time to optimize, but the clock is running. Investors will fund this story, but they will pressure you on efficiency before the next milestone.`;
+                steps = [
+                    'Conduct a full unit economics audit this week — identify your top 3 expense categories and cut or renegotiate the lowest-ROI one by at least 15% within 30 days.',
+                    'Implement a revenue acceleration sprint: offer annual plan discounts to existing monthly customers to pull forward 3–6 months of future ARR into the current quarter.'
+                ];
+            } else {
+                badge = '🔴 Critical Inefficiency';
+                badgeClass = 'inefficient';
+                text = `A Burn Multiple of ${fmtDec(burnMultiple)} is a red flag — you are burning significantly more cash than the new revenue you are creating. To be blunt: at this rate, you are destroying capital faster than you are building a business. With only ${fmtDec(runway, 1)} months of runway, a corrective strategy is not optional — it is your immediate existential priority.`;
+                steps = [
+                    'Freeze all non-essential hiring and discretionary spend immediately. Recalculate your burn rate to a survival scenario where you extend runway to at least 18 months before spending a dollar on growth.',
+                    'Audit your customer acquisition cost (CAC) and payback period — if CAC payback exceeds 12 months, your unit economics are broken and must be rebuilt before adding growth capital will help.'
+                ];
+            }
+
+            return { badge, badgeClass, text, steps };
+        }
+
+        document.getElementById('auditBtn').addEventListener('click', () => {
+            const errEl = document.getElementById('errorMsg');
+            errEl.style.display = 'none';
+
+            const cash = parseFloat(document.getElementById('cashOnHand').value);
+            const expenses = parseFloat(document.getElementById('monthlyExpenses').value);
+            const revenue = parseFloat(document.getElementById('monthlyRevenue').value);
+            const growth = parseFloat(document.getElementById('monthlyGrowth').value);
+
+            if (isNaN(cash) || isNaN(expenses) || isNaN(revenue) || isNaN(growth)) {
+                errEl.textContent = 'Please fill in all four fields to run the audit.';
+                errEl.style.display = 'block';
+                return;
+            }
+            if (cash < 0 || expenses < 0 || revenue < 0) {
+                errEl.textContent = 'Cash, Expenses, and Revenue cannot be negative.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            // Core Math
+            const netBurn = expenses - revenue;
+            const runway = netBurn > 0 ? cash / netBurn : Infinity;
+            const newRevenue = revenue * (growth / 100);
+            const burnMultiple = newRevenue > 0 ? netBurn / newRevenue : (netBurn > 0 ? Infinity : 0);
+
+            // Metric Cards
+            const runwayDisplay = runway === Infinity ? '∞' : fmtDec(runway, 1);
+            const bmDisplay = burnMultiple === Infinity ? '∞' : (burnMultiple < 0 ? '0.00' : fmtDec(burnMultiple, 2));
+
+            let runwayClass = runway < 6 ? 'danger' : runway < 12 ? 'warning' : 'good';
+            let bmClass = burnMultiple > 2.5 ? 'danger' : burnMultiple > 1.0 ? 'warning' : 'good';
+
+            document.getElementById('metricsGrid').innerHTML = `
+            <div class="metric-card ${netBurn > 0 ? 'danger' : 'good'}">
+                <div class="metric-label">Net Burn</div>
+                <div class="metric-value">${netBurn > 0 ? '$' + fmt(netBurn) : '—'}</div>
+                <div class="metric-unit">${netBurn > 0 ? 'per month' : 'Cash-flow positive'}</div>
+            </div>
+            <div class="metric-card ${runwayClass}">
+                <div class="metric-label">Runway</div>
+                <div class="metric-value">${runwayDisplay}</div>
+                <div class="metric-unit">${runway === Infinity ? 'No burn' : 'months remaining'}</div>
+            </div>
+            <div class="metric-card ${bmClass}">
+                <div class="metric-label">Burn Multiple</div>
+                <div class="metric-value">${bmDisplay}×</div>
+                <div class="metric-unit">burn per $1 new ARR</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Monthly Growth</div>
+                <div class="metric-value">${growth}%</div>
+                <div class="metric-unit">= $${fmt(newRevenue)} new MRR</div>
+            </div>
+        `;
+
+            // Verdict
+            const bmForVerdict = burnMultiple === Infinity ? 999 : (burnMultiple < 0 ? 0 : burnMultiple);
+            const verdict = getVerdict(bmForVerdict, runway === Infinity ? 999 : runway, netBurn);
+
+            document.getElementById('verdictBadge').textContent = verdict.badge;
+            document.getElementById('verdictBadge').className = 'verdict-badge ' + verdict.badgeClass;
+            document.getElementById('verdictText').textContent = verdict.text;
+            document.getElementById('nextSteps').innerHTML = verdict.steps.map((s, i) => `
+            <div class="step-item">
+                <div class="step-num">${i + 1}</div>
+                <p class="step-text">${s}</p>
+            </div>
+        `).join('');
+
+            // JSON Output
+            const jsonData = {
+                inputs: { cashOnHand: cash, monthlyExpenses: expenses, monthlyRevenue: revenue, monthlyGrowthPercent: growth },
+                metrics: {
+                    netBurn: netBurn,
+                    runwayMonths: runway === Infinity ? null : parseFloat(fmtDec(runway, 1)),
+                    burnMultiple: burnMultiple === Infinity ? null : parseFloat(fmtDec(bmForVerdict, 2)),
+                    newMRRAdded: parseFloat(fmtDec(newRevenue, 2))
+                },
+                aiVerdict: {
+                    rating: verdict.badge,
+                    strategicVerdict: verdict.text,
+                    nextSteps: verdict.steps
+                }
+            };
+            document.getElementById('jsonOutput').textContent = JSON.stringify(jsonData, null, 2);
+
+            // Show panel
+            const panel = document.getElementById('resultsPanel');
+            panel.classList.add('visible');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        // Copy JSON
+        document.getElementById('copyJsonBtn').addEventListener('click', () => {
+            const text = document.getElementById('jsonOutput').textContent;
+            navigator.clipboard.writeText(text);
+            const btn = document.getElementById('copyJsonBtn');
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy JSON', 2000);
+        });
+    </script>
+</body>
+
+</html>
