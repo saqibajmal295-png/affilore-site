@@ -10,10 +10,9 @@
     <style>
         :root {
             --bg-color: #050505;
-            --bg-surface: #0a0a0c;
             --accent-yellow: #FFD700;
             --accent-glow: rgba(255, 215, 0, 0.15);
-            --card-bg: linear-gradient(145deg, #121214, #0a0a0c);
+            --card-bg: linear-gradient(145deg, #111111, #080808);
             --card-border: rgba(255, 255, 255, 0.05);
             --text-main: #ffffff;
             --text-muted: #888899;
@@ -24,10 +23,26 @@
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            /* Refined subtle dot pattern */
-            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
+            /* Premium Yellow Dots Pattern */
+            background-image: radial-gradient(rgba(255, 215, 0, 0.3) 1.5px, transparent 1.5px);
+            background-size: 35px 35px;
+            background-position: center top;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Large Ambient Gradient Glow Behind Hero */
+        .page-glow {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            max-width: 1200px;
+            height: 700px;
+            background: radial-gradient(ellipse at top center, rgba(255, 215, 0, 0.15) 0%, transparent 60%);
+            z-index: -1;
+            pointer-events: none;
         }
 
         a { text-decoration: none; color: inherit; }
@@ -38,7 +53,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 5%;
-            background: rgba(5, 5, 5, 0.7);
+            background: rgba(5, 5, 5, 0.8);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             position: sticky;
@@ -100,32 +115,18 @@
         .search-container i { color: var(--text-muted); }
         .search-container:focus-within i { color: var(--accent-yellow); }
 
-        /* Hero Section with Glowing Background */
+        /* Hero Section */
         .hero {
             text-align: center;
             padding: 120px 20px 80px;
             position: relative;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
         .hero h1 {
             font-size: 4rem;
             margin: 0 0 15px 0;
-            background: linear-gradient(180deg, #ffffff 0%, #aaaaaa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffffff;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
             letter-spacing: -1px;
         }
 
@@ -145,7 +146,7 @@
             color: #ffffff;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .section-title::before {
@@ -155,7 +156,7 @@
             height: 12px;
             background: var(--accent-yellow);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent-yellow);
+            box-shadow: 0 0 12px var(--accent-yellow);
         }
 
         .container {
@@ -265,6 +266,7 @@
             padding: 50px 20px 30px;
             text-align: center;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 40px;
         }
 
         .footer-links a {
@@ -300,27 +302,19 @@
 
         /* Mobile Adjustments */
         @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                padding: 20px;
-                gap: 20px;
-            }
-            .nav-right {
-                flex-direction: column;
-                width: 100%;
-                gap: 15px;
-            }
-            .search-container {
-                width: 100%;
-                box-sizing: border-box;
-            }
+            nav { flex-direction: column; padding: 20px; gap: 20px; }
+            .nav-right { flex-direction: column; width: 100%; gap: 15px; }
+            .search-container { width: 100%; box-sizing: border-box; }
             .search-container input { width: 100%; }
             .hero h1 { font-size: 2.8rem; }
             .hero { padding: 60px 20px 40px; }
+            .page-glow { height: 500px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="page-glow"></div>
 
     <nav>
         <a href="index.html" class="logo">Affilore</a>
@@ -380,7 +374,7 @@
                 <p>Instantly calculate characters, words, and estimated reading time.</p>
             </a>
             <a href="#" class="card">
-                <div class="icon-wrapper"><i class="fas fa-brackets-curly"></i></div>
+                <div class="icon-wrapper"><i class="fas fa-code-branch"></i></div>
                 <h3>JSON Formatter</h3>
                 <p>Beautify, validate, and parse raw JSON data securely in your browser.</p>
             </a>
