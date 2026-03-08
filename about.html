@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Affilore</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --accent-yellow: #FFD700;
+            --card-bg: #111111;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+        }
+        body {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            background-image: radial-gradient(rgba(255, 215, 0, 0.15) 1px, transparent 1px);
+            background-size: 40px 40px;
+            line-height: 1.6;
+        }
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; background: rgba(5, 5, 5, 0.9);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        .logo { font-size: 28px; font-weight: 800; color: var(--accent-yellow); text-decoration: none;}
+        .nav-links a { color: white; margin-left: 20px; text-decoration: none; font-weight: 600; transition: color 0.3s;}
+        .nav-links a:hover { color: var(--accent-yellow); }
+        .container { max-width: 900px; margin: 60px auto; padding: 40px; background: var(--card-bg); border-radius: 12px; border: 1px solid rgba(255,215,0,0.2); text-align: center; }
+        h1 { color: var(--accent-yellow); font-size: 2.5rem; margin-bottom: 20px;}
+        p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 20px; text-align: left; }
+        .highlight { color: var(--text-main); font-weight: 600; }
+        .mission-box { background: #000; border-left: 4px solid var(--accent-yellow); padding: 20px; margin: 30px 0; text-align: left;}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">Affilore</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html" style="color: var(--accent-yellow);">About Us</a>
+            <a href="contact.html">Contact Us</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>About Affilore</h1>
+        
+        <div class="mission-box">
+            <p style="margin: 0; color: white; font-size: 1.2rem;"><strong>Our Mission:</strong> To provide powerful, accessible micro-SaaS tools that streamline workflows, optimize digital assets, and accelerate enterprise growth worldwide.</p>
+        </div>
+
+        <p>Welcome to <span class="highlight">Affilore</span>, your ultimate hub for precision digital utilities. We understand that in today's fast-paced digital landscape, efficiency is everything. Whether you are a developer formatting code, an SEO specialist optimizing content, or a business owner calculating ROI, you need tools that are fast, reliable, and completely free to use.</p>
+
+        <p>Our platform is designed to house a comprehensive suite of highly optimized, search-friendly micro-tools. We cut out the fluff and deliver straight-to-the-point utilities that solve immediate problems.</p>
+
+        <p><span class="highlight">Custom Enterprise Solutions:</span> Beyond our free public tools, Affilore specializes in crafting bespoke micro-SaaS solutions. If your company requires a unique internal tool or a customized client-facing utility, our development team is ready to build it to your exact specifications.</p>
+
+        <p>Thank you for choosing Affilore as your digital toolkit. We are constantly expanding our directory, so be sure to check back for the latest tools designed to make your work easier.</p>
+    </div>
+
+</body>
+</html>
