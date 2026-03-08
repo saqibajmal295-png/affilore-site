@@ -2,12 +2,9 @@
     {
         "id": "saas-audit",
         "title": "SaaS Audit Tool",
-        "category": [
-            "Finance",
-            "Developer Productivity"
-        ],
+        "category": "Finance",
         "description": "Calculate your Net Burn, Runway, and Burn Multiple — then get an instant VC Strategic Verdict on your company's financial health.",
-        "thumbnail": "/images/thumbnails/placeholder-saas.png",
+        "thumbnail": "/images/thumbnails/finance-runway.png",
         "url": "/tools/saas-audit.html"
     }
 ]
