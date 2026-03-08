@@ -28,7 +28,8 @@
             scroll-behavior: smooth;
         }
 
-        html, body {
+        html,
+        body {
             overflow-x: hidden;
             max-width: 100vw;
         }
@@ -419,19 +420,24 @@
         }
 
         @media(max-width:600px) {
-            .tool-wrap, .panel { 
-                max-width: 100vw; 
+
+            .tool-wrap,
+            .panel {
+                max-width: 100vw;
                 overflow-x: hidden;
             }
+
             .panel {
                 padding: 16px !important;
                 margin: 0 !important;
                 width: calc(100vw - 20px) !important;
             }
+
             .form-input {
                 width: 100% !important;
                 max-width: 100% !important;
             }
+
             .tool-wrap {
                 padding: 0 10px 40px;
                 gap: 16px;
@@ -1436,32 +1442,35 @@
             <p>In plain English: for every dollar of new Annual Recurring Revenue you add, how many dollars are you
                 burning?</p>
 
-            <table class="burn-table">
-                <thead>
-                    <tr>
-                        <th>Burn Multiple</th>
-                        <th>Signal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>&lt; 1x</td>
-                        <td>🟢 Exceptional — highly capital efficient</td>
-                    </tr>
-                    <tr>
-                        <td>1x – 1.5x</td>
-                        <td>🟡 Good — sustainable with strong growth</td>
-                    </tr>
-                    <tr>
-                        <td>1.5x – 2x</td>
-                        <td>🟠 Fair — needs monitoring and optimization</td>
-                    </tr>
-                    <tr>
-                        <td>&gt; 2x</td>
-                        <td>🔴 Concerning — value destruction at scale</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive"
+                style="overflow-x: auto; max-width: 100%; border-radius: 12px; margin: 20px 0;">
+                <table class="burn-table" style="margin: 0;">
+                    <thead>
+                        <tr>
+                            <th>Burn Multiple</th>
+                            <th>Signal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&lt; 1x</td>
+                            <td>🟢 Exceptional — highly capital efficient</td>
+                        </tr>
+                        <tr>
+                            <td>1x – 1.5x</td>
+                            <td>🟡 Good — sustainable with strong growth</td>
+                        </tr>
+                        <tr>
+                            <td>1.5x – 2x</td>
+                            <td>🟠 Fair — needs monitoring and optimization</td>
+                        </tr>
+                        <tr>
+                            <td>&gt; 2x</td>
+                            <td>🔴 Concerning — value destruction at scale</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <p>A company burning $2M to generate $1M in new ARR has a Burn Multiple of 2x. A company burning $500K to
                 generate $1M in new ARR has a Burn Multiple of 0.5x — and will have investors lining up at their door.
