@@ -1386,12 +1386,14 @@
             //  COOKIE BANNER
             // ════════════════════════════════════════════════════════════════
             if (localStorage.getItem('affilore_cookies_accepted') === 'true') {
-                cookieBanner.classList.add('hidden');
+                if(cookieBanner) cookieBanner.style.display = 'none';
             }
-            cookieAccept.addEventListener('click', () => {
-                localStorage.setItem('affilore_cookies_accepted', 'true');
-                cookieBanner.classList.add('hidden');
-            });
+            if(cookieAccept) {
+                cookieAccept.addEventListener('click', () => {
+                    localStorage.setItem('affilore_cookies_accepted', 'true');
+                    cookieBanner.style.display = 'none';
+                });
+            }
 
             // ════════════════════════════════════════════════════════════════
             //  MOBILE MENU
