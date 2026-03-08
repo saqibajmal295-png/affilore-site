@@ -1389,9 +1389,10 @@
                 if(cookieBanner) cookieBanner.style.display = 'none';
             }
             if(cookieAccept) {
-                cookieAccept.addEventListener('click', () => {
+                cookieAccept.addEventListener('click', (e) => {
+                    e.preventDefault();
                     localStorage.setItem('affilore_cookies_accepted', 'true');
-                    cookieBanner.style.display = 'none';
+                    if(cookieBanner) cookieBanner.style.display = 'none';
                 });
             }
 
@@ -1425,8 +1426,14 @@
                 let tools = [...allTools];
 
                 // Category filter
-                if (activeCategory !== 'all') {
-                    tools = tools.filter(t => Array.isArray(t.category) ? t.category.includes(activeCategory) : t.category === activeCategory);
+                if (activeCategory !== 'all' && activeCategory !== 'All Tools') {
+                    tools = tools.filter(t => {
+                        const qCat = activeCategory.toLowerCase();
+                        if (Array.isArray(t.category)) {
+                            return t.category.some(c => c.toLowerCase() === qCat);
+                        }
+                        return t.category && t.category.toLowerCase() === qCat;
+                    });
                 }
 
                 // Search filter
