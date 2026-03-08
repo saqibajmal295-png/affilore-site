@@ -68,6 +68,17 @@
             color: var(--accent-yellow);
             text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
             letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            height: 45px; /* Adjust this number to make it bigger or smaller */
+            width: auto;
+            /* This magic trick removes the black background from your logo! */
+            mix-blend-mode: screen; 
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
         }
 
         .nav-right {
@@ -317,7 +328,10 @@
     <div class="page-glow"></div>
 
     <nav>
-        <a href="index.html" class="logo">Affilore</a>
+        <a href="index.html" class="logo">
+            <img src="logo.jpg" alt="Affilore Logo">
+            Affilore
+        </a>
         <div class="nav-right">
             <div class="search-container">
                 <i class="fas fa-search"></i>
