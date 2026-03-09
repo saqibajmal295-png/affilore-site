@@ -273,83 +273,49 @@
             font-weight: 600;
         }
 
-        /* Tools Grid */
+        /* UPGRADED TOOLS GRID WITH THUMBNAILS */
         .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px;
         }
-
         .tool-card {
             background: linear-gradient(145deg, rgba(30, 30, 35, 0.6), rgba(15, 15, 20, 0.6));
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+            border: 1px solid var(--border-color); border-radius: 20px; 
+            padding: 0;
+            position: relative; overflow: hidden; transition: all 0.3s ease;
+            display: flex; flex-direction: column;
         }
-
         .tool-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
             background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            opacity: 0; transition: opacity 0.3s ease; z-index: 10;
         }
-
-        .tool-card:hover::before {
-            opacity: 1;
+        .tool-card:hover::before { opacity: 1; }
+        .tool-card:hover { border-color: rgba(255, 214, 0, 0.3); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .tool-card-img {
+            width: 100%; height: 180px; object-fit: cover; 
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.3);
         }
-
-        .tool-card:hover {
-            border-color: rgba(255, 214, 0, 0.3);
-            transform: translateY(-5px);
+        
+        .tool-card-body {
+            padding: 30px; display: flex; flex-direction: column; flex-grow: 1;
         }
 
         .badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 214, 0, 0.1);
-            color: var(--accent-gold);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
+            position: absolute; top: 15px; right: 15px; 
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); border: 1px solid rgba(255,214,0,0.2);
+            color: var(--accent-gold); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+            z-index: 5;
         }
-
-        .tool-card h3 {
-            font-size: 1.4rem;
-            margin: 15px 0;
-        }
-
-        .tool-card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-        }
-
+        .tool-card h3 { font-size: 1.4rem; margin: 0 0 15px 0; }
+        .tool-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; flex-grow: 1; }
         .btn-use {
-            display: inline-block;
-            padding: 10px 20px;
-            background: transparent;
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            display: inline-block; padding: 10px 20px; background: transparent; text-align: center;
+            border: 1px solid var(--accent-gold); color: var(--accent-gold);
+            border-radius: 8px; font-weight: 600; transition: all 0.3s ease;
         }
-
-        .btn-use:hover {
-            background: var(--accent-gold);
-            color: #000;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
+        .btn-use:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
 
         /* Custom Tool Banner */
         .custom-tool-banner {
@@ -628,49 +594,58 @@
         <div class="tools-grid" id="toolsList">
 
             <div class="tool-card">
+                <img src="backlink-checker-thumbnail.png" alt="Backlink Checker Pro" class="tool-card-img">
                 <div class="badge">SEO Tools</div>
-                <h3>Backlink Checker Pro</h3>
-                <p>Analyze any domain's backlink profile instantly with our premium API integration to uncover hidden
-                    SEO strategies.</p>
-                <a href="tool-backlink-checker.html" class="btn-use">Launch Tool →</a>
+                <div class="tool-card-body">
+                    <h3>Backlink Checker Pro</h3>
+                    <p>Analyze any domain's backlink profile instantly with our premium API integration to uncover hidden SEO strategies.</p>
+                    <a href="tool-backlink-checker.html" class="btn-use">Launch Tool →</a>
+                </div>
             </div>
 
             <div class="tool-card">
                 <div class="badge">Finance</div>
-                <h3>SaaS Runway Calculator</h3>
-                <p>A smart calculator for tech startups to track burn rates, cash flow, and runway utilizing AI-driven
-                    health signals.</p>
-                <a href="#" class="btn-use">Launch Tool →</a>
+                <div class="tool-card-body" style="padding-top: 60px;">
+                    <h3>SaaS Runway Calculator</h3>
+                    <p>A smart calculator for tech startups to track burn rates, cash flow, and runway utilizing AI-driven health signals.</p>
+                    <a href="#" class="btn-use">Launch Tool →</a>
+                </div>
             </div>
 
             <div class="tool-card">
                 <div class="badge">AI Creator</div>
-                <h3>Agentic Prompt Builder</h3>
-                <p>Craft the perfect ChatGPT & Claude prompts in seconds. Optimize your workflow with our dynamic
-                    library.</p>
-                <a href="#" class="btn-use">Launch Tool →</a>
+                <div class="tool-card-body" style="padding-top: 60px;">
+                    <h3>Agentic Prompt Builder</h3>
+                    <p>Craft the perfect ChatGPT & Claude prompts in seconds. Optimize your workflow with our dynamic library.</p>
+                    <a href="#" class="btn-use">Launch Tool →</a>
+                </div>
             </div>
 
             <div class="tool-card">
                 <div class="badge">Developer Tools</div>
-                <h3>JSON Formatter & Validator</h3>
-                <p>Instantly beautify, format, and debug your raw JSON output online securely without data logging.</p>
-                <a href="#" class="btn-use">Launch Tool →</a>
+                <div class="tool-card-body" style="padding-top: 60px;">
+                    <h3>JSON Formatter & Validator</h3>
+                    <p>Instantly beautify, format, and debug your raw JSON output online securely without data logging.</p>
+                    <a href="#" class="btn-use">Launch Tool →</a>
+                </div>
             </div>
 
             <div class="tool-card">
                 <div class="badge">Utilities</div>
-                <h3>Image Compressor Ultra</h3>
-                <p>Next-gen WEBP/JPEG optimization that shrinks file sizes up to 80% with zero visible quality loss.</p>
-                <a href="#" class="btn-use">Launch Tool →</a>
+                <div class="tool-card-body" style="padding-top: 60px;">
+                    <h3>Image Compressor Ultra</h3>
+                    <p>Next-gen WEBP/JPEG optimization that shrinks file sizes up to 80% with zero visible quality loss.</p>
+                    <a href="#" class="btn-use">Launch Tool →</a>
+                </div>
             </div>
 
             <div class="tool-card">
                 <div class="badge">Marketing</div>
-                <h3>Meta Tags Analyzer</h3>
-                <p>Audit page titles and OG tags to ensure your site displays perfectly on Google, Facebook, and
-                    Twitter.</p>
-                <a href="#" class="btn-use">Launch Tool →</a>
+                <div class="tool-card-body" style="padding-top: 60px;">
+                    <h3>Meta Tags Analyzer</h3>
+                    <p>Audit page titles and OG tags to ensure your site displays perfectly on Google, Facebook, and Twitter.</p>
+                    <a href="#" class="btn-use">Launch Tool →</a>
+                </div>
             </div>
 
         </div>
@@ -826,7 +801,7 @@
                 
                 // If the search term matches title, description, or category badge
                 if (title.includes(query) || desc.includes(query) || badge.includes(query)) {
-                    card.style.display = 'block';
+                    card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
@@ -870,4 +845,3 @@
 </body>
 
 </html>
-
