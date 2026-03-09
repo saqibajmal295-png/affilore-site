@@ -47,7 +47,6 @@
             min-height: 100vh;
         }
 
-        /* Yellow Dots Background - Contrast Increased */
         .bg-pattern {
             position: fixed;
             top: 0;
@@ -80,7 +79,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Navbar */
         header {
             position: fixed;
             top: 0;
@@ -133,7 +131,6 @@
             text-shadow: 0 0 8px var(--accent-glow);
         }
 
-        /* Custom Tool Button in Header */
         .header-btn {
             background: var(--accent-gold);
             color: #000;
@@ -151,7 +148,6 @@
             transform: scale(1.05);
         }
 
-        /* Hero Section */
         .hero {
             padding: 160px 5% 100px;
             text-align: center;
@@ -225,7 +221,6 @@
             transform: scale(1.05);
         }
 
-        /* Section Shared */
         .section-title {
             font-size: 2.2rem;
             margin-bottom: 40px;
@@ -238,7 +233,6 @@
             margin: 0 auto;
         }
 
-        /* Categories Section */
         .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -273,7 +267,7 @@
             font-weight: 600;
         }
 
-        /* UPGRADED TOOLS GRID WITH THUMBNAILS */
+        /* UPGRADED TOOLS GRID - NO PARAGRAPH TEXT */
         .tools-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px;
         }
@@ -299,7 +293,7 @@
         }
         
         .tool-card-body {
-            padding: 30px; display: flex; flex-direction: column; flex-grow: 1;
+            padding: 30px; display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; align-items: flex-start;
         }
 
         .badge {
@@ -308,8 +302,8 @@
             color: var(--accent-gold); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
             z-index: 5;
         }
-        .tool-card h3 { font-size: 1.4rem; margin: 0 0 15px 0; }
-        .tool-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; flex-grow: 1; }
+        .tool-card h3 { font-size: 1.4rem; margin: 0 0 20px 0; }
+        
         .btn-use {
             display: inline-block; padding: 10px 20px; background: transparent; text-align: center;
             border: 1px solid var(--accent-gold); color: var(--accent-gold);
@@ -317,7 +311,6 @@
         }
         .btn-use:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
 
-        /* Custom Tool Banner */
         .custom-tool-banner {
             background: linear-gradient(135deg, rgba(255, 214, 0, 0.1) 0%, rgba(0, 0, 0, 0.5) 100%);
             border: 1px solid var(--accent-gold);
@@ -360,7 +353,6 @@
             transform: scale(1.05);
         }
 
-        /* AdSense Placeholder */
         .adsense-placeholder {
             width: 100%;
             height: 90px;
@@ -375,7 +367,6 @@
             border-radius: 10px;
         }
 
-        /* Footer */
         footer {
             background: rgba(10, 10, 12, 0.9);
             border-top: 1px solid var(--border-color);
@@ -448,7 +439,6 @@
             font-size: 0.9rem;
         }
 
-        /* Cookie Banner */
         .cookie-banner {
             position: fixed;
             bottom: 30px;
@@ -598,7 +588,6 @@
                 <div class="badge">SEO Tools</div>
                 <div class="tool-card-body">
                     <h3>Backlink Checker Pro</h3>
-                    <p>Analyze any domain's backlink profile instantly with our premium API integration to uncover hidden SEO strategies.</p>
                     <a href="tool-backlink-checker.html" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
@@ -607,7 +596,6 @@
                 <div class="badge">Finance</div>
                 <div class="tool-card-body" style="padding-top: 60px;">
                     <h3>SaaS Runway Calculator</h3>
-                    <p>A smart calculator for tech startups to track burn rates, cash flow, and runway utilizing AI-driven health signals.</p>
                     <a href="#" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
@@ -616,7 +604,6 @@
                 <div class="badge">AI Creator</div>
                 <div class="tool-card-body" style="padding-top: 60px;">
                     <h3>Agentic Prompt Builder</h3>
-                    <p>Craft the perfect ChatGPT & Claude prompts in seconds. Optimize your workflow with our dynamic library.</p>
                     <a href="#" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
@@ -625,7 +612,6 @@
                 <div class="badge">Developer Tools</div>
                 <div class="tool-card-body" style="padding-top: 60px;">
                     <h3>JSON Formatter & Validator</h3>
-                    <p>Instantly beautify, format, and debug your raw JSON output online securely without data logging.</p>
                     <a href="#" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
@@ -634,7 +620,6 @@
                 <div class="badge">Utilities</div>
                 <div class="tool-card-body" style="padding-top: 60px;">
                     <h3>Image Compressor Ultra</h3>
-                    <p>Next-gen WEBP/JPEG optimization that shrinks file sizes up to 80% with zero visible quality loss.</p>
                     <a href="#" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
@@ -643,7 +628,6 @@
                 <div class="badge">Marketing</div>
                 <div class="tool-card-body" style="padding-top: 60px;">
                     <h3>Meta Tags Analyzer</h3>
-                    <p>Audit page titles and OG tags to ensure your site displays perfectly on Google, Facebook, and Twitter.</p>
                     <a href="#" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
@@ -796,11 +780,10 @@
 
             toolCards.forEach(card => {
                 const title = card.querySelector('h3').textContent.toLowerCase();
-                const desc = card.querySelector('p').textContent.toLowerCase();
                 const badge = card.querySelector('.badge').textContent.toLowerCase();
                 
-                // If the search term matches title, description, or category badge
-                if (title.includes(query) || desc.includes(query) || badge.includes(query)) {
+                // If the search term matches title or category badge
+                if (title.includes(query) || badge.includes(query)) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
