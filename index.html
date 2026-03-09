@@ -8,18 +8,15 @@
     <meta name="description"
         content="Affilore provides high search volume, premium, and free SEO tools, calculators, and micro-SaaS utilities.">
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KFHTZ6EJC2"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
-        gtag('config', 'G-KFHTZ6EJC2');
-        gtag('config', 'G-YRKMHHSYBC'); // Secondary GA ID provided
+        gtag('config', 'G-YRKMHHSYBC');
     </script>
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -50,7 +47,7 @@
             min-height: 100vh;
         }
 
-        /* Yellow Dots Background */
+        /* Yellow Dots Background - Contrast Increased */
         .bg-pattern {
             position: fixed;
             top: 0;
@@ -59,7 +56,7 @@
             height: 100%;
             background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px);
             background-size: 40px 40px;
-            opacity: 0.15;
+            opacity: 0.35; 
             z-index: -2;
             pointer-events: none;
         }
@@ -101,20 +98,19 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 800;
-            color: var(--text-main);
+            color: var(--accent-gold); 
             text-transform: uppercase;
             letter-spacing: 2px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: radial-gradient(circle, var(--accent-gold) 20%, transparent 80%);
-            border-radius: 50%;
-            box-shadow: 0 0 15px var(--accent-gold);
+        .logo-img {
+            height: 35px;
+            width: auto;
+            mix-blend-mode: screen; 
+            filter: drop-shadow(0 0 8px var(--accent-glow));
         }
 
         .nav-links {
@@ -125,20 +121,34 @@
         .nav-links a {
             font-size: 1rem;
             font-weight: 600;
-            color: var(--text-muted);
+            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nav-links a:hover {
-            color: var(--accent-gold);
+            background: var(--accent-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-shadow: 0 0 8px var(--accent-glow);
         }
 
-        .search-icon-btn {
-            background: none;
-            border: none;
-            color: var(--text-main);
-            cursor: pointer;
-            font-size: 1.2rem;
+        /* Custom Tool Button in Header */
+        .header-btn {
+            background: var(--accent-gold);
+            color: #000;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            -webkit-text-fill-color: #000; 
+        }
+
+        .header-btn:hover {
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: scale(1.05);
         }
 
         /* Hero Section */
@@ -576,14 +586,12 @@
 
 <body>
 
-    <!-- Dynamic Background Elements -->
     <div class="bg-pattern"></div>
     <div class="ambient-light"></div>
 
-    <!-- Header Navigation -->
     <header>
         <a href="/" class="logo">
-            <div class="logo-icon"></div>
+            <img src="logo.jpg" alt="Affilore Logo" class="logo-img">
             Affilore
         </a>
         <nav class="nav-links">
@@ -594,31 +602,27 @@
             <a href="contact.html">Contact Us</a>
         </nav>
         <div>
-            <button class="search-icon-btn" aria-label="Search">🔍</button>
+            <a href="mailto:affilore4@gmail.com" class="header-btn">Custom Tool</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <h1>Empower Your Workflow with <span>Premium Micro-SaaS Tools</span></h1>
         <p>The ultimate suite of SEO-optimized tools, built to scale your business, analyze data, and accelerate growth.
             Free and hyper-fast.</p>
 
         <div class="main-search">
-            <input type="text" placeholder="Search for tools (e.g. 'Keyword Generator')...">
-            <button>Search Tools</button>
+            <input type="text" id="searchInput" placeholder="Search for tools (e.g. 'Keyword Generator')...">
+            <button id="searchBtn">Search Tools</button>
         </div>
     </section>
 
-    <!-- AdSense Slot 1 -->
     <div class="container" style="padding: 0 5%;">
         <div class="adsense-placeholder">
-            <!-- Google AdSense Code Here -->
             AdSense Ad Unit (Leaderboard)
         </div>
     </div>
 
-    <!-- High Volume Categories -->
     <section id="categories" class="container">
         <h2 class="section-title">Explore Best-in-Class Categories</h2>
         <div class="categories-grid">
@@ -645,12 +649,10 @@
         </div>
     </section>
 
-    <!-- Latest Tools -->
     <section id="tools" class="container">
         <h2 class="section-title">Latest Engineered Tools</h2>
-        <div class="tools-grid">
+        <div class="tools-grid" id="toolsList">
 
-            <!-- Tool 1 -->
             <div class="tool-card">
                 <div class="badge">SEO Tools</div>
                 <h3>Backlink Checker Pro</h3>
@@ -659,7 +661,6 @@
                 <a href="#" class="btn-use">Launch Tool →</a>
             </div>
 
-            <!-- Tool 2 -->
             <div class="tool-card">
                 <div class="badge">Finance</div>
                 <h3>SaaS Runway Calculator</h3>
@@ -668,7 +669,6 @@
                 <a href="#" class="btn-use">Launch Tool →</a>
             </div>
 
-            <!-- Tool 3 -->
             <div class="tool-card">
                 <div class="badge">AI Creator</div>
                 <h3>Agentic Prompt Builder</h3>
@@ -677,7 +677,6 @@
                 <a href="#" class="btn-use">Launch Tool →</a>
             </div>
 
-            <!-- Tool 4 -->
             <div class="tool-card">
                 <div class="badge">Developer Tools</div>
                 <h3>JSON Formatter & Validator</h3>
@@ -685,7 +684,6 @@
                 <a href="#" class="btn-use">Launch Tool →</a>
             </div>
 
-            <!-- Tool 5 -->
             <div class="tool-card">
                 <div class="badge">Utilities</div>
                 <h3>Image Compressor Ultra</h3>
@@ -693,7 +691,6 @@
                 <a href="#" class="btn-use">Launch Tool →</a>
             </div>
 
-            <!-- Tool 6 -->
             <div class="tool-card">
                 <div class="badge">Marketing</div>
                 <h3>Meta Tags Analyzer</h3>
@@ -705,7 +702,6 @@
         </div>
     </section>
 
-    <!-- Custom Tool Banner -->
     <section class="container" style="padding-top: 0;">
         <div class="custom-tool-banner">
             <h2>Need a Custom Solution?</h2>
@@ -715,20 +711,17 @@
         </div>
     </section>
 
-    <!-- AdSense Slot 2 -->
     <div class="container" style="padding: 0 5% 50px;">
         <div class="adsense-placeholder">
-            <!-- Google AdSense Code Here -->
             AdSense Ad Unit (Responsive)
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-grid">
             <div class="footer-col" style="flex: 2; min-width: 250px;">
                 <a href="/" class="logo" style="font-size: 1.5rem; margin-bottom: 20px;">
-                    <div class="logo-icon" style="width: 24px; height: 24px;"></div>
+                    <img src="logo.jpg" alt="Affilore Logo" class="logo-img" style="height: 25px;">
                     Affilore
                 </a>
                 <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
@@ -799,7 +792,6 @@
         </div>
     </footer>
 
-    <!-- Cookie Banner -->
     <div class="cookie-banner" id="cookieBanner">
         <div class="cookie-text">
             We use cookies to improve your user experience and for analytics and personalized ads. By continuing to use
@@ -812,10 +804,43 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
         // Set dynamic year in footer
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Search Bar Functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const toolCards = document.querySelectorAll('.tool-card');
+
+        function filterTools() {
+            const query = searchInput.value.toLowerCase();
+            
+            // Scroll down to the tools section smoothly so the user sees the results
+            document.getElementById('tools').scrollIntoView({ behavior: 'smooth' });
+
+            toolCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                const badge = card.querySelector('.badge').textContent.toLowerCase();
+                
+                // If the search term matches title, description, or category badge
+                if (title.includes(query) || desc.includes(query) || badge.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        searchBtn.addEventListener('click', filterTools);
+        
+        // Also allow searching by pressing the "Enter" key
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                filterTools();
+            }
+        });
 
         // Cookie Banner Logic
         document.addEventListener('DOMContentLoaded', () => {
