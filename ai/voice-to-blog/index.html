@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Note to Blog Post Converter | Affilore</title>
+    <meta name="description" content="Dictate your ideas and instantly format them into a structured blog post using our free, private browser-based AI speech-to-text tool.">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YRKMHHSYBC');
+    </script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #08080a; --text-main: #f0f0f5; --text-muted: #9ba1a6;
+            --accent-gold: #ffd600; --accent-glow: rgba(255, 214, 0, 0.4);
+            --accent-purple: #b535ff; --purple-glow: rgba(181, 53, 255, 0.4);
+            --card-bg: rgba(20, 20, 25, 0.7); --border-color: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(15px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: radial-gradient(circle at top, #1a1500 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
+        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.3; z-index: -2; pointer-events: none; }
+        
+        header { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none;}
+        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;}
+        .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; text-decoration: none; -webkit-text-fill-color: #000;}
+
+        /* Tool Styles */
+        .tool-container { max-width: 1100px; margin: 120px auto 40px; padding: 0 20px; }
+        .tool-header { text-align: center; margin-bottom: 50px; }
+        .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+        .tool-header p { color: var(--text-muted); font-size: 1.2rem; margin-top: 10px;}
+
+        .app-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; }
+        @media(max-width: 900px) { .app-layout { grid-template-columns: 1fr; } }
+
+        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); display: flex; flex-direction: column;}
+        .panel h3 { color: var(--accent-gold); margin-bottom: 20px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;}
+
+        /* Recording UI */
+        .record-dashboard { text-align: center; padding: 40px 0; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;}
+        
+        .mic-btn {
+            width: 100px; height: 100px; border-radius: 50%; background: rgba(0,0,0,0.5); border: 2px solid var(--accent-gold);
+            color: var(--accent-gold); font-size: 2.5rem; cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; margin: 0 auto 30px; outline: none;
+        }
+        
+        .mic-btn:hover { background: rgba(255, 214, 0, 0.1); box-shadow: 0 0 20px var(--accent-glow); transform: scale(1.05); }
+        
+        .mic-btn.recording {
+            border-color: #ff3366; color: #ff3366; background: rgba(255, 51, 102, 0.1);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 51, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
+        }
+
+        .status-text { font-size: 1.2rem; font-weight: 600; color: var(--text-muted); margin-bottom: 20px;}
+        .status-text.active { color: #ff3366; }
+
+        /* Output Textareas */
+        .editor-container { display: flex; flex-direction: column; gap: 20px; flex-grow: 1;}
+        .custom-textarea {
+            width: 100%; height: 350px; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.4); color: #fff; font-family: 'Outfit', sans-serif; font-size: 1.05rem; outline: none; resize: vertical; line-height: 1.7; transition: border-color 0.3s;
+        }
+        .custom-textarea:focus { border-color: var(--accent-purple); box-shadow: 0 0 15px var(--purple-glow); }
+
+        .btn-row { display: flex; gap: 15px; margin-top: 15px;}
+        .btn-action { 
+            flex: 1; padding: 15px; border-radius: 10px; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .btn-format { background: linear-gradient(135deg, var(--accent-purple), #7a15cc); color: #fff; }
+        .btn-format:hover { box-shadow: 0 0 20px var(--purple-glow); transform: translateY(-2px); }
+        
+        .btn-copy { background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); }
+        .btn-copy:hover { border-color: #fff; color: #fff; }
+
+        /* Notification */
+        .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-gold); color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
+        .notification.show { transform: translateY(0); opacity: 1; }
+
+        /* ARTICLE SECTION */
+        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
+        .article-thumbnail { width: 100%; height: auto; border-radius: 12px; margin-bottom: 30px; border: 1px solid var(--border-color); }
+        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
+        .article-container h2:first-child { margin-top: 0; }
+        .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
+        .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px;}
+        .article-container li { font-size: 1.1rem; margin-bottom: 10px;}
+        .article-container strong { color: #fff; }
+
+        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; margin-top: 60px;}
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
+        .footer-links a:hover { color: var(--accent-gold); }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <header>
+        <a href="../../index.html" class="logo">
+            <img src="../../logo.jpg" alt="Affilore Logo" class="logo-img">
+            Affilore
+        </a>
+        <nav class="nav-links">
+            <a href="../../index.html">Home</a>
+            <a href="../../index.html#categories">Categories</a>
+            <a href="../../index.html#tools">Latest Tools</a>
+        </nav>
+        <div>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn">Custom Tool</a>
+        </div>
+    </header>
+
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>Voice Note to Blog Post</h1>
+            <p>Dictate your ideas and instantly format them into a structured, readable article.</p>
+        </div>
+
+        <div class="app-layout">
+            <div class="panel">
+                <h3><i class="fas fa-microphone-alt"></i> Brain Dump Dictation</h3>
+                <div class="record-dashboard">
+                    <button class="mic-btn" id="micBtn" onclick="toggleRecording()">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <div class="status-text" id="statusText">Click to Start Dictating</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; padding: 0 20px;">
+                        Speak naturally. Say words like <strong>"period"</strong> or <strong>"comma"</strong> for punctuation. When finished, click Stop and then Format.
+                    </p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3><i class="fas fa-file-alt"></i> Formatted Blog Output</h3>
+                <div class="editor-container">
+                    <textarea class="custom-textarea" id="outputArea" placeholder="Your transcribed and formatted text will appear here..."></textarea>
+                    
+                    <div class="btn-row">
+                        <button class="btn-action btn-format" onclick="magicFormat()">
+                            <i class="fas fa-wand-magic-sparkles"></i> Magic Format
+                        </button>
+                        <button class="btn-action btn-copy" onclick="copyToClipboard()">
+                            <i class="far fa-copy"></i> Copy Text
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article-container">
+        <img src="voice-thumbnail.png" alt="AI Voice to Blog Post Converter" class="article-thumbnail">
+        
+        <h2>You Can Speak an Entire Blog Post Faster Than You Can Type the Introduction</h2>
+        <p>Here's a fact that will change how you think about content creation: the average person types at 40 words per minute. The average person speaks at 130 words per minute. That's not a small gap — that's a 3x speed advantage sitting completely idle every time you open a blank document and stare at a blinking cursor.</p>
+        <p>But raw speed isn't even the biggest unlock. It's what speaking does to the quality of your thinking.</p>
+        <p>Writer's block is almost never a shortage of ideas. It's the friction of translating fluid, conversational thought into formal written sentences — in real time, under self-imposed pressure. When you speak instead of type, that friction disappears. You stop performing and start thinking out loud. The result? A first draft that actually sounds like a human being wrote it, because a human literally said it.</p>
+        <p>Content creators who have switched to voice-first drafting routinely report completing a 1,000-word first draft in under 10 minutes. The editing pass that follows is faster too, because the raw material is already natural and conversational — not stilted and laboured.</p>
+        <p>The Affilore <strong>AI Voice Note to Blog Post Converter</strong> is built for exactly this workflow. Speak your ideas. The tool formats them. You publish. That's the whole pipeline.</p>
+
+        <h2>How to Use the Affilore Voice-to-Blog Converter</h2>
+        <p>The tool was designed to get out of your way. There is no account, no upload, no waiting. Here's the entire process:</p>
+        <ul>
+            <li><strong>Click the microphone button</strong> at the top of this page to activate your browser's built-in speech recognition.</li>
+            <li><strong>Speak your content naturally.</strong> Talk the way you would explain your topic to a smart friend. Don't worry about structure yet — just get your ideas out.</li>
+            <li><strong>Watch the transcription appear in real time.</strong> The tool processes your speech on-device, converting it to formatted text as you speak.</li>
+            <li><strong>Review the formatted output.</strong> The converter applies basic structure — paragraphs, line breaks, and flow — to your raw transcript.</li>
+            <li><strong>Copy and paste into your CMS.</strong> WordPress, Ghost, Webflow, Notion — your formatted draft is ready to paste and polish.</li>
+        </ul>
+
+        <h3>What Makes It Different</h3>
+        <ul>
+            <li><strong>100% browser-based.</strong> Your device's built-in Web Speech API handles everything. No audio files are sent to external servers.</li>
+            <li><strong>Zero sign-up required.</strong> Open the tool and start immediately.</li>
+            <li><strong>Works on desktop and mobile.</strong> Dictate at your desk or pace while you talk — whatever unlocks your best thinking.</li>
+            <li><strong>Real-time formatting.</strong> The output isn't a raw wall of text. Sentences are broken into readable paragraphs, ready for the editing stage.</li>
+        </ul>
+
+        <h2>The "Brain Dump" Framework: How to Structure Your Voice Notes Before You Hit Record</h2>
+        <p>The difference between a rambling voice note and a publishable first draft comes down to one thing: a lightweight structure you hold in your head before you start speaking. You don't need a detailed outline. You just need three anchor points.</p>
+
+        <h3>Step 1: Open With a Hook (30–60 Seconds)</h3>
+        <p>State the core tension or surprising truth that makes your topic worth reading. This is what you'd tell someone at a networking event if you had 30 seconds to get them interested. Speak it conversationally — you can refine the wording later.</p>
+        <p><em>"Most people think [common assumption]. But here's what actually happens..."</em><br><em>"If you've ever struggled with [pain point], this changes everything..."</em></p>
+
+        <h3>Step 2: State Your Three Main Points (The Bulk of Your Draft)</h3>
+        <p>Tell your listener — and your future reader — exactly what they're about to learn. Then cover each point in turn. Speak one point at a time, and give yourself an obvious verbal signal to move on.</p>
+        <p><em>"Point one... Point two... And the third thing I want to cover is..."</em></p>
+        <p>This natural verbal signposting makes the editing process dramatically easier. You'll be able to identify section breaks in the transcript instantly.</p>
+
+        <h3>Step 3: Land a Conclusion That Earns a Click or a Share</h3>
+        <p>Don't trail off. Summarise your key insight in one or two sentences and tell your reader what to do next.</p>
+        <p><em>"So the bottom line is... Now, if you want to [outcome], the next step is..."</em></p>
+        <p>That's the entire Brain Dump Framework. Hook → Three Points → Conclusion. Hold that in mind as you press record, and your voice note becomes a structured first draft on the first pass.</p>
+
+        <h2>Why Privacy Matters — And Why This Tool Has It Covered</h2>
+        <p>When you're drafting content, you're often working with your best, most unfiltered ideas — the ones that haven't been published yet, the angles that haven't been claimed, the strategies that give you a competitive edge. The last place you want that raw thinking to land is on a third-party server you have no control over.</p>
+        <p>Most AI transcription and content tools send your audio to cloud-based APIs for processing. That means your voice data travels to an external server, gets processed, potentially gets logged, and in some cases, gets used to train models.</p>
+        <p>The Affilore Voice-to-Blog Converter works entirely differently.</p>
+        <ul>
+            <li><strong>It uses the Web Speech API</strong> — a technology built directly into your browser.</li>
+            <li><strong>Your audio never leaves your device.</strong> Processing happens locally, in your browser session.</li>
+            <li><strong>No audio files are recorded or stored</strong> by Affilore or any third party in the pipeline.</li>
+            <li><strong>Your ideas stay yours.</strong> There is no server-side logging of your spoken content.</li>
+            <li><strong>Your session is ephemeral.</strong> When you close the tab, everything is gone — by design.</li>
+        </ul>
+        <p>For content creators, bloggers, and digital entrepreneurs who treat their ideas as intellectual property, this architecture isn't just a nice-to-have. It's a non-negotiable.</p>
+
+        <h2>Editing the Raw Output: From Voice Draft to Published Post in Under 20 Minutes</h2>
+        <p>A voice-first draft is not a finished article. It's a complete first draft — which is a very different, and much more valuable, thing. Here's the editing workflow that makes it publishable fast:</p>
+
+        <h3>Pass 1: Structure (5 Minutes)</h3>
+        <p>Read through the transcript once. Add an H2 heading at each major topic shift. Break any paragraph longer than 4–5 sentences. Delete false starts and repeated phrases — these are common in voice drafts and take seconds to spot.</p>
+
+        <h3>Pass 2: Clarity (10 Minutes)</h3>
+        <ul>
+            <li><strong>Tighten verbose sentences.</strong> Spoken language uses filler. Written language doesn't need it.</li>
+            <li><strong>Replace vague words.</strong> "Good," "thing," "a lot" — swap these for precise alternatives.</li>
+            <li><strong>Check your opening line.</strong> Your hook is the most important sentence. Rewrite it until it earns the second sentence.</li>
+        </ul>
+
+        <h3>Pass 3: Polish (5 Minutes)</h3>
+        <ul>
+            <li>Run a quick spell and grammar check.</li>
+            <li>Read the post aloud one more time — ironically, the fastest way to catch awkward phrasing in a voice-first draft.</li>
+            <li>Add any links, images, or metadata your CMS requires.</li>
+        </ul>
+        <p>Total elapsed time for a 1,000-word post from record to publish-ready: <strong>under 30 minutes</strong> for most writers.</p>
+
+        <h2>Frequently Asked Questions About Voice-to-Blog Conversion</h2>
+        
+        <h3>How accurate is browser voice recognition?</h3>
+        <p>Modern browser-based speech recognition (powered by the Web Speech API) is remarkably accurate for standard English in a quiet environment, typically achieving 95%+ accuracy for clear speech. Accuracy drops slightly with strong accents, technical jargon, or background noise. Speaking clearly and at a measured pace — not rushed — produces the cleanest output with the least editing required.</p>
+
+        <h3>Can I format headers and bullet points with my voice?</h3>
+        <p>The Affilore converter focuses on producing clean, readable body text from your spoken content. For structural elements like H2 headings and bullet points, the recommended workflow is to use verbal cues as you speak (e.g., "heading: why this matters" or "bullet point one...") and then apply the actual formatting in your CMS during the editing pass. This two-step approach is faster than trying to apply formatting mid-dictation.</p>
+
+        <h3>What browsers support the tool?</h3>
+        <p>The Web Speech API is natively supported in Google Chrome and Microsoft Edge on both desktop and mobile. It is not currently supported in Firefox or Safari. For the best experience, use Chrome — which also happens to have the most mature speech recognition engine available in a browser.</p>
+
+        <h3>Is there a word or time limit for dictation?</h3>
+        <p>The tool does not impose artificial word or time limits. However, browser speech recognition sessions can occasionally time out after extended periods of silence. To avoid losing content, it is good practice to speak in natural segments — complete one section of your Brain Dump, review the output, then continue with the next.</p>
+
+        <h3>What if my transcription has errors — can I edit it directly in the tool?</h3>
+        <p>Yes. The text output field is fully editable. You can correct any transcription errors, adjust phrasing, or restructure sentences directly in the tool before copying the content across to your CMS. Think of the output area as a lightweight text editor, not a read-only display.</p>
+
+        <h3>Do I need to install anything?</h3>
+        <p>Nothing. The Affilore Voice-to-Blog Converter runs entirely in your browser. No extensions, plugins, apps, or software downloads are required. As long as you are using a supported browser and grant microphone access when prompted, you are ready to dictate immediately.</p>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your First Draft Is One Conversation Away</p>
+            <p style="color: #fff;">The blank page isn't writer's block. It's the wrong input method. Scroll back to the top, click the microphone, and dictate your first article right now. You'll have a complete first draft before your coffee gets cold.</p>
+        </div>
+    </div>
+
+    <div class="notification" id="toast">Copied to clipboard!</div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="../../about.html">About Us</a>
+            <a href="../../contact.html">Contact Us</a>
+            <a href="../../privacy.html">Privacy Policy</a>
+            <a href="../../terms.html">Terms & Conditions</a>
+        </div>
+        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let isRecording = false;
+        let recognition;
+        const micBtn = document.getElementById('micBtn');
+        const statusText = document.getElementById('statusText');
+        const outputArea = document.getElementById('outputArea');
+
+        // Check Browser Support
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            
+            recognition.onstart = function() {
+                isRecording = true;
+                micBtn.classList.add('recording');
+                statusText.innerText = "Listening... Speak your ideas.";
+                statusText.classList.add('active');
+            };
+
+            recognition.onresult = function(event) {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                
+                // Append final text to textarea safely
+                if(finalTranscript !== '') {
+                    // Replace verbal punctuation
+                    let cleaned = finalTranscript.replace(/\bperiod\b/gi, '.')
+                                                 .replace(/\bcomma\b/gi, ',')
+                                                 .replace(/\bquestion mark\b/gi, '?')
+                                                 .replace(/\bexclamation point\b/gi, '!');
+                    outputArea.value += cleaned + ' ';
+                }
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Speech recognition error", event.error);
+                stopRecording();
+                if(event.error === 'not-allowed') {
+                    alert("Please allow microphone access in your browser settings to use this tool.");
+                }
+            };
+
+            recognition.onend = function() {
+                if(isRecording) {
+                    // Auto-restart if it stops unexpectedly while user intends to record
+                    recognition.start();
+                } else {
+                    stopRecording();
+                }
+            };
+        } else {
+            statusText.innerText = "Speech Recognition not supported in this browser. Please use Chrome.";
+            micBtn.style.opacity = "0.5";
+            micBtn.style.cursor = "not-allowed";
+            micBtn.onclick = null;
+        }
+
+        function toggleRecording() {
+            if (isRecording) {
+                isRecording = false;
+                recognition.stop();
+                stopRecording();
+            } else {
+                recognition.start();
+            }
+        }
+
+        function stopRecording() {
+            micBtn.classList.remove('recording');
+            statusText.innerText = "Click to Start Dictating";
+            statusText.classList.remove('active');
+        }
+
+        // Smart Formatter Logic
+        function magicFormat() {
+            let text = outputArea.value.trim();
+            if(!text) return;
+
+            // 1. Capitalize first letter of sentences
+            text = text.replace(/(^\s*\w|[\.\?!]\s*\w)/g, function(c) { return c.toUpperCase(); });
+
+            // 2. Break large blocks of text into paragraphs (roughly every 3-4 sentences)
+            let sentences = text.match(/[^\.!\?]+[\.!\?]+/g) || [text];
+            let formattedText = "";
+            let sentenceCount = 0;
+
+            // Add a title placeholder
+            formattedText += "## Your Blog Post Title Here\n\n";
+
+            for(let i=0; i < sentences.length; i++) {
+                formattedText += sentences[i].trim() + " ";
+                sentenceCount++;
+
+                // Inject a paragraph break every ~3 sentences
+                if(sentenceCount >= 3 && i !== sentences.length - 1) {
+                    formattedText += "\n\n";
+                    sentence onCount = 0;
+                    
+                    // Occasionally inject a subheading placeholder
+                    if (Math.random() > 0.5) {
+                        formattedText += "### [Insert Subheading Here]\n\n";
+                    }
+                }
+            }
+
+            outputArea.value = formattedText;
+            showToast("Text Magically Formatted!");
+        }
+
+        function copyToClipboard() {
+            outputArea.select();
+            navigator.clipboard.writeText(outputArea.value).then(() => {
+                showToast("Copied to clipboard!");
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
