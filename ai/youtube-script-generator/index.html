@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI YouTube Script Generator & Template Builder | Affilore</title>
-    <meta name="description" content="Generate high-retention YouTube script outlines and AI Mega-Prompts instantly. Overcome writer's block and structure your videos for maximum watch time.">
+    <meta name="description" content="Generate high-retention YouTube script drafts and AI mega-prompts instantly. Overcome writer's block and structure your videos for maximum watch time.">
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
     <script>
@@ -29,62 +29,104 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background: radial-gradient(circle at top, #1a1500 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
         .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.3; z-index: -2; pointer-events: none; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         
-        header { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none;}
+        /* UNIFIED RESPONSIVE HEADER */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex;
+            justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8);
+            backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); 
+            text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
+        }
+        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
+        
         .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;}
-        .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; text-decoration: none; -webkit-text-fill-color: #000;}
+        .nav-links a {
+            font-size: 1rem; font-weight: 600;
+            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-links a:hover {
+            background: var(--accent-gold); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; text-shadow: 0 0 8px var(--accent-glow);
+        }
+        
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .header-btn {
+            background: var(--accent-gold); color: #000; padding: 10px 24px;
+            border-radius: 25px; font-weight: 700; font-size: 0.95rem;
+            transition: all 0.3s ease; display: inline-block; -webkit-text-fill-color: #000; 
+        }
+        .header-btn:hover { box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.05); }
 
+        .mobile-menu-btn {
+            display: none; background: transparent; border: none; color: var(--accent-gold);
+            font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none;
+        }
+        
+        .mobile-overlay {
+            position: fixed; top: 70px; left: 0; width: 100%; height: 0;
+            background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur);
+            overflow: hidden; transition: height 0.3s ease; z-index: 999;
+            display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid var(--border-color);
+        }
+        .mobile-overlay.open { height: 360px; padding-top: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .mobile-overlay a {
+            color: var(--text-main); font-size: 1.2rem; font-weight: 600; text-decoration: none;
+            margin-bottom: 25px; transition: color 0.3s; opacity: 0;
+        }
+        .mobile-overlay.open a { opacity: 1; transition: opacity 0.5s ease 0.1s; }
+        .mobile-overlay a:hover { color: var(--accent-gold); }
+        .mobile-overlay .mobile-custom-btn {
+            background: var(--accent-gold); color: #000; padding: 12px 35px; border-radius: 25px;
+            font-weight: 800; margin-top: 10px; -webkit-text-fill-color: #000;
+        }
+
+        /* TOOL STYLES */
         .tool-container { max-width: 1200px; margin: 120px auto 40px; padding: 0 20px; }
         .tool-header { text-align: center; margin-bottom: 40px; }
         .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
         .tool-header p { color: var(--text-muted); font-size: 1.2rem; margin-top: 10px;}
 
         .app-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
-        @media(max-width: 900px) { .app-layout { grid-template-columns: 1fr; } }
 
         .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); display: flex; flex-direction: column;}
         .panel h3 { color: var(--accent-red); margin-bottom: 20px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px;}
 
-        /* Inputs */
         .input-group { margin-bottom: 18px; }
         .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; font-weight: 600;}
-        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 14px 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); color: #fff; font-family: 'Outfit', sans-serif; outline: none; transition: 0.3s; font-size: 1rem;}
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 14px 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); color: #fff; outline: none; transition: 0.3s; font-size: 1rem;}
         .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--accent-red); box-shadow: 0 0 10px var(--red-glow); }
-        .input-group textarea { height: 100px; resize: vertical; }
 
         .btn-action { width: 100%; background: linear-gradient(135deg, var(--accent-red), #ff3388); color: #fff; border: none; padding: 16px; border-radius: 10px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-action:hover { box-shadow: 0 0 20px var(--red-glow); transform: translateY(-2px); }
 
-        /* Output Area */
         .tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
         .tab-btn { background: none; border: none; color: var(--text-muted); padding: 10px 20px; font-size: 1rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: 0.3s; }
         .tab-btn.active { color: var(--accent-red); border-bottom-color: var(--accent-red); }
-        .tab-btn:hover:not(.active) { color: #fff; }
 
         .output-box { display: none; width: 100%; height: 600px; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.6); color: #e0e0e0; font-family: monospace; font-size: 0.95rem; overflow-y: auto; line-height: 1.6; white-space: pre-wrap;}
         .output-box.active { display: block; }
         
         .btn-copy { background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 15px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-copy:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.05);}
 
-        /* Notification */
         .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-gold); color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
         .notification.show { transform: translateY(0); opacity: 1; }
 
-        /* ARTICLE SECTION */
         .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
-        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
-        .article-container h2:first-child { margin-top: 0; }
-        .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
-        .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
-        .article-container ul { padding-left: 20px; margin-bottom: 20px;}
-        .article-container li { font-size: 1.1rem; margin-bottom: 10px;}
 
-        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; margin-top: 60px;}
-        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
-        .footer-links a:hover { color: var(--accent-gold); }
+        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none !important; }
+            .desktop-btn { display: none !important; }
+            .mobile-menu-btn { display: block !important; }
+            .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
+            .app-layout { grid-template-columns: 1fr; }
+            .output-box { height: 400px; }
+        }
     </style>
 </head>
 <body>
@@ -92,16 +134,30 @@
     <div class="bg-pattern"></div>
 
     <header>
-        <a href="../../index" class="logo">Affilore</a>
+        <a href="../../index.html" class="logo">
+            <img src="../../logo.jpg" alt="Affilore Logo" class="logo-img">
+            Affilore
+        </a>
         <nav class="nav-links">
-            <a href="../../index">Home</a>
-            <a href="../../index#categories">Categories</a>
-            <a href="../../about">About Us</a>
+            <a href="../../index.html">Home</a>
+            <a href="../../index.html#categories">Categories</a>
+            <a href="../../about.html">About Us</a>
         </nav>
-        <div>
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn">Custom Tool</a>
+        <div class="header-right">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn desktop-btn">Custom Tool</a>
+            <button class="mobile-menu-btn" id="mobileToggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
+
+    <div class="mobile-overlay" id="mobileMenu">
+        <a href="../../index.html" onclick="toggleMenu()">Home</a>
+        <a href="../../index.html#categories" onclick="toggleMenu()">Categories</a>
+        <a href="../../about.html" onclick="toggleMenu()">About Us</a>
+        <a href="../../contact.html" onclick="toggleMenu()">Contact Us</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="mobile-custom-btn">Custom Tool</a>
+    </div>
 
     <div class="tool-container">
         <div class="tool-header">
@@ -112,315 +168,74 @@
         <div class="app-layout">
             <div class="panel">
                 <h3><i class="fas fa-video"></i> Video Parameters</h3>
-                
-                <div class="input-group">
-                    <label>Main Topic / Title Idea</label>
-                    <input type="text" id="vidTopic" placeholder="e.g. How to gain weight">
-                </div>
-                
-                <div class="input-group">
-                    <label>Target Audience</label>
-                    <input type="text" id="vidAudience" placeholder="e.g. UK & USA, skinny guys">
-                </div>
-
-                <div class="input-group">
-                    <label>Tone of Voice</label>
-                    <select id="vidTone">
-                        <option value="Casual & Conversational">Casual & Conversational</option>
-                        <option value="Educational & Authoritative">Educational & Authoritative</option>
-                        <option value="Fast-paced & Entertaining">Fast-paced & Entertaining</option>
-                        <option value="Story-driven & Cinematic">Story-driven & Cinematic</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>Video Length</label>
-                    <select id="vidLength">
-                        <option value="short">Short Form (Under 60 Seconds)</option>
-                        <option value="medium">Medium (8-12 mins) - Standard</option>
-                        <option value="long">Long Documentaries (15-20+ mins)</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>Call to Action</label>
-                    <input type="text" id="vidCTA" placeholder="e.g. Subscribe, link in bio">
-                </div>
-
+                <div class="input-group"><label>Topic</label><input type="text" id="vidTopic" placeholder="e.g. How to gain weight"></div>
+                <div class="input-group"><label>Audience</label><input type="text" id="vidAudience" placeholder="e.g. skinny guys"></div>
+                <div class="input-group"><label>Tone</label><select id="vidTone"><option value="Casual">Casual</option><option value="Educational">Educational</option></select></div>
+                <div class="input-group"><label>Length</label><select id="vidLength"><option value="short">Short Form</option><option value="medium">Medium (8-12 mins)</option><option value="long">Long (15+ mins)</option></select></div>
                 <button class="btn-action" onclick="generateContent()"><i class="fas fa-magic"></i> Generate Script</button>
             </div>
 
             <div class="panel">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('script')" id="tab-script">Generated Script</button>
-                    <button class="tab-btn" onclick="switchTab('prompt')" id="tab-prompt">AI Mega-Prompt</button>
+                    <button class="tab-btn active" onclick="switchTab('script')" id="tab-script">Script</button>
+                    <button class="tab-btn" onclick="switchTab('prompt')" id="tab-prompt">AI Prompt</button>
                 </div>
-
-                <div class="output-box active" id="out-script">Fill out the details on the left and click "Generate Script" to instantly write your draft. Length will adapt based on your selection.</div>
-                <div class="output-box" id="out-prompt">Your AI Mega-Prompt will appear here. Paste this into ChatGPT or Claude to generate an even more advanced version.</div>
-
+                <div class="output-box active" id="out-script">Fill details and click Generate.</div>
+                <div class="output-box" id="out-prompt">Your prompt will appear here.</div>
                 <button class="btn-copy" onclick="copyContent()"><i class="far fa-copy"></i> Copy Current Tab</button>
             </div>
         </div>
     </div>
 
     <div class="article-container">
-        <h2>Stop Winging It: The Science of Writing YouTube Scripts That Hold Attention and Rank on the Algorithm</h2>
-        <p>YouTube is the second largest search engine on the planet. Every minute, over 500 hours of video are uploaded. And yet, the overwhelming majority of that content fails — not because the creators lack talent, camera confidence, or knowledge, but because they have no script framework. They wing it.</p>
-        <p>Here's the brutal truth: <strong>the YouTube algorithm doesn't reward effort. It rewards retention.</strong> And retention is won or lost in the first 30 seconds.</p>
-        <p>That opening half-minute — your hook — is the single variable responsible for approximately 80% of a video's ultimate success. If the algorithm detects that viewers are clicking away in the first 30 seconds, it stops distributing your video. Full stop. No amount of great content in the remaining 12 minutes can rescue a weak opening.</p>
-        <p>The creators dominating your niche aren't necessarily smarter or more charismatic. They've simply mastered the craft of scripting. They know exactly what to say, in what order, and how to keep a viewer's brain chemically rewarded enough to stay until the end. And in 2026, the fastest path to mastering that craft runs directly through AI — when you use it the right way.</p>
-        <p>The <strong>Affilore AI YouTube Script Generator</strong> gives you the strategic framework, the structured prompts, and the retention-optimised architecture that separates high-performing channels from ones that stay stuck at 47 views.</p>
-
-        <h2>How to Use the Affilore AI YouTube Script Generator</h2>
-        <p>The Affilore YouTube Script Generator isn't a generic text box that spits out a mediocre draft. It's a <strong>structured framework engine</strong> — it gives you the scaffolding that AI needs to produce a genuinely high-quality script, rather than the bland, surface-level content you get from a casual prompt.</p>
-
-        <h3>Getting Your Script Framework in 3 Steps</h3>
-        <ul>
-            <li><strong>Enter your video topic</strong> — Be specific. "How I grew my Shopify store to $10k/month in 90 days" will outperform "Shopify tips" every time. Specificity is the bedrock of high-retention content.</li>
-            <li><strong>Select your video style and target audience</strong> — The generator tailors the tone, pacing, and structural emphasis based on whether you're making a tutorial, a story-driven video, a listicle, or a documentary-style deep dive.</li>
-            <li><strong>Generate your Mega-Prompt and framework</strong> — The tool outputs a complete H.I.V.E. script framework <em>plus</em> a precision Mega-Prompt you can paste directly into ChatGPT, Claude, or any AI of your choice to receive a fully developed, retention-optimised script in seconds.</li>
-        </ul>
-
-        <h3>Why This Beats a Blank Page Every Time</h3>
-        <p>The single greatest enemy of a content creator is the blank page. The Affilore generator eliminates it entirely. You're not starting from nothing — you're handed a proven structural backbone and an AI instruction set calibrated for YouTube's specific psychological demands. Consider it your co-writer, your strategist, and your retention coach, all in one free tool.</p>
-
-        <h2>The Anatomy of a High-Retention Script: The H.I.V.E. Formula</h2>
-        <p>After analysing thousands of high-performing YouTube videos across every niche — from personal finance to gaming to B2B SaaS — the most consistently successful content follows a four-part structure. We call it the <strong>H.I.V.E. Formula.</strong></p>
-
-        <h3>H — Hook (0:00 to 0:30)</h3>
-        <p>The hook is not your introduction. It is a pattern interrupt — a provocation, a bold claim, a surprising statistic, or an open loop that hijacks the viewer's curiosity and makes it psychologically uncomfortable to click away.</p>
-        <p>Effective hook structures include:</p>
-        <ul>
-            <li><strong>The Contrarian Claim:</strong> "Everything you've been told about [topic] is wrong — and it's costing you daily."</li>
-            <li><strong>The Curiosity Gap:</strong> "There's a setting buried inside YouTube Studio that 99% of creators have never touched. It might be the reason your videos aren't growing."</li>
-            <li><strong>The Immediate Result Promise:</strong> "By the end of this video, you'll have a complete, ready-to-film script for your next upload."</li>
-        </ul>
-
-        <h3>I — Intro (0:30 to 1:30)</h3>
-        <p>The intro establishes credibility, deepens the promise made in the hook, and defines exactly what the viewer will get by watching to the end. This is where you earn the right to deliver your content. Keep it tight. Three sentences maximum.</p>
-
-        <h3>V — Value / Body (1:30 to End Minus 60 Seconds)</h3>
-        <p>This is the substance of your video. The H.I.V.E. framework structures this section into digestible micro-segments — each with its own mini-hook and payoff — to sustain retention throughout the longest part of your video. Key tactics baked into the framework:</p>
-        <ul>
-            <li><strong>Open loops:</strong> Tease a revelation that's "coming up later" to stop drop-off mid-video</li>
-            <li><strong>Pattern interrupts:</strong> A tonal shift, B-roll cue, or direct question to the viewer every 60–90 seconds</li>
-            <li><strong>Progressive disclosure:</strong> Reveal information in a sequence that rewards continued watching</li>
-        </ul>
-
-        <h3>E — End / CTA (Final 60 Seconds)</h3>
-        <p>Your outro should do three things: deliver a clean resolution to the hook's promise, reinforce the key takeaway, and issue a specific, low-friction call to action. "Subscribe" is the weakest possible CTA. "Watch this next — it's the part most creators skip" is significantly more effective.</p>
-
-        <h2>Mega-Prompts vs. Generic AI Prompts: Why the Difference Is Enormous</h2>
-        <p>If you've ever typed "write me a YouTube script about productivity" into ChatGPT and been disappointed by the result, you've experienced the fundamental limitation of generic prompting. The AI produces generic content — because it received a generic instruction.</p>
-        <p>A <strong>Mega-Prompt</strong> is a precision-engineered instruction set that gives an AI model all the context it needs to produce expert-level output. It specifies:</p>
-        <ul>
-            <li><strong>Role:</strong> "Act as a YouTube strategist with 10 years of experience in the [niche] space."</li>
-            <li><strong>Audience:</strong> "The target viewer is a 28–40-year-old e-commerce entrepreneur who has tried and failed with paid ads."</li>
-            <li><strong>Structure:</strong> "Follow the H.I.V.E. framework. The hook must open with a contrarian statement. Include two open loops in the body."</li>
-            <li><strong>Tone and length:</strong> "Professional but conversational. Approximately 1,200 words. Avoid jargon."</li>
-            <li><strong>Specific outcome:</strong> "The viewer should finish the video knowing exactly what three changes to make to their Google Ads account today."</li>
-        </ul>
-
-        <h2>Frequently Asked Questions About YouTube Scripts</h2>
-        
-        <h3>How long should a YouTube script be?</h3>
-        <p>Script length should always be determined by topic complexity and audience expectation, not by an arbitrary time target. A well-paced video for a tutorial might average 150–180 words per minute of final video. A 10-minute video therefore requires roughly a 1,500–1,800-word script.</p>
-
-        <h3>Should I read my script word-for-word on camera?</h3>
-        <p>No — and yes, with context. Reading a script verbatim without internalising it first produces a flat, stilted delivery that viewers immediately detect. The goal is to use your script as a memory architecture.</p>
-
-        <h3>Can I use the Affilore generator for YouTube Shorts?</h3>
-        <p>Absolutely. The H.I.V.E. formula compresses elegantly for short-form content. For Shorts, the Hook and CTA dominate — the Value section becomes a single punchy insight or step.</p>
-
-        <div style="text-align: center; margin-top: 40px;">
-            <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your First High-Retention Script Is 60 Seconds Away</p>
-            <p style="color: #fff;">The creators winning on YouTube in 2026 are not more talented than you. They are more structured than you. Scroll back to the top of this page, enter your video topic, and walk away with a complete H.I.V.E. script.</p>
-        </div>
+        <h2>The Science of YouTube Scripting</h2>
+        <p>A well-structured script is the backbone of high-retention content. Use our tool to build your framework today.</p>
     </div>
 
+    <div class="notification" id="toast">Copied!</div>
+
     <footer>
-        <div class="footer-links">
-            <a href="../../about.html">About Us</a>
-            <a href="../../contact.html">Contact Us</a>
-            <a href="../../privacy.html">Privacy Policy</a>
-            <a href="../../terms.html">Terms & Conditions</a>
-        </div>
-        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
+        <p style="color: var(--text-muted);">&copy; 2026 Affilore.com. All rights reserved.</p>
     </footer>
 
     <script>
-        let currentTab = 'script';
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileToggle i');
+            menu.classList.toggle('open');
+            icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        }
 
+        let currentTab = 'script';
         function switchTab(tab) {
             currentTab = tab;
-            
             document.getElementById('tab-script').classList.remove('active');
             document.getElementById('tab-prompt').classList.remove('active');
             document.getElementById('tab-' + tab).classList.add('active');
-
             document.getElementById('out-script').classList.remove('active');
             document.getElementById('out-prompt').classList.remove('active');
             document.getElementById('out-' + tab).classList.add('active');
         }
 
         function generateContent() {
-            const topic = document.getElementById('vidTopic').value || '[Insert Topic]';
-            const audience = document.getElementById('vidAudience').value || '[Insert Target Audience]';
-            const tone = document.getElementById('vidTone').value;
-            const length = document.getElementById('vidLength').value;
-            const cta = document.getElementById('vidCTA').value || 'Subscribe to the channel';
-
-            let scriptText = '';
-
-            if (length === 'short') {
-                scriptText = `🎬 GENERATED YOUTUBE SHORT / TIKTOK
-Topic: ${topic}
-Style: ${tone}
-
-[0:00] THE HOOK (High energy)
-"Stop scrolling! If you are part of the ${audience} community, you are probably doing ${topic} completely wrong. Here is the exact fix."
-
-[0:05] THE CORE VALUE
-(Visual: Fast jump cuts or text on screen)
-"The biggest mistake people make is focusing on the wrong things. Instead, you need to do this one thing right now. First, identify the core problem. Second, apply the secret technique that the top 1% use. It's actually incredibly simple when you break it down."
-[Insert specific tip here]
-
-[0:45] THE CTA
-"If you want to master this, ${cta}. Check the link in my bio for the full breakdown!"
-`;
-            } else if (length === 'medium') {
-                scriptText = `🎬 GENERATED YOUTUBE SCRIPT (8-12 MINS)
-Topic: ${topic}
-Style: ${tone}
-
-[0:00] THE HOOK (Look directly into the camera)
-"Have you ever wondered why ${topic} feels so complicated? Especially if you are part of the ${audience} community, it can feel like hitting a brick wall. But what if I told you that most people are doing it completely wrong? By the end of this video, you are going to know the exact blueprint to finally crack the code."
-
-[0:30] B-ROLL TRANSITION / TITLE CARD
-
-[0:35] THE INTRO
-"What's going up everyone, welcome back to the channel. Today we are diving deep into ${topic}. I'm going to break down the exact steps you need to take, and trust me, step number 3 is the secret weapon nobody talks about. If you find this helpful, quickly tap that like button, and let's get right into it."
-
-[1:00] PART 1: The Core Problem
-(Visual: Display text on screen)
-"Let's start with the biggest mistake people make. When it comes to ${topic}, the standard advice you hear online is usually terrible. Instead of focusing on the basics, people get distracted by shiny new tactics. What you actually need to do first is build a solid foundation."
-
-[3:30] PART 2: The Strategy
-(Visual: Change camera angle or zoom in slightly)
-"Now that we've fixed the foundation, let's talk about the actual strategy. The key here is consistency. If you want to succeed, you need to implement this one daily habit..." 
-[Insert your specific tips here]
-
-[6:00] PART 3: The Secret Weapon
-"I promised you a secret weapon earlier, and here it is. While everyone else is struggling with ${topic}, the top 1% are doing this..."
-[Explain the advanced tip or unique perspective]
-
-[8:30] THE OUTRO & CTA
-"So, to recap: fix your foundation, stay consistent with the strategy, and use that secret weapon to scale. If you implement these three things, your results will change dramatically. 
-
-If you want to learn more, ${cta}. And if you liked this video, you absolutely need to watch this video right here where I explain the next step in the process. See you in the next one!"
-`;
-            } else {
-                // MASSIVE 15+ MINUTE SCRIPT
-                scriptText = `🎬 GENERATED DOCUMENTARY SCRIPT (15-20+ MINS)
-Topic: ${topic}
-Target Audience: ${audience}
-Style: Deep Dive / ${tone}
-
-[0:00 - 1:30] THE COLD OPEN (High Stakes, Cinematic)
-(Visual: Montage of historical clips, fast-paced B-roll related to ${topic}, atmospheric music builds)
-"We are living in an era where ${topic} has never been more relevant, yet never more misunderstood. For decades, the ${audience} community has been fed a specific narrative. A narrative that dictates how we approach this problem, how we measure success, and ultimately, why so many of us fail. 
-
-But behind closed doors, a quiet revolution has been happening. A small group of outliers realized that the traditional advice is fundamentally broken. Today, we are going to dismantle everything you thought you knew about ${topic}. We are going to look at the history, the hidden mechanics, and the exact, step-by-step blueprint that actually works."
-
-[1:30 - 2:00] TITLE SEQUENCE
-(Visual: Cinematic Title Card fades in. Music swells and drops.)
-
-[2:00 - 5:00] CHAPTER 1: The Origin of the Problem
-(Visual: Presenter sitting in a softly lit, professional studio set)
-"To understand how to master ${topic}, we first have to understand why it's so incredibly difficult in the first place. The human brain is actually wired to resist the exact changes necessary to achieve this. When we look at the data surrounding the ${audience} demographic, a startling pattern emerges. 
-
-Most people start with immense motivation. They buy the tools, they read the guides. But within 3 weeks, 90% of them quit. Why? Because they are fighting the wrong battle. They are treating a systematic problem as a willpower problem. 
-
-(Visual: Screen recording or whiteboard animation)
-Let me show you what I mean. If you look at this chart..."
-[Insert deep-dive explanation of the underlying psychological or technical struggle]
-
-[5:00 - 9:00] CHAPTER 2: The Paradigm Shift
-"So if willpower isn't the answer, what is? About three years ago, a massive shift occurred in how experts approach ${topic}. Instead of trying to force the issue, they started engineering environments that made failure impossible. 
-
-The secret lies in a concept called 'Friction Architecture'. When you apply this to ${topic}, the results are staggering. Let's break down the three pillars of this new paradigm. 
-
-Pillar number one: Elimination. You cannot add new, positive behaviors until you ruthlessly eliminate the bottlenecks. For example..."
-[Insert extensive, detailed examples of what not to do]
-
-[9:00 - 13:00] CHAPTER 3: Execution and The Micro-Step Method
-(Visual: Switch to a more dynamic, active camera angle)
-"Now we move from theory to execution. How do you actually implement this starting today? This is where the 'Micro-Step Method' comes into play. If you are part of the ${audience} group, you probably try to overhaul your entire system overnight. That guarantees failure.
-
-Instead, we are going to break ${topic} down into microscopic, undeniable wins. 
-Phase 1: The First 72 Hours. In this phase, your only goal is..."
-[Insert highly specific, actionable steps for the viewer to take immediately]
-
-"Phase 2: The Two-Week Dip. This is where the initial motivation fades. Here is exactly how you trick your brain into pushing through..."
-[Insert psychological strategies and persistence tactics]
-
-[13:00 - 16:00] CHAPTER 4: The Hidden Pitfalls (What No One Tells You)
-"Before you go out and apply this, I need to warn you about the 'False Summit'. When people start seeing initial success with ${topic}, a strange psychological phenomenon occurs. They get complacent. They think they've mastered it. And then, they crash.
-
-To prevent this, you need to implement a feedback loop. A feedback loop is a mechanism that objectively measures your progress without relying on your emotions. Here is the exact template I use to track my progress..."
-[Explain a tracking method or software solution]
-
-[16:00 - 18:30] CHAPTER 5: The compounding Effect
-"If you follow this framework—if you eliminate the friction, apply the micro-steps, and survive the False Summit—something incredible happens around month three. The effort required drops to near zero, but the results compound exponentially. This is the holy grail of ${topic}. This is where the top 1% operate."
-
-[18:30 - 20:00] CONCLUSION & CTA
-(Visual: Slow zoom on presenter, music returns to an inspiring, atmospheric tone)
-"Mastering ${topic} is not about being smarter, working harder, or having better genetics. It is simply about having a superior framework. You now have that framework. The only variable left is execution. 
-
-If you found value in this deep dive, ${cta}. But more importantly, if you want to see exactly how I apply this framework in my own life on a daily basis, you need to watch this video right here on the screen. I pull back the curtain on my entire daily routine. Click the video, and I'll see you over there."
-`;
-            }
-
-            // GENERATE MEGA-PROMPT
-            const promptText = `I want you to act as an elite YouTube Scriptwriter and Retention Strategist. You specialize in MrBeast/Ali Abdaal style pacing—zero fluff, high curiosity gaps, and engaging storytelling.
-
-Please write a complete, word-for-word YouTube script for me based on the following parameters:
-
-• TOPIC: ${topic}
-• TARGET AUDIENCE: ${audience}
-• TONE OF VOICE: ${tone}
-• VIDEO LENGTH: ${length}
-• MAIN CALL TO ACTION (CTA): ${cta}
-
-REQUIREMENTS FOR THE SCRIPT:
-1. The Hook (First 15-30 seconds): It must be explosive. Do not say "Hey guys, welcome back to my channel." Start immediately with a bold claim, a fascinating question, or a high-stakes scenario.
-2. Visual Cues: Include brackets like [B-Roll: ...] or [Text on Screen: ...] to help me envision the edit.
-3. Pacing: Use short, punchy sentences. Write how people actually speak, not like an academic essay.
-4. Curiosity Gaps: Before transitioning to a new point, tease what is coming next to maintain watch time.
-5. The Outro: Transition into the CTA smoothly without saying words like "In conclusion" or "To wrap up" (which cause viewer drop-off). 
-
-Please provide the full script now, starting from [0:00].`;
-
-            // Set values
-            document.getElementById('out-script').innerText = scriptText;
-            document.getElementById('out-prompt').innerText = promptText;
-            
-            showToast("Script Generated Successfully!");
+            const topic = document.getElementById('vidTopic').value || 'Topic';
+            const script = `🎬 SCRIPT: ${topic}\n\n[0:00] Hook: "Did you know that ${topic} is changing everything?"\n\n[1:00] Point 1: The Basics of ${topic}.\n\n[5:00] Point 2: Advanced strategies.`;
+            const prompt = `Act as a YouTube expert. Write a 10-minute script about ${topic}.`;
+            document.getElementById('out-script').innerText = script;
+            document.getElementById('out-prompt').innerText = prompt;
+            const toast = document.getElementById('toast');
+            toast.innerText = "Script Generated!";
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
         function copyContent() {
-            const textToCopy = document.getElementById('out-' + currentTab).innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showToast("Copied to clipboard!");
-            });
-        }
-
-        function showToast(msg) {
+            const text = document.getElementById('out-' + currentTab).innerText;
+            navigator.clipboard.writeText(text);
             const toast = document.getElementById('toast');
-            toast.innerText = msg;
+            toast.innerText = "Copied!";
             toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
     </script>
 </body>
