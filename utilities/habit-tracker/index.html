@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimalist Habit Tracker | Free Private Tool | Affilore</title>
-    <meta name="description" content="A private, lightning-fast habit tracker that runs entirely in your browser. Build streaks, track daily progress, and stop breaking the chain. No login required.">
+    <title>Minimalist Habit Tracker | The Seinfeld Strategy | Affilore</title>
+    <meta name="description" content="Build consistency with this free, private, client-side habit tracker. Track your daily goals using the Seinfeld 'Don't Break the Chain' method.">
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
     <script>
@@ -21,78 +21,126 @@
         :root {
             --bg-color: #08080a; --text-main: #f0f0f5; --text-muted: #9ba1a6;
             --accent-gold: #ffd600; --accent-glow: rgba(255, 214, 0, 0.4);
-            --accent-green: #00ff88; --green-glow: rgba(0, 255, 136, 0.4);
+            --accent-green: #00e676; --green-glow: rgba(0, 230, 118, 0.4);
             --card-bg: rgba(20, 20, 25, 0.7); --border-color: rgba(255, 255, 255, 0.08);
             --glass-blur: blur(15px);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: radial-gradient(circle at top, #1a1500 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
-        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.3; z-index: -2; pointer-events: none; }
+        body { background: radial-gradient(circle at top, #0a1a10 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
+        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-green) 1px, transparent 1px); background-size: 45px 45px; opacity: 0.1; z-index: -2; pointer-events: none; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+
+        /* UNIFIED RESPONSIVE HEADER */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex;
+            justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8);
+            backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); 
+            text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
+        }
+        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
         
-        header { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none;}
         .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;}
-        .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; text-decoration: none; -webkit-text-fill-color: #000;}
+        .nav-links a {
+            font-size: 1rem; font-weight: 600;
+            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-links a:hover {
+            background: var(--accent-gold); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; text-shadow: 0 0 8px var(--accent-glow);
+        }
+        
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .header-btn {
+            background: var(--accent-gold); color: #000; padding: 10px 24px;
+            border-radius: 25px; font-weight: 700; font-size: 0.95rem;
+            transition: all 0.3s ease; display: inline-block; -webkit-text-fill-color: #000; 
+        }
+        .header-btn:hover { box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.05); }
 
-        .tool-container { max-width: 900px; margin: 120px auto 40px; padding: 0 20px; }
+        .mobile-menu-btn {
+            display: none; background: transparent; border: none; color: var(--accent-gold);
+            font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none;
+        }
+        
+        .mobile-overlay {
+            position: fixed; top: 70px; left: 0; width: 100%; height: 0;
+            background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur);
+            overflow: hidden; transition: height 0.3s ease; z-index: 999;
+            display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid var(--border-color);
+        }
+        .mobile-overlay.open { height: 360px; padding-top: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .mobile-overlay a {
+            color: var(--text-main); font-size: 1.2rem; font-weight: 600; text-decoration: none;
+            margin-bottom: 25px; transition: color 0.3s; opacity: 0;
+        }
+        .mobile-overlay.open a { opacity: 1; transition: opacity 0.5s ease 0.1s; }
+        .mobile-overlay a:hover { color: var(--accent-gold); }
+        .mobile-overlay .mobile-custom-btn {
+            background: var(--accent-gold); color: #000; padding: 12px 35px; border-radius: 25px;
+            font-weight: 800; margin-top: 10px; -webkit-text-fill-color: #000;
+        }
+
+        /* TOOL UI */
+        .tool-container { max-width: 1200px; margin: 120px auto 40px; padding: 0 20px; }
         .tool-header { text-align: center; margin-bottom: 40px; }
-        .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; line-height: 1.2;}
-        .tool-header p { color: var(--text-muted); font-size: 1.2rem;}
+        .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+        .tool-header p { color: var(--text-muted); font-size: 1.2rem; margin-top: 10px;}
 
-        .dashboard { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; backdrop-filter: var(--glass-blur); box-shadow: 0 20px 50px rgba(0,0,0,0.5);}
+        .app-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 30px; }
+
+        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); display: flex; flex-direction: column;}
         
-        .add-habit-bar { display: flex; gap: 15px; margin-bottom: 30px; }
-        .add-habit-bar input { flex-grow: 1; padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); color: #fff; font-family: 'Outfit', sans-serif; font-size: 1.1rem; outline: none; transition: 0.3s;}
-        .add-habit-bar input:focus { border-color: var(--accent-gold); box-shadow: 0 0 15px var(--accent-glow); }
-        .btn-add { background: var(--accent-gold); color: #000; border: none; padding: 0 30px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s;}
-        .btn-add:hover { box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-2px); }
+        .habit-input { background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: #fff; font-size: 1.2rem; font-weight: 700; padding: 15px; border-radius: 10px; width: 100%; text-align: center; margin-bottom: 20px; outline: none; transition: 0.3s;}
+        .habit-input:focus { border-color: var(--accent-green); box-shadow: 0 0 15px var(--green-glow); }
 
-        .habit-list { display: flex; flex-direction: column; gap: 15px; }
-        .habit-card { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 20px; border-radius: 15px; transition: 0.3s; }
-        .habit-card:hover { border-color: rgba(255,214,0,0.3); background: rgba(255,255,255,0.05);}
+        .stats-box { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);}
+        .stats-title { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 5px;}
+        .stats-val { font-size: 3rem; font-weight: 800; color: var(--accent-green); text-shadow: 0 0 20px var(--green-glow); line-height: 1;}
         
-        .habit-info { display: flex; align-items: center; gap: 20px; }
-        .checkbox-wrapper { cursor: pointer; }
-        .checkbox { width: 30px; height: 30px; border-radius: 8px; border: 2px solid var(--text-muted); display: flex; justify-content: center; align-items: center; transition: 0.3s; }
-        .checkbox i { color: var(--bg-color); font-size: 1.2rem; opacity: 0; transition: 0.2s;}
-        .checkbox.checked { background: var(--accent-green); border-color: var(--accent-green); box-shadow: 0 0 15px var(--green-glow); }
-        .checkbox.checked i { opacity: 1; }
+        .reset-btn { background: transparent; border: 1px solid rgba(255,51,102,0.4); color: #ff3366; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; margin-top: auto;}
+        .reset-btn:hover { background: rgba(255,51,102,0.1); }
 
-        .habit-name { font-size: 1.3rem; font-weight: 600; color: #fff; }
-        .habit-name.done { color: var(--text-muted); text-decoration: line-through; }
+        /* CALENDAR GRID */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; }
+        .day-box { aspect-ratio: 1; background: rgba(0,0,0,0.4); border: 2px solid var(--border-color); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: 800; color: var(--text-muted); cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); user-select: none; position: relative; overflow: hidden;}
+        
+        .day-box:hover { border-color: var(--accent-green); transform: translateY(-2px); }
+        
+        .day-box.completed { background: rgba(0, 230, 118, 0.15); border-color: var(--accent-green); color: var(--accent-green); box-shadow: inset 0 0 20px rgba(0, 230, 118, 0.2); }
+        .day-box.completed::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 1.5rem; position: absolute; }
+        .day-box.completed span { opacity: 0; } /* Hide number when checked */
 
-        .habit-stats { display: flex; align-items: center; gap: 20px; }
-        .streak-pill { background: rgba(255,214,0,0.1); color: var(--accent-gold); padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 5px;}
-        .btn-delete { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; transition: 0.2s; padding: 5px;}
-        .btn-delete:hover { color: #ff3366; }
-
-        .empty-state { text-align: center; padding: 40px 0; color: var(--text-muted); }
-        .empty-state i { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; color: var(--accent-gold);}
-
-        /* Notification */
-        .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-green); color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
-        .notification.show { transform: translateY(0); opacity: 1; }
-
-        /* ARTICLE SECTION */
         .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
         .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
         .article-container h2:first-child { margin-top: 0; }
         .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
         .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
-        .article-container ul { padding-left: 20px; margin-bottom: 20px;}
-        .article-container li { font-size: 1.1rem; margin-bottom: 10px;}
-        
-        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; margin-top: 60px;}
-        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
-        .footer-links a:hover { color: var(--accent-gold); }
 
-        @media(max-width: 600px) {
-            .habit-card { flex-direction: column; align-items: flex-start; gap: 15px;}
-            .habit-stats { width: 100%; justify-content: space-between;}
-            .add-habit-bar { flex-direction: column;}
-            .btn-add { padding: 15px; }
+        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+
+        /* THE MOBILE FIXES */
+        @media (max-width: 900px) {
+            .app-layout { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none !important; }
+            .desktop-btn { display: none !important; }
+            .mobile-menu-btn { display: block !important; }
+            
+            /* Fixes the Giant Title */
+            .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
+            .tool-header p { font-size: 1rem; }
+            
+            /* Fixes the Calendar grid on tiny screens */
+            .calendar-grid { gap: 8px; }
+            .day-box { font-size: 1rem; border-radius: 8px; border-width: 1px;}
+            .day-box.completed::after { font-size: 1.2rem; }
+            .article-container { padding: 30px 20px; }
         }
     </style>
 </head>
@@ -101,273 +149,178 @@
     <div class="bg-pattern"></div>
 
     <header>
-        <a href="../../index" class="logo">Affilore</a>
+        <a href="../../index.html" class="logo">
+            <img src="../../logo.jpg" alt="Affilore Logo" class="logo-img">
+            Affilore
+        </a>
         <nav class="nav-links">
-            <a href="../../index">Home</a>
-            <a href="../../index#categories">Categories</a>
-            <a href="../../about">About Us</a>
+            <a href="../../index.html">Home</a>
+            <a href="../../index.html#categories">Categories</a>
+            <a href="../../about.html">About Us</a>
         </nav>
-        <div>
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn">Custom Tool</a>
+        <div class="header-right">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn desktop-btn">Custom Tool</a>
+            <button class="mobile-menu-btn" id="mobileToggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
+
+    <div class="mobile-overlay" id="mobileMenu">
+        <a href="../../index.html" onclick="toggleMenu()">Home</a>
+        <a href="../../index.html#categories" onclick="toggleMenu()">Categories</a>
+        <a href="../../about.html" onclick="toggleMenu()">About Us</a>
+        <a href="../../contact.html" onclick="toggleMenu()">Contact Us</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="mobile-custom-btn">Custom Tool</a>
+    </div>
 
     <div class="tool-container">
         <div class="tool-header">
             <h1>Minimalist Habit Tracker</h1>
-            <p>100% private, browser-based daily tracker. Don't break the chain.</p>
+            <p>Don't break the chain. Track your daily habit locally in your browser.</p>
         </div>
 
-        <div class="dashboard">
-            <div class="add-habit-bar">
-                <input type="text" id="habitInput" placeholder="Enter a new micro-habit (e.g. Read 10 pages)" onkeypress="handleEnter(event)">
-                <button class="btn-add" onclick="addHabit()"><i class="fas fa-plus"></i> Add Habit</button>
+        <div class="app-layout">
+            <div class="panel">
+                <input type="text" id="habitName" class="habit-input" placeholder="Name your habit..." value="Read 10 Pages">
+                
+                <div class="stats-box">
+                    <div class="stats-title">Current Streak</div>
+                    <div class="stats-val" id="currentStreak">0</div>
+                </div>
+                
+                <div class="stats-box" style="border-bottom: none;">
+                    <div class="stats-title">Total Days Completed</div>
+                    <div class="stats-val" id="totalCompleted" style="color: #fff; text-shadow: none;">0</div>
+                </div>
+
+                <button class="reset-btn" onclick="resetTracker()"><i class="fas fa-undo"></i> Reset Tracker</button>
             </div>
 
-            <div class="habit-list" id="habitList">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin: 0;"><i class="fas fa-calendar-check"></i> 30-Day Challenge</h3>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;"><i class="fas fa-lock"></i> Data stored locally</span>
                 </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    </div>
+            </div>
         </div>
     </div>
 
     <div class="article-container">
-        <h2>Why Most Habit Tracking Apps Are Setting You Up to Fail (And What to Use Instead)</h2>
-        <p>You downloaded the app. You created an account. You set up notifications. You explored the analytics dashboard. You customised the icons. And somewhere in that process — before you ever checked off a single habit — you quietly stopped caring.</p>
-        <p>This is the story of virtually every habit-building attempt in the modern era. And the culprit isn't your discipline, your willpower, or your ambition. <strong>The culprit is friction.</strong> The apps designed to help you build better habits have become so feature-laden, so account-dependent, so notification-addicted, that they've created more cognitive overhead than the habits themselves.</p>
-        <p>Research from behavioural science is consistent and unambiguous: the more steps stand between intention and action, the less likely the action becomes. Every login screen, every push notification asking for permission, every onboarding survey, every gamification badge — each one is a micro-tax on your motivation. And motivation, unlike discipline, is a finite daily resource.</p>
-        <p>The solution isn't a better app. It's a <strong>simpler</strong> one.</p>
-        <p>The <strong>Affilore Minimalist Habit Tracker</strong> is built on a single governing principle: the tool should disappear. It opens instantly, requires nothing from you, stores your data without asking for it, and gets completely out of the way so you can focus on the one thing that matters — showing up today.</p>
+        <h2>The Seinfeld Strategy: Why "Don't Break the Chain" Works</h2>
+        <p>When an aspiring comedian asked Jerry Seinfeld for advice on how to be a better comic, Seinfeld didn't talk about finding better material, studying crowds, or networking. He talked about a calendar.</p>
+        <p>He told the young comic to get a large wall calendar that has a whole year on one page and hang it prominently. Next, get a big red magic marker. For each day that you do your task of writing, put a big red X over that day. "After a few days you'll have a chain. Just keep at it and the chain will grow longer every day. You'll like seeing that chain, especially when you get a few weeks under your belt. Your only job next is to not break the chain."</p>
 
-        <h2>How the Affilore Minimalist Habit Tracker Works</h2>
-        <p>Most habit apps live on someone else's server. Your routines, your check-ins, your streaks — they're uploaded to a database owned by a company with its own interests, its own monetisation strategy, and its own inevitable product pivot.</p>
-        <p>The Affilore Habit Tracker works differently. It runs <strong>entirely in your browser</strong>, powered by client-side technology. That means:</p>
-        <ul>
-            <li><strong>No account required</strong> — there is no sign-up flow because there is no account system</li>
-            <li><strong>No server uploads</strong> — your habit data never leaves your device</li>
-            <li><strong>Instant load</strong> — because there's no authentication layer, the dashboard opens in under a second</li>
-            <li><strong>Zero notifications</strong> — the tool doesn't have permission to interrupt your day, and it never asks for it</li>
-        </ul>
-        <p>Your habit data is stored in your browser's <code>localStorage</code> — a private, sandboxed storage area that exists entirely on your own machine. It persists across sessions automatically, which means your streaks are waiting for you every time you return, without any syncing, loading, or logging back in.</p>
+        <h3>Action Precedes Motivation</h3>
+        <p>The mistake most people make when building a habit is waiting until they feel motivated to do it. The Affilore Minimalist Habit Tracker is designed to bypass motivation entirely. By gamifying the process of showing up, the tracker hacks your brain's reward system. You aren't writing a book today; you are just earning your green checkmark.</p>
 
-        <h3>Getting Started in 30 Seconds</h3>
-        <ul>
-            <li><strong>Scroll up to the tracker</strong> at the top of this page</li>
-            <li><strong>Add your first habit</strong> — keep it small. "Drink a glass of water" beats "Exercise for 45 minutes" every time</li>
-            <li><strong>Check it off today</strong> — that single checkmark is the beginning of your streak</li>
-            <li><strong>Return tomorrow</strong> — the tracker remembers exactly where you left off</li>
-        </ul>
-        <p>That's the entire product. There is nothing else to configure, nothing to unlock, and no premium tier to upgrade to. Simplicity is the feature.</p>
-
-        <h2>The Science of the Streak: Why the Seinfeld Strategy Works</h2>
-        <p>Jerry Seinfeld — one of the most prolific comedy writers in history — was once asked by a young comedian how to get better at writing jokes. His answer had nothing to do with technique, inspiration, or craft. It was a system.</p>
-        <p>Seinfeld told him to get a big wall calendar that shows the whole year on one page, and a red marker. Every day he writes, he puts a large red X over that day. After a few days, he has a chain of X's. The job then becomes <strong>to not break the chain.</strong></p>
-        <p>This strategy — now widely known as the <strong>Seinfeld Strategy</strong> — works because it harnesses one of the most powerful forces in human psychology: <strong>loss aversion.</strong> We are neurologically wired to fear losses more intensely than we desire equivalent gains. In habit terms, this means the pain of breaking a 14-day streak is a far more potent motivator than the abstract reward of "being healthier."</p>
-
-        <h3>Why Visual Checkmarks Beat Complex Analytics</h3>
-        <p>Modern habit apps tend to overwhelm users with completion rate percentages, trend graphs, and weekly summary reports. While intellectually satisfying, this data-heavy approach actually undermines habit formation in a subtle but significant way — it shifts your focus from <strong>doing the habit</strong> to <strong>analysing the habit.</strong></p>
-        <p>The simple checkmark is superior for three reasons:</p>
-        <ul>
-            <li><strong>Immediate reward loop</strong> — the act of checking a box triggers a small dopamine release, reinforcing the behaviour on a neurological level</li>
-            <li><strong>Clarity of status</strong> — you either did it or you didn't. Binary feedback is faster to process and act on than a percentage</li>
-            <li><strong>Streak visibility</strong> — a row of consecutive checkmarks creates a visual "chain" that makes breaking the streak feel genuinely costly</li>
-        </ul>
-        <p>The Affilore tracker is built around this insight. The interface is deliberately sparse. There are no charts. There are no badges. There are no weekly recap emails. There is only the streak — clean, visible, and yours to protect.</p>
-
-        <h2>Why Privacy Matters in Personal Development</h2>
-        <p>Habit data is intimate data. Your morning routine, your sleep consistency, your exercise frequency, your meditation practice — these patterns reveal more about your psychology, your mental health, and your personal circumstances than almost any other data type.</p>
-        <p>When you store this information in a cloud-based app, you are placing it in the hands of entities who have their own interests. Even with the most benevolent of intentions, that data sits in a database that can be:</p>
-        <ul>
-            <li><strong>Breached</strong> — no company's servers are impervious to attack</li>
-            <li><strong>Sold</strong> — privacy policies change, and data is an asset that companies have monetised before</li>
-            <li><strong>Subpoenaed</strong> — your personal behavioural data exists in a jurisdiction not necessarily your own</li>
-            <li><strong>Lost</strong> — when startups fail (and most eventually do), so does your data</li>
-        </ul>
-
-        <h3>The Right to Private Self-Improvement</h3>
-        <p>There is something philosophically troubling about a world where tracking whether you meditated this morning requires surrendering that information to a Silicon Valley server farm. Personal development is, by definition, personal. The investment you make in yourself — the small, private decisions to be slightly better each day — shouldn't require an audience.</p>
-        <p>The Affilore Habit Tracker restores that privacy as a baseline. Your habit data is processed locally, stored locally, and never transmitted anywhere. The business model of Affilore does not depend on knowing your routines. Your data has no value to us because we never see it.</p>
-        <p>This isn't a feature added to a complex product. It's the architectural foundation of the entire tool.</p>
-
-        <h2>Frequently Asked Questions About the Affilore Habit Tracker</h2>
-        
-        <h3>Where is my habit data saved?</h3>
-        <p>Your data is saved in your browser's localStorage — a private storage area built into every modern browser (Chrome, Firefox, Safari, Edge). This storage exists exclusively on your device. The Affilore servers never receive, process, or store any of your habit information. Think of it as a sticky note that lives inside your browser, accessible only to you.</p>
-
-        <h3>What happens if I clear my browser cache or cookies?</h3>
-        <p>Clearing site data, cookies, or browser cache for the Affilore domain will erase your localStorage data, which means your habits and streak history will be reset. To protect against this, avoid selecting "All time" or "All sites" when clearing browsing data — instead, choose to clear only cookies or cache for specific sites you want to reset. For most users who don't routinely wipe their browser data, this is never an issue in day-to-day use.</p>
-
-        <h3>Can I access my habits on another device?</h3>
-        <p>Currently, because the tracker is client-side by design, your habit data is tied to the specific browser on the specific device you used to set it up. There is no cross-device sync — and that's an intentional privacy trade-off. If you regularly use two devices, simply bookmark the Affilore tracker on each and set up your habits on both. They'll operate as separate, independent trackers.</p>
-
-        <h3>How many habits can I track?</h3>
-        <p>There is no set limit enforced by the tool. However, behavioural research strongly suggests that tracking three to five habits simultaneously is the optimal range for most people. Beyond five, attention and prioritisation become diluted, and completion rates for all tracked habits tend to decline. Start with your three most important micro-habits and expand only once those feel automatic.</p>
-
-        <h3>Is this tool really completely free?</h3>
-        <p>Yes, entirely. There is no free tier versus paid tier, no feature gating, and no credit card required (or requestable — there's no payment system at all). Affilore funds its infrastructure through contextual advertising. The Habit Tracker, like every tool on this platform, will remain free to use in full.</p>
-
-        <h3>Will my streak survive if the browser is closed or the computer is restarted?</h3>
-        <p>Absolutely. localStorage persists across browser sessions, restarts, and shutdowns. Your streak data will be exactly where you left it the next time you open the tracker — whether that's 8 hours or 8 days later. The data only disappears if you explicitly clear your site data, as described above.</p>
-
-        <div style="text-align: center; margin-top: 40px;">
-            <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your Chain Starts Today</p>
-            <p style="color: #fff;">Somewhere between the login screen and the onboarding tutorial, most people lose the battle before it starts. You've already won that fight. Scroll back to the top of this page right now. Add your first three micro-habits, check off today's box, and don't break the chain.</p>
-        </div>
+        <h3>100% Private By Design</h3>
+        <p>Your goals are your business. Unlike massive app ecosystems that harvest your daily routine data, require account signups, and push notifications to your phone, this tracker operates entirely on your local machine using standard HTML5 `localStorage`.</p>
     </div>
 
-    <div class="notification" id="toast">Habit Completed! 🔥</div>
-
     <footer>
-        <div class="footer-links">
-            <a href="../../about">About Us</a>
-            <a href="../../contact">Contact Us</a>
-            <a href="../../privacy">Privacy Policy</a>
-            <a href="../../terms">Terms & Conditions</a>
-        </div>
-        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
+        <p style="color: var(--text-muted);">&copy; 2026 Affilore.com. All rights reserved.</p>
     </footer>
 
     <script>
-        let habits = [];
-
-        // Helper: Get local YYYY-MM-DD string
-        function getTodayString() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadHabits();
-            checkStreaks();
-            renderHabits();
-        });
-
-        function loadHabits() {
-            const saved = localStorage.getItem('affiloreHabits');
-            if (saved) {
-                habits = JSON.parse(saved);
-            }
-        }
-
-        function saveHabits() {
-            localStorage.setItem('affiloreHabits', JSON.stringify(habits));
-        }
-
-        function handleEnter(e) {
-            if (e.key === 'Enter') addHabit();
-        }
-
-        function addHabit() {
-            const input = document.getElementById('habitInput');
-            const title = input.value.trim();
-            if (!title) return;
-
-            habits.push({
-                id: Date.now().toString(),
-                title: title,
-                streak: 0,
-                lastChecked: null
-            });
-
-            input.value = '';
-            saveHabits();
-            renderHabits();
-        }
-
-        function deleteHabit(id) {
-            if(confirm("Delete this habit? Your streak will be lost forever.")) {
-                habits = habits.filter(h => h.id !== id);
-                saveHabits();
-                renderHabits();
-            }
-        }
-
-        // Core Logic: Validates if the user missed a day
-        function checkStreaks() {
-            const today = getTodayString();
-            const yesterdayDate = new Date();
-            yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-            const yesterday = `${yesterdayDate.getFullYear()}-${String(yesterdayDate.getMonth() + 1).padStart(2, '0')}-${String(yesterdayDate.getDate()).padStart(2, '0')}`;
-
-            habits.forEach(habit => {
-                if (habit.lastChecked !== today && habit.lastChecked !== yesterday && habit.lastChecked !== null) {
-                    // They broke the chain
-                    habit.streak = 0; 
-                }
-            });
-            saveHabits();
-        }
-
-        function toggleHabit(id) {
-            const today = getTodayString();
-            const habitIndex = habits.findIndex(h => h.id === id);
-            const habit = habits[habitIndex];
-
-            if (habit.lastChecked === today) {
-                // Undo check (accidental click)
-                habit.streak = Math.max(0, habit.streak - 1);
-                habit.lastChecked = null; // Simplification: we don't store deep history, just streak length
+        // GLOBAL HEADER MENU LOGIC
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileToggle i');
+            menu.classList.toggle('open');
+            if(menu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
             } else {
-                // Check it off for today
-                habit.streak += 1;
-                habit.lastChecked = today;
-                showToast("Habit Completed! 🔥");
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
             }
-
-            saveHabits();
-            renderHabits();
         }
 
-        function renderHabits() {
-            const list = document.getElementById('habitList');
-            const today = getTodayString();
-            list.innerHTML = '';
+        // HABIT TRACKER LOGIC
+        const TOTAL_DAYS = 30;
+        let habitData = JSON.parse(localStorage.getItem('affilore_habit')) || {
+            name: 'Read 10 Pages',
+            days: Array(TOTAL_DAYS).fill(false)
+        };
 
-            if (habits.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-seedling"></i>
-                        <h3>Your tracking board is empty.</h3>
-                        <p>Add a micro-habit above to start building your streak.</p>
-                    </div>
-                `;
-                return;
-            }
+        const grid = document.getElementById('calendarGrid');
+        const nameInput = document.getElementById('habitName');
 
-            habits.forEach(habit => {
-                const isDoneToday = habit.lastChecked === today;
-                const checkClass = isDoneToday ? 'checked' : '';
-                const textClass = isDoneToday ? 'done' : '';
-                const fireColor = habit.streak > 0 ? '#ff5500' : 'var(--text-muted)';
+        function init() {
+            nameInput.value = habitData.name;
+            renderGrid();
+            updateStats();
 
-                const card = document.createElement('div');
-                card.className = 'habit-card';
-                card.innerHTML = `
-                    <div class="habit-info" onclick="toggleHabit('${habit.id}')">
-                        <div class="checkbox-wrapper">
-                            <div class="checkbox ${checkClass}"><i class="fas fa-check"></i></div>
-                        </div>
-                        <div class="habit-name ${textClass}">${habit.title}</div>
-                    </div>
-                    <div class="habit-stats">
-                        <div class="streak-pill" title="Current Streak">
-                            <i class="fas fa-fire" style="color: ${fireColor};"></i> ${habit.streak} Days
-                        </div>
-                        <button class="btn-delete" onclick="deleteHabit('${habit.id}')" title="Delete Habit"><i class="fas fa-trash-alt"></i></button>
-                    </div>
-                `;
-                list.appendChild(card);
+            nameInput.addEventListener('input', (e) => {
+                habitData.name = e.target.value;
+                saveData();
             });
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        function renderGrid() {
+            grid.innerHTML = '';
+            for (let i = 0; i < TOTAL_DAYS; i++) {
+                const box = document.createElement('div');
+                box.className = `day-box ${habitData.days[i] ? 'completed' : ''}`;
+                box.innerHTML = `<span>${i + 1}</span>`;
+                box.onclick = () => toggleDay(i);
+                grid.appendChild(box);
+            }
         }
+
+        function toggleDay(index) {
+            habitData.days[index] = !habitData.days[index];
+            saveData();
+            renderGrid();
+            updateStats();
+        }
+
+        function updateStats() {
+            let currentStreak = 0;
+            let maxStreak = 0;
+            let total = 0;
+
+            for (let i = 0; i < TOTAL_DAYS; i++) {
+                if (habitData.days[i]) {
+                    currentStreak++;
+                    total++;
+                    if (currentStreak > maxStreak) maxStreak = currentStreak;
+                } else {
+                    currentStreak = 0; // Reset streak if broken
+                }
+            }
+
+            // Find current active streak counting backward from the last checked day
+            let activeStreak = 0;
+            for (let i = TOTAL_DAYS - 1; i >= 0; i--) {
+                if (habitData.days[i]) {
+                    activeStreak++;
+                } else if (activeStreak > 0) {
+                    break; // stop counting once a gap is found after a checked day
+                }
+            }
+
+            document.getElementById('currentStreak').innerText = maxStreak; // Displaying longest continuous chain for motivation
+            document.getElementById('totalCompleted').innerText = total;
+        }
+
+        function resetTracker() {
+            if (confirm("Are you sure you want to reset your entire 30-day progress?")) {
+                habitData.days = Array(TOTAL_DAYS).fill(false);
+                saveData();
+                renderGrid();
+                updateStats();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('affilore_habit', JSON.stringify(habitData));
+        }
+
+        window.onload = init;
     </script>
 </body>
 </html>
