@@ -63,7 +63,7 @@
         .tab-btn.active { color: var(--accent-red); border-bottom-color: var(--accent-red); }
         .tab-btn:hover:not(.active) { color: #fff; }
 
-        .output-box { display: none; width: 100%; height: 500px; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.6); color: #e0e0e0; font-family: monospace; font-size: 0.95rem; overflow-y: auto; line-height: 1.6; white-space: pre-wrap;}
+        .output-box { display: none; width: 100%; height: 600px; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.6); color: #e0e0e0; font-family: monospace; font-size: 0.95rem; overflow-y: auto; line-height: 1.6; white-space: pre-wrap;}
         .output-box.active { display: block; }
         
         .btn-copy { background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 15px; width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;}
@@ -136,9 +136,9 @@
                 <div class="input-group">
                     <label>Video Length</label>
                     <select id="vidLength">
-                        <option value="Short Form (TikTok/Shorts)">Short Form (Under 60 Seconds)</option>
-                        <option value="Medium (8-12 minutes)">Medium (8-12 mins) - Standard</option>
-                        <option value="Long (15-20+ minutes)">Long Documentaries (15+ mins)</option>
+                        <option value="short">Short Form (Under 60 Seconds)</option>
+                        <option value="medium">Medium (8-12 mins) - Standard</option>
+                        <option value="long">Long Documentaries (15-20+ mins)</option>
                     </select>
                 </div>
 
@@ -156,7 +156,7 @@
                     <button class="tab-btn" onclick="switchTab('prompt')" id="tab-prompt">AI Mega-Prompt</button>
                 </div>
 
-                <div class="output-box active" id="out-script">Fill out the details on the left and click "Generate Script" to instantly write your word-for-word draft.</div>
+                <div class="output-box active" id="out-script">Fill out the details on the left and click "Generate Script" to instantly write your draft. Length will adapt based on your selection.</div>
                 <div class="output-box" id="out-prompt">Your AI Mega-Prompt will appear here. Paste this into ChatGPT or Claude to generate an even more advanced version.</div>
 
                 <button class="btn-copy" onclick="copyContent()"><i class="far fa-copy"></i> Copy Current Tab</button>
@@ -196,7 +196,6 @@
             <li><strong>The Curiosity Gap:</strong> "There's a setting buried inside YouTube Studio that 99% of creators have never touched. It might be the reason your videos aren't growing."</li>
             <li><strong>The Immediate Result Promise:</strong> "By the end of this video, you'll have a complete, ready-to-film script for your next upload."</li>
         </ul>
-        <p>The Affilore generator crafts a tailored hook structure based on your topic and audience, so you start every video with momentum.</p>
 
         <h3>I — Intro (0:30 to 1:30)</h3>
         <p>The intro establishes credibility, deepens the promise made in the hook, and defines exactly what the viewer will get by watching to the end. This is where you earn the right to deliver your content. Keep it tight. Three sentences maximum.</p>
@@ -222,31 +221,21 @@
             <li><strong>Tone and length:</strong> "Professional but conversational. Approximately 1,200 words. Avoid jargon."</li>
             <li><strong>Specific outcome:</strong> "The viewer should finish the video knowing exactly what three changes to make to their Google Ads account today."</li>
         </ul>
-        <p>The difference in output quality is not marginal — it is transformational. Generic prompts produce average scripts. Mega-Prompts produce scripts that drive watch time, subscriber growth, and genuine viewer loyalty.</p>
 
         <h2>Frequently Asked Questions About YouTube Scripts</h2>
         
         <h3>How long should a YouTube script be?</h3>
-        <p>Script length should always be determined by topic complexity and audience expectation, not by an arbitrary time target. A well-paced video for a tutorial might average 150–180 words per minute of final video. A 10-minute video therefore requires roughly a 1,500–1,800-word script. That said, the H.I.V.E. framework prioritises density of value over duration — a tightly scripted 7-minute video will outperform a padded 15-minute video in retention metrics every single time.</p>
+        <p>Script length should always be determined by topic complexity and audience expectation, not by an arbitrary time target. A well-paced video for a tutorial might average 150–180 words per minute of final video. A 10-minute video therefore requires roughly a 1,500–1,800-word script.</p>
 
         <h3>Should I read my script word-for-word on camera?</h3>
-        <p>No — and yes, with context. Reading a script verbatim without internalising it first produces a flat, stilted delivery that viewers immediately detect. The goal is to use your script as a memory architecture. Internalise the key beats, the hook wording, and the transitions. Then speak naturally from those anchors. Many top creators use bullet-point teleprompter scripts rather than full-sentence scripts, which allows natural delivery while maintaining structural discipline.</p>
+        <p>No — and yes, with context. Reading a script verbatim without internalising it first produces a flat, stilted delivery that viewers immediately detect. The goal is to use your script as a memory architecture.</p>
 
         <h3>Can I use the Affilore generator for YouTube Shorts?</h3>
-        <p>Absolutely. The H.I.V.E. formula compresses elegantly for short-form content. For Shorts, the Hook and CTA dominate — the Value section becomes a single punchy insight or step. Select "Short Form" as your video length in the generator and it will output a Shorts-optimised framework and corresponding Mega-Prompt.</p>
-
-        <h3>Do I need to use ChatGPT specifically to use this tool?</h3>
-        <p>No. The Mega-Prompts generated by the Affilore tool are model-agnostic. They produce excellent results with ChatGPT (GPT-4o), Anthropic's Claude, Google's Gemini, and other large language models. The structural logic of the prompt is what drives quality — not the specific AI you paste it into.</p>
-
-        <h3>How is this different from just asking AI to write a script directly?</h3>
-        <p>Think of it this way: asking AI to write your script is like giving a contractor a rough sketch and saying "build something." Using the Affilore generator first is like handing that same contractor a full architectural blueprint, material list, and project brief. The output quality isn't slightly different — it's categorically different. The generator ensures your AI-produced script has proper retention mechanics, a crafted hook, and a structure that the YouTube algorithm will reward.</p>
-
-        <h3>Will a scripted video feel inauthentic to my audience?</h3>
-        <p>This is the most common misconception in content creation. Authenticity comes from your perspective and delivery — not from improvisation. Every major talk show host, documentary narrator, and TED speaker works from a script. The script doesn't make you robotic; a poorly internalised script does. Use the framework to plan, internalise the flow, and deliver with your natural voice. The result is content that feels both polished and genuine.</p>
+        <p>Absolutely. The H.I.V.E. formula compresses elegantly for short-form content. For Shorts, the Hook and CTA dominate — the Value section becomes a single punchy insight or step.</p>
 
         <div style="text-align: center; margin-top: 40px;">
             <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your First High-Retention Script Is 60 Seconds Away</p>
-            <p style="color: #fff;">The creators winning on YouTube in 2026 are not more talented than you. They are more structured than you. Scroll back to the top of this page, enter your video topic into the Affilore AI YouTube Script Generator, and walk away with a complete H.I.V.E. script and Mega-Prompt in under 60 seconds.</p>
+            <p style="color: #fff;">The creators winning on YouTube in 2026 are not more talented than you. They are more structured than you. Scroll back to the top of this page, enter your video topic, and walk away with a complete H.I.V.E. script.</p>
         </div>
     </div>
 
@@ -282,8 +271,26 @@
             const length = document.getElementById('vidLength').value;
             const cta = document.getElementById('vidCTA').value || 'Subscribe to the channel';
 
-            // GENERATE ACTUAL SCRIPT USING DYNAMIC TEMPLATES
-            const scriptText = `🎬 GENERATED YOUTUBE SCRIPT
+            let scriptText = '';
+
+            if (length === 'short') {
+                scriptText = `🎬 GENERATED YOUTUBE SHORT / TIKTOK
+Topic: ${topic}
+Style: ${tone}
+
+[0:00] THE HOOK (High energy)
+"Stop scrolling! If you are part of the ${audience} community, you are probably doing ${topic} completely wrong. Here is the exact fix."
+
+[0:05] THE CORE VALUE
+(Visual: Fast jump cuts or text on screen)
+"The biggest mistake people make is focusing on the wrong things. Instead, you need to do this one thing right now. First, identify the core problem. Second, apply the secret technique that the top 1% use. It's actually incredibly simple when you break it down."
+[Insert specific tip here]
+
+[0:45] THE CTA
+"If you want to master this, ${cta}. Check the link in my bio for the full breakdown!"
+`;
+            } else if (length === 'medium') {
+                scriptText = `🎬 GENERATED YOUTUBE SCRIPT (8-12 MINS)
 Topic: ${topic}
 Style: ${tone}
 
@@ -299,22 +306,83 @@ Style: ${tone}
 (Visual: Display text on screen)
 "Let's start with the biggest mistake people make. When it comes to ${topic}, the standard advice you hear online is usually terrible. Instead of focusing on the basics, people get distracted by shiny new tactics. What you actually need to do first is build a solid foundation."
 
-[2:30] PART 2: The Strategy
+[3:30] PART 2: The Strategy
 (Visual: Change camera angle or zoom in slightly)
 "Now that we've fixed the foundation, let's talk about the actual strategy. The key here is consistency. If you want to succeed, you need to implement this one daily habit..." 
 [Insert your specific tips here]
 
-[4:00] PART 3: The Secret Weapon
+[6:00] PART 3: The Secret Weapon
 "I promised you a secret weapon earlier, and here it is. While everyone else is struggling with ${topic}, the top 1% are doing this..."
 [Explain the advanced tip or unique perspective]
 
-[5:30] THE OUTRO & CTA
+[8:30] THE OUTRO & CTA
 "So, to recap: fix your foundation, stay consistent with the strategy, and use that secret weapon to scale. If you implement these three things, your results will change dramatically. 
 
 If you want to learn more, ${cta}. And if you liked this video, you absolutely need to watch this video right here where I explain the next step in the process. See you in the next one!"
 `;
+            } else {
+                // MASSIVE 15+ MINUTE SCRIPT
+                scriptText = `🎬 GENERATED DOCUMENTARY SCRIPT (15-20+ MINS)
+Topic: ${topic}
+Target Audience: ${audience}
+Style: Deep Dive / ${tone}
 
-            // GENERATE MEGA-PROMPT (Kept as an option for users who want ChatGPT to expand it further)
+[0:00 - 1:30] THE COLD OPEN (High Stakes, Cinematic)
+(Visual: Montage of historical clips, fast-paced B-roll related to ${topic}, atmospheric music builds)
+"We are living in an era where ${topic} has never been more relevant, yet never more misunderstood. For decades, the ${audience} community has been fed a specific narrative. A narrative that dictates how we approach this problem, how we measure success, and ultimately, why so many of us fail. 
+
+But behind closed doors, a quiet revolution has been happening. A small group of outliers realized that the traditional advice is fundamentally broken. Today, we are going to dismantle everything you thought you knew about ${topic}. We are going to look at the history, the hidden mechanics, and the exact, step-by-step blueprint that actually works."
+
+[1:30 - 2:00] TITLE SEQUENCE
+(Visual: Cinematic Title Card fades in. Music swells and drops.)
+
+[2:00 - 5:00] CHAPTER 1: The Origin of the Problem
+(Visual: Presenter sitting in a softly lit, professional studio set)
+"To understand how to master ${topic}, we first have to understand why it's so incredibly difficult in the first place. The human brain is actually wired to resist the exact changes necessary to achieve this. When we look at the data surrounding the ${audience} demographic, a startling pattern emerges. 
+
+Most people start with immense motivation. They buy the tools, they read the guides. But within 3 weeks, 90% of them quit. Why? Because they are fighting the wrong battle. They are treating a systematic problem as a willpower problem. 
+
+(Visual: Screen recording or whiteboard animation)
+Let me show you what I mean. If you look at this chart..."
+[Insert deep-dive explanation of the underlying psychological or technical struggle]
+
+[5:00 - 9:00] CHAPTER 2: The Paradigm Shift
+"So if willpower isn't the answer, what is? About three years ago, a massive shift occurred in how experts approach ${topic}. Instead of trying to force the issue, they started engineering environments that made failure impossible. 
+
+The secret lies in a concept called 'Friction Architecture'. When you apply this to ${topic}, the results are staggering. Let's break down the three pillars of this new paradigm. 
+
+Pillar number one: Elimination. You cannot add new, positive behaviors until you ruthlessly eliminate the bottlenecks. For example..."
+[Insert extensive, detailed examples of what not to do]
+
+[9:00 - 13:00] CHAPTER 3: Execution and The Micro-Step Method
+(Visual: Switch to a more dynamic, active camera angle)
+"Now we move from theory to execution. How do you actually implement this starting today? This is where the 'Micro-Step Method' comes into play. If you are part of the ${audience} group, you probably try to overhaul your entire system overnight. That guarantees failure.
+
+Instead, we are going to break ${topic} down into microscopic, undeniable wins. 
+Phase 1: The First 72 Hours. In this phase, your only goal is..."
+[Insert highly specific, actionable steps for the viewer to take immediately]
+
+"Phase 2: The Two-Week Dip. This is where the initial motivation fades. Here is exactly how you trick your brain into pushing through..."
+[Insert psychological strategies and persistence tactics]
+
+[13:00 - 16:00] CHAPTER 4: The Hidden Pitfalls (What No One Tells You)
+"Before you go out and apply this, I need to warn you about the 'False Summit'. When people start seeing initial success with ${topic}, a strange psychological phenomenon occurs. They get complacent. They think they've mastered it. And then, they crash.
+
+To prevent this, you need to implement a feedback loop. A feedback loop is a mechanism that objectively measures your progress without relying on your emotions. Here is the exact template I use to track my progress..."
+[Explain a tracking method or software solution]
+
+[16:00 - 18:30] CHAPTER 5: The compounding Effect
+"If you follow this framework—if you eliminate the friction, apply the micro-steps, and survive the False Summit—something incredible happens around month three. The effort required drops to near zero, but the results compound exponentially. This is the holy grail of ${topic}. This is where the top 1% operate."
+
+[18:30 - 20:00] CONCLUSION & CTA
+(Visual: Slow zoom on presenter, music returns to an inspiring, atmospheric tone)
+"Mastering ${topic} is not about being smarter, working harder, or having better genetics. It is simply about having a superior framework. You now have that framework. The only variable left is execution. 
+
+If you found value in this deep dive, ${cta}. But more importantly, if you want to see exactly how I apply this framework in my own life on a daily basis, you need to watch this video right here on the screen. I pull back the curtain on my entire daily routine. Click the video, and I'll see you over there."
+`;
+            }
+
+            // GENERATE MEGA-PROMPT
             const promptText = `I want you to act as an elite YouTube Scriptwriter and Retention Strategist. You specialize in MrBeast/Ali Abdaal style pacing—zero fluff, high curiosity gaps, and engaging storytelling.
 
 Please write a complete, word-for-word YouTube script for me based on the following parameters:
