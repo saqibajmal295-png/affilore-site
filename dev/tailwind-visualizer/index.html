@@ -122,15 +122,16 @@
         .notification { position: fixed; bottom: 30px; right: 30px; background: #ffd600; color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
         .notification.show { transform: translateY(0); opacity: 1; }
 
-        /* SEO SECTION */
-        .article-wrap { background: var(--bg-color); padding: 80px 5%; }
+        /* FULL SEO ARTICLE SECTION */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); }
         .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
         .article-container h2 { color: #ffd600; font-size: 2.2rem; margin: 40px 0 20px; }
         .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
-        .article-container p { margin-bottom: 20px; }
-        .article-container ul { padding-left: 20px; margin-bottom: 20px; }
+        .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
         .article-container li { margin-bottom: 10px; }
-        .article-container code { background: rgba(56, 189, 248, 0.1); color: var(--accent-blue); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        .article-container code { background: rgba(56, 189, 248, 0.1); color: var(--accent-blue); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 1rem;}
+        .article-container pre { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; font-family: monospace; color: var(--accent-blue); overflow-x: auto; margin-bottom: 20px; border: 1px solid var(--border-color);}
         
         footer { background: #08080a; border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
         .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
@@ -238,45 +239,98 @@
     <div class="article-wrap">
         <div class="article-container">
             <h2>The Best Code Is the Code You Can See Immediately</h2>
-            <p>There's a specific kind of developer frustration that Tailwind CSS users know intimately. You have a component idea — a card, a nav, a pricing table — and the path from idea to visible result used to involve spinning up a build tool, configuring PostCSS, installing dependencies, and waiting for a dev server to compile before a single utility class could be rendered.</p>
-            <p>Tailwind CSS fundamentally changed how developers think about styling. Its utility-first model collapsed the distance between design intention and CSS output, replacing mental context-switching between stylesheets and markup with a single, composable layer right in your HTML. It's fast to write, fast to read, and Pair with a proper sandbox, fast to iterate.</p>
+            <p>There's a specific kind of developer frustration that Tailwind CSS users know intimately. You have a component idea — a card, a nav, a pricing table — and the path from idea to visible result used to involve spinning up a build tool, configuring PostCSS, installing dependencies, and waiting for a dev server to compile before a single utility class could be rendered. By the time the browser opened, the momentum was gone.</p>
+            <p>Tailwind CSS fundamentally changed how developers think about styling. Its utility-first model collapsed the distance between design intention and CSS output, replacing mental context-switching between stylesheets and markup with a single, composable layer right in your HTML. It's fast to write, fast to read, and — when paired with a proper sandbox — fast to iterate.</p>
+            <p>That last part is the key. Tailwind's philosophy demands rapid visual feedback. Writing <code>rounded-xl shadow-lg bg-gradient-to-br from-violet-600 to-indigo-600</code> is only productive if you can <em>see</em> it rendered the moment you type it. That's the gap a browser-based visualizer fills — and why the <strong>Affilore Tailwind CSS Component Visualizer</strong> exists.</p>
 
             <h2>How the Affilore Tailwind Visualizer Works</h2>
-            <p>The Affilore Tailwind CSS Component Visualizer is a <strong>live, browser-based rendering engine</strong> built on top of the official Tailwind Play CDN. It requires no installation, no Node.js, and no configuration. Open the tool, write your HTML with Tailwind utility classes, and watch the rendered output update in real time.</p>
+            <p>The Affilore Tailwind CSS Component Visualizer is a <strong>live, browser-based rendering engine</strong> built on top of the official Tailwind Play CDN. It requires no installation, no Node.js, no configuration, and no account. Open the tool, write your HTML with Tailwind utility classes, and watch the rendered output update in real time.</p>
 
             <h3>The Tailwind Play CDN: What's Actually Happening Under the Hood</h3>
-            <p>When you load the Affilore Visualizer, it injects the Tailwind Play CDN script into the context. This uses a <strong>just-in-time (JIT) engine</strong> running in the browser. It scans your markup for utility class names and generates the corresponding CSS on demand — exactly the same output you'd get from a production build.</p>
+            <p>When you load the Affilore Visualizer, it injects the Tailwind Play CDN script into the rendering context:</p>
+            <pre><code>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</code></pre>
+            <p>This is Tailwind's official browser-side engine. Unlike the traditional PostCSS build-time purge pipeline, the Play CDN uses a <strong>just-in-time (JIT) engine</strong> running in the browser. It scans your markup for utility class names and generates the corresponding CSS on demand — exactly the same output you'd get from a production build, but computed at runtime rather than build time.</p>
+            <p>The practical result: every class in Tailwind's full utility vocabulary is available to you immediately. No configuration step. No missing classes. No purge list to maintain. If it exists in Tailwind, it works in the Visualizer.</p>
 
-            <h2>Tailwind Best Practices: Utility-First vs. Component Architecture</h2>
-            <p>Utility-first means reaching for single-purpose classes instead of custom CSS selectors. Instead of creating a <code>.card</code> class in a separate CSS file, you apply utilities like <code>p-6 rounded-xl bg-white shadow-md</code> directly to your HTML element.</p>
+            <h3>What the Editor Gives You</h3>
             <ul>
-                <li><strong>No dead CSS:</strong> Classes only exist if they're used in your markup.</li>
-                <li><strong>No naming collisions:</strong> No custom class names to conflict with.</li>
-                <li><strong>No context switching:</strong> Styling lives with the structure.</li>
+                <li><strong>Split-pane interface</strong> — write HTML with Tailwind classes on the left, see the rendered component on the right.</li>
+                <li><strong>Live-sync rendering</strong> — the preview updates as you type, with no save-and-refresh cycle.</li>
+                <li><strong>Full Tailwind utility access</strong> — every spacing, typography, color, flexbox, grid, animation, and responsive class is available.</li>
+                <li><strong>Copy-ready output</strong> — the HTML you write is exactly what you copy into your project.</li>
             </ul>
 
+            <h2>Tailwind Best Practices: Utility-First vs. Component Architecture</h2>
+            <p>Understanding <em>how</em> to write Tailwind is just as important as knowing <em>what</em> to write. The Affilore Visualizer is an excellent environment to practice and internalize these architectural patterns before applying them in production.</p>
+            
+            <h3>Utility-First: The Core Philosophy</h3>
+            <p>Utility-first means reaching for single-purpose classes instead of custom CSS selectors. Instead of:</p>
+<pre><code>.card {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}</code></pre>
+            <p>You write:</p>
+            <pre><code>&lt;div class="p-6 rounded-xl bg-white shadow-md"&gt;</code></pre>
+            
+            <p>The benefits compound at scale:</p>
+            <ul>
+                <li><strong>No dead CSS</strong> — classes only exist if they're used in your markup.</li>
+                <li><strong>No naming collisions</strong> — there are no custom class names to conflict with.</li>
+                <li><strong>No context switching</strong> — styling lives with the structure.</li>
+                <li><strong>Instantly readable</strong> — any developer can visually parse the layout from the class list alone.</li>
+            </ul>
+
+            <h3>When to Reach for Component Abstraction</h3>
+            <p>Utility-first doesn't mean copy-pasting 30 classes into every button in your codebase. Once a UI pattern is stable, abstract it:</p>
+            <ul>
+                <li><strong>In React/Vue/Svelte:</strong> Extract it into a reusable component. The markup lives in one place; the component is called everywhere else.</li>
+                <li><strong>In plain HTML:</strong> Use Tailwind's <code>@apply</code> directive in your CSS to create a semantic class that bundles utilities.</li>
+            </ul>
+            <p><strong>The workflow the Visualizer enables:</strong> Prototype the component with raw utilities in the sandbox, validate it visually, then extract it to a component in your production environment. This separation of exploration from extraction is exactly how elite frontend developers work.</p>
+
+            <h3>Responsive Design in the Visualizer</h3>
+            <p>Tailwind's responsive prefix system (<code>sm:</code>, <code>md:</code>, <code>lg:</code>, <code>xl:</code>) works fully within the Affilore Visualizer. You can use the device toggle buttons at the top of the editor (Mobile, Tablet, Desktop) to observe breakpoint behavior in real time.</p>
+            <p>This is genuinely faster than testing responsive behavior in a local dev environment, where you need to rotate between DevTools breakpoints and watch a full Vite or Next.js HMR cycle complete.</p>
+
+            <h2>Why Browser-Based Is Faster: The Real Performance Argument</h2>
+            <p>The instinct to "just open a new Vite project" is strong among experienced developers — it feels like the right tool. But for UI exploration and component prototyping, it introduces overhead that a browser-based visualizer entirely eliminates.</p>
+            
+            <h3>The Cold-Start Cost of a Local Environment</h3>
+            <p>When you run a new project, here's what actually happens:</p>
+            <ul>
+                <li><code>npm install</code> — resolves, downloads, and extracts node modules (30 seconds to several minutes).</li>
+                <li>Tailwind configuration — manual or scaffolded setup.</li>
+                <li><code>tailwind.config.js</code> setup — if misconfigured, classes silently don't generate.</li>
+                <li><code>npm run dev</code> — Vite dev server starts.</li>
+            </ul>
+            <p>That's a 2–5 minute ramp for an experienced developer. For a quick idea you want to test in sixty seconds, it kills the impulse entirely.</p>
+
+            <h3>The Affilore Visualizer's Startup Cost</h3>
+            <p>Open the page. Start typing. That's it. No terminal. No package manager. No configuration files. No <code>node_modules</code> folder consuming gigabytes of disk space.</p>
+
             <h2>Frequently Asked Questions</h2>
+            
             <h3>Can I use a custom Tailwind configuration in the Visualizer?</h3>
-            <p>Yes. By switching to the <strong>Config</strong> tab in the editor, you can extend the default theme with custom colors, fonts, and spacing using the standard <code>tailwind.config</code> syntax.</p>
+            <p>Yes. The Affilore Visualizer has a dedicated <strong>Config tab</strong> at the top of the editor. Click it, and you can write custom configuration just like you would in <code>tailwind.config.js</code>. You can extend the default theme with custom colors, fonts, spacing, and more. These custom values are immediately available as utility classes in your HTML markup.</p>
 
             <h3>Is this using the latest version of Tailwind CSS?</h3>
-            <p>The Affilore Visualizer tracks the stable Tailwind CSS v3 release channel. You have access to all v3 features including arbitrary values, container queries, and the full color palette.</p>
+            <p>The Affilore Visualizer loads the Tailwind Play CDN from the official Tailwind CDN endpoint, which tracks the stable Tailwind CSS v3 release channel. This means you have access to all v3 features including the JIT engine, arbitrary values (e.g., <code>w-[337px]</code>), container queries, and the full v3 color palette.</p>
+
+            <h3>Can I copy the code directly into a production project?</h3>
+            <p>Yes. The HTML and class structure you write in the Visualizer copies directly into any Tailwind-powered project. Your markup will render identically as long as your production environment uses Tailwind CSS.</p>
+
+            <h3>Can I test dark mode in the Visualizer?</h3>
+            <p>Yes. We have built a dedicated <strong>Dark Mode Toggle</strong> (the moon icon) into the toolbar. Click it, and the preview frame will instantly simulate a dark environment, allowing you to test all your <code>dark:</code> prefixed Tailwind utility classes seamlessly.</p>
 
             <h3>Is my code saved anywhere?</h3>
-            <p>The visualizer runs entirely in-browser. Code you write is not transmitted to any server. Make sure to copy your code to your project before closing the tab!</p>
+            <p>The Affilore Visualizer runs entirely in-browser. Code you write in the editor is not transmitted to any server and is not persisted beyond your browser session. Treat each session as a clean slate — copy your finished component code to your codebase using the "Copy" button before closing the tab.</p>
         </div>
     </div>
 
-    <div class="notification" id="toast">Code Copied!</div>
-
     <footer>
-        <div class="footer-links">
-            <a href="../../about.html">About Us</a>
-            <a href="../../contact.html">Contact Us</a>
-            <a href="../../privacy.html">Privacy Policy</a>
-            <a href="../../terms.html">Terms & Conditions</a>
-        </div>
-        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
+        <p style="color: var(--text-muted);">&copy; 2026 Affilore.com. All rights reserved.</p>
     </footer>
 
     <script>
@@ -294,7 +348,7 @@
             }
         }
 
-        // TAILWIND TOOL SPECIFIC LOGIC
+        // TAILWIND TOOL LOGIC
         function switchEditor(type) {
             const htmlBtn = document.getElementById('btn-html');
             const configBtn = document.getElementById('btn-config');
