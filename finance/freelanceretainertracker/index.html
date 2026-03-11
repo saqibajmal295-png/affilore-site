@@ -31,7 +31,7 @@
         .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.3; z-index: -2; pointer-events: none; }
         a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         
-        /* RESPONSIVE HEADER STYLES */
+        /* UNIFIED RESPONSIVE HEADER */
         header {
             position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex;
             justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8);
@@ -119,7 +119,7 @@
         tr:hover td { background: rgba(255,255,255,0.02); }
         tr:last-child td { border-bottom: none; }
 
-        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;}
+        .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; border: none; outline: none; cursor: pointer; text-align: center; -webkit-appearance: none; appearance: none;}
         .status-paid { background: rgba(0, 230, 118, 0.15); color: var(--success-green); border: 1px solid rgba(0, 230, 118, 0.3); }
         .status-sent { background: rgba(255, 184, 0, 0.15); color: var(--status-yellow); border: 1px solid rgba(255, 184, 0, 0.3); }
         .status-draft { background: rgba(155, 161, 166, 0.15); color: var(--text-muted); border: 1px solid rgba(155, 161, 166, 0.3); }
@@ -137,20 +137,25 @@
         .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-gold); color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
         .notification.show { transform: translateY(0); opacity: 1; }
 
-        /* ARTICLE SECTION */
-        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
-        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
+        /* FULL SEO ARTICLE SECTION */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); margin-top: 40px;}
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 40px 0 20px; line-height: 1.3;}
         .article-container h2:first-child { margin-top: 0; }
         .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
         .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
-        .article-container ul { padding-left: 20px; margin-bottom: 20px;}
-        .article-container li { font-size: 1.1rem; margin-bottom: 10px;}
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
+        .article-container li { margin-bottom: 10px; }
 
-        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; margin-top: 60px;}
-        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
+        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
         .footer-links a:hover { color: var(--accent-gold); }
 
         /* --- THE MOBILE FIX --- */
+        @media (max-width: 1024px) {
+            .dashboard-layout { grid-template-columns: 1fr; }
+            .sidebar-panel { position: static; }
+        }
         @media (max-width: 768px) {
             .nav-links { display: none !important; }
             .desktop-btn { display: none !important; }
@@ -160,9 +165,9 @@
             .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
             .tool-header p { font-size: 1rem; }
             
-            .dashboard-layout { grid-template-columns: 1fr; }
             .tracker-form { grid-template-columns: 1fr; }
             .panel { padding: 20px; }
+            .article-wrap { padding: 40px 20px; }
         }
     </style>
 </head>
@@ -198,7 +203,7 @@
 
     <div class="tool-container">
         <div class="tool-header">
-            <h1>Freelance Retainer Fee Tracker</h1>
+            <h1>Freelance Retainer Tracker</h1>
             <p>Your secure, local financial dashboard. Keep track of recurring client income instantly.</p>
         </div>
 
@@ -275,15 +280,29 @@
         </div>
     </div>
 
-    <div class="article-container">
-        <h2>The Freelancer's Greatest Financial Weapon: The Retainer</h2>
-        <p>For most freelance creatives, developers, and consultants, the business model is inherently unstable. You hunt for a client, pitch a project, do the work, send the invoice, and then immediately return to the hunt. This feast-or-famine cycle is the primary reason so many talented independents eventually return to full-time employment. The stress of not knowing where next month's rent is coming from destroys creativity.</p>
-        <p>The antidote to this instability is the retainer.</p>
-        <p>A retainer is a recurring agreement where a client pays you a set fee — typically monthly — to reserve a specific amount of your time or guarantee a specific set of deliverables. When you transition your business model from project-based billing to retainer-based billing, you unlock the holy grail of business: Monthly Recurring Revenue (MRR).</p>
-        
-        <h3>Why You Need to Track Your MRR Obsessively</h3>
-        <p>Once you have multiple clients on different retainer cycles, tracking your income in a spreadsheet becomes chaotic. Did Client A pay their invoice this month? Is Client B on a quarterly or monthly cycle? What is your actual guaranteed income for the next 30 days?</p>
-        <p>The Affilore Freelance Retainer Fee Tracker solves this. It gives you a clean, real-time dashboard of your active contracts, automatically calculates your total MRR, and highlights pending invoices so nothing falls through the cracks.</p>
+    <div class="article-wrap">
+        <div class="article-container">
+            <h2>The Freelancer's Greatest Financial Weapon: The Retainer</h2>
+            <p>For most freelance creatives, developers, and consultants, the business model is inherently unstable. You hunt for a client, pitch a project, do the work, send the invoice, and then immediately return to the hunt. This feast-or-famine cycle is the primary reason so many talented independents eventually return to full-time employment. The stress of not knowing where next month's rent is coming from destroys creativity and forces you to accept bad clients out of desperation.</p>
+            <p>The absolute antidote to this instability is the retainer agreement.</p>
+            <p>A retainer is a recurring contractual agreement where a client pays you a set fee — typically at the beginning of the month — to reserve a specific amount of your time or guarantee a specific set of deliverables. When you transition your freelance business model from project-based billing to retainer-based billing, you unlock the holy grail of modern business: <strong>Monthly Recurring Revenue (MRR)</strong>.</p>
+            
+            <h3>Why You Need to Track Your MRR Obsessively</h3>
+            <p>Once you successfully transition multiple clients onto different retainer cycles (some monthly, some quarterly), tracking your income in a standard spreadsheet quickly becomes chaotic. Did Client A pay their invoice this month? Is Client B due for renewal? What is your actual, guaranteed baseline income for the next 30 days?</p>
+            <p>The <strong>Affilore Freelance Retainer Fee Tracker</strong> solves this. It provides a clean, real-time dashboard of your active contracts, automatically normalizes quarterly and annual contracts to calculate your true Monthly MRR, and highlights pending invoices so nothing falls through the cracks.</p>
+
+            <h2>How to Price a Retainer Agreement</h2>
+            <p>Moving a client to a retainer requires a shift in how you frame your value. You are no longer selling hours; you are selling priority access and peace of mind.</p>
+            <ul>
+                <li><strong>The "Bucket of Hours" Model:</strong> The easiest to sell, but the hardest to scale. The client pays for 20 hours a month at a slightly discounted rate. If they don't use the hours, they lose them (or they roll over, depending on your contract).</li>
+                <li><strong>The "Deliverables" Model:</strong> Highly recommended. The client pays a flat fee for a specific output each month (e.g., 4 blog posts, 2 SEO audits, and 1 newsletter). This decouples your time from your income, allowing you to increase your profit margin as you get faster at the work.</li>
+                <li><strong>The "Access" Model:</strong> Usually reserved for high-level consultants and legal professionals. The client pays a large monthly fee simply for the right to call you and get immediate priority consulting when they have an emergency.</li>
+            </ul>
+
+            <h2>Why We Built This as a Client-Side Dashboard</h2>
+            <p>Financial data is highly sensitive. As an independent business owner, the last thing you want to do is upload your client roster, your pricing structures, and your revenue metrics to a random third-party cloud application that might get hacked or suddenly start charging you $20 a month to access your own data.</p>
+            <p>We engineered the Affilore Retainer Tracker using a 100% client-side architecture. When you enter a client and a retainer amount, that data is saved directly to your browser's local HTML5 storage. <strong>It never touches a database. It never leaves your computer.</strong> You get all the benefits of a sleek SaaS dashboard with the absolute privacy of an offline spreadsheet.</p>
+        </div>
     </div>
 
     <div class="notification" id="toast">Data Saved!</div>
@@ -335,7 +354,7 @@
                 const amount = parseFloat(r.amount) || 0;
                 activeCount++;
                 
-                // Adjust for cycle
+                // Adjust for cycle to get accurate MRR
                 if(r.cycle === 'Monthly') totalMrr += amount;
                 if(r.cycle === 'Quarterly') totalMrr += (amount / 3);
                 if(r.cycle === 'Annually') totalMrr += (amount / 12);
@@ -414,8 +433,8 @@
                 
                 body.innerHTML += `
                     <tr>
-                        <td style="white-space: nowrap;">${r.client}</td>
-                        <td>${formatCurrency(r.amount)}</td>
+                        <td style="white-space: nowrap; font-weight: 700;">${r.client}</td>
+                        <td style="white-space: nowrap;">${formatCurrency(r.amount)}</td>
                         <td>${r.cycle}</td>
                         <td>
                             <select class="status-badge ${statusClass}" onchange="changeStatus(${r.id}, this.value)">
@@ -432,6 +451,7 @@
             });
         }
 
+        // Initialize on Load
         window.onload = function() {
             updateMetrics();
             renderTable();
