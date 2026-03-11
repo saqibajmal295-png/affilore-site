@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Review Reply Generator | Free GBP Tool | Affilore</title>
-    <meta name="description" content="Generate perfect, SEO-optimized replies to your Google Business Profile reviews instantly. Handle 5-star praise and 1-star complaints professionally.">
+    <title>Google Review Auto-Responder | AI Reply Generator | Affilore</title>
+    <meta name="description" content="Generate professional, SEO-optimized replies to your Google Business Profile reviews instantly. 100% free and private.">
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
     <script>
@@ -19,84 +19,134 @@
 
     <style>
         :root {
-            --bg-color: #08080a;
-            --text-main: #f0f0f5;
-            --text-muted: #9ba1a6;
-            --accent-gold: #ffd600;
-            --accent-glow: rgba(255, 214, 0, 0.4);
-            --card-bg: rgba(20, 20, 25, 0.7);
-            --border-color: rgba(255, 255, 255, 0.08);
+            --bg-color: #08080a; --text-main: #f0f0f5; --text-muted: #9ba1a6;
+            --accent-gold: #ffd600; --accent-glow: rgba(255, 214, 0, 0.4);
+            --card-bg: rgba(20, 20, 25, 0.7); --border-color: rgba(255, 255, 255, 0.08);
             --glass-blur: blur(15px);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background: radial-gradient(circle at top, #1a1500 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
-        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.3; z-index: -2; pointer-events: none; }
-        
-        header { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none;}
-        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;}
-        .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; text-decoration: none; -webkit-text-fill-color: #000;}
+        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.2; z-index: -2; pointer-events: none; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
 
-        .tool-container { max-width: 1000px; margin: 120px auto 40px; padding: 0 20px; }
+        /* UNIFIED RESPONSIVE HEADER */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex;
+            justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8);
+            backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); 
+            text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
+        }
+        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a {
+            font-size: 1rem; font-weight: 600;
+            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-links a:hover {
+            background: var(--accent-gold); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; text-shadow: 0 0 8px var(--accent-glow);
+        }
+        
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .header-btn {
+            background: var(--accent-gold); color: #000; padding: 10px 24px;
+            border-radius: 25px; font-weight: 700; font-size: 0.95rem;
+            transition: all 0.3s ease; display: inline-block; -webkit-text-fill-color: #000; 
+        }
+        .header-btn:hover { box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.05); }
+
+        .mobile-menu-btn {
+            display: none; background: transparent; border: none; color: var(--accent-gold);
+            font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none;
+        }
+        
+        /* MOBILE MENU OVERLAY */
+        .mobile-overlay {
+            position: fixed; top: 70px; left: 0; width: 100%; height: 0;
+            background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur);
+            overflow: hidden; transition: height 0.3s ease; z-index: 999;
+            display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid var(--border-color);
+        }
+        .mobile-overlay.open { height: 360px; padding-top: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .mobile-overlay a {
+            color: var(--text-main); font-size: 1.2rem; font-weight: 600; text-decoration: none;
+            margin-bottom: 25px; transition: color 0.3s; opacity: 0;
+        }
+        .mobile-overlay.open a { opacity: 1; transition: opacity 0.5s ease 0.1s; }
+        .mobile-overlay a:hover { color: var(--accent-gold); }
+        .mobile-overlay .mobile-custom-btn {
+            background: var(--accent-gold); color: #000; padding: 12px 35px; border-radius: 25px;
+            font-weight: 800; margin-top: 10px; -webkit-text-fill-color: #000;
+        }
+
+        /* TOOL UI STYLES */
+        .tool-container { max-width: 1100px; margin: 120px auto 40px; padding: 0 20px; }
         .tool-header { text-align: center; margin-bottom: 40px; }
         .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
         .tool-header p { color: var(--text-muted); font-size: 1.2rem; margin-top: 10px;}
 
-        /* Tool UI */
-        .generator-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        @media(max-width: 800px) { .generator-layout { grid-template-columns: 1fr; } }
+        .app-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
 
-        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); }
-        .panel h3 { color: var(--accent-gold); margin-bottom: 20px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;}
+        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); display: flex; flex-direction: column;}
+        .panel h3 { color: var(--accent-gold); margin-bottom: 20px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px;}
 
-        .input-group { margin-bottom: 20px; }
+        .input-group { margin-bottom: 18px; }
         .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; font-weight: 600;}
-        .input-group input, .input-group textarea { 
-            width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); 
-            background: rgba(0,0,0,0.5); color: #fff; font-family: 'Outfit', sans-serif; outline: none; transition: 0.3s; font-size: 1rem;
-        }
-        .input-group textarea { height: 120px; resize: vertical; }
-        .input-group input:focus, .input-group textarea:focus { border-color: var(--accent-gold); }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); color: #fff; outline: none; transition: 0.3s; font-size: 1rem; font-family: 'Outfit', sans-serif;}
+        .input-group textarea { resize: vertical; min-height: 80px; }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-glow); }
 
-        /* Star Selector */
-        .star-selector { display: flex; gap: 10px; flex-direction: row-reverse; justify-content: flex-end; }
-        .star-selector input { display: none; }
-        .star-selector label { font-size: 2rem; color: #444; cursor: pointer; transition: 0.2s; }
-        .star-selector label:hover,
-        .star-selector label:hover ~ label,
-        .star-selector input:checked ~ label { color: var(--accent-gold); text-shadow: 0 0 10px var(--accent-glow); }
+        /* Star Rating Logic */
+        .star-rating { display: flex; gap: 10px; margin-bottom: 15px; flex-direction: row-reverse; justify-content: flex-end; }
+        .star-rating input { display: none; }
+        .star-rating label { color: #444; font-size: 2.2rem; cursor: pointer; transition: 0.2s; }
+        .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: var(--accent-gold); text-shadow: 0 0 15px var(--accent-glow); }
 
-        .btn-generate { width: 100%; background: var(--accent-gold); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin-top: 10px;}
-        .btn-generate:hover { box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-2px); }
+        .btn-action { width: 100%; background: linear-gradient(135deg, var(--accent-gold), #ffaa00); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-action:hover { box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-2px); }
 
-        /* Output Area */
-        .output-box { background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px; position: relative; transition: 0.3s;}
-        .output-box:hover { border-color: rgba(255,214,0,0.3); }
-        .output-text { color: #e0e0e0; font-size: 1rem; margin-bottom: 20px; line-height: 1.5; white-space: pre-wrap;}
-        .btn-copy { background: transparent; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: 0.2s;}
-        .btn-copy:hover { background: var(--accent-gold); color: #000; }
+        .output-box { width: 100%; height: 250px; padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.6); color: #fff; font-size: 1.05rem; overflow-y: auto; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap;}
+        .btn-copy { background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-copy:hover { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(255,214,0,0.05);}
 
-        .loader { display: none; text-align: center; padding: 40px; color: var(--accent-gold); font-weight: bold; }
-        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,214,0,0.2); border-top: 4px solid var(--accent-gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-gold); color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
+        .notification.show { transform: translateY(0); opacity: 1; }
 
-        /* ARTICLE SECTION */
-        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
-        .article-thumbnail { width: 100%; height: auto; border-radius: 12px; margin-bottom: 30px; border: 1px solid var(--border-color); }
-        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
+        /* FULL SEO ARTICLE SECTION */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); margin-top: 40px;}
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 40px 0 20px; line-height: 1.3;}
         .article-container h2:first-child { margin-top: 0; }
         .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
         .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
-        .article-container ul { padding-left: 20px; margin-bottom: 20px;}
-        .article-container li { font-size: 1.1rem; margin-bottom: 10px;}
-        .article-container strong { color: #fff; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
+        .article-container li { margin-bottom: 10px; }
 
-        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; margin-top: 60px;}
-        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
+        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
         .footer-links a:hover { color: var(--accent-gold); }
+
+        /* MOBILE FIXES */
+        @media (max-width: 900px) {
+            .app-layout { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none !important; }
+            .desktop-btn { display: none !important; }
+            .mobile-menu-btn { display: block !important; }
+            
+            /* THIS FIXES THE GIANT TITLE ON MOBILE */
+            .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
+            .tool-header p { font-size: 1rem; }
+            
+            .article-wrap { padding: 40px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -111,12 +161,23 @@
         <nav class="nav-links">
             <a href="../../index.html">Home</a>
             <a href="../../index.html#categories">Categories</a>
-            <a href="../../index.html#tools">Latest Tools</a>
+            <a href="../../about.html">About Us</a>
         </nav>
-        <div>
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn">Custom Tool</a>
+        <div class="header-right">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn desktop-btn">Custom Tool</a>
+            <button class="mobile-menu-btn" id="mobileToggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
+
+    <div class="mobile-overlay" id="mobileMenu">
+        <a href="../../index.html" onclick="toggleMenu()">Home</a>
+        <a href="../../index.html#categories" onclick="toggleMenu()">Categories</a>
+        <a href="../../about.html" onclick="toggleMenu()">About Us</a>
+        <a href="../../contact.html" onclick="toggleMenu()">Contact Us</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="mobile-custom-btn">Custom Tool</a>
+    </div>
 
     <div class="tool-container">
         <div class="tool-header">
@@ -124,148 +185,76 @@
             <p>Generate perfectly toned, SEO-optimized replies for your Google Business reviews instantly.</p>
         </div>
 
-        <div class="generator-layout">
+        <div class="app-layout">
             <div class="panel">
                 <h3><i class="fas fa-edit"></i> Review Details</h3>
                 
                 <div class="input-group">
                     <label>Star Rating Received</label>
-                    <div class="star-selector">
-                        <input type="radio" id="star5" name="rating" value="5" checked><label for="star5"><i class="fas fa-star"></i></label>
-                        <input type="radio" id="star4" name="rating" value="4"><label for="star4"><i class="fas fa-star"></i></label>
-                        <input type="radio" id="star3" name="rating" value="3"><label for="star3"><i class="fas fa-star"></i></label>
-                        <input type="radio" id="star2" name="rating" value="2"><label for="star2"><i class="fas fa-star"></i></label>
-                        <input type="radio" id="star1" name="rating" value="1"><label for="star1"><i class="fas fa-star"></i></label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5" checked><label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star"><i class="fas fa-star"></i></label>
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <label>Customer's Review (Optional)</label>
-                    <textarea id="reviewText" placeholder="Paste the customer's review here to generate a personalized response..."></textarea>
+                    <label>Reviewer's Name (Optional)</label>
+                    <input type="text" id="reviewerName" placeholder="e.g. John Smith">
                 </div>
 
                 <div class="input-group">
-                    <label>Business Name (For SEO)</label>
-                    <input type="text" id="bizName" placeholder="e.g. Joe's Coffee Shop">
+                    <label>What did they mention? (Optional)</label>
+                    <input type="text" id="reviewContext" placeholder="e.g. great customer service, fast shipping">
                 </div>
 
                 <div class="input-group">
-                    <label>City/Location (For SEO)</label>
-                    <input type="text" id="bizLocation" placeholder="e.g. Austin, TX">
+                    <label>Tone of Reply</label>
+                    <select id="replyTone">
+                        <option value="professional">Professional & Appreciative</option>
+                        <option value="casual">Casual & Friendly</option>
+                        <option value="apologetic">Apologetic & Fix-Oriented (For bad reviews)</option>
+                    </select>
                 </div>
 
-                <button class="btn-generate" onclick="generateReplies()">Generate Replies <i class="fas fa-magic" style="margin-left:8px;"></i></button>
+                <button class="btn-action" onclick="generateReply()"><i class="fas fa-magic"></i> Generate Response</button>
             </div>
 
             <div class="panel">
-                <h3><i class="fas fa-check-circle"></i> Suggested Replies</h3>
-                
-                <div class="loader" id="loader">
-                    <div class="spinner"></div>
-                    Crafting the perfect response...
-                </div>
-
-                <div id="resultsArea">
-                    <div class="output-box" style="text-align:center; padding: 40px 20px; color: var(--text-muted);">
-                        <i class="fas fa-robot" style="font-size: 3rem; opacity:0.5; margin-bottom:15px;"></i><br>
-                        Fill out the details on the left and click Generate to see your custom replies.
-                    </div>
-                </div>
+                <h3><i class="fas fa-comment-dots"></i> Generated Response</h3>
+                <div class="output-box" id="outputBox">Fill in the details on the left to generate a response.</div>
+                <button class="btn-copy" onclick="copyReply()"><i class="far fa-copy"></i> Copy to Clipboard</button>
             </div>
         </div>
     </div>
 
-    <div class="article-container">
-        <img src="gbp-thumbnail.png" alt="Google Business Review Reply Generator" class="article-thumbnail">
-        
-        <h2>Why Replying to Google Reviews Is the Most Underrated Local SEO Strategy in 2026</h2>
-        <p>Every local business owner knows they should get more Google reviews. But here's what the top-ranking businesses know that most others don't: <strong>getting the review is only half the battle. Replying to it is where the real SEO magic happens.</strong></p>
-        <p>Google's own documentation confirms that businesses that respond to reviews are considered more reputable, and their profiles are rewarded with higher visibility in local search results. Yet a staggering majority of local businesses either reply inconsistently, use the same copy-pasted "Thanks for the review!" message every time, or — worst of all — don't reply at all.</p>
-        <p>This is your competitive advantage hiding in plain sight.</p>
-        <p>When you respond to Google reviews thoughtfully and consistently, you signal to Google's algorithm that your Google Business Profile (GBP) is actively managed. You also signal to potential customers that you're engaged, professional, and trustworthy. Add strategically placed local keywords into those replies, and you've quietly turned your review section into a powerful, ever-growing SEO asset.</p>
-        <p>The problem? Writing individualized, keyword-rich, brand-appropriate replies for every review takes time you simply don't have. That's exactly why we built the <strong>Affilore GBP Review Reply Generator</strong> — and it's waiting for you at the top of this page.</p>
+    <div class="article-wrap">
+        <div class="article-container">
+            <h2>Why You Must Reply to Every Google Business Profile Review</h2>
+            <p>In the world of Local SEO, a customer review is not just feedback; it is a direct, highly-weighted ranking signal to Google's local search algorithm. Many local business owners make the critical mistake of only replying to negative reviews to do damage control, leaving their 5-star reviews completely ignored. This is a massive missed opportunity.</p>
+            <p>Google explicitly states in its official support documentation that businesses should "reply to reviews to build your users' trust." When you reply to reviews, you signal to the algorithm that your business is active, engaged, and values customer experience. Furthermore, a well-crafted reply allows you to naturally incorporate secondary keywords related to your services, further strengthening your local map pack relevance.</p>
 
-        <h2>How to Use the Affilore GBP Review Reply Generator</h2>
-        <p>The Affilore tool was designed with one goal in mind: <strong>zero friction, maximum results.</strong> Here's how it works:</p>
-        <ul>
-            <li><strong>Paste or type in the review</strong> you received from your customer.</li>
-            <li><strong>Select the star rating</strong> (1–5 stars) so the tool matches the right tone.</li>
-            <li><strong>Add your business name and city</strong> (optional but recommended for local SEO keyword insertion).</li>
-            <li><strong>Click "Generate Reply"</strong> and receive a polished, professional, ready-to-post response in seconds.</li>
-        </ul>
+            <h3>The Anatomy of a Perfect 5-Star Reply</h3>
+            <p>A simple "Thanks!" is better than nothing, but it leaves SEO value on the table. A highly optimized response to a positive review does three specific things:</p>
+            <ul>
+                <li><strong>Personalizes the experience:</strong> Uses the customer's name to show there is a real human behind the keyboard.</li>
+                <li><strong>Reinforces the value and keywords:</strong> Mentions the specific service they bought (e.g., "We're so glad you loved the new roof installation!" instead of just "glad you liked our work").</li>
+                <li><strong>Encourages return business:</strong> Ends with a warm closing like, "We look forward to seeing you next time."</li>
+            </ul>
 
-        <h3>What Makes It Different</h3>
-        <ul>
-            <li><strong>100% browser-based and private.</strong> Your customer data never leaves your device. Nothing is stored on a server.</li>
-            <li><strong>No login required.</strong> Open the tool, generate your reply, and you're done.</li>
-            <li><strong>Tone-matched responses.</strong> A 5-star reply sounds warm and grateful. A 1-star reply is calm, professional, and de-escalating — never defensive.</li>
-            <li><strong>Local SEO–aware.</strong> When you include your business name and location, the generator naturally weaves them into the response, helping Google associate your profile with local search queries.</li>
-        </ul>
-        <p>Whether you're managing reviews for one café or twenty franchise locations, the Affilore GBP Reply Generator removes the mental load from one of your most important marketing tasks.</p>
+            <h3>Handling 1-Star Reviews Like a Professional</h3>
+            <p>Negative reviews happen to everyone, even the best businesses. The way you reply to a 1-star review is often read more closely by future prospective customers than the complaint itself. Your reply is a public audition for how you handle conflict.</p>
+            <p><strong>Never argue, and never get defensive online.</strong> Acknowledge the frustration, apologize for the specific issue without taking unnecessary legal liability, and immediately move the conversation offline. Provide a direct phone number or email address (e.g., "Please reach out to our management team at support@example.com so we can resolve this for you immediately.").</p>
 
-        <h2>The Anatomy of a Perfect 5-Star Reply (With Stealth Local SEO Built In)</h2>
-        <p>Most "thank you" replies are wasted SEO opportunities. A generic <em>"Thanks so much, we appreciate it!"</em> does nothing for your local search ranking. A strategic reply, on the other hand, can quietly reinforce your business's relevance for the exact terms customers search for.</p>
-        
-        <h3>The 4-Part Formula for 5-Star Replies</h3>
-        <ul>
-            <li><strong>1. Personalise with a detail from the review.</strong> Mention something specific — a dish they loved, a staff member they named, a service they praised. This proves authenticity to both the reader and Google's quality signals.</li>
-            <li><strong>2. Naturally insert your city and service category.</strong> Instead of: <em>"Thank you for the kind words!"</em> Try: <em>"Thank you for visiting [Business Name] — we're so glad our [service] team at our [City] location made your day."</em> This isn't keyword stuffing. It's context. And Google treats it as a relevance signal for "[service] in [city]" searches.</li>
-            <li><strong>3. Reinforce your USP (Unique Selling Proposition).</strong> Briefly mention what makes you special — your values, your process, your team. <em>"Our plumbers in Austin are trained to be in and out within the hour, every time."</em> That sentence just targeted "plumbers in Austin" and confirmed a brand promise.</li>
-            <li><strong>4. Invite repeat business.</strong> Close with a warm invitation. <em>"We can't wait to serve you again — see you next time!"</em> Short, human, and it leaves the conversation on a high note.</li>
-        </ul>
-
-        <h2>Crisis Management: The Exact Framework for Responding to 1-Star Reviews</h2>
-        <p>A negative review is not a disaster. A negative review that goes unanswered — or worse, gets a defensive reply — <em>is</em> a disaster. Here is the proven framework our reply generator uses as its foundation:</p>
-        
-        <ul>
-            <li><strong>Step 1: De-Escalate.</strong> Never match the tone of an angry review. Your response isn't just for the reviewer — it's for every prospective customer reading it. Start by acknowledging the frustration without admitting fault prematurely. <em>"We're genuinely sorry to hear that your experience didn't meet the standard we hold ourselves to."</em></li>
-            <li><strong>Step 2: Apologise Sincerely.</strong> A sincere apology does not mean accepting blame for something outside your control. It means demonstrating empathy and accountability. <em>"We understand how frustrating this must have been, and we take feedback like yours very seriously."</em></li>
-            <li><strong>Step 3: Take It Offline.</strong> Never fight a PR battle in the comments. Invite the reviewer to contact you directly to resolve the issue. <em>"We'd love the opportunity to make this right. Please reach out to us directly at [email/phone] so we can address your concerns personally."</em></li>
-        </ul>
-        <p>This three-step approach — <strong>De-escalate → Apologise → Take It Offline</strong> — protects your brand reputation publicly while opening the door to a private resolution. In many cases, customers who were angry and felt heard will return and update their review voluntarily.</p>
-
-        <h2>Why Automating Your Review Replies Saves More Than Just Time</h2>
-        <p>Let's talk about something local business owners rarely admit: <strong>review management is emotionally exhausting.</strong></p>
-        <p>Reading a vicious 1-star review about something you poured your heart into is demoralising. Writing a measured, professional response when you're upset takes enormous emotional energy. And doing that repeatedly, across dozens or hundreds of reviews, leads to burnout, inconsistency, or avoidance.</p>
-        <p>Templating and automating your Google review replies isn't cutting corners. It's <strong>protecting your mental energy for the decisions that actually require you.</strong></p>
-
-        <h3>The Business Case for Consistent Review Management</h3>
-        <ul>
-            <li><strong>Conversion rates increase.</strong> Studies show that businesses with active owner responses convert profile visitors to customers at a higher rate.</li>
-            <li><strong>Review volume increases.</strong> When customers see that their feedback gets a thoughtful reply, more customers are motivated to leave reviews.</li>
-            <li><strong>Local ranking improves.</strong> Google's algorithm explicitly favours profiles with consistent engagement, which includes review responses.</li>
-            <li><strong>You reclaim hours per month.</strong> A business receiving 30 reviews a month could spend 2–3 hours just on replies. A tool like Affilore compresses that to minutes.</li>
-        </ul>
-        <p>The ROI of a well-maintained review section isn't theoretical. It's the difference between appearing in the Local Pack for high-intent searches or being invisible on page two.</p>
-
-        <h2>Frequently Asked Questions About Google Review Management</h2>
-        
-        <h3>Can I delete a bad Google review?</h3>
-        <p>Not directly. Business owners cannot unilaterally delete reviews. However, you can flag a review for removal if it violates Google's content policies — for example, if it contains hate speech, is clearly spam, or was left by someone who was never actually a customer. Google reviews this on a case-by-case basis, and removal is not guaranteed. The best strategy for a genuine negative review is always a professional, empathetic response.</p>
-
-        <h3>Does replying to Google reviews actually help SEO?</h3>
-        <p>Yes. Google has confirmed that responding to reviews improves your business's local search visibility. Beyond that, keyword-rich replies help Google understand the geographic and service context of your business. Consistent engagement also boosts your overall GBP signals, which is a known ranking factor for the Local Pack (the map results at the top of search).</p>
-
-        <h3>How fast should I reply to a Google review?</h3>
-        <p>Aim to reply within 24 to 48 hours, especially for negative reviews. Speed signals attentiveness to Google and to potential customers who read recent reviews before making a decision. For positive reviews, responding within a week is generally acceptable — though sooner is always better.</p>
-
-        <h3>Is it okay to use the same reply template for multiple reviews?</h3>
-        <p>Identical, copy-pasted replies are better than no replies, but they can look robotic to prospective customers reading through your profile. The ideal approach is to use a templated structure (like the 4-part formula above) but personalise each reply with at least one detail from the original review. The Affilore generator does exactly this — every reply is unique to the review input.</p>
-
-        <h3>Can I ask customers to change or remove a negative review?</h3>
-        <p>You can ask, but you cannot incentivise. Google's policies prohibit offering discounts, gifts, or any form of compensation in exchange for editing or removing a review. This can result in penalties against your profile. The most effective approach is to resolve the issue genuinely, offline, and let the customer decide to update the review on their own terms.</p>
-
-        <h3>What should I never say in a reply to a negative review?</h3>
-        <p>Avoid: Being defensive or accusatory ("This review is completely false."), sharing private customer details publicly, making promises you can't keep in a public reply, and ignoring the review entirely — silence reads as indifference.</p>
-
-        <h3>Does the Affilore tool store my review data?</h3>
-        <p>No. The Affilore GBP Review Reply Generator is entirely browser-based. No review content, business name, or customer information is transmitted to or stored on any server. Everything runs locally in your browser session and is discarded when you close the tab.</p>
-
-        <div style="text-align: center; margin-top: 40px;">
-            <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your Reviews Are Talking to Google Right Now — Are You Listening?</p>
-            <p style="color: #fff;">Scroll back to the top, paste in your latest Google review, and generate your perfect reply right now. Your local SEO ranking will thank you.</p>
+            <h2>How the Affilore Reply Generator Saves You Time</h2>
+            <p>Writing unique, professional responses to every review is incredibly time-consuming, which is why most owners give up on it. The Affilore Google Review Auto-Responder acts as your digital PR assistant.</p>
+            <p>By simply selecting the star rating, inputting the customer's name, and choosing a tone, the generator uses a randomized, pre-built template engine to output a perfectly crafted response. Because it runs 100% on the client side (in your browser), there are no API costs, no account sign-ups, and no waiting. You can blast through a backlog of 50 reviews in less than five minutes, dramatically improving your Local SEO profile with zero friction.</p>
         </div>
     </div>
+
+    <div class="notification" id="toast">Copied to Clipboard!</div>
 
     <footer>
         <div class="footer-links">
@@ -278,78 +267,81 @@
     </footer>
 
     <script>
-        function generateReplies() {
-            // UI Switch
-            document.getElementById('resultsArea').style.display = 'none';
-            document.getElementById('loader').style.display = 'block';
-
-            // Get Inputs
-            let rating = document.querySelector('input[name="rating"]:checked').value;
-            let bizName = document.getElementById('bizName').value || "our business";
-            let location = document.getElementById('bizLocation').value || "our area";
-            let reviewText = document.getElementById('reviewText').value.toLowerCase();
-
-            // Keyword Extraction Logic (Simulating AI Context)
-            let context = "";
-            if(reviewText.includes("staff") || reviewText.includes("team") || reviewText.includes("service")) context = "team";
-            if(reviewText.includes("fast") || reviewText.includes("quick") || reviewText.includes("time")) context = "speed";
-            if(reviewText.includes("price") || reviewText.includes("cost") || reviewText.includes("expensive")) context = "price";
-
-            setTimeout(() => {
-                let replies = [];
-
-                if(rating == 5 || rating == 4) {
-                    replies.push(`Thank you so much for the ${rating}-star review! We are thrilled to hear you had a great experience with ${bizName}. Our team works hard to provide the best service in ${location}, and feedback like yours makes it all worth it. We hope to see you again soon!`);
-                    
-                    if(context === "team") {
-                        replies.push(`Wow, thank you for the wonderful review! I will be sure to pass your kind words along to our team here at ${bizName}. Providing excellent service in ${location} is our top priority. Thanks for choosing us!`);
-                    } else if (context === "speed") {
-                        replies.push(`Thank you for the great feedback! We know your time is valuable, so being efficient and fast is a huge priority for us at ${bizName}. Thanks for supporting a local ${location} business!`);
-                    } else {
-                        replies.push(`We really appreciate you taking the time to leave us this review! Everyone here at ${bizName} in ${location} is grateful for your business. Let us know if there is anything else we can do for you in the future.`);
-                    }
-                    
-                    replies.push(`Thanks for the stellar rating! We're so glad we could hit the mark for you. We appreciate your support of ${bizName} and hope to serve you again in ${location} very soon.`);
-                } 
-                else if (rating == 3) {
-                    replies.push(`Thank you for taking the time to leave a review. We are always looking for ways to improve our service at ${bizName}. If you have any specific feedback on how we can make your next experience a 5-star one, please reach out to us!`);
-                    replies.push(`We appreciate your feedback! It looks like there is still room for us to improve. We'd love to hear more about your visit to our ${location} location so we can do better next time.`);
-                }
-                else { // 1 or 2 stars
-                    replies.push(`We are genuinely sorry to hear that your experience did not meet the standard we hold ourselves to at ${bizName}. We take this very seriously and would love the opportunity to make things right. Please contact us directly so we can address your concerns.`);
-                    
-                    if(context === "price") {
-                        replies.push(`We appreciate your feedback and apologize that you were disappointed. We strive to provide the best value in ${location}, and we are sorry we missed the mark this time. Please reach out to management directly so we can resolve this.`);
-                    } else {
-                        replies.push(`Thank you for bringing this to our attention. This is certainly not the level of service we aim to provide at our ${location} location. We would like to investigate this further. Please contact us directly so we can find a resolution.`);
-                    }
-                    
-                    replies.push(`We are disappointed to see this rating, as customer satisfaction is our top priority. We understand your frustration and want to fix this. Please get in touch with us directly so we can look into what happened and make it right.`);
-                }
-
-                // Render Results
-                let htmlOutput = '';
-                replies.forEach((reply, index) => {
-                    htmlOutput += `
-                        <div class="output-box">
-                            <div class="output-text" id="reply-${index}">${reply}</div>
-                            <button class="btn-copy" onclick="copyText('reply-${index}')"><i class="far fa-copy"></i> Copy Reply</button>
-                        </div>
-                    `;
-                });
-
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('resultsArea').innerHTML = htmlOutput;
-                document.getElementById('resultsArea').style.display = 'block';
-
-            }, 1200); // 1.2 second simulated processing delay
+        // GLOBAL HEADER MENU LOGIC
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileToggle i');
+            menu.classList.toggle('open');
+            if(menu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         }
 
-        function copyText(elementId) {
-            const text = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Reply copied to clipboard!");
-            });
+        // TOOL LOGIC
+        function generateReply() {
+            const name = document.getElementById('reviewerName').value.trim() || "there";
+            const context = document.getElementById('reviewContext').value.trim();
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+            const tone = document.getElementById('replyTone').value;
+            const outputBox = document.getElementById('outputBox');
+
+            let templates = [];
+
+            // Context phrase logic
+            let contextPhrase = "";
+            if (context) {
+                contextPhrase = ` We are especially glad to hear your positive feedback regarding ${context}.`;
+            }
+
+            if (rating >= 4) {
+                if (tone === 'professional') {
+                    templates = [
+                        `Hi ${name}, thank you so much for taking the time to leave this wonderful review!${contextPhrase} Providing top-notch service is our highest priority, and your feedback reaffirms the hard work we put in every day. We look forward to serving you again in the future!`,
+                        `Dear ${name}, we truly appreciate your fantastic rating and kind words!${contextPhrase} It is always our goal to ensure complete customer satisfaction, and we are so glad we hit the mark for you. Thank you for choosing us, and please don't hesitate to reach out if you need anything else.`
+                    ];
+                } else {
+                    templates = [
+                        `Hey ${name}! Thanks a million for the awesome review.${contextPhrase} We're so happy you loved your experience with us. Can't wait to see you again soon!`,
+                        `Hi ${name}, this review totally made our day!${contextPhrase} Thanks for the support and the ${rating}-star rating. Cheers from the whole team!`
+                    ];
+                }
+            } else if (rating == 3) {
+                templates = [
+                    `Hi ${name}, thank you for your feedback and the ${rating}-star rating. We are always looking for ways to improve our customer experience. If you have any specific suggestions on how we can earn a 5-star rating from you next time, we would love to hear from you directly!`,
+                    `Dear ${name}, we appreciate you taking the time to leave a review. We're glad you visited us, but we always strive for perfection. We would love the opportunity to make your next experience even better.`
+                ];
+            } else {
+                // 1 or 2 stars
+                if (tone === 'apologetic') {
+                    templates = [
+                        `Hi ${name}, we are incredibly sorry to hear about your recent experience with us. This is absolutely not the standard of service we strive to provide. We take your feedback very seriously and would like to make things right. Please contact our management team directly so we can resolve this issue for you immediately.`,
+                        `Dear ${name}, thank you for bringing this to our attention, and please accept our sincere apologies for the frustration you experienced. We hold ourselves to high standards, and we clearly missed the mark here. We would appreciate the chance to look into this further. Please reach out to us at your earliest convenience.`
+                    ];
+                } else {
+                    templates = [
+                        `Hi ${name}, we regret to see your ${rating}-star rating. We would like to understand more about what went wrong so we can address it properly. Please reach out to us directly so we can assist you.`,
+                        `Hello ${name}. Thank you for your feedback. We are disappointed to hear that your experience wasn't up to our usual standards. We would like to learn more about this so we can fix it.`
+                    ];
+                }
+            }
+
+            // Pick a random template from the matching array
+            const randomReply = templates[Math.floor(Math.random() * templates.length)];
+            outputBox.innerText = randomReply;
+        }
+
+        function copyReply() {
+            const text = document.getElementById('outputBox').innerText;
+            if (text === "Fill in the details on the left to generate a response.") return;
+            
+            navigator.clipboard.writeText(text);
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
     </script>
 </body>
