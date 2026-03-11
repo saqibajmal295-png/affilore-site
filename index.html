@@ -116,6 +116,11 @@
         .tool-card:hover::before { opacity: 1; }
         .tool-card:hover { border-color: rgba(255, 214, 0, 0.3); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
+        /* New Style for Tool Numbering (Matching context of Image 1) */
+        .tool-card-number {
+            position: absolute; top: 15px; left: 15px; background: rgba(8, 8, 10, 0.9); color: #fff; font-size: 0.9rem; font-weight: 800; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); z-index: 6; 
+        }
+
         .tool-card-img {
             width: 100%; height: 180px; object-fit: cover; 
             border-bottom: 1px solid var(--border-color);
@@ -215,80 +220,90 @@
     <section id="tools" class="container">
         <h2 class="section-title">Latest Engineered Tools</h2>
         <div class="tools-grid" id="toolsList">
+            
             <div class="tool-card">
-                <img src="finance/freelanceretainertracker/retainer-thumbnail.png" alt="Freelance Retainer Tracker" class="tool-card-img">
+                <div class="tool-card-number">01</div> <img src="finance/freelanceretainertracker/retainer-thumbnail.png" alt="Freelance Retainer Tracker" class="tool-card-img">
                 <div class="badge">Finance</div>
                 <div class="tool-card-body">
                     <h3>Freelance Retainer Tracker</h3>
                     <a href="finance/freelanceretainertracker/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="seo/gbp-reply-generator/gbp-thumbnail.png" alt="Google Review Reply Generator" class="tool-card-img">
+                <div class="tool-card-number">02</div> <img src="seo/gbp-reply-generator/gbp-thumbnail.png" alt="Google Review Reply Generator" class="tool-card-img">
                 <div class="badge">SEO Tools</div>
                 <div class="tool-card-body">
                     <h3>Google Review Auto-Responder</h3>
                     <a href="seo/gbp-reply-generator/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="seo/citation-tracker/citation-thumbnail.png" alt="Local SEO Citation Tracker" class="tool-card-img">
+                <div class="tool-card-number">03</div> <img src="seo/citation-tracker/citation-thumbnail.png" alt="Local SEO Citation Tracker" class="tool-card-img">
                 <div class="badge">SEO Tools</div>
                 <div class="tool-card-body">
                     <h3>Local SEO Citation Tracker</h3>
                     <a href="seo/citation-tracker/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="ai/youtube-script-generator/youtube-thumbnail.jpeg" alt="AI YouTube Script Generator" class="tool-card-img">
+                <div class="tool-card-number">04</div> <img src="ai/youtube-script-generator/youtube-thumbnail.jpeg" alt="AI YouTube Script Generator" class="tool-card-img">
                 <div class="badge">AI Creator</div>
                 <div class="tool-card-body">
                     <h3>AI YouTube Script Generator</h3>
                     <a href="ai/youtube-script-generator/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="dev/api-monitor/api-thumbnail.jpeg" alt="API Monitoring Dashboard" class="tool-card-img">
+                <div class="tool-card-number">05</div> <img src="dev/api-monitor/api-thumbnail.jpeg" alt="API Monitoring Dashboard" class="tool-card-img">
                 <div class="badge">Dev Tools</div>
                 <div class="tool-card-body">
                     <h3>API Monitoring Dashboard</h3>
                     <a href="dev/api-monitor/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="dev/a11y-tester/a11y-thumbnail.png" alt="AI Web Accessibility Tester" class="tool-card-img">
+                <div class="tool-card-number">06</div> <img src="dev/a11y-tester/a11y-thumbnail.png" alt="AI Web Accessibility Tester" class="tool-card-img">
                 <div class="badge">Developer Tools</div>
                 <div class="tool-card-body">
                     <h3>AI Accessibility (a11y) Tester</h3>
                     <a href="dev/a11y-tester/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="dev/tailwind-visualizer/tailwind-thumbnail.jpeg" alt="Tailwind CSS Visualizer" class="tool-card-img">
+                <div class="tool-card-number">07</div> <img src="dev/tailwind-visualizer/tailwind-thumbnail.jpeg" alt="Tailwind CSS Visualizer" class="tool-card-img">
                 <div class="badge">Developer Tools</div>
                 <div class="tool-card-body">
                     <h3>Tailwind Component Visualizer</h3>
                     <a href="dev/tailwind-visualizer/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="utilities/form-to-pdf/pdf-thumbnail.png" alt="Form to PDF Converter" class="tool-card-img">
+                <div class="tool-card-number">08</div> <img src="utilities/form-to-pdf/pdf-thumbnail.png" alt="Form to PDF Converter" class="tool-card-img">
                 <div class="badge">Utilities</div>
                 <div class="tool-card-body">
                     <h3>Form to PDF Converter</h3>
                     <a href="utilities/form-to-pdf/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="utilities/habit-tracker/habit-thumbnail.jpeg" alt="Minimalist Habit Tracker" class="tool-card-img">
+                <div class="tool-card-number">09</div> <img src="utilities/habit-tracker/habit-thumbnail.jpeg" alt="Minimalist Habit Tracker" class="tool-card-img">
                 <div class="badge">Utilities</div>
                 <div class="tool-card-body">
                     <h3>Minimalist Habit Tracker</h3>
                     <a href="utilities/habit-tracker/" class="btn-use">Launch Tool →</a>
                 </div>
             </div>
+            
             <div class="tool-card">
-                <img src="real-estate/roi-calculator/roi-thumbnail.jpeg" alt="Real Estate ROI Calculator" class="tool-card-img">
+                <div class="tool-card-number">10</div> <img src="real-estate/roi-calculator/roi-thumbnail.jpeg" alt="Real Estate ROI Calculator" class="tool-card-img">
                 <div class="badge">Real Estate</div>
                 <div class="tool-card-body">
                     <h3>Real Estate ROI Calculator</h3>
