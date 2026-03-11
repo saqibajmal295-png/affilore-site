@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Monitoring Dashboard & REST Ping Tool | Affilore</title>
+    <meta name="description" content="Free, client-side API health checker. Ping REST endpoints, measure latency, inspect status codes, and test payloads right from your browser.">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YRKMHHSYBC');
+    </script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #08080a; --text-main: #f0f0f5; --text-muted: #9ba1a6;
+            --accent-gold: #ffd600; --accent-glow: rgba(255, 214, 0, 0.4);
+            --accent-cyan: #00f2fe; --cyan-glow: rgba(0, 242, 254, 0.4);
+            --accent-green: #00e676; --accent-red: #ff3366; --accent-orange: #ffb800;
+            --card-bg: rgba(20, 20, 25, 0.7); --border-color: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(15px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: radial-gradient(circle at top, #1a1500 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
+        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.3; z-index: -2; pointer-events: none; }
+        
+        header { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none;}
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;}
+        .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; text-decoration: none; -webkit-text-fill-color: #000;}
+
+        .tool-container { max-width: 1300px; margin: 120px auto 40px; padding: 0 20px; }
+        .tool-header { text-align: center; margin-bottom: 40px; }
+        .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+        .tool-header p { color: var(--text-muted); font-size: 1.2rem; margin-top: 10px;}
+
+        .app-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; }
+        @media(max-width: 900px) { .app-layout { grid-template-columns: 1fr; } }
+
+        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); display: flex; flex-direction: column;}
+        .panel h3 { color: var(--accent-cyan); margin-bottom: 20px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+
+        /* Advanced Inputs */
+        .url-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .method-select { width: 120px; padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.6); color: var(--accent-cyan); font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem; outline: none;}
+        .url-input { flex-grow: 1; padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.6); color: #fff; font-family: monospace; font-size: 1rem; outline: none; transition: 0.3s;}
+        .url-input:focus { border-color: var(--accent-cyan); box-shadow: 0 0 10px var(--cyan-glow); }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; display: flex; justify-content: space-between;}
+        .code-area { width: 100%; height: 120px; padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.8); color: #00e676; font-family: monospace; font-size: 0.9rem; outline: none; resize: vertical;}
+        .code-area:focus { border-color: var(--accent-cyan); }
+
+        .btn-row { display: flex; gap: 15px; margin-top: 10px;}
+        .btn-action { flex: 2; background: linear-gradient(135deg, var(--accent-cyan), #0077ff); color: #000; border: none; padding: 16px; border-radius: 10px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        .btn-action:hover { box-shadow: 0 0 20px var(--cyan-glow); transform: translateY(-2px); }
+        .btn-outline { flex: 1; background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); font-weight: 600; border-radius: 10px; cursor: pointer; transition: 0.3s;}
+        .btn-outline:hover { border-color: #fff; color: #fff; }
+
+        /* Results Panel */
+        .tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        .tab-btn { background: none; border: none; color: var(--text-muted); padding: 10px 20px; font-size: 1rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: 0.3s; }
+        .tab-btn.active { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); }
+        .tab-btn:hover:not(.active) { color: #fff; }
+
+        .tab-content { display: none; flex-direction: column; flex-grow: 1; }
+        .tab-content.active { display: flex; }
+
+        /* Response Metrics */
+        .metrics-bar { display: flex; gap: 15px; margin-bottom: 20px; }
+        .metric-pill { flex: 1; padding: 15px; border-radius: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); text-align: center; }
+        .metric-title { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; font-weight: 600;}
+        .metric-value { font-size: 1.5rem; font-weight: 800; font-family: monospace;}
+        
+        .status-200 { color: var(--accent-green); }
+        .status-400 { color: var(--accent-orange); }
+        .status-500 { color: var(--accent-red); }
+        .status-loading { color: var(--text-muted); }
+
+        .response-body { flex-grow: 1; background: rgba(0,0,0,0.8); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; color: #e0e0e0; font-family: monospace; font-size: 0.95rem; overflow-y: auto; max-height: 400px; white-space: pre-wrap;}
+
+        /* Saved Endpoints List */
+        .saved-list { display: flex; flex-direction: column; gap: 10px; max-height: 500px; overflow-y: auto; }
+        .saved-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); transition: 0.2s;}
+        .saved-item:hover { border-color: var(--accent-cyan); }
+        .saved-info { display: flex; align-items: center; gap: 15px; overflow: hidden;}
+        .saved-method { font-weight: 800; font-size: 0.9rem; color: var(--accent-cyan);}
+        .saved-url { font-family: monospace; font-size: 0.9rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+        .saved-actions { display: flex; gap: 10px; }
+        .icon-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 1.1rem;}
+        .icon-btn:hover { color: #fff; }
+        .icon-btn.delete:hover { color: var(--accent-red); }
+
+        /* Notification */
+        .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-cyan); color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
+        .notification.show { transform: translateY(0); opacity: 1; }
+
+        /* ARTICLE SECTION */
+        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
+        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
+        .article-container h2:first-child { margin-top: 0; }
+        .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
+        .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px;}
+        .article-container li { font-size: 1.1rem; margin-bottom: 10px;}
+        .article-container code { background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; font-family: monospace; color: var(--accent-cyan); font-size: 0.95rem; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background: rgba(0, 242, 254, 0.1); color: var(--accent-cyan); font-weight: 700; }
+
+        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; margin-top: 60px;}
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
+        .footer-links a:hover { color: var(--accent-gold); }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <header>
+        <a href="../../index" class="logo">Affilore</a>
+        <nav class="nav-links">
+            <a href="../../index">Home</a>
+            <a href="../../index#categories">Categories</a>
+            <a href="../../about">About Us</a>
+        </nav>
+        <div>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn">Custom Tool</a>
+        </div>
+    </header>
+
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>API Monitoring Dashboard</h1>
+            <p>Ping REST APIs, check status codes, measure latency, and save endpoints locally.</p>
+        </div>
+
+        <div class="app-layout">
+            <div class="panel">
+                <h3><i class="fas fa-terminal"></i> Request Builder</h3>
+                
+                <div class="url-bar">
+                    <select class="method-select" id="apiMethod">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="DELETE">DELETE</option>
+                        <option value="HEAD">HEAD</option>
+                    </select>
+                    <input type="text" class="url-input" id="apiUrl" placeholder="https://api.example.com/v1/health">
+                </div>
+
+                <div class="input-group">
+                    <label>Headers (JSON Format) <span>Optional</span></label>
+                    <textarea class="code-area" id="apiHeaders" placeholder='{&#10;  "Authorization": "Bearer token",&#10;  "Content-Type": "application/json"&#10;}'></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>Request Body (JSON Format) <span>Optional</span></label>
+                    <textarea class="code-area" id="apiBody" placeholder='{&#10;  "key": "value"&#10;}'></textarea>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-action" onclick="runPing()" id="pingBtn"><i class="fas fa-bolt"></i> Run Ping</button>
+                    <button class="btn-outline" onclick="saveEndpoint()"><i class="fas fa-save"></i> Save</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('response')" id="tab-response">Live Response</button>
+                    <button class="tab-btn" onclick="switchTab('saved')" id="tab-saved">Saved Endpoints</button>
+                </div>
+
+                <div class="tab-content active" id="content-response">
+                    <div class="metrics-bar">
+                        <div class="metric-pill">
+                            <div class="metric-title">Status Code</div>
+                            <div class="metric-value status-loading" id="resStatus">---</div>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-title">Latency</div>
+                            <div class="metric-value status-loading" id="resTime">--- ms</div>
+                        </div>
+                    </div>
+                    <div class="response-body" id="resBody">// Response body will appear here after ping...</div>
+                </div>
+
+                <div class="tab-content" id="content-saved">
+                    <div class="saved-list" id="savedList">
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article-container">
+        <h2>Stop Paying for API Monitors You Use Once a Week</h2>
+        <p>Every modern web application is a promise — a promise that your data will load, your checkout will complete, your login will succeed. At the heart of every one of these promises sits an API endpoint, silently doing the heavy lifting. When it goes down, everything downstream goes down with it: revenue, user trust, and your weekend plans.</p>
+        <p>Yet for all the critical importance of API uptime, the monitoring tools available to most developers are absurdly over-engineered for everyday health checks. Enterprise-grade SaaS platforms like Datadog, Pingdom, or New Relic are exceptional pieces of engineering — but do you really need a 30-dashboard observability suite just to verify that your <code>/api/products</code> endpoint is returning a <code>200 OK</code>? For indie developers, freelancers, and small SaaS teams, these platforms represent a sledgehammer where a precision tap is all that's needed.</p>
+        <p>That's the exact gap the <strong>Affilore API Monitoring Dashboard</strong> was built to fill. It's a free, browser-based API health checker that lets you ping any REST API endpoint, measure its latency, inspect its HTTP status code, and save your endpoints for future checks — all without signing up for a single account or sending a byte of your data to a third-party server.</p>
+
+        <h2>How the Affilore API Monitor Works</h2>
+        <p>The Affilore API Monitor is engineered for one thing: <strong>speed and simplicity.</strong> It operates entirely client-side, meaning all the logic — the request, the response parsing, the latency calculation — runs directly inside your browser.</p>
+        <p>Here's what happens when you run a health ping:</p>
+        <ul>
+            <li><strong>You enter your endpoint URL</strong> — a full REST API URL, e.g., <code>https://api.yourapp.com/health</code></li>
+            <li><strong>You select an HTTP method</strong> — <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, or <code>HEAD</code></li>
+            <li><strong>The tool fires the request</strong> directly from your browser using the native <code>fetch()</code> API</li>
+            <li><strong>It measures round-trip latency</strong> in milliseconds — from the moment the request leaves your browser to the moment the first byte of the response arrives</li>
+            <li><strong>It displays the results</strong> including the HTTP status code, response time, and returned body</li>
+            <li><strong>Your endpoints are saved locally</strong> in your browser's <code>localStorage</code> — private to your device, never uploaded anywhere</li>
+        </ul>
+        <p>There is no backend. There is no database. There is no account. It is a pure, client-side REST API ping tool that respects your privacy and your time.</p>
+
+        <h3>Who Should Use It?</h3>
+        <ul>
+            <li><strong>Backend developers</strong> doing rapid sanity checks after a deployment</li>
+            <li><strong>Frontend developers</strong> verifying that a third-party API they depend on is actually reachable</li>
+            <li><strong>QA engineers</strong> running quick pre-test environment validation</li>
+            <li><strong>Freelancers</strong> monitoring client APIs without committing to a paid subscription</li>
+        </ul>
+
+        <h2>Understanding the Metrics: What Your Results Actually Mean</h2>
+        
+        <h3>HTTP Status Codes: The Server's Report Card</h3>
+        <p>HTTP status codes are a three-digit language that your server speaks to describe the outcome of every request.</p>
+        <ul>
+            <li><strong>2xx — Success:</strong> <code>200 OK</code> (Gold standard), <code>201 Created</code>, <code>204 No Content</code>.</li>
+            <li><strong>4xx — Client Errors:</strong> <code>400 Bad Request</code>, <code>401 Unauthorized</code> (Missing API Key), <code>403 Forbidden</code>, <code>404 Not Found</code>.</li>
+            <li><strong>5xx — Server Errors:</strong> <code>500 Internal Server Error</code> (Server crashed), <code>502 Bad Gateway</code>, <code>503 Service Unavailable</code>.</li>
+        </ul>
+
+        <h3>Latency: Reading the Milliseconds</h3>
+        <p>Latency (measured in ms) is the total round-trip time for your request. It is one of the most honest indicators of real-world API performance.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Latency Range</th>
+                    <th>Interpretation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>&lt; 100ms</strong></td>
+                    <td>Excellent. Fast server, geographically close, or well-cached.</td>
+                </tr>
+                <tr>
+                    <td><strong>100ms – 300ms</strong></td>
+                    <td>Good. Acceptable for most production applications.</td>
+                </tr>
+                <tr>
+                    <td><strong>300ms – 1,000ms</strong></td>
+                    <td>Sluggish. Worth investigating — is the server cold-starting?</td>
+                </tr>
+                <tr>
+                    <td><strong>&gt; 1,000ms</strong></td>
+                    <td>Poor. Users will feel this. High priority to diagnose.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>The CORS Factor: Why Browser-Based API Testing Has One Unique Quirk</h2>
+        <p>If you've ever tested an API directly from a browser tool and received a "Failed to Fetch" or a CORS error in your console, you've collided with one of the web's most important security mechanisms: <strong>Cross-Origin Resource Sharing (CORS).</strong></p>
+        <p>When your browser makes a request to an API, it checks whether that API's server explicitly permits requests from external origins. This check is enforced by the browser's security model. A server communicates its CORS policy via response headers, specifically: <code>Access-Control-Allow-Origin: *</code></p>
+        <p>If your endpoint works fine in Postman but fails here, a CORS misconfiguration on the server is almost certainly the culprit. Postman bypasses CORS because it is a desktop app, not a browser.</p>
+
+        <h2>Frequently Asked Questions</h2>
+        
+        <h3>Is my API endpoint data sent to Affilore's servers?</h3>
+        <p>No, never. The Affilore API Monitor is a fully client-side application. When you click "Run Ping," your browser fires the request directly to your API endpoint. Your endpoint URLs, headers, and any response data are stored exclusively in your browser's localStorage.</p>
+
+        <h3>Why am I getting a "Failed to Fetch" or CORS error?</h3>
+        <p>This is the most common issue with any browser-based API testing tool. It means your API server is not returning CORS headers that permit browser requests from external origins. You need to add an <code>Access-Control-Allow-Origin</code> header to your API's responses.</p>
+
+        <h3>Can I test authenticated API endpoints?</h3>
+        <p>Yes. The tool includes a custom headers interface. To test an authenticated endpoint, add an <code>Authorization</code> header with the value <code>Bearer YOUR_TOKEN</code> in the JSON header box.</p>
+
+        <h3>Are my saved endpoints private?</h3>
+        <p>Yes. Your endpoints are saved using your browser's localStorage API. This data never leaves your device and is never transmitted to any server.</p>
+
+        <h3>Is this tool suitable for production uptime monitoring with alerts?</h3>
+        <p>The Affilore API Monitor is designed for on-demand health checks and manual testing. It does not run scheduled pings in the background. For critical production APIs where you need 24/7 uptime monitoring with SMS alerts, consider a dedicated automated service.</p>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your API Deserves a Health Check — Right Now</p>
+            <p style="color: #fff;">Scroll up, enter your first API endpoint in the input field above, and run your first health ping. It takes less than ten seconds. What you find might surprise you.</p>
+        </div>
+    </div>
+
+    <div class="notification" id="toast">Endpoint Saved!</div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="../../about">About Us</a>
+            <a href="../../contact">Contact Us</a>
+            <a href="../../privacy">Privacy Policy</a>
+            <a href="../../terms">Terms & Conditions</a>
+        </div>
+        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let savedEndpoints = JSON.parse(localStorage.getItem('affiloreAPIs')) || [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSaved();
+        });
+
+        function switchTab(tab) {
+            document.getElementById('tab-response').classList.remove('active');
+            document.getElementById('tab-saved').classList.remove('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+
+            document.getElementById('content-response').classList.remove('active');
+            document.getElementById('content-saved').classList.remove('active');
+            document.getElementById('content-' + tab).classList.add('active');
+        }
+
+        async function runPing() {
+            const url = document.getElementById('apiUrl').value.trim();
+            const method = document.getElementById('apiMethod').value;
+            const headersStr = document.getElementById('apiHeaders').value.trim();
+            const bodyStr = document.getElementById('apiBody').value.trim();
+            
+            const btn = document.getElementById('pingBtn');
+            const resStatus = document.getElementById('resStatus');
+            const resTime = document.getElementById('resTime');
+            const resBody = document.getElementById('resBody');
+
+            if (!url) {
+                alert("Please enter a valid API URL.");
+                return;
+            }
+
+            // Ensure HTTPS
+            let finalUrl = url;
+            if (!/^https?:\/\//i.test(url)) {
+                finalUrl = 'https://' + url;
+            }
+
+            // Parse Headers safely
+            let fetchHeaders = {};
+            if (headersStr) {
+                try {
+                    fetchHeaders = JSON.parse(headersStr);
+                } catch (e) {
+                    alert("Invalid JSON format in Headers.");
+                    return;
+                }
+            }
+
+            // Options
+            const options = {
+                method: method,
+                headers: fetchHeaders
+            };
+
+            if (method !== 'GET' && method !== 'HEAD' && bodyStr) {
+                try {
+                    // Test if valid JSON before sending
+                    JSON.parse(bodyStr); 
+                    options.body = bodyStr;
+                    if(!options.headers['Content-Type']) {
+                        options.headers['Content-Type'] = 'application/json';
+                    }
+                } catch (e) {
+                    alert("Invalid JSON format in Request Body.");
+                    return;
+                }
+            }
+
+            // UI Loading State
+            switchTab('response');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Pinging...';
+            resStatus.className = 'metric-value status-loading';
+            resStatus.innerText = 'Pinging...';
+            resTime.className = 'metric-value status-loading';
+            resTime.innerText = '--- ms';
+            resBody.innerText = 'Waiting for response...';
+            resBody.style.color = '#aaa';
+
+            const startTime = performance.now();
+
+            try {
+                const response = await fetch(finalUrl, options);
+                const endTime = performance.now();
+                const latency = Math.round(endTime - startTime);
+
+                // Handle Status UI
+                resStatus.innerText = `${response.status} ${response.statusText}`;
+                if (response.ok) {
+                    resStatus.className = 'metric-value status-200';
+                } else if (response.status >= 400 && response.status < 500) {
+                    resStatus.className = 'metric-value status-400';
+                } else {
+                    resStatus.className = 'metric-value status-500';
+                }
+
+                // Handle Latency UI
+                resTime.innerText = `${latency} ms`;
+                if (latency < 300) resTime.className = 'metric-value status-200';
+                else if (latency < 1000) resTime.className = 'metric-value status-400';
+                else resTime.className = 'metric-value status-500';
+
+                // Handle Body
+                const textData = await response.text();
+                try {
+                    // Try to format as JSON
+                    const jsonData = JSON.parse(textData);
+                    resBody.innerText = JSON.stringify(jsonData, null, 2);
+                    resBody.style.color = '#00e676';
+                } catch(e) {
+                    // Output as raw text
+                    resBody.innerText = textData || '(No Response Body)';
+                    resBody.style.color = '#e0e0e0';
+                }
+
+            } catch (error) {
+                // Catch CORS or Network Failure
+                resStatus.innerText = "FAILED";
+                resStatus.className = 'metric-value status-500';
+                resTime.innerText = "Timeout";
+                resTime.className = 'metric-value status-500';
+                resBody.innerText = `Network Error / CORS Blocked.\n\nBrowser prevented the request. Ensure the API URL is correct and the server sends the header:\nAccess-Control-Allow-Origin: *\n\nError details: ${error.message}`;
+                resBody.style.color = '#ff3366';
+            }
+
+            btn.innerHTML = '<i class="fas fa-bolt"></i> Run Ping';
+        }
+
+        function saveEndpoint() {
+            const url = document.getElementById('apiUrl').value.trim();
+            if (!url) return;
+
+            const method = document.getElementById('apiMethod').value;
+            const headers = document.getElementById('apiHeaders').value;
+            const body = document.getElementById('apiBody').value;
+
+            const newEndpoint = {
+                id: Date.now().toString(),
+                url: url,
+                method: method,
+                headers: headers,
+                body: body
+            };
+
+            // Prevent exact duplicates
+            savedEndpoints = savedEndpoints.filter(e => e.url !== url || e.method !== method);
+            savedEndpoints.unshift(newEndpoint);
+            
+            localStorage.setItem('affiloreAPIs', JSON.stringify(savedEndpoints));
+            renderSaved();
+            showToast("Endpoint Saved!");
+            switchTab('saved');
+        }
+
+        function renderSaved() {
+            const list = document.getElementById('savedList');
+            list.innerHTML = '';
+
+            if (savedEndpoints.length === 0) {
+                list.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px;">No endpoints saved yet.</div>`;
+                return;
+            }
+
+            savedEndpoints.forEach(ep => {
+                const item = document.createElement('div');
+                item.className = 'saved-item';
+                item.innerHTML = `
+                    <div class="saved-info">
+                        <div class="saved-method">${ep.method}</div>
+                        <div class="saved-url" title="${ep.url}">${ep.url}</div>
+                    </div>
+                    <div class="saved-actions">
+                        <button class="icon-btn" onclick="loadEndpoint('${ep.id}')" title="Load into Editor"><i class="fas fa-external-link-alt"></i></button>
+                        <button class="icon-btn delete" onclick="deleteEndpoint('${ep.id}')" title="Remove"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function loadEndpoint(id) {
+            const ep = savedEndpoints.find(e => e.id === id);
+            if(ep) {
+                document.getElementById('apiUrl').value = ep.url;
+                document.getElementById('apiMethod').value = ep.method;
+                document.getElementById('apiHeaders').value = ep.headers;
+                document.getElementById('apiBody').value = ep.body;
+                showToast("Loaded to Editor");
+            }
+        }
+
+        function deleteEndpoint(id) {
+            savedEndpoints = savedEndpoints.filter(e => e.id !== id);
+            localStorage.setItem('affiloreAPIs', JSON.stringify(savedEndpoints));
+            renderSaved();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+    </script>
+</body>
+</html>
