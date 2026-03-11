@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affilore - Premium SEO & Micro-SaaS Tools</title>
-    <meta name="description"
-        content="Affilore provides high search volume, premium, and free SEO tools, calculators, and micro-SaaS utilities.">
+    <meta name="description" content="Affilore provides high search volume, premium, and free SEO tools, calculators, and micro-SaaS utilities.">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -79,7 +78,6 @@
         }
         .header-btn:hover { box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.05); }
 
-        /* NEW MOBILE MENU STYLES */
         .mobile-menu-btn {
             display: none; background: transparent; border: none; color: var(--accent-gold);
             font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none;
@@ -129,7 +127,7 @@
         .container { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
         
         .tools-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 30px;
         }
         .tool-card {
             background: linear-gradient(145deg, rgba(30, 30, 35, 0.6), rgba(15, 15, 20, 0.6));
@@ -146,10 +144,6 @@
         .tool-card:hover::before { opacity: 1; }
         .tool-card:hover { border-color: rgba(255, 214, 0, 0.3); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        .tool-card-number {
-            position: absolute; top: 15px; left: 15px; background: rgba(8, 8, 10, 0.9); color: #fff; font-size: 0.9rem; font-weight: 800; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); z-index: 6; 
-        }
-
         .tool-card-img {
             width: 100%; height: 180px; object-fit: cover; 
             border-bottom: 1px solid var(--border-color);
@@ -173,6 +167,19 @@
             border-radius: 8px; font-weight: 600; transition: all 0.3s ease;
         }
         .btn-use:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
+
+        /* GOOGLE STYLE PAGINATION */
+        .pagination {
+            display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 20px; margin-bottom: 80px;
+        }
+        .page-btn {
+            background: transparent; border: none; color: var(--text-muted); font-size: 1.3rem; 
+            font-weight: 600; cursor: pointer; padding: 5px 12px; transition: all 0.3s ease; font-family: 'Outfit', sans-serif;
+        }
+        .page-btn:hover { color: #fff; }
+        .page-btn.active { color: var(--accent-gold); font-weight: 800; border-bottom: 2px solid var(--accent-gold); }
+        .page-btn.next-btn { color: #38bdf8; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+        .page-btn.next-btn:hover { text-decoration: underline; color: #7dd3fc; }
 
         .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .category-card {
@@ -214,7 +221,6 @@
         .social-icon:hover { background: var(--accent-gold); color: #000; box-shadow: 0 0 15px var(--accent-glow); transform: translateY(-3px); }
         .copyright-bar { text-align: center; padding-top: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.9rem; }
         
-        /* THIS FIXES THE MOBILE LAYOUT */
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .desktop-btn { display: none; }
@@ -265,12 +271,12 @@
             <button id="searchBtn">Search Tools</button>
         </div>
     </section>
+
     <section id="tools" class="container">
         <h2 class="section-title">Latest Engineered Tools</h2>
+        
         <div class="tools-grid" id="toolsList">
-            
-            <div class="tool-card">
-                <div class="tool-card-number">01</div>
+            <div class="tool-card" data-index="0">
                 <img src="finance/freelanceretainertracker/retainer-thumbnail.png" alt="Freelance Retainer Tracker" class="tool-card-img">
                 <div class="badge">Finance</div>
                 <div class="tool-card-body">
@@ -279,8 +285,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">02</div>
+            <div class="tool-card" data-index="1">
                 <img src="seo/gbp-reply-generator/gbp-thumbnail.png" alt="Google Review Reply Generator" class="tool-card-img">
                 <div class="badge">SEO Tools</div>
                 <div class="tool-card-body">
@@ -289,8 +294,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">03</div>
+            <div class="tool-card" data-index="2">
                 <img src="seo/citation-tracker/citation-thumbnail.png" alt="Local SEO Citation Tracker" class="tool-card-img">
                 <div class="badge">SEO Tools</div>
                 <div class="tool-card-body">
@@ -299,8 +303,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">04</div>
+            <div class="tool-card" data-index="3">
                 <img src="ai/youtube-script-generator/youtube-thumbnail.jpeg" alt="AI YouTube Script Generator" class="tool-card-img">
                 <div class="badge">AI Creator</div>
                 <div class="tool-card-body">
@@ -309,8 +312,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">05</div>
+            <div class="tool-card" data-index="4">
                 <img src="dev/api-monitor/api-thumbnail.jpeg" alt="API Monitoring Dashboard" class="tool-card-img">
                 <div class="badge">Dev Tools</div>
                 <div class="tool-card-body">
@@ -319,8 +321,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">06</div>
+            <div class="tool-card" data-index="5">
                 <img src="dev/a11y-tester/a11y-thumbnail.png" alt="AI Web Accessibility Tester" class="tool-card-img">
                 <div class="badge">Developer Tools</div>
                 <div class="tool-card-body">
@@ -329,8 +330,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">07</div>
+            <div class="tool-card" data-index="6">
                 <img src="dev/tailwind-visualizer/tailwind-thumbnail.jpeg" alt="Tailwind CSS Visualizer" class="tool-card-img">
                 <div class="badge">Developer Tools</div>
                 <div class="tool-card-body">
@@ -339,8 +339,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">08</div>
+            <div class="tool-card" data-index="7">
                 <img src="utilities/form-to-pdf/pdf-thumbnail.png" alt="Form to PDF Converter" class="tool-card-img">
                 <div class="badge">Utilities</div>
                 <div class="tool-card-body">
@@ -349,8 +348,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">09</div>
+            <div class="tool-card" data-index="8">
                 <img src="utilities/habit-tracker/habit-thumbnail.jpeg" alt="Minimalist Habit Tracker" class="tool-card-img">
                 <div class="badge">Utilities</div>
                 <div class="tool-card-body">
@@ -359,8 +357,7 @@
                 </div>
             </div>
             
-            <div class="tool-card">
-                <div class="tool-card-number">10</div>
+            <div class="tool-card" data-index="9">
                 <img src="real-estate/roi-calculator/roi-thumbnail.jpeg" alt="Real Estate ROI Calculator" class="tool-card-img">
                 <div class="badge">Real Estate</div>
                 <div class="tool-card-body">
@@ -369,7 +366,12 @@
                 </div>
             </div>
         </div>
+
+        <div class="pagination" id="pagination">
+            </div>
+
     </section>
+
     <section id="categories" class="container">
         <h2 class="section-title">Explore Best-in-Class Categories</h2>
         <div class="categories-grid">
@@ -399,6 +401,7 @@
             </a>
         </div>
     </section>
+
     <section class="container" style="padding-top: 0;">
         <div class="custom-tool-banner">
             <h2>Need a Custom Solution?</h2>
@@ -406,6 +409,7 @@
             <a href="mailto:affilore4@gmail.com" class="btn-primary">Hire Us to Build It</a>
         </div>
     </section>
+
     <footer>
         <div class="footer-grid">
             <div class="footer-col" style="flex: 2; min-width: 250px;">
@@ -456,14 +460,84 @@
         // Set year
         document.getElementById('year').textContent = new Date().getFullYear();
         
-        // Search logic 
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileToggle i');
+            menu.classList.toggle('open');
+            if(menu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // PAGINATION & SEARCH LOGIC
+        const itemsPerPage = 9; // User requested exactly 9 tools per page
+        let currentPage = 1;
+        
+        const toolCards = Array.from(document.querySelectorAll('.tool-card'));
+        const paginationContainer = document.getElementById('pagination');
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
-        const toolCards = document.querySelectorAll('.tool-card');
-        
+
+        function displayPage(page) {
+            currentPage = page;
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+
+            toolCards.forEach((card, index) => {
+                if (index >= start && index < end) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            renderPagination();
+            document.getElementById('tools').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(toolCards.length / itemsPerPage);
+            paginationContainer.innerHTML = '';
+
+            if (totalPages <= 1) return; // Hide pagination if only 1 page needed
+
+            // Number Buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.innerText = i;
+                pageBtn.onclick = () => displayPage(i);
+                paginationContainer.appendChild(pageBtn);
+            }
+
+            // Next Button
+            if (currentPage < totalPages) {
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'page-btn next-btn';
+                nextBtn.innerHTML = 'Next <i class="fas fa-chevron-right" style="font-size: 0.9rem;"></i>';
+                nextBtn.onclick = () => displayPage(currentPage + 1);
+                paginationContainer.appendChild(nextBtn);
+            }
+        }
+
         function filterTools() {
             const query = searchInput.value.toLowerCase();
+            
+            // If search is cleared, go back to normal pagination
+            if (query.trim() === '') {
+                paginationContainer.style.display = 'flex';
+                displayPage(1);
+                return;
+            }
+
+            // If searching, hide pagination and show all matches
+            paginationContainer.style.display = 'none';
             document.getElementById('tools').scrollIntoView({ behavior: 'smooth' });
+            
             toolCards.forEach(card => {
                 const title = card.querySelector('h3').textContent.toLowerCase();
                 const badge = card.querySelector('.badge').textContent.toLowerCase();
@@ -474,23 +548,16 @@
                 }
             });
         }
-        searchBtn.addEventListener('click', filterTools);
 
-        // Mobile Menu Toggle Logic
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const icon = document.querySelector('#mobileToggle i');
-            
-            menu.classList.toggle('open');
-            
-            if(menu.classList.contains('open')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        }
+        // Initialize Page 1 on load
+        window.addEventListener('DOMContentLoaded', () => {
+            displayPage(1);
+        });
+
+        searchBtn.addEventListener('click', filterTools);
+        searchInput.addEventListener('keyup', (e) => {
+            if(e.key === 'Enter') filterTools();
+        });
     </script>
 </body>
 </html>
