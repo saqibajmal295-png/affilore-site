@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind CSS Component Visualizer | Affilore</title>
+    <meta name="description" content="Advanced Tailwind CSS playground. Real-time rendering, custom theme configuration, and responsive testing directly in your browser.">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YRKMHHSYBC');
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #08080a; --text-main: #f0f0f5; --text-muted: #9ba1a6;
+            --accent-blue: #38bdf8; --blue-glow: rgba(56, 189, 248, 0.4);
+            --card-bg: rgba(20, 20, 25, 0.7); --border-color: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(15px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
+        
+        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-blue) 1px, transparent 1px); background-size: 50px 50px; opacity: 0.1; z-index: -2; pointer-events: none; }
+        
+        header { position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #ffd600; text-decoration: none; text-transform: uppercase; letter-spacing: 2px;}
+        
+        .app-container { margin-top: 80px; height: calc(100vh - 80px); display: flex; flex-direction: column; }
+        
+        /* Toolbar */
+        .toolbar { background: #111; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .tab-group, .action-group { display: flex; gap: 10px; }
+        
+        .tool-btn { background: #222; border: 1px solid var(--border-color); color: #fff; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: 0.3s; display: flex; align-items: center; gap: 8px;}
+        .tool-btn:hover { background: #333; border-color: var(--accent-blue); }
+        .tool-btn.active { background: var(--accent-blue); color: #000; border-color: var(--accent-blue); }
+
+        /* Split Screen */
+        .split-view { display: flex; flex: 1; overflow: hidden; background: #000; }
+        @media (max-width: 1024px) { .split-view { flex-direction: column; } }
+
+        .editor-section { width: 45%; display: flex; flex-direction: column; border-right: 1px solid var(--border-color); position: relative;}
+        @media (max-width: 1024px) { .editor-section { width: 100%; height: 40%; border-right: none; border-bottom: 1px solid var(--border-color); } }
+
+        .editor-header { background: #1e293b; padding: 8px 20px; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 800; display: flex; justify-content: space-between;}
+        
+        .code-input { flex: 1; width: 100%; padding: 20px; background: #0f172a; color: #cbd5e1; border: none; font-family: 'Fira Code', monospace; font-size: 0.95rem; outline: none; resize: none; line-height: 1.6; }
+
+        .preview-section { flex: 1; background: #f1f5f9; position: relative; overflow: auto; display: flex; justify-content: center; align-items: flex-start; padding: 40px 20px;}
+        .preview-frame { background: white; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border-radius: 8px; width: 100%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); min-height: 200px;}
+        
+        /* Device Sizes */
+        .size-mobile { width: 375px; }
+        .size-tablet { width: 768px; }
+        .size-desktop { width: 100%; }
+
+        /* Dark Mode for Preview */
+        .preview-frame.dark-mode-preview { background: #0f172a; color: white; }
+
+        /* Notification */
+        .notification { position: fixed; bottom: 30px; right: 30px; background: #ffd600; color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
+        .notification.show { transform: translateY(0); opacity: 1; }
+
+        /* SEO SECTION */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; }
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h2 { color: #ffd600; font-size: 2.2rem; margin: 40px 0 20px; }
+        .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
+        .article-container p { margin-bottom: 20px; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; }
+        .article-container li { margin-bottom: 10px; }
+        .article-container code { background: rgba(56, 189, 248, 0.1); color: var(--accent-blue); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        
+        footer { background: #08080a; border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <header>
+        <a href="../../index" class="logo">Affilore</a>
+        <div class="nav-links">
+            <a href="../../index" style="color: #fff; text-decoration: none; font-weight: 600;">Home</a>
+        </div>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="tool-btn" style="background:#ffd600; color:#000;">Custom Tool</a>
+    </header>
+
+    <div class="app-container">
+        <div class="toolbar">
+            <div class="tab-group">
+                <button class="tool-btn active" id="btn-html" onclick="switchEditor('html')"><i class="fas fa-code"></i> HTML</button>
+                <button class="tool-btn" id="btn-config" onclick="switchEditor('config')"><i class="fas fa-cog"></i> Config</button>
+            </div>
+
+            <div class="action-group">
+                <button class="tool-btn" onclick="toggleSize('mobile')" title="Mobile View"><i class="fas fa-mobile-alt"></i></button>
+                <button class="tool-btn" onclick="toggleSize('tablet')" title="Tablet View"><i class="fas fa-tablet-alt"></i></button>
+                <button class="tool-btn active" onclick="toggleSize('desktop')" title="Full View"><i class="fas fa-desktop"></i></button>
+                <div style="width: 1px; background: #333; margin: 0 5px;"></div>
+                <button class="tool-btn" onclick="toggleDarkMode()" id="dark-toggle" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+                <button class="tool-btn" onclick="copyCode()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+        </div>
+
+        <div class="split-view">
+            <div class="editor-section">
+                <div class="editor-header">
+                    <span id="editor-label">index.html</span>
+                    <span>Live Rendering</span>
+                </div>
+                <textarea id="htmlInput" class="code-input" spellcheck="false" oninput="runUpdate()"><div class="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden md:max-w-2xl border border-slate-200">
+  <div class="md:flex">
+    <div class="p-8">
+      <div class="uppercase tracking-wide text-sm text-indigo-500 font-black">Tailwind Visualizer</div>
+      <h1 class="block mt-1 text-3xl leading-tight font-extrabold text-black">Rapid UI Prototyping</h1>
+      <p class="mt-2 text-slate-500">Edit this HTML to see changes instantly. Switch to the Config tab to add custom theme colors or fonts.</p>
+      <button class="mt-6 px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all hover:scale-105 active:scale-95">
+        Get Started →
+      </button>
+    </div>
+  </div>
+</div></textarea>
+                <textarea id="configInput" class="code-input" style="display:none;" spellcheck="false" oninput="runUpdate()">tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        brand: '#38bdf8',
+      }
+    }
+  }
+}</textarea>
+            </div>
+
+            <div class="preview-section" id="previewContainer">
+                <div class="preview-frame" id="previewFrame">
+                    <div id="renderTarget" class="p-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article-wrap">
+        <div class="article-container">
+            <h2>The Best Code Is the Code You Can See Immediately</h2>
+            <p>There's a specific kind of developer frustration that Tailwind CSS users know intimately. You have a component idea — a card, a nav, a pricing table — and the path from idea to visible result used to involve spinning up a build tool, configuring PostCSS, installing dependencies, and waiting for a dev server to compile before a single utility class could be rendered.</p>
+            <p>Tailwind CSS fundamentally changed how developers think about styling. Its utility-first model collapsed the distance between design intention and CSS output, replacing mental context-switching between stylesheets and markup with a single, composable layer right in your HTML. It's fast to write, fast to read, and Pair with a proper sandbox, fast to iterate.</p>
+
+            <h2>How the Affilore Tailwind Visualizer Works</h2>
+            <p>The Affilore Tailwind CSS Component Visualizer is a <strong>live, browser-based rendering engine</strong> built on top of the official Tailwind Play CDN. It requires no installation, no Node.js, and no configuration. Open the tool, write your HTML with Tailwind utility classes, and watch the rendered output update in real time.</p>
+
+            <h3>The Tailwind Play CDN: What's Actually Happening Under the Hood</h3>
+            <p>When you load the Affilore Visualizer, it injects the Tailwind Play CDN script into the context. This uses a <strong>just-in-time (JIT) engine</strong> running in the browser. It scans your markup for utility class names and generates the corresponding CSS on demand — exactly the same output you'd get from a production build.</p>
+
+            <h2>Tailwind Best Practices: Utility-First vs. Component Architecture</h2>
+            <p>Utility-first means reaching for single-purpose classes instead of custom CSS selectors. Instead of creating a <code>.card</code> class in a separate CSS file, you apply utilities like <code>p-6 rounded-xl bg-white shadow-md</code> directly to your HTML element.</p>
+            <ul>
+                <li><strong>No dead CSS:</strong> Classes only exist if they're used in your markup.</li>
+                <li><strong>No naming collisions:</strong> No custom class names to conflict with.</li>
+                <li><strong>No context switching:</strong> Styling lives with the structure.</li>
+            </ul>
+
+            <h2>Frequently Asked Questions</h2>
+            <h3>Can I use a custom Tailwind configuration in the Visualizer?</h3>
+            <p>Yes. By switching to the <strong>Config</strong> tab in the editor, you can extend the default theme with custom colors, fonts, and spacing using the standard <code>tailwind.config</code> syntax.</p>
+
+            <h3>Is this using the latest version of Tailwind CSS?</h3>
+            <p>The Affilore Visualizer tracks the stable Tailwind CSS v3 release channel. You have access to all v3 features including arbitrary values, container queries, and the full color palette.</p>
+
+            <h3>Is my code saved anywhere?</h3>
+            <p>The visualizer runs entirely in-browser. Code you write is not transmitted to any server. Make sure to copy your code to your project before closing the tab!</p>
+        </div>
+    </div>
+
+    <div class="notification" id="toast">Code Copied!</div>
+
+    <footer>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function switchEditor(type) {
+            const htmlBtn = document.getElementById('btn-html');
+            const configBtn = document.getElementById('btn-config');
+            const htmlIn = document.getElementById('htmlInput');
+            const configIn = document.getElementById('configInput');
+            const label = document.getElementById('editor-label');
+
+            if(type === 'html') {
+                htmlBtn.classList.add('active');
+                configBtn.classList.remove('active');
+                htmlIn.style.display = 'block';
+                configIn.style.display = 'none';
+                label.innerText = 'index.html';
+            } else {
+                htmlBtn.classList.remove('active');
+                configBtn.classList.add('active');
+                htmlIn.style.display = 'none';
+                configIn.style.display = 'block';
+                label.innerText = 'tailwind.config.js';
+            }
+        }
+
+        function runUpdate() {
+            try {
+                // Update Config
+                const configCode = document.getElementById('configInput').value;
+                eval(configCode); // Safely execute config update for CDN
+                
+                // Update HTML
+                const htmlCode = document.getElementById('htmlInput').value;
+                document.getElementById('renderTarget').innerHTML = htmlCode;
+                
+                // Trigger Tailwind JIT refresh
+                if(window.tailwind) window.tailwind.uncloack();
+            } catch(e) {
+                console.error("Tailwind Render Error", e);
+            }
+        }
+
+        function toggleSize(size) {
+            const frame = document.getElementById('previewFrame');
+            const container = document.getElementById('previewContainer');
+            
+            // UI Update
+            document.querySelectorAll('.action-group .tool-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            frame.className = 'preview-frame size-' + size;
+            if(size === 'desktop') {
+                container.style.alignItems = 'flex-start';
+            } else {
+                container.style.alignItems = 'center';
+            }
+        }
+
+        function toggleDarkMode() {
+            const frame = document.getElementById('previewFrame');
+            const btn = document.getElementById('dark-toggle');
+            frame.classList.toggle('dark-mode-preview');
+            
+            if(frame.classList.contains('dark-mode-preview')) {
+                btn.innerHTML = '<i class="fas fa-sun"></i>';
+                btn.style.color = '#ffd600';
+            } else {
+                btn.innerHTML = '<i class="fas fa-moon"></i>';
+                btn.style.color = '#fff';
+            }
+        }
+
+        function copyCode() {
+            const code = document.getElementById('htmlInput').value;
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            });
+        }
+
+        window.onload = runUpdate;
+    </script>
+</body>
+</html>
