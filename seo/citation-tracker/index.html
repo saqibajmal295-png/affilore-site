@@ -107,15 +107,20 @@
 
         .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);}
         .stats { display: flex; gap: 20px; }
-        .stat-val { font-size: 1.5rem; font-weight: 800; }
+        .stat-box { text-align: center; }
+        .stat-val { font-size: 1.8rem; font-weight: 800; }
         .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;}
 
         .directory-list { display: flex; flex-direction: column; gap: 10px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
+        .directory-list::-webkit-scrollbar { width: 6px; }
+        .directory-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        
         .dir-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 15px 20px; border-radius: 10px; border-left: 4px solid var(--text-muted); transition: 0.2s;}
         .dir-info h4 { margin: 0 0 5px 0; font-size: 1.1rem;}
         .dir-info a { color: var(--accent-blue); font-size: 0.85rem;}
+        
         .dir-actions { display: flex; gap: 10px; }
-        .status-btn { padding: 8px 15px; border-radius: 6px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer;}
+        .status-btn { padding: 8px 15px; border-radius: 6px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;}
         
         .status-none { background: rgba(255,255,255,0.1); color: #fff; }
         .status-correct { background: rgba(0, 230, 118, 0.2); color: var(--accent-green); }
@@ -127,18 +132,37 @@
         .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-gold); color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
         .notification.show { transform: translateY(0); opacity: 1; }
 
-        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
-        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
+        /* FULL SEO ARTICLE SECTION */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); }
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 40px 0 20px; line-height: 1.3;}
         .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
         .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
+        .article-container li { margin-bottom: 10px; }
 
+        footer { background: #08080a; border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
+        .footer-links a:hover { color: #ffd600; }
+
+        /* --- MOBILE FIXES --- */
+        @media (max-width: 900px) {
+            .app-layout { grid-template-columns: 1fr; }
+        }
         @media (max-width: 768px) {
             .nav-links { display: none !important; }
             .desktop-btn { display: none !important; }
             .mobile-menu-btn { display: block !important; }
+            
+            /* Fixes the Giant Title */
             .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
-            .app-layout { grid-template-columns: 1fr; }
-            .stats { flex-direction: column; gap: 10px; }
+            .tool-header p { font-size: 1rem; }
+            
+            .dashboard-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .dir-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .dir-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+            
+            .article-wrap { padding: 40px 20px; }
         }
     </style>
 </head>
@@ -181,331 +205,74 @@
         <div class="app-layout">
             <div class="panel">
                 <h3><i class="fas fa-building"></i> Canonical NAP Data</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Enter your exact, correct business information here to serve as your master reference.</p>
                 <div class="input-group"><label>Business Name</label><input type="text" id="bizName" placeholder="e.g. Acme Plumbing LLC"></div>
                 <div class="input-group"><label>Street Address</label><input type="text" id="bizAddress" placeholder="e.g. 123 Main St"></div>
                 <div class="input-group"><label>City, State, Zip</label><input type="text" id="bizCity" placeholder="e.g. Austin, TX 78701"></div>
                 <div class="input-group"><label>Phone Number</label><input type="text" id="bizPhone" placeholder="e.g. (555) 123-4567"></div>
                 <button class="btn-action" onclick="saveNAP()">Save Reference Data</button>
-                <button class="btn-action btn-outline" onclick="clearData()">Reset Dashboard</button>
+                <button class="btn-action btn-outline" onclick="clearData()" style="margin-top: 10px;">Reset Dashboard</button>
             </div>
 
             <div class="panel">
                 <div class="dashboard-header">
-                    <h3><i class="fas fa-tasks"></i> Tracking Board</h3>
+                    <h3 style="margin:0;"><i class="fas fa-tasks"></i> Tracking Board</h3>
                     <div class="stats">
                         <div class="stat-box"><div class="stat-val" id="statCorrect" style="color: var(--accent-green);">0</div><div class="stat-label">Verified</div></div>
                         <div class="stat-box"><div class="stat-val" id="statError" style="color: var(--accent-red);">0</div><div class="stat-label">Errors</div></div>
                     </div>
                 </div>
-                <div class="directory-list" id="dirList"></div>
+                <div class="directory-list" id="dirList">
+                    </div>
             </div>
         </div>
     </div>
 
-    <div class="article-container">
-        <h2>The Hidden Power of NAP Consistency</h2>
-        <p>Your local search presence depends heavily on how consistent your Name, Address, and Phone number are across the web. Use the tracker above to audit your current listings.</p>
+    <div class="article-wrap">
+        <div class="article-container">
+            <h2>The Hidden Power of NAP Consistency in Local SEO</h2>
+            <p>When trying to rank a brick-and-mortar business or service area business on Google Maps, many business owners obsess over website backlinks and keyword density. While those matter, they frequently ignore the absolute foundation of Local SEO: <strong>NAP Consistency</strong>.</p>
+            <p>NAP stands for <strong>Name, Address, and Phone Number</strong>. It represents the core digital identity of a local business. Search engines like Google and Bing rely on thousands of third-party directories, review sites, and data aggregators to verify that your business is legitimate, operational, and located exactly where you say it is.</p>
+            
+            <h3>Why Inconsistent Citations Destroy Rankings</h3>
+            <p>Think of Google's local algorithm like a digital detective. If your Google Business Profile says your business is located at "123 Main Street", but Yelp says "123 Main St.", and the YellowPages lists an old phone number from three years ago, the detective loses trust in your data.</p>
+            <p>When search engines detect conflicting NAP information across the web, they lose confidence in your business's legitimacy. A loss of algorithmic confidence results in an immediate drop in local map pack rankings. You will be outranked by competitors with fewer reviews simply because their data footprint is clean and unified.</p>
+
+            <h2>How to Use the Affilore Citation Tracker</h2>
+            <p>Manual citation auditing is notoriously messy. It usually involves chaotic spreadsheets, multiple tabs, and lost progress. The Affilore Local SEO Citation Tracker simplifies this workflow into a visual, browser-based dashboard.</p>
+            
+            <ul>
+                <li><strong>Establish Your Canonical Data:</strong> On the left panel, input the exact, legally correct formatting of your business Name, Address, and Phone number. This is your "source of truth." Save it.</li>
+                <li><strong>Audit the Directories:</strong> The right panel contains a pre-built list of the most critical local directories. Click "Check Listing" to open that directory in a new tab.</li>
+                <li><strong>Compare and Verify:</strong> Search for your business on the directory. Does the data match your Canonical NAP exactly? If yes, click the green checkmark. If there is a mismatch, spelling error, or old address, click the red "X".</li>
+                <li><strong>Local Storage Privacy:</strong> As you mark directories as verified or containing errors, your progress is automatically saved to your browser's local storage. You can close the tab and return tomorrow; your dashboard will be exactly how you left it. No data is ever sent to our servers.</li>
+            </ul>
+
+            <h3>The Top Directories You Must Claim First</h3>
+            <p>Not all citations are created equal. While there are hundreds of niche and local directories, you must prioritize the Tier 1 platforms that feed data to smaller sites. Ensure your NAP is flawless on these platforms before moving elsewhere:</p>
+            <ul>
+                <li><strong>Google Business Profile (GBP):</strong> The undisputed king of local search. Your GBP data is what populates Google Maps.</li>
+                <li><strong>Apple Maps Connect:</strong> Frequently overlooked, but powers the default navigation app on over a billion iOS devices globally.</li>
+                <li><strong>Bing Places:</strong> The default search engine for many corporate networks and older Windows devices. It allows you to sync data directly from your Google Business Profile.</li>
+                <li><strong>Yelp:</strong> A massive trust signal for search engines, and the primary data provider for Apple Maps reviews and Amazon Alexa searches.</li>
+                <li><strong>Facebook Business Pages:</strong> One of the most crawled domains on the internet. Your "About" section must match your website perfectly.</li>
+            </ul>
+
+            <h2>The Aggregator Ecosystem: The Secret to Scaling</h2>
+            <p>Once you have manually verified the top directories using our tracker, you will need to address the "Data Aggregators." These are massive data brokers (such as Foursquare, Data Axle, and Neustar Localeze) that do not have consumer-facing websites. Instead, they sell business data to hundreds of smaller directories, GPS systems, and apps.</p>
+            <p>If an aggregator has the wrong phone number for your business, they will push that wrong phone number out to 50+ different websites simultaneously. This is why fixing citations manually can sometimes feel like playing whack-a-mole. By using the Affilore Tracker to identify the errors, you can then take targeted action to clean up the source of the bad data.</p>
+            <p>Don't let bad data throttle your local traffic. Start your audit today using the dashboard above.</p>
+        </div>
     </div>
 
-    <div class="notification" id="toast">Data Saved!</div>
-
     <footer>
-        <p style="color: var(--text-muted); text-align:center; padding: 20px;">&copy; 2026 Affilore.com. All rights reserved.</p>
-    </footer>
-
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const icon = document.querySelector('#mobileToggle i');
-            menu.classList.toggle('open');
-            icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        }
-
-        const directories = [
-            { id: 'gmb', name: 'Google Business Profile', url: 'https://google.com/business' },
-            { id: 'bing', name: 'Bing Places', url: 'https://bingplaces.com' },
-            { id: 'yelp', name: 'Yelp for Business', url: 'https://biz.yelp.com' },
-            { id: 'fb', name: 'Facebook Page', url: 'https://facebook.com' },
-            { id: 'yellowpages', name: 'YellowPages (YP)', url: 'https://yellowpages.com' }
-        ];
-
-        document.addEventListener('DOMContentLoaded', () => { loadNAP(); renderDirectories(); updateStats(); });
-
-        function saveNAP() {
-            const data = { name: document.getElementById('bizName').value, address: document.getElementById('bizAddress').value, city: document.getElementById('bizCity').value, phone: document.getElementById('bizPhone').value };
-            localStorage.setItem('affiloreNAP', JSON.stringify(data));
-            showToast("Reference Data Saved!");
-        }
-
-        function loadNAP() {
-            const saved = localStorage.getItem('affiloreNAP');
-            if (saved) {
-                const data = JSON.parse(saved);
-                document.getElementById('bizName').value = data.name || '';
-                document.getElementById('bizAddress').value = data.address || '';
-                document.getElementById('bizCity').value = data.city || '';
-                document.getElementById('bizPhone').value = data.phone || '';
-            }
-        }
-
-        function renderDirectories() {
-            const container = document.getElementById('dirList');
-            container.innerHTML = '';
-            const savedStatuses = JSON.parse(localStorage.getItem('affiloreDirStatus')) || {};
-            directories.forEach(dir => {
-                const status = savedStatuses[dir.id] || 'none';
-                const div = document.createElement('div');
-                div.className = 'dir-item';
-                div.setAttribute('data-status', status);
-                div.innerHTML = `
-                    <div class="dir-info"><h4>${dir.name}</h4><a href="${dir.url}" target="_blank">Check Listing</a></div>
-                    <div class="dir-actions">
-                        <button class="status-btn status-correct" onclick="setStatus('${dir.id}', 'correct')"><i class="fas fa-check"></i></button>
-                        <button class="status-btn status-error" onclick="setStatus('${dir.id}', 'error')"><i class="fas fa-times"></i></button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function setStatus(dirId, newStatus) {
-            const savedStatuses = JSON.parse(localStorage.getItem('affiloreDirStatus')) || {};
-            savedStatuses[dirId] = newStatus;
-            localStorage.setItem('affiloreDirStatus', JSON.stringify(savedStatuses));
-            renderDirectories();
-            updateStats();
-        }
-
-        function updateStats() {
-            const savedStatuses = JSON.parse(localStorage.getItem('affiloreDirStatus')) || {};
-            let correct = 0, error = 0;
-            Object.values(savedStatuses).forEach(val => { if (val === 'correct') correct++; if (val === 'error') error++; });
-            document.getElementById('statCorrect').innerText = correct;
-            document.getElementById('statError').innerText = error;
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Local SEO Citation Tracker | Free NAP Audit | Affilore</title>
-    <meta name="description" content="Track your Local SEO NAP consistency across top directories. Free, private, browser-based citation audit dashboard.">
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-YRKMHHSYBC');
-    </script>
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --bg-color: #08080a; --text-main: #f0f0f5; --text-muted: #9ba1a6;
-            --accent-gold: #ffd600; --accent-glow: rgba(255, 214, 0, 0.4);
-            --accent-green: #00e676; --accent-red: #ff3366; --accent-blue: #00e5ff;
-            --card-bg: rgba(20, 20, 25, 0.7); --border-color: rgba(255, 255, 255, 0.08);
-            --glass-blur: blur(15px);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: radial-gradient(circle at top, #1a1500 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
-        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.3; z-index: -2; pointer-events: none; }
-        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
-
-        /* UNIFIED RESPONSIVE HEADER */
-        header {
-            position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex;
-            justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8);
-            backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000;
-        }
-        .logo {
-            font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); 
-            text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
-        }
-        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
-        
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a {
-            font-size: 1rem; font-weight: 600;
-            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .nav-links a:hover {
-            background: var(--accent-gold); -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent; text-shadow: 0 0 8px var(--accent-glow);
-        }
-        
-        .header-right { display: flex; align-items: center; gap: 15px; }
-        .header-btn {
-            background: var(--accent-gold); color: #000; padding: 10px 24px;
-            border-radius: 25px; font-weight: 700; font-size: 0.95rem;
-            transition: all 0.3s ease; display: inline-block; -webkit-text-fill-color: #000; 
-        }
-        .header-btn:hover { box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.05); }
-
-        .mobile-menu-btn {
-            display: none; background: transparent; border: none; color: var(--accent-gold);
-            font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none;
-        }
-        
-        .mobile-overlay {
-            position: fixed; top: 70px; left: 0; width: 100%; height: 0;
-            background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur);
-            overflow: hidden; transition: height 0.3s ease; z-index: 999;
-            display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid var(--border-color);
-        }
-        .mobile-overlay.open { height: 360px; padding-top: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .mobile-overlay a {
-            color: var(--text-main); font-size: 1.2rem; font-weight: 600; text-decoration: none;
-            margin-bottom: 25px; transition: color 0.3s; opacity: 0;
-        }
-        .mobile-overlay.open a { opacity: 1; transition: opacity 0.5s ease 0.1s; }
-        .mobile-overlay a:hover { color: var(--accent-gold); }
-        .mobile-overlay .mobile-custom-btn {
-            background: var(--accent-gold); color: #000; padding: 12px 35px; border-radius: 25px;
-            font-weight: 800; margin-top: 10px; -webkit-text-fill-color: #000;
-        }
-
-        /* TOOL UI STYLES */
-        .tool-container { max-width: 1200px; margin: 120px auto 40px; padding: 0 20px; }
-        .tool-header { text-align: center; margin-bottom: 40px; }
-        .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
-        .tool-header p { color: var(--text-muted); font-size: 1.2rem; margin-top: 10px;}
-
-        .app-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
-
-        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); display: flex; flex-direction: column;}
-        .panel h3 { color: var(--accent-gold); margin-bottom: 20px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;}
-
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; font-weight: 600;}
-        .input-group input { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); color: #fff; outline: none; transition: 0.3s; font-size: 1rem;}
-        .input-group input:focus { border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-glow); }
-
-        .btn-action { width: 100%; background: var(--accent-gold); color: #000; border: none; padding: 15px; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-action:hover { box-shadow: 0 0 15px var(--accent-glow); transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); }
-
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);}
-        .stats { display: flex; gap: 20px; }
-        .stat-val { font-size: 1.5rem; font-weight: 800; }
-        .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;}
-
-        .directory-list { display: flex; flex-direction: column; gap: 10px; max-height: 500px; overflow-y: auto; padding-right: 5px; }
-        .dir-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 15px 20px; border-radius: 10px; border-left: 4px solid var(--text-muted); transition: 0.2s;}
-        .dir-info h4 { margin: 0 0 5px 0; font-size: 1.1rem;}
-        .dir-info a { color: var(--accent-blue); font-size: 0.85rem;}
-        .dir-actions { display: flex; gap: 10px; }
-        .status-btn { padding: 8px 15px; border-radius: 6px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer;}
-        
-        .status-none { background: rgba(255,255,255,0.1); color: #fff; }
-        .status-correct { background: rgba(0, 230, 118, 0.2); color: var(--accent-green); }
-        .status-error { background: rgba(255, 51, 102, 0.2); color: var(--accent-red); }
-        
-        .dir-item[data-status="correct"] { border-left-color: var(--accent-green); }
-        .dir-item[data-status="error"] { border-left-color: var(--accent-red); }
-
-        .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-gold); color: #000; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
-        .notification.show { transform: translateY(0); opacity: 1; }
-
-        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
-        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
-        .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
-        .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none !important; }
-            .desktop-btn { display: none !important; }
-            .mobile-menu-btn { display: block !important; }
-            .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
-            .app-layout { grid-template-columns: 1fr; }
-            .stats { flex-direction: column; gap: 10px; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="bg-pattern"></div>
-
-    <header>
-        <a href="../../index.html" class="logo">
-            <img src="../../logo.jpg" alt="Affilore Logo" class="logo-img">
-            Affilore
-        </a>
-        <nav class="nav-links">
-            <a href="../../index.html">Home</a>
-            <a href="../../index.html#categories">Categories</a>
+        <div class="footer-links">
             <a href="../../about.html">About Us</a>
-        </nav>
-        <div class="header-right">
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn desktop-btn">Custom Tool</a>
-            <button class="mobile-menu-btn" id="mobileToggle" onclick="toggleMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
+            <a href="../../contact.html">Contact Us</a>
+            <a href="../../privacy.html">Privacy Policy</a>
+            <a href="../../terms.html">Terms & Conditions</a>
         </div>
-    </header>
-
-    <div class="mobile-overlay" id="mobileMenu">
-        <a href="../../index.html" onclick="toggleMenu()">Home</a>
-        <a href="../../index.html#categories" onclick="toggleMenu()">Categories</a>
-        <a href="../../about.html" onclick="toggleMenu()">About Us</a>
-        <a href="../../contact.html" onclick="toggleMenu()">Contact Us</a>
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="mobile-custom-btn">Custom Tool</a>
-    </div>
-
-    <div class="tool-container">
-        <div class="tool-header">
-            <h1>Local SEO Citation Tracker</h1>
-            <p>Audit and manage your NAP consistency across top local directories natively in your browser.</p>
-        </div>
-
-        <div class="app-layout">
-            <div class="panel">
-                <h3><i class="fas fa-building"></i> Canonical NAP Data</h3>
-                <div class="input-group"><label>Business Name</label><input type="text" id="bizName" placeholder="e.g. Acme Plumbing LLC"></div>
-                <div class="input-group"><label>Street Address</label><input type="text" id="bizAddress" placeholder="e.g. 123 Main St"></div>
-                <div class="input-group"><label>City, State, Zip</label><input type="text" id="bizCity" placeholder="e.g. Austin, TX 78701"></div>
-                <div class="input-group"><label>Phone Number</label><input type="text" id="bizPhone" placeholder="e.g. (555) 123-4567"></div>
-                <button class="btn-action" onclick="saveNAP()">Save Reference Data</button>
-                <button class="btn-action btn-outline" onclick="clearData()">Reset Dashboard</button>
-            </div>
-
-            <div class="panel">
-                <div class="dashboard-header">
-                    <h3><i class="fas fa-tasks"></i> Tracking Board</h3>
-                    <div class="stats">
-                        <div class="stat-box"><div class="stat-val" id="statCorrect" style="color: var(--accent-green);">0</div><div class="stat-label">Verified</div></div>
-                        <div class="stat-box"><div class="stat-val" id="statError" style="color: var(--accent-red);">0</div><div class="stat-label">Errors</div></div>
-                    </div>
-                </div>
-                <div class="directory-list" id="dirList"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="article-container">
-        <h2>The Hidden Power of NAP Consistency</h2>
-        <p>Your local search presence depends heavily on how consistent your Name, Address, and Phone number are across the web. Use the tracker above to audit your current listings.</p>
-    </div>
-
-    <div class="notification" id="toast">Data Saved!</div>
-
-    <footer>
-        <p style="color: var(--text-muted); text-align:center; padding: 20px;">&copy; 2026 Affilore.com. All rights reserved.</p>
+        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
     </footer>
 
     <script>
@@ -521,13 +288,20 @@
             { id: 'bing', name: 'Bing Places', url: 'https://bingplaces.com' },
             { id: 'yelp', name: 'Yelp for Business', url: 'https://biz.yelp.com' },
             { id: 'fb', name: 'Facebook Page', url: 'https://facebook.com' },
-            { id: 'yellowpages', name: 'YellowPages (YP)', url: 'https://yellowpages.com' }
+            { id: 'apple', name: 'Apple Maps Connect', url: 'https://mapsconnect.apple.com' },
+            { id: 'yellowpages', name: 'YellowPages (YP)', url: 'https://yellowpages.com' },
+            { id: 'bbb', name: 'Better Business Bureau', url: 'https://bbb.org' }
         ];
 
         document.addEventListener('DOMContentLoaded', () => { loadNAP(); renderDirectories(); updateStats(); });
 
         function saveNAP() {
-            const data = { name: document.getElementById('bizName').value, address: document.getElementById('bizAddress').value, city: document.getElementById('bizCity').value, phone: document.getElementById('bizPhone').value };
+            const data = { 
+                name: document.getElementById('bizName').value, 
+                address: document.getElementById('bizAddress').value, 
+                city: document.getElementById('bizCity').value, 
+                phone: document.getElementById('bizPhone').value 
+            };
             localStorage.setItem('affiloreNAP', JSON.stringify(data));
             showToast("Reference Data Saved!");
         }
@@ -543,20 +317,42 @@
             }
         }
 
+        function clearData() {
+            if(confirm("Are you sure you want to clear your reference data and reset the dashboard?")) {
+                localStorage.removeItem('affiloreNAP');
+                localStorage.removeItem('affiloreDirStatus');
+                document.getElementById('bizName').value = '';
+                document.getElementById('bizAddress').value = '';
+                document.getElementById('bizCity').value = '';
+                document.getElementById('bizPhone').value = '';
+                renderDirectories();
+                updateStats();
+                showToast("Dashboard Reset");
+            }
+        }
+
         function renderDirectories() {
             const container = document.getElementById('dirList');
             container.innerHTML = '';
             const savedStatuses = JSON.parse(localStorage.getItem('affiloreDirStatus')) || {};
+            
             directories.forEach(dir => {
                 const status = savedStatuses[dir.id] || 'none';
                 const div = document.createElement('div');
                 div.className = 'dir-item';
                 div.setAttribute('data-status', status);
                 div.innerHTML = `
-                    <div class="dir-info"><h4>${dir.name}</h4><a href="${dir.url}" target="_blank">Check Listing</a></div>
+                    <div class="dir-info">
+                        <h4>${dir.name}</h4>
+                        <a href="${dir.url}" target="_blank"><i class="fas fa-external-link-alt"></i> Check Listing</a>
+                    </div>
                     <div class="dir-actions">
-                        <button class="status-btn status-correct" onclick="setStatus('${dir.id}', 'correct')"><i class="fas fa-check"></i></button>
-                        <button class="status-btn status-error" onclick="setStatus('${dir.id}', 'error')"><i class="fas fa-times"></i></button>
+                        <button class="status-btn status-correct" onclick="setStatus('${dir.id}', 'correct')" title="Mark Verified">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="status-btn status-error" onclick="setStatus('${dir.id}', 'error')" title="Mark Error">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -574,7 +370,10 @@
         function updateStats() {
             const savedStatuses = JSON.parse(localStorage.getItem('affiloreDirStatus')) || {};
             let correct = 0, error = 0;
-            Object.values(savedStatuses).forEach(val => { if (val === 'correct') correct++; if (val === 'error') error++; });
+            Object.values(savedStatuses).forEach(val => { 
+                if (val === 'correct') correct++; 
+                if (val === 'error') error++; 
+            });
             document.getElementById('statCorrect').innerText = correct;
             document.getElementById('statError').innerText = error;
         }
@@ -588,4 +387,3 @@
     </script>
 </body>
 </html>
-
