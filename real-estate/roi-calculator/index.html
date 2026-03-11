@@ -29,21 +29,70 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background: radial-gradient(circle at top, #0a1a10 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
         .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-emerald) 1px, transparent 1px); background-size: 45px 45px; opacity: 0.15; z-index: -2; pointer-events: none; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         
-        header { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
-        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none;}
+        /* UNIFIED RESPONSIVE HEADER */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex;
+            justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8);
+            backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); 
+            text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px;
+        }
+        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
+        
         .nav-links { display: flex; gap: 30px; }
-        .nav-links a { font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;}
-        .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; text-decoration: none; -webkit-text-fill-color: #000;}
+        .nav-links a {
+            font-size: 1rem; font-weight: 600;
+            background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-links a:hover {
+            background: var(--accent-gold); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; text-shadow: 0 0 8px var(--accent-glow);
+        }
+        
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .header-btn {
+            background: var(--accent-gold); color: #000; padding: 10px 24px;
+            border-radius: 25px; font-weight: 700; font-size: 0.95rem;
+            transition: all 0.3s ease; display: inline-block; -webkit-text-fill-color: #000; 
+        }
+        .header-btn:hover { box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.05); }
 
+        .mobile-menu-btn {
+            display: none; background: transparent; border: none; color: var(--accent-gold);
+            font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none;
+        }
+        
+        .mobile-overlay {
+            position: fixed; top: 70px; left: 0; width: 100%; height: 0;
+            background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur);
+            overflow: hidden; transition: height 0.3s ease; z-index: 999;
+            display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid var(--border-color);
+        }
+        .mobile-overlay.open { height: 360px; padding-top: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .mobile-overlay a {
+            color: var(--text-main); font-size: 1.2rem; font-weight: 600; text-decoration: none;
+            margin-bottom: 25px; transition: color 0.3s; opacity: 0;
+        }
+        .mobile-overlay.open a { opacity: 1; transition: opacity 0.5s ease 0.1s; }
+        .mobile-overlay a:hover { color: var(--accent-gold); }
+        .mobile-overlay .mobile-custom-btn {
+            background: var(--accent-gold); color: #000; padding: 12px 35px; border-radius: 25px;
+            font-weight: 800; margin-top: 10px; -webkit-text-fill-color: #000;
+        }
+
+        /* TOOL UI */
         .tool-container { max-width: 1300px; margin: 120px auto 40px; padding: 0 20px; }
         .tool-header { text-align: center; margin-bottom: 40px; }
         .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
         .tool-header p { color: var(--text-muted); font-size: 1.2rem; margin-top: 10px;}
 
         .app-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        @media(max-width: 900px) { .app-layout { grid-template-columns: 1fr; } }
-
+        
         .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); display: flex; flex-direction: column;}
         .panel h3 { color: var(--accent-emerald); margin-bottom: 20px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px;}
 
@@ -99,6 +148,26 @@
         footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; margin-top: 60px;}
         .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
         .footer-links a:hover { color: var(--accent-gold); }
+
+        /* --- MOBILE FIXES --- */
+        @media (max-width: 900px) { 
+            .app-layout { grid-template-columns: 1fr; } 
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none !important; }
+            .desktop-btn { display: none !important; }
+            .mobile-menu-btn { display: block !important; }
+            
+            .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
+            .tool-header p { font-size: 1rem; }
+            
+            /* Stack inputs on small mobile screens */
+            .input-grid { grid-template-columns: 1fr; }
+            .input-group.full { grid-column: span 1; }
+            
+            .hero-value { font-size: 3rem; }
+            .article-container { padding: 30px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -106,16 +175,30 @@
     <div class="bg-pattern"></div>
 
     <header>
-        <a href="../../index" class="logo">Affilore</a>
+        <a href="../../index.html" class="logo">
+            <img src="../../logo.jpg" alt="Affilore Logo" class="logo-img">
+            Affilore
+        </a>
         <nav class="nav-links">
-            <a href="../../index">Home</a>
-            <a href="../../index#categories">Categories</a>
-            <a href="../../about">About Us</a>
+            <a href="../../index.html">Home</a>
+            <a href="../../index.html#categories">Categories</a>
+            <a href="../../about.html">About Us</a>
         </nav>
-        <div>
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn">Custom Tool</a>
+        <div class="header-right">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn desktop-btn">Custom Tool</a>
+            <button class="mobile-menu-btn" id="mobileToggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
+
+    <div class="mobile-overlay" id="mobileMenu">
+        <a href="../../index.html" onclick="toggleMenu()">Home</a>
+        <a href="../../index.html#categories" onclick="toggleMenu()">Categories</a>
+        <a href="../../about.html" onclick="toggleMenu()">About Us</a>
+        <a href="../../contact.html" onclick="toggleMenu()">Contact Us</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="mobile-custom-btn">Custom Tool</a>
+    </div>
 
     <div class="tool-container">
         <div class="tool-header">
@@ -246,7 +329,7 @@
 
                 <div class="breakdown-list">
                     <div class="breakdown-item">
-                        <span class="breakdown-label">Total Cash Needed (Down + Closing)</span>
+                        <span class="breakdown-label">Total Cash Needed</span>
                         <span class="breakdown-val" id="resTotalCash">$0</span>
                     </div>
                     <div class="breakdown-item">
@@ -262,7 +345,7 @@
                         <span class="breakdown-val val-expense" id="resOpEx">-$0</span>
                     </div>
                     <div class="breakdown-item" style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; margin-top: 5px;">
-                        <span class="breakdown-label" style="color: #fff; font-weight: bold;">Net Operating Income (NOI) / Year</span>
+                        <span class="breakdown-label" style="color: #fff; font-weight: bold;">Net Operating Income / Yr</span>
                         <span class="breakdown-val" style="color: var(--accent-emerald);" id="resNOI">$0</span>
                     </div>
                 </div>
@@ -286,17 +369,6 @@
             <li><strong>Enter your monthly rental income</strong> — be realistic; use current market rents for comparable properties, not optimistic projections.</li>
             <li><strong>Enter your monthly expenses</strong> — property taxes, insurance, HOA fees, vacancy allowance, maintenance reserve, and management fees.</li>
         </ul>
-        <p>The dashboard updates instantly, outputting your <strong>Monthly Cash Flow</strong>, <strong>Annual Cash on Cash Return</strong>, <strong>Net Operating Income (NOI)</strong>, and <strong>Cap Rate</strong>. No spreadsheets, no formulas to remember, no Excel expertise required.</p>
-
-        <h3>What to Bring to the Calculator</h3>
-        <ul>
-            <li>Current or projected monthly rent (check Zillow, Rentometer, or local listings)</li>
-            <li>Estimated property taxes (available from the county assessor's website)</li>
-            <li>Insurance quote (typically 0.5%–1% of property value annually)</li>
-            <li>Estimated maintenance reserve (many investors use 1% of property value per year)</li>
-            <li>Vacancy rate for your local market (commonly 5%–10%)</li>
-            <li>Property management fees if you plan to hire a manager (typically 8%–12% of gross rent)</li>
-        </ul>
 
         <h2>The Core Metrics Explained: What the Numbers Actually Mean</h2>
         
@@ -304,27 +376,13 @@
         <p>Cash on Cash Return is the most practical metric for leveraged real estate investors. It measures the relationship between your <strong>annual pre-tax cash flow</strong> and the <strong>actual cash you invested</strong> (your down payment and closing costs).</p>
         <p><strong>Formula:</strong> (Annual Net Cash Flow ÷ Total Cash Invested) × 100</p>
         <p>If you put $50,000 down on a property and it generates $4,000 in net cash flow per year, your CoC return is <strong>8%</strong>. This is the figure you compare against alternative investments.</p>
-        <p><strong>What's a good Cash on Cash Return?</strong> Most experienced investors target a minimum of <strong>6%–10%</strong> in competitive markets, and <strong>10%–15%+</strong> in higher-yield markets.</p>
 
         <h3>Cap Rate (Capitalization Rate)</h3>
         <p>The Cap Rate strips out the effect of financing entirely. It measures the yield a property would generate if purchased <strong>all cash</strong>, making it ideal for comparing two properties on a level playing field.</p>
         <p><strong>Formula:</strong> (Net Operating Income ÷ Property Price) × 100</p>
-        <p>A property with a $12,000 NOI purchased for $200,000 has a cap rate of <strong>6%</strong>.</p>
-        <p><strong>What's a good Cap Rate?</strong> This is heavily market-dependent. In gateway cities, cap rates of 3%–4% are common. In secondary markets, 6%–10% is achievable.</p>
 
         <h3>Net Operating Income (NOI)</h3>
         <p>NOI is the foundational building block from which both Cap Rate and CoC are derived. It represents the <strong>gross annual rental income minus all operating expenses</strong>, but critically, it does <strong>not</strong> include mortgage payments (debt service).</p>
-        <p><strong>Formula:</strong> Gross Annual Rent − Annual Operating Expenses (excluding mortgage) = NOI</p>
-
-        <h2>The 1% Rule and the 50% Rule: Quick Filters, Not Final Answers</h2>
-        
-        <h3>The 1% Rule</h3>
-        <p><strong>The Rule:</strong> A rental property's monthly rent should be at least <strong>1% of its total purchase price.</strong> A $200,000 property should rent for at least $2,000/month.</p>
-        <p>This is a <strong>screening filter, not an investment thesis.</strong> Use this rule to quickly eliminate deals from consideration. Never use it to approve one.</p>
-
-        <h3>The 50% Rule</h3>
-        <p><strong>The Rule:</strong> Estimate that <strong>50% of gross rental income</strong> will be consumed by operating expenses (excluding the mortgage).</p>
-        <p>The 50% rule is deliberately conservative and deliberately imprecise. Use it to survive the volume of deals in your pipeline. Use the Affilore calculator to properly underwrite the ones that pass.</p>
 
         <h2>Frequently Asked Questions</h2>
         
@@ -337,15 +395,6 @@
         <h3>How does leverage (using a mortgage) affect my ROI?</h3>
         <p>Leverage is real estate's superpower — and its primary risk. When you use a mortgage, you control a large asset with a fraction of its price, amplifying returns. The Affilore ROI calculator reflects leveraged returns in the Cash on Cash metric, and unleveraged returns in the Cap Rate.</p>
 
-        <h3>What expenses should I never forget to include?</h3>
-        <p>Beginner investors almost universally underestimate expenses. Do not forget Vacancy allowance (5%–10%), CapEx reserve (5%–10%), Maintenance and repairs (5%–8%), and Property management fees (8%–12%).</p>
-
-        <h3>Can I use this calculator for short-term rentals (Airbnb/VRBO)?</h3>
-        <p>Yes. The primary adjustment is in how you project income: estimate your annual gross revenue (average nightly rate × occupied nights) and divide by 12 to input a monthly figure. Expenses for short-term rentals are typically higher.</p>
-
-        <h3>Does the calculator account for property appreciation?</h3>
-        <p>No — and this is by design. Appreciation is speculative. The Affilore calculator focuses exclusively on income-based returns, which are knowable, measurable, and controllable. Never underwrite a deal that only works if it appreciates.</p>
-
         <div style="text-align: center; margin-top: 40px;">
             <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Run Your Numbers Before the Market Runs Away</p>
             <p style="color: #fff;">Scroll back up, enter your property numbers into the Affilore Real Estate ROI Calculator, and find out what that listing is truly worth. The market won't wait — but a two-minute calculation could save you decades of regret.</p>
@@ -354,21 +403,27 @@
 
     <footer>
         <div class="footer-links">
-            <a href="../../about">About Us</a>
-            <a href="../../contact">Contact Us</a>
-            <a href="../../privacy">Privacy Policy</a>
-            <a href="../../terms">Terms & Conditions</a>
+            <a href="../../about.html">About Us</a>
+            <a href="../../contact.html">Contact Us</a>
+            <a href="../../privacy.html">Privacy Policy</a>
+            <a href="../../terms.html">Terms & Conditions</a>
         </div>
         <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
     </footer>
 
     <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileToggle i');
+            menu.classList.toggle('open');
+            icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        }
+
         function formatCurrency(num) {
             return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
         }
 
         function calculateROI() {
-            // 1. Get Values
             const price = parseFloat(document.getElementById('purchasePrice').value) || 0;
             const downPct = parseFloat(document.getElementById('downPaymentPct').value) || 0;
             const rate = parseFloat(document.getElementById('interestRate').value) || 0;
@@ -384,12 +439,10 @@
             const vacPct = parseFloat(document.getElementById('vacancy').value) || 0;
             const mgmtPct = parseFloat(document.getElementById('management').value) || 0;
 
-            // 2. Core Math
             const downPaymentAmount = price * (downPct / 100);
             const loanAmount = price - downPaymentAmount;
             const totalCashInvested = downPaymentAmount + closing;
 
-            // Calculate Monthly Mortgage (P&I)
             let monthlyMortgage = 0;
             if (loanAmount > 0 && rate > 0 && term > 0) {
                 const monthlyRate = (rate / 100) / 12;
@@ -397,32 +450,23 @@
                 monthlyMortgage = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / (Math.pow(1 + monthlyRate, totalPayments) - 1);
             }
 
-            // Calculate Operating Expenses (OpEx)
             const vacancyCost = rent * (vacPct / 100);
             const mgmtCost = rent * (mgmtPct / 100);
             const totalMonthlyOpEx = taxes + insurance + hoa + maintenance + vacancyCost + mgmtCost;
 
-            // Net Operating Income (NOI)
             const annualRent = rent * 12;
             const annualOpEx = totalMonthlyOpEx * 12;
             const annualNOI = annualRent - annualOpEx;
 
-            // Cash Flow
             const monthlyCashFlow = rent - totalMonthlyOpEx - monthlyMortgage;
             const annualCashFlow = monthlyCashFlow * 12;
 
-            // Returns
             let capRate = 0;
-            if (price > 0) {
-                capRate = (annualNOI / price) * 100;
-            }
+            if (price > 0) capRate = (annualNOI / price) * 100;
 
             let cocReturn = 0;
-            if (totalCashInvested > 0) {
-                cocReturn = (annualCashFlow / totalCashInvested) * 100;
-            }
+            if (totalCashInvested > 0) cocReturn = (annualCashFlow / totalCashInvested) * 100;
 
-            // 3. Update UI
             const flowUI = document.getElementById('resCashFlow');
             flowUI.innerText = formatCurrency(monthlyCashFlow);
             if (monthlyCashFlow < 0) {
@@ -433,7 +477,6 @@
 
             document.getElementById('resCoC').innerText = cocReturn.toFixed(2) + '%';
             document.getElementById('resCapRate').innerText = capRate.toFixed(2) + '%';
-
             document.getElementById('resTotalCash').innerText = formatCurrency(totalCashInvested);
             document.getElementById('resGrossIncome').innerText = formatCurrency(rent);
             document.getElementById('resMortgage').innerText = '-' + formatCurrency(monthlyMortgage);
@@ -441,7 +484,6 @@
             document.getElementById('resNOI').innerText = formatCurrency(annualNOI);
         }
 
-        // Run once on load
         document.addEventListener('DOMContentLoaded', calculateROI);
     </script>
 </body>
