@@ -136,7 +136,7 @@
         .val-expense { color: #ffb800; }
         .val-income { color: var(--accent-emerald); }
 
-        /* ARTICLE SECTION */
+        /* FULL ARTICLE SECTION */
         .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
         .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
         .article-container h2:first-child { margin-top: 0; }
@@ -161,7 +161,6 @@
             .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
             .tool-header p { font-size: 1rem; }
             
-            /* Stack inputs on small mobile screens */
             .input-grid { grid-template-columns: 1fr; }
             .input-group.full { grid-column: span 1; }
             
@@ -354,7 +353,6 @@
     </div>
 
     <div class="article-container">
-        
         <h2>Real Estate Investing Without the Math Is Just Gambling</h2>
         <p>Every successful real estate investor has a number they live by — not a hunch, not a gut feeling, not advice from a friend who "flipped a house once." A number. A cold, calculated figure that tells them, with brutal clarity, whether a property will build wealth or quietly drain it.</p>
         <p>The hard truth is that most first-time and intermediate investors skip the math. They fall in love with a property, rationalize the purchase price, and underestimate the expenses. Then they spend the next three years wondering why an "investment" that's perpetually breaking even feels more like a second job. The property wasn't the problem. The missing data was.</p>
@@ -365,9 +363,22 @@
         <p>Using it is straightforward:</p>
         <ul>
             <li><strong>Enter the property purchase price</strong> — the total acquisition cost, including any closing costs if you want a complete picture.</li>
-            <li><strong>Enter your down payment amount</strong> — as a percentage of the purchase price.</li>
+            <li><strong>Enter your down payment amount</strong> — either as a dollar figure or a percentage of the purchase price.</li>
             <li><strong>Enter your monthly rental income</strong> — be realistic; use current market rents for comparable properties, not optimistic projections.</li>
-            <li><strong>Enter your monthly expenses</strong> — property taxes, insurance, HOA fees, vacancy allowance, maintenance reserve, and management fees.</li>
+            <li><strong>Enter your monthly expenses</strong> — mortgage payments (PITI: Principal, Interest, Taxes, Insurance), HOA fees, vacancy allowance, maintenance reserve, and management fees.</li>
+            <li><strong>Hit Calculate</strong> — the tool instantly outputs your Monthly Cash Flow, Annual Cash on Cash Return, Net Operating Income (NOI), and Cap Rate.</li>
+        </ul>
+        <p>The entire workflow is designed to take a raw property listing and give you a clear, objective verdict within a minute. No spreadsheets, no formulas to remember, no Excel expertise required.</p>
+
+        <h3>What to Bring to the Calculator</h3>
+        <p>The quality of your output depends on the quality of your input. Before you start, have these figures ready:</p>
+        <ul>
+            <li>Current or projected monthly rent (check Zillow, Rentometer, or local listings)</li>
+            <li>Estimated property taxes (available from the county assessor's website)</li>
+            <li>Insurance quote (typically 0.5%–1% of property value annually)</li>
+            <li>Estimated maintenance reserve (many investors use 1% of property value per year)</li>
+            <li>Vacancy rate for your local market (commonly 5%–10%)</li>
+            <li>Property management fees if you plan to hire a manager (typically 8%–12% of gross rent)</li>
         </ul>
 
         <h2>The Core Metrics Explained: What the Numbers Actually Mean</h2>
@@ -375,29 +386,53 @@
         <h3>Cash on Cash Return (CoC)</h3>
         <p>Cash on Cash Return is the most practical metric for leveraged real estate investors. It measures the relationship between your <strong>annual pre-tax cash flow</strong> and the <strong>actual cash you invested</strong> (your down payment and closing costs).</p>
         <p><strong>Formula:</strong> (Annual Net Cash Flow ÷ Total Cash Invested) × 100</p>
-        <p>If you put $50,000 down on a property and it generates $4,000 in net cash flow per year, your CoC return is <strong>8%</strong>. This is the figure you compare against alternative investments.</p>
+        <p>If you put $50,000 down on a property and it generates $4,000 in net cash flow per year, your CoC return is <strong>8%</strong>. This is the figure you compare against alternative investments — if an index fund is returning 10% and your rental property returns 4%, the math is telling you something important.</p>
+        <p><strong>What's a good Cash on Cash Return?</strong> Most experienced investors target a minimum of <strong>6%–10%</strong> in competitive markets, and <strong>10%–15%+</strong> in higher-yield markets or value-add deals.</p>
 
         <h3>Cap Rate (Capitalization Rate)</h3>
-        <p>The Cap Rate strips out the effect of financing entirely. It measures the yield a property would generate if purchased <strong>all cash</strong>, making it ideal for comparing two properties on a level playing field.</p>
-        <p><strong>Formula:</strong> (Net Operating Income ÷ Property Price) × 100</p>
+        <p>The Cap Rate strips out the effect of financing entirely. It measures the yield a property would generate if purchased <strong>all cash</strong>, making it ideal for comparing two properties on a level playing field regardless of how each might be financed.</p>
+        <p><strong>Formula:</strong> (Net Operating Income ÷ Property Value) × 100</p>
+        <p>A property with a $12,000 NOI purchased for $200,000 has a cap rate of <strong>6%</strong>. Cap rate is also how commercial properties are valued — a falling cap rate means the market is paying a premium for income (prices are high), and a rising cap rate signals a discount market.</p>
+        <p><strong>What's a good Cap Rate?</strong> This is heavily market-dependent. In gateway cities like New York or San Francisco, cap rates of 3%–4% are common. In secondary and tertiary markets, 6%–10% is achievable. Never evaluate a cap rate without comparing it to the local market average.</p>
 
         <h3>Net Operating Income (NOI)</h3>
         <p>NOI is the foundational building block from which both Cap Rate and CoC are derived. It represents the <strong>gross annual rental income minus all operating expenses</strong>, but critically, it does <strong>not</strong> include mortgage payments (debt service).</p>
+        <p><strong>Formula:</strong> Gross Annual Rent − Annual Operating Expenses (excluding mortgage) = NOI</p>
+        <p>NOI is useful because it isolates the property's income-generating ability independent of how you choose to finance it. A seasoned investor looking at a deal looks at the NOI first — it's the engine. How you finance the engine comes second.</p>
+
+        <h2>The 1% Rule and the 50% Rule: Quick Filters, Not Final Answers</h2>
+        
+        <h3>The 1% Rule</h3>
+        <p><strong>The Rule:</strong> A rental property's monthly rent should be at least <strong>1% of its total purchase price.</strong></p>
+        <p>A $200,000 property should rent for at least $2,000/month. A $350,000 property needs $3,500/month. This is a <strong>screening filter, not an investment thesis.</strong> Markets like Austin, Phoenix, or coastal California rarely produce 1% rule deals anymore — not because investing there is impossible, but because appreciation rather than cash flow is the primary value driver. Use this rule to quickly eliminate deals from consideration. Never use it to approve one.</p>
+
+        <h3>The 50% Rule</h3>
+        <p><strong>The Rule:</strong> Estimate that <strong>50% of gross rental income</strong> will be consumed by operating expenses (excluding the mortgage).</p>
+        <p>If a property rents for $2,000/month, assume $1,000/month goes to taxes, insurance, vacancy, maintenance, and management — leaving $1,000 as the amount available to service your debt. If that $1,000 doesn't comfortably cover your mortgage payment, the deal likely doesn't cash flow. The 50% rule is deliberately conservative and deliberately imprecise. It's designed to be a red-flag system, not an underwriting model.</p>
 
         <h2>Frequently Asked Questions</h2>
         
         <h3>What is a good ROI for a rental property?</h3>
-        <p>A "good" ROI depends on your market and strategy. Most investors target a Cash on Cash Return of 8%–12% for buy-and-hold rentals. In appreciating markets, investors may accept lower returns (4%–6%) if strong long-term appreciation is supported by data.</p>
+        <p>A "good" ROI depends on your market, your strategy, and your alternatives. As a general benchmark, most investors target a Cash on Cash Return of 8%–12% for buy-and-hold rentals. In appreciating markets, investors may accept lower cash-on-cash returns (4%–6%) if strong long-term appreciation is supported by data. The key is that your real estate ROI should meaningfully beat what you could achieve with a passive index fund investment after accounting for the additional time, risk, and illiquidity of property ownership.</p>
 
         <h3>Should I include property management fees even if I plan to self-manage?</h3>
-        <p>Yes — always include management fees in your analysis. The moment you decide you no longer want to manage the property yourself, you need to know the deal still works. Self-management is a bonus margin, not a core assumption.</p>
+        <p>Yes — always include management fees in your analysis, even if you currently plan to self-manage. Here's why: the moment you decide you no longer want to manage the property yourself, or your circumstances change, you need to know the deal still works. A property that only cash flows because you're providing free labor isn't a viable investment — it's a part-time job that happens to own real estate. Self-management is a bonus margin, not a core assumption.</p>
 
         <h3>How does leverage (using a mortgage) affect my ROI?</h3>
-        <p>Leverage is real estate's superpower — and its primary risk. When you use a mortgage, you control a large asset with a fraction of its price, amplifying returns. The Affilore ROI calculator reflects leveraged returns in the Cash on Cash metric, and unleveraged returns in the Cap Rate.</p>
+        <p>Leverage is real estate's superpower — and its primary risk. When you use a mortgage, you control a large asset with a fraction of its price. This amplifies your returns when the property appreciates or generates strong cash flow. For example, if you buy a $200,000 property with $50,000 down and it appreciates 5% ($10,000), you've earned a 20% return on your actual invested cash. However, leverage cuts both ways: if the property depreciates or sits vacant, your losses are also amplified. The Affilore ROI calculator reflects leveraged returns in the Cash on Cash metric, and unleveraged returns in the Cap Rate — use both together for a complete picture.</p>
+
+        <h3>What expenses should I never forget to include?</h3>
+        <p>Beginner investors almost universally underestimate expenses. The most commonly forgotten line items are: Vacancy allowance (budget 5%–10% of annual gross rent), CapEx reserve (capital expenditures — roof, HVAC, water heater; budget 5%–10% of annual rent), Maintenance and repairs (beyond CapEx; budget 5%–8% of annual rent), Property management fees (8%–12% of gross rent collected), and Accounting/legal fees (if holding in an LLC, which is recommended). Omitting these will make any deal look far more profitable than it actually is.</p>
+
+        <h3>Can I use this calculator for short-term rentals (Airbnb/VRBO)?</h3>
+        <p>The Affilore Real Estate ROI Calculator uses the same core financial framework for short-term rentals as for long-term rentals. The primary adjustment is in how you project income: instead of a fixed monthly rent, you'll need to estimate your annual gross revenue (average nightly rate × projected occupied nights) and divide by 12 to input a monthly figure. Expenses for short-term rentals are typically higher — add platform fees (3%–5% for Airbnb), cleaning costs, higher furnished maintenance costs, and potentially higher local taxes or licensing fees. The underlying metrics — NOI, Cap Rate, and Cash on Cash — remain equally valid.</p>
+
+        <h3>Does the calculator account for property appreciation?</h3>
+        <p>No — and this by design. Appreciation is speculative; it depends on macroeconomic conditions, local supply and demand, and market timing that no calculator can reliably predict. The Affilore calculator focuses exclusively on income-based returns, which are knowable, measurable, and controllable. Never underwrite a deal that only works if it appreciates. If a property cash flows today with your actual numbers, any future appreciation is a bonus. If it only works because "property values always go up," you're speculating, not investing.</p>
 
         <div style="text-align: center; margin-top: 40px;">
-            <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Run Your Numbers Before the Market Runs Away</p>
-            <p style="color: #fff;">Scroll back up, enter your property numbers into the Affilore Real Estate ROI Calculator, and find out what that listing is truly worth. The market won't wait — but a two-minute calculation could save you decades of regret.</p>
+            <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Run Your Numbers Before the Market Runs Away With You</p>
+            <p style="color: #fff;">The best deal you'll ever find is the one you almost passed on — until the numbers told you otherwise. And the worst deal of your portfolio is the one you bought because it felt right without checking the math first. You now have the tool. You have the framework. You understand what cash flow, cap rate, and NOI actually mean beyond the jargon. Scroll back up, enter your property numbers into the Affilore Real Estate ROI Calculator, and find out what that listing is truly worth. The market won't wait — but a two-minute calculation could save you decades of regret.</p>
         </div>
     </div>
 
