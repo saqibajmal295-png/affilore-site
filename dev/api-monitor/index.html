@@ -68,6 +68,7 @@
             font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none;
         }
         
+        /* MOBILE MENU OVERLAY */
         .mobile-overlay {
             position: fixed; top: 70px; left: 0; width: 100%; height: 0;
             background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur);
@@ -105,22 +106,40 @@
         .status-card.loading::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--accent-blue); animation: scan 1.5s linear infinite; }
         @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-        .latency-val { font-size: 3rem; font-weight: 800; margin: 10px 0; font-family: 'Fira Code', monospace; }
-        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-top: 10px;}
+        .latency-val { font-size: 3.5rem; font-weight: 800; margin: 10px 0; font-family: 'Fira Code', monospace; }
+        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; margin-top: 10px;}
         .code-200 { background: rgba(0, 230, 118, 0.2); color: var(--success); }
         .code-error { background: rgba(255, 51, 102, 0.2); color: var(--error); }
 
-        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
+        /* FULL SEO ARTICLE SECTION */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); margin-top: 40px;}
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 40px 0 20px; line-height: 1.3;}
+        .article-container h2:first-child { margin-top: 0; }
+        .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
+        .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
+        .article-container li { margin-bottom: 10px; }
+        .article-container code { background: rgba(0,229,255,0.1); color: var(--accent-blue); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.95rem; }
 
         footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
+        .footer-links a:hover { color: #ffd600; }
 
+        /* MOBILE RESPONSIVE FIXES */
         @media (max-width: 768px) {
             .nav-links { display: none !important; }
             .desktop-btn { display: none !important; }
             .mobile-menu-btn { display: block !important; }
+            
+            /* Fixes the Giant Title */
             .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
+            .tool-header p { font-size: 1rem; }
+            
             .input-bar { flex-direction: column; }
             .btn-ping { width: 100%; }
+            .latency-val { font-size: 2.8rem; }
+            .article-wrap { padding: 40px 20px; }
         }
     </style>
 </head>
@@ -163,36 +182,78 @@
         <div class="app-layout">
             <div class="panel">
                 <div class="input-bar">
-                    <input type="text" id="apiUrl" placeholder="https://api.example.com/data">
+                    <input type="text" id="apiUrl" placeholder="https://api.example.com/v1/data">
                     <button class="btn-ping" onclick="pingApi()">Run Test</button>
                 </div>
 
                 <div class="monitor-grid">
                     <div class="status-card" id="card-latency">
-                        <div style="color: var(--text-muted); font-weight: 700;">LATENCY</div>
+                        <div style="color: var(--text-muted); font-weight: 700; letter-spacing: 1px;">LATENCY (RTT)</div>
                         <div class="latency-val" id="val-ms">--</div>
-                        <div style="color: var(--text-muted);">Milliseconds</div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">Milliseconds</div>
                     </div>
                     <div class="status-card" id="card-status">
-                        <div style="color: var(--text-muted); font-weight: 700;">HTTP STATUS</div>
+                        <div style="color: var(--text-muted); font-weight: 700; letter-spacing: 1px;">HTTP STATUS</div>
                         <div class="latency-val" id="val-status">--</div>
-                        <div id="badge-container"></div>
+                        <div id="badge-container">
+                            <span class="status-badge" style="background: rgba(255,255,255,0.1); color: #fff;">Awaiting Test</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="article-container">
-        <h2>Why API Monitoring Matters</h2>
-        <p>A fast backend is the foundation of a great user experience. Use this monitor to verify endpoint health directly from the browser environment.</p>
+    <div class="article-wrap">
+        <div class="article-container">
+            <h2>The Hidden Cost of API Latency in Modern Web Apps</h2>
+            <p>In modern web development, your frontend UI is only as good as the backend API it relies on. A beautifully designed React or Vue application will still feel broken and sluggish if the API takes two seconds to return a JSON payload. Studies consistently show that bounce rates skyrocket when total page load time exceeds 2.5 seconds, and API latency is often the primary bottleneck.</p>
+            <p>The <strong>Affilore API Performance Monitor</strong> is a lightweight, browser-based diagnostic tool designed to help developers instantly check the health, speed, and configuration of any public REST endpoint.</p>
+
+            <h2>Why Test APIs Directly From the Browser?</h2>
+            <p>Developers typically use tools like Postman, Insomnia, or server-side cURL commands to test their APIs. While those tools are incredibly powerful for development and automated testing, they hide a crucial piece of the puzzle: <strong>the actual user environment</strong>.</p>
+            <p>When you ping an API from Postman, you are bypassing browser security policies. When a real user visits your website, their browser enforces strict rules. Testing your API directly from the browser using our monitor reveals exactly what your users experience:</p>
+            <ul>
+                <li><strong>CORS (Cross-Origin Resource Sharing) Errors:</strong> Postman doesn't care about CORS. Browsers do. If your API isn't configured with the correct <code>Access-Control-Allow-Origin</code> headers, our monitor will immediately flag the CORS failure, just like your users' browsers would.</li>
+                <li><strong>Real-World Network Routing:</strong> Server-to-server API calls (like from a Node backend to a database) are lightning-fast because they often exist in the same data center. Browser-to-server calls must traverse the public internet, revealing the true Round-Trip Time (RTT).</li>
+                <li><strong>Preflight Options Checks:</strong> Browsers often send an <code>OPTIONS</code> request before a <code>GET</code> or <code>POST</code>. Our monitor accurately reflects the total latency of the actual browser fetch cycle.</li>
+            </ul>
+
+            <h2>Understanding HTTP Status Codes</h2>
+            <p>When you enter a URL into the monitor above, it returns a standard HTTP status code. Here is a quick cheat sheet on what those numbers mean for your API's health:</p>
+            
+            <h3>200-Level: Success</h3>
+            <p>A <code>200 OK</code> response means the API received the request, understood it, and successfully returned the requested data. For POST requests creating new records, you might see a <code>201 Created</code>.</p>
+
+            <h3>400-Level: Client Errors</h3>
+            <p>If you see a 400-level error, the API is telling you that the request you sent was flawed. A <code>400 Bad Request</code> usually means missing parameters. A <code>401 Unauthorized</code> or <code>403 Forbidden</code> means you lack the proper API keys or authentication tokens. A <code>404 Not Found</code> means the specific endpoint URL does not exist.</p>
+
+            <h3>500-Level: Server Errors</h3>
+            <p>A 500-level error is the dreaded "server crash." A <code>500 Internal Server Error</code> means your backend code threw an unhandled exception. A <code>502 Bad Gateway</code> or <code>503 Service Unavailable</code> typically means the reverse proxy (like Nginx or an AWS load balancer) failed to communicate with the actual application server.</p>
+
+            <h2>How to Optimize Your API Response Times</h2>
+            <p>If our monitor shows your API consistently returning data in over 300 milliseconds, it's time to optimize. Consider implementing the following strategies:</p>
+            <ul>
+                <li><strong>Database Indexing:</strong> The most common cause of slow APIs is unindexed database queries. Ensure columns used in <code>WHERE</code> clauses are properly indexed.</li>
+                <li><strong>Response Caching:</strong> Use tools like Redis or Memcached to store the results of complex, frequently requested queries so the database doesn't have to recalculate them every time.</li>
+                <li><strong>CDN Edge Caching:</strong> For data that changes rarely, configure your CDN (like Cloudflare) to cache the API response at edge nodes closest to the user's geographic location.</li>
+                <li><strong>Payload Reduction:</strong> Don't send a massive JSON object with 50 fields if the frontend only needs 3. Use GraphQL or implement strict data transfer objects (DTOs) in your REST API to reduce payload size.</li>
+            </ul>
+        </div>
     </div>
 
     <footer>
-        <p style="color: var(--text-muted);">&copy; 2026 Affilore.com. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="../../about.html">About Us</a>
+            <a href="../../contact.html">Contact Us</a>
+            <a href="../../privacy.html">Privacy Policy</a>
+            <a href="../../terms.html">Terms & Conditions</a>
+        </div>
+        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
     </footer>
 
     <script>
+        // Menu Toggle Logic
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
             const icon = document.querySelector('#mobileToggle i');
@@ -200,31 +261,56 @@
             icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
         }
 
+        // API Ping Logic
         async function pingApi() {
-            const url = document.getElementById('apiUrl').value.trim();
+            let url = document.getElementById('apiUrl').value.trim();
             if (!url) return;
+
+            // Basic URL validation
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+                document.getElementById('apiUrl').value = url;
+            }
 
             const cardL = document.getElementById('card-latency');
             const cardS = document.getElementById('card-status');
+            
+            // Add loading animations
             cardL.classList.add('loading');
             cardS.classList.add('loading');
+            document.getElementById('val-ms').innerText = '--';
+            document.getElementById('val-status').innerText = '--';
 
             const start = performance.now();
             try {
+                // Fetch with CORS mode
                 const response = await fetch(url, { method: 'GET', mode: 'cors' });
                 const end = performance.now();
                 const latency = Math.round(end - start);
 
+                // Update Latency UI
                 document.getElementById('val-ms').innerText = latency;
                 document.getElementById('val-ms').style.color = latency < 300 ? 'var(--success)' : 'var(--accent-gold)';
+                
+                // Update Status UI
                 document.getElementById('val-status').innerText = response.status;
-                document.getElementById('badge-container').innerHTML = `<span class="status-badge code-200">${response.statusText || 'OK'}</span>`;
+                
+                if(response.ok) {
+                    document.getElementById('badge-container').innerHTML = `<span class="status-badge code-200">${response.statusText || 'OK'}</span>`;
+                } else {
+                    document.getElementById('badge-container').innerHTML = `<span class="status-badge code-error">${response.statusText || 'Error'}</span>`;
+                    document.getElementById('val-ms').style.color = 'var(--error)';
+                }
+
             } catch (err) {
+                // Catch network/CORS errors
                 document.getElementById('val-ms').innerText = 'ERR';
                 document.getElementById('val-ms').style.color = 'var(--error)';
                 document.getElementById('val-status').innerText = '!!!';
-                document.getElementById('badge-container').innerHTML = `<span class="status-badge code-error">CORS/Network Error</span>`;
+                document.getElementById('badge-container').innerHTML = `<span class="status-badge code-error">CORS / Network Failed</span>`;
             }
+            
+            // Remove loading animations
             cardL.classList.remove('loading');
             cardS.classList.remove('loading');
         }
