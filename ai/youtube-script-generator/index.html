@@ -32,7 +32,6 @@
         
         header { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
         .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none;}
-        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
         .nav-links { display: flex; gap: 30px; }
         .nav-links a { font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none;}
         .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; text-decoration: none; -webkit-text-fill-color: #000;}
@@ -93,14 +92,11 @@
     <div class="bg-pattern"></div>
 
     <header>
-        <a href="../../index.html" class="logo">
-            <img src="../../logo.jpg" alt="Affilore Logo" class="logo-img">
-            Affilore
-        </a>
+        <a href="../../index" class="logo">Affilore</a>
         <nav class="nav-links">
-            <a href="../../index.html">Home</a>
-            <a href="../../index.html#categories">Categories</a>
-            <a href="../../about.html">About Us</a>
+            <a href="../../index">Home</a>
+            <a href="../../index#categories">Categories</a>
+            <a href="../../about">About Us</a>
         </nav>
         <div>
             <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn">Custom Tool</a>
@@ -110,7 +106,7 @@
     <div class="tool-container">
         <div class="tool-header">
             <h1>AI YouTube Script Generator</h1>
-            <p>Generate high-retention script frameworks and AI mega-prompts instantly.</p>
+            <p>Generate high-retention script drafts and AI mega-prompts instantly.</p>
         </div>
 
         <div class="app-layout">
@@ -119,21 +115,21 @@
                 
                 <div class="input-group">
                     <label>Main Topic / Title Idea</label>
-                    <input type="text" id="vidTopic" placeholder="e.g. How to start a faceless YouTube channel">
+                    <input type="text" id="vidTopic" placeholder="e.g. How to gain weight">
                 </div>
                 
                 <div class="input-group">
                     <label>Target Audience</label>
-                    <input type="text" id="vidAudience" placeholder="e.g. Beginners, Entrepreneurs, Gamers">
+                    <input type="text" id="vidAudience" placeholder="e.g. UK & USA, skinny guys">
                 </div>
 
                 <div class="input-group">
                     <label>Tone of Voice</label>
                     <select id="vidTone">
+                        <option value="Casual & Conversational">Casual & Conversational</option>
                         <option value="Educational & Authoritative">Educational & Authoritative</option>
                         <option value="Fast-paced & Entertaining">Fast-paced & Entertaining</option>
                         <option value="Story-driven & Cinematic">Story-driven & Cinematic</option>
-                        <option value="Casual & Conversational">Casual & Conversational</option>
                     </select>
                 </div>
 
@@ -141,28 +137,27 @@
                     <label>Video Length</label>
                     <select id="vidLength">
                         <option value="Short Form (TikTok/Shorts)">Short Form (Under 60 Seconds)</option>
-                        <option value="Short (3-5 minutes)">Short (3-5 mins) - ~750 words</option>
-                        <option value="Medium (8-12 minutes)">Medium (8-12 mins) - ~1500 words</option>
-                        <option value="Long (15-20+ minutes)">Long Documentaries (15+ mins) - ~2500+ words</option>
+                        <option value="Medium (8-12 minutes)">Medium (8-12 mins) - Standard</option>
+                        <option value="Long (15-20+ minutes)">Long Documentaries (15+ mins)</option>
                     </select>
                 </div>
 
                 <div class="input-group">
-                    <label>Call to Action (What do you want them to do?)</label>
-                    <input type="text" id="vidCTA" placeholder="e.g. Subscribe, click the link in description">
+                    <label>Call to Action</label>
+                    <input type="text" id="vidCTA" placeholder="e.g. Subscribe, link in bio">
                 </div>
 
-                <button class="btn-action" onclick="generateContent()"><i class="fas fa-magic"></i> Generate Framework</button>
+                <button class="btn-action" onclick="generateContent()"><i class="fas fa-magic"></i> Generate Script</button>
             </div>
 
             <div class="panel">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('framework')" id="tab-framework">Script Framework</button>
+                    <button class="tab-btn active" onclick="switchTab('script')" id="tab-script">Generated Script</button>
                     <button class="tab-btn" onclick="switchTab('prompt')" id="tab-prompt">AI Mega-Prompt</button>
                 </div>
 
-                <div class="output-box active" id="out-framework">Fill out the details on the left and click "Generate Framework" to build your high-retention script outline.</div>
-                <div class="output-box" id="out-prompt">Your AI Mega-Prompt will appear here. Paste this into ChatGPT or Claude to get a perfect, word-for-word script based on your parameters.</div>
+                <div class="output-box active" id="out-script">Fill out the details on the left and click "Generate Script" to instantly write your word-for-word draft.</div>
+                <div class="output-box" id="out-prompt">Your AI Mega-Prompt will appear here. Paste this into ChatGPT or Claude to generate an even more advanced version.</div>
 
                 <button class="btn-copy" onclick="copyContent()"><i class="far fa-copy"></i> Copy Current Tab</button>
             </div>
@@ -251,7 +246,7 @@
 
         <div style="text-align: center; margin-top: 40px;">
             <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your First High-Retention Script Is 60 Seconds Away</p>
-            <p style="color: #fff;">The creators winning on YouTube in 2026 are not more talented than you. They are more structured than you. Scroll back to the top of this page, enter your video topic into the Affilore AI YouTube Script Generator, and walk away with a complete H.I.V.E. framework and Mega-Prompt in under 60 seconds.</p>
+            <p style="color: #fff;">The creators winning on YouTube in 2026 are not more talented than you. They are more structured than you. Scroll back to the top of this page, enter your video topic into the Affilore AI YouTube Script Generator, and walk away with a complete H.I.V.E. script and Mega-Prompt in under 60 seconds.</p>
         </div>
     </div>
 
@@ -266,16 +261,16 @@
     </footer>
 
     <script>
-        let currentTab = 'framework';
+        let currentTab = 'script';
 
         function switchTab(tab) {
             currentTab = tab;
             
-            document.getElementById('tab-framework').classList.remove('active');
+            document.getElementById('tab-script').classList.remove('active');
             document.getElementById('tab-prompt').classList.remove('active');
             document.getElementById('tab-' + tab).classList.add('active');
 
-            document.getElementById('out-framework').classList.remove('active');
+            document.getElementById('out-script').classList.remove('active');
             document.getElementById('out-prompt').classList.remove('active');
             document.getElementById('out-' + tab).classList.add('active');
         }
@@ -287,46 +282,39 @@
             const length = document.getElementById('vidLength').value;
             const cta = document.getElementById('vidCTA').value || 'Subscribe to the channel';
 
-            // GENERATE FRAMEWORK
-            const frameworkText = `🎥 YOUTUBE SCRIPT FRAMEWORK
+            // GENERATE ACTUAL SCRIPT USING DYNAMIC TEMPLATES
+            const scriptText = `🎬 GENERATED YOUTUBE SCRIPT
 Topic: ${topic}
-Target Audience: ${audience}
-Vibe: ${tone}
-Estimated Length: ${length}
+Style: ${tone}
 
---- [ 0:00 - 0:30 ] THE HOOK (Crucial for Retention) ---
-Goal: Agitate a pain point, state a surprising fact, or tease the final result immediately.
-Option 1 (The Question): "Have you ever wondered why [common struggle related to topic]? Most people do X, but they are completely wrong."
-Option 2 (The Result): "By the end of this video, you will know exactly how to [achieve desired result]."
-Option 3 (The Story): "I used to struggle with [topic], until I discovered this one weird trick..."
+[0:00] THE HOOK (Look directly into the camera)
+"Have you ever wondered why ${topic} feels so complicated? Especially if you are part of the ${audience} community, it can feel like hitting a brick wall. But what if I told you that most people are doing it completely wrong? By the end of this video, you are going to know the exact blueprint to finally crack the code."
 
---- [ 0:30 - 1:00 ] THE INTRO & CREDIBILITY ---
-Goal: Tell them WHY they should listen to you and WHAT is coming.
-• Briefly state your experience or research.
-• Give a roadmap: "Today we are covering 3 steps: [Step 1], [Step 2], and the most important one, [Step 3]."
-• Micro-CTA (Optional): Quick reminder to like the video if they find it helpful.
+[0:30] B-ROLL TRANSITION / TITLE CARD
 
---- [ 1:00 - 75% Mark ] THE VALUE BODY ---
-Goal: Deliver the promise fast. No fluff. Keep the pacing tight.
-[Point 1: The Foundation]
-• Concept explanation.
-• Example / B-Roll visual cue.
+[0:35] THE INTRO
+"What's going up everyone, welcome back to the channel. Today we are diving deep into ${topic}. I'm going to break down the exact steps you need to take, and trust me, step number 3 is the secret weapon nobody talks about. If you find this helpful, quickly tap that like button, and let's get right into it."
 
-[Point 2: The Core Strategy]
-• The actionable advice or main story beat.
-• B-Roll visual cue.
+[1:00] PART 1: The Core Problem
+(Visual: Display text on screen)
+"Let's start with the biggest mistake people make. When it comes to ${topic}, the standard advice you hear online is usually terrible. Instead of focusing on the basics, people get distracted by shiny new tactics. What you actually need to do first is build a solid foundation."
 
-[Point 3: The Secret Sauce / Climax]
-• The most valuable piece of advice (saved for last to retain viewers).
-• Common mistakes to avoid.
+[2:30] PART 2: The Strategy
+(Visual: Change camera angle or zoom in slightly)
+"Now that we've fixed the foundation, let's talk about the actual strategy. The key here is consistency. If you want to succeed, you need to implement this one daily habit..." 
+[Insert your specific tips here]
 
---- [ Last 60 Seconds ] THE OUTRO & CTA ---
-Goal: Do not say "In conclusion" (viewers will click off). Transition smoothly.
-• Summarize the main takeaway in 1 sentence.
-• Primary CTA: "${cta}"
-• Binge-Session: Point them to another specific video on your screen. "If you liked this, you need to watch this video right here where I explain [related topic]."`;
+[4:00] PART 3: The Secret Weapon
+"I promised you a secret weapon earlier, and here it is. While everyone else is struggling with ${topic}, the top 1% are doing this..."
+[Explain the advanced tip or unique perspective]
 
-            // GENERATE MEGA-PROMPT
+[5:30] THE OUTRO & CTA
+"So, to recap: fix your foundation, stay consistent with the strategy, and use that secret weapon to scale. If you implement these three things, your results will change dramatically. 
+
+If you want to learn more, ${cta}. And if you liked this video, you absolutely need to watch this video right here where I explain the next step in the process. See you in the next one!"
+`;
+
+            // GENERATE MEGA-PROMPT (Kept as an option for users who want ChatGPT to expand it further)
             const promptText = `I want you to act as an elite YouTube Scriptwriter and Retention Strategist. You specialize in MrBeast/Ali Abdaal style pacing—zero fluff, high curiosity gaps, and engaging storytelling.
 
 Please write a complete, word-for-word YouTube script for me based on the following parameters:
@@ -347,10 +335,10 @@ REQUIREMENTS FOR THE SCRIPT:
 Please provide the full script now, starting from [0:00].`;
 
             // Set values
-            document.getElementById('out-framework').innerText = frameworkText;
+            document.getElementById('out-script').innerText = scriptText;
             document.getElementById('out-prompt').innerText = promptText;
             
-            showToast("Content Generated Successfully!");
+            showToast("Script Generated Successfully!");
         }
 
         function copyContent() {
