@@ -32,7 +32,7 @@
         .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1.5px, transparent 1.5px); background-size: 40px 40px; opacity: 0.3; z-index: -2; pointer-events: none; }
         a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         
-        /* NEW RESPONSIVE HEADER STYLES */
+        /* UNIFIED RESPONSIVE HEADER */
         header {
             position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex;
             justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8);
@@ -68,6 +68,7 @@
             font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none;
         }
         
+        /* MOBILE MENU OVERLAY */
         .mobile-overlay {
             position: fixed; top: 70px; left: 0; width: 100%; height: 0;
             background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur);
@@ -83,9 +84,10 @@
         .mobile-overlay a:hover { color: var(--accent-gold); }
         .mobile-overlay .mobile-custom-btn {
             background: var(--accent-gold); color: #000; padding: 12px 35px; border-radius: 25px;
-            font-weight: 800; margin-top: 10px;
+            font-weight: 800; margin-top: 10px; -webkit-text-fill-color: #000;
         }
 
+        /* TOOL UI */
         .tool-container { max-width: 1200px; margin: 120px auto 40px; padding: 0 20px; }
         .tool-header { text-align: center; margin-bottom: 40px; }
         .tool-header h1 { font-size: 3.5rem; color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
@@ -126,30 +128,36 @@
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(0,242,254,0.2); border-top: 4px solid var(--accent-cyan); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* ARTICLE SECTION */
-        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
-        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
-        .article-container h2:first-child { margin-top: 0; }
+        /* FULL ARTICLE SECTION */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); }
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 40px 0 20px; line-height: 1.3;}
         .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
         .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
-        .article-container ul { padding-left: 20px; margin-bottom: 20px;}
-        .article-container li { font-size: 1.1rem; margin-bottom: 10px;}
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
+        .article-container li { margin-bottom: 10px; }
         .article-container strong { color: #fff; }
-
-        /* Code block styling within article */
         .article-container code { background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; font-family: monospace; color: var(--accent-cyan); font-size: 0.95rem; }
         .article-container pre { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; font-family: monospace; color: var(--accent-cyan); font-size: 0.95rem; overflow-x: auto; margin-bottom: 20px;}
 
-        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; margin-top: 60px;}
+        footer { background: #08080a; border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
         .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
         .footer-links a:hover { color: var(--accent-gold); }
 
+        /* MOBILE RESPONSIVE FIXES */
+        @media (max-width: 900px) {
+            .app-layout { grid-template-columns: 1fr; }
+        }
         @media (max-width: 768px) {
             .nav-links { display: none !important; }
             .desktop-btn { display: none !important; }
             .mobile-menu-btn { display: block !important; }
-            .app-layout { grid-template-columns: 1fr; }
-            .tool-header h1 { font-size: 2.5rem; }
+            
+            /* Fixes the Giant Title */
+            .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
+            .tool-header p { font-size: 1rem; }
+            
+            .article-wrap { padding: 40px 20px; }
         }
     </style>
 </head>
@@ -208,8 +216,7 @@
                     <div class="score-circle" id="scoreCircle">100</div>
                     <div class="score-text" id="scoreText">Perfect Accessibility Score!</div>
                     
-                    <div class="issue-list" id="issueList">
-                        </div>
+                    <div class="issue-list" id="issueList"></div>
                 </div>
 
                 <div id="emptyState" style="text-align: center; color: var(--text-muted); padding: 40px 0;">
@@ -220,105 +227,107 @@
         </div>
     </div>
 
-    <div class="article-container">
-        <h2>Web Accessibility Is No Longer Optional — And Ignoring It Is Getting Expensive</h2>
-        <p>For most of the internet's history, accessibility was treated as an afterthought — a line item cut at the end of a sprint, a feature deferred indefinitely, a "nice to have" for companies with spare dev hours. That era is over.</p>
-        <p>In 2023 alone, over 4,600 federal ADA accessibility lawsuits were filed against businesses in the United States. Law firms have automated the process of scanning websites for WCAG violations and filing demand letters — often targeting small businesses and independent agencies who simply didn't know they were non-compliant. Settlement costs typically start at $25,000 and can climb well beyond six figures.</p>
-        <p>But the legal risk is only half the story. Google has been increasingly transparent about the relationship between accessibility and search performance. Semantic HTML, descriptive alt text, proper heading hierarchy, and fast load times — all core a11y requirements — are also core SEO signals. An accessible website isn't just ethically correct and legally defensible; it ranks better, converts better, and retains users longer.</p>
-        <p>The Affilore <strong>AI-Based Web Accessibility Tester</strong> gives developers and agency owners a fast, free, private way to catch critical WCAG violations before they reach production — or before a plaintiff's bot finds them first.</p>
+    <div class="article-wrap">
+        <div class="article-container">
+            <h2>Web Accessibility Is No Longer Optional — And Ignoring It Is Getting Expensive</h2>
+            <p>For most of the internet's history, accessibility was treated as an afterthought — a line item cut at the end of a sprint, a feature deferred indefinitely, a "nice to have" for companies with spare dev hours. That era is over.</p>
+            <p>In 2023 alone, over 4,600 federal ADA accessibility lawsuits were filed against businesses in the United States. Law firms have automated the process of scanning websites for WCAG violations and filing demand letters — often targeting small businesses and independent agencies who simply didn't know they were non-compliant. Settlement costs typically start at $25,000 and can climb well beyond six figures.</p>
+            <p>But the legal risk is only half the story. Google has been increasingly transparent about the relationship between accessibility and search performance. Semantic HTML, descriptive alt text, proper heading hierarchy, and fast load times — all core a11y requirements — are also core SEO signals. An accessible website isn't just ethically correct and legally defensible; it ranks better, converts better, and retains users longer.</p>
+            <p>The Affilore <strong>AI-Based Web Accessibility Tester</strong> gives developers and agency owners a fast, free, private way to catch critical WCAG violations before they reach production — or before a plaintiff's bot finds them first.</p>
 
-        <h2>How to Use the Affilore AI Accessibility Tester</h2>
-        <p>The tool was built for speed and simplicity. No account creation, no file uploads to external servers, no waiting for a cloud scan. Here's how it works:</p>
-        <ul>
-            <li><strong>Paste your HTML snippet</strong> into the input field at the top of this page. This can be a full page, a component, a section, or even a single form — the tool handles any valid HTML fragment.</li>
-            <li><strong>Click "Audit Code"</strong> to trigger the analysis engine.</li>
-            <li><strong>Review your results.</strong> The tool flags violations by severity (Critical, Serious, Moderate, Minor) and maps each issue directly to the relevant WCAG 2.1 or 2.2 success criterion.</li>
-            <li><strong>Use the inline guidance</strong> to understand why each issue matters and exactly what to change to fix it.</li>
-            <li><strong>Iterate locally.</strong> Fix the issue in your editor, paste the updated code back in, and re-audit in seconds.</li>
-        </ul>
+            <h2>How to Use the Affilore AI Accessibility Tester</h2>
+            <p>The tool was built for speed and simplicity. No account creation, no file uploads to external servers, no waiting for a cloud scan. Here's how it works:</p>
+            <ul>
+                <li><strong>Paste your HTML snippet</strong> into the input field at the top of this page. This can be a full page, a component, a section, or even a single form — the tool handles any valid HTML fragment.</li>
+                <li><strong>Click "Audit Code"</strong> to trigger the analysis engine.</li>
+                <li><strong>Review your results.</strong> The tool flags violations by severity (Critical, Serious, Moderate, Minor) and maps each issue directly to the relevant WCAG 2.1 or 2.2 success criterion.</li>
+                <li><strong>Use the inline guidance</strong> to understand why each issue matters and exactly what to change to fix it.</li>
+                <li><strong>Iterate locally.</strong> Fix the issue in your editor, paste the updated code back in, and re-audit in seconds.</li>
+            </ul>
 
-        <h3>What Makes It Different</h3>
-        <ul>
-            <li><strong>Fully browser-based.</strong> Your HTML never leaves your machine. The analysis runs entirely in-browser — there is no server processing your source code.</li>
-            <li><strong>WCAG 2.1 and 2.2 mapped results.</strong> Issues are tagged to specific success criteria so you know exactly which compliance level is affected.</li>
-            <li><strong>Developer-first output.</strong> Results are specific, actionable, and formatted for developers — not compliance-speak designed for lawyers.</li>
-            <li><strong>Zero cost, zero friction.</strong> Open the tool, paste code, get results.</li>
-        </ul>
+            <h3>What Makes It Different</h3>
+            <ul>
+                <li><strong>Fully browser-based.</strong> Your HTML never leaves your machine. The analysis runs entirely in-browser — there is no server processing your source code.</li>
+                <li><strong>WCAG 2.1 and 2.2 mapped results.</strong> Issues are tagged to specific success criteria so you know exactly which compliance level is affected.</li>
+                <li><strong>Developer-first output.</strong> Results are specific, actionable, and formatted for developers — not compliance-speak designed for lawyers.</li>
+                <li><strong>Zero cost, zero friction.</strong> Open the tool, paste code, get results.</li>
+            </ul>
 
-        <h2>The 5 Most Common Accessibility Errors Developers Make</h2>
-        <p>Most accessibility failures aren't exotic or obscure. The vast majority of WCAG violations found in real-world audits come from a very short list of recurring mistakes. Here are the five that account for the bulk of complaints and lawsuits:</p>
+            <h2>The 5 Most Common Accessibility Errors Developers Make</h2>
+            <p>Most accessibility failures aren't exotic or obscure. The vast majority of WCAG violations found in real-world audits come from a very short list of recurring mistakes. Here are the five that account for the bulk of complaints and lawsuits:</p>
 
-        <h3>1. Missing Alt Text on Images</h3>
-        <p>Every <code>&lt;img&gt;</code> element that conveys meaning must have a descriptive <code>alt</code> attribute. Screen readers announce images by reading the alt text aloud — without it, a visually impaired user hears "image" and nothing else. Decorative images should use <code>alt=""</code> (empty, not absent) to tell assistive technology to skip them entirely.</p>
-        <p><strong>Wrong:</strong> <code>&lt;img src="hero.jpg"&gt;</code></p>
-        <p><strong>Right:</strong> <code>&lt;img src="hero.jpg" alt="Founder presenting at a startup conference in Austin"&gt;</code></p>
+            <h3>1. Missing Alt Text on Images</h3>
+            <p>Every <code>&lt;img&gt;</code> element that conveys meaning must have a descriptive <code>alt</code> attribute. Screen readers announce images by reading the alt text aloud — without it, a visually impaired user hears "image" and nothing else. Decorative images should use <code>alt=""</code> (empty, not absent) to tell assistive technology to skip them entirely.</p>
+            <p><strong>Wrong:</strong> <code>&lt;img src="hero.jpg"&gt;</code></p>
+            <p><strong>Right:</strong> <code>&lt;img src="hero.jpg" alt="Founder presenting at a startup conference in Austin"&gt;</code></p>
 
-        <h3>2. Div-Soup Instead of Semantic HTML</h3>
-        <p>Using a wall of <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code> elements where native HTML elements exist is one of the most pervasive accessibility failures. Native elements like <code>&lt;button&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;header&gt;</code>, and <code>&lt;aside&gt;</code> carry implicit ARIA roles and keyboard accessibility out of the box. A <code>&lt;div&gt;</code> styled to look like a button does not.</p>
-        <ul>
-            <li>Use <code>&lt;button&gt;</code> for interactive controls, not <code>&lt;div onclick="..."&gt;</code></li>
-            <li>Use <code>&lt;nav&gt;</code> for navigation regions</li>
-            <li>Use <code>&lt;main&gt;</code> for your primary content area — only once per page</li>
-            <li>Use heading tags (<code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>) in logical hierarchical order</li>
-        </ul>
+            <h3>2. Div-Soup Instead of Semantic HTML</h3>
+            <p>Using a wall of <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code> elements where native HTML elements exist is one of the most pervasive accessibility failures. Native elements like <code>&lt;button&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;header&gt;</code>, and <code>&lt;aside&gt;</code> carry implicit ARIA roles and keyboard accessibility out of the box. A <code>&lt;div&gt;</code> styled to look like a button does not.</p>
+            <ul>
+                <li>Use <code>&lt;button&gt;</code> for interactive controls, not <code>&lt;div onclick="..."&gt;</code></li>
+                <li>Use <code>&lt;nav&gt;</code> for navigation regions</li>
+                <li>Use <code>&lt;main&gt;</code> for your primary content area — only once per page</li>
+                <li>Use heading tags (<code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>) in logical hierarchical order</li>
+            </ul>
 
-        <h3>3. Insufficient Color Contrast</h3>
-        <p>WCAG requires a minimum contrast ratio of 4.5:1 for normal text and 3:1 for large text (18pt or 14pt bold) against its background. Light grey text on a white background, or yellow text on a white button — common in modern "minimalist" design — frequently fails this threshold. Users with low vision or colour blindness rely on sufficient contrast to read content at all.</p>
+            <h3>3. Insufficient Color Contrast</h3>
+            <p>WCAG requires a minimum contrast ratio of 4.5:1 for normal text and 3:1 for large text (18pt or 14pt bold) against its background. Light grey text on a white background, or yellow text on a white button — common in modern "minimalist" design — frequently fails this threshold. Users with low vision or colour blindness rely on sufficient contrast to read content at all.</p>
 
-        <h3>4. Missing ARIA Labels on Interactive Elements</h3>
-        <p>Icon buttons — a hamburger menu, a close icon, a search magnifier — are invisible to screen readers without an accessible label. An icon wrapped in a <code>&lt;button&gt;</code> with no text and no <code>aria-label</code> reads only as "button." The user has no idea what it does.</p>
-        <p><strong>Wrong:</strong> <code>&lt;button&gt;&lt;i class="fa fa-search"&gt;&lt;/i&gt;&lt;/button&gt;</code></p>
-        <p><strong>Right:</strong> <code>&lt;button aria-label="Search"&gt;&lt;i class="fa fa-search"&gt;&lt;/i&gt;&lt;/button&gt;</code></p>
+            <h3>4. Missing ARIA Labels on Interactive Elements</h3>
+            <p>Icon buttons — a hamburger menu, a close icon, a search magnifier — are invisible to screen readers without an accessible label. An icon wrapped in a <code>&lt;button&gt;</code> with no text and no <code>aria-label</code> reads only as "button." The user has no idea what it does.</p>
+            <p><strong>Wrong:</strong> <code>&lt;button&gt;&lt;i class="fa fa-search"&gt;&lt;/i&gt;&lt;/button&gt;</code></p>
+            <p><strong>Right:</strong> <code>&lt;button aria-label="Search"&gt;&lt;i class="fa fa-search"&gt;&lt;/i&gt;&lt;/button&gt;</code></p>
 
-        <h3>5. Form Label Detachment</h3>
-        <p>Every form input (<code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code>) must be programmatically associated with a label. Placeholder text is <em>not</em> a substitute for a label — it disappears as soon as the user starts typing, and it's frequently ignored by assistive technology. Use <code>&lt;label for="inputId"&gt;</code> paired with the input's <code>id</code>, or wrap the input inside the <code>&lt;label&gt;</code> element.</p>
-        <p><strong>Wrong:</strong> <code>&lt;input type="email" placeholder="Your email"&gt;</code></p>
-        <p><strong>Right:</strong> <code>&lt;label for="email"&gt;Email Address&lt;/label&gt;&lt;input type="email" id="email"&gt;</code></p>
+            <h3>5. Form Label Detachment</h3>
+            <p>Every form input (<code>&lt;input&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;textarea&gt;</code>) must be programmatically associated with a label. Placeholder text is <em>not</em> a substitute for a label — it disappears as soon as the user starts typing, and it's frequently ignored by assistive technology. Use <code>&lt;label for="inputId"&gt;</code> paired with the input's <code>id</code>, or wrap the input inside the <code>&lt;label&gt;</code> element.</p>
+            <p><strong>Wrong:</strong> <code>&lt;input type="email" placeholder="Your email"&gt;</code></p>
+            <p><strong>Right:</strong> <code>&lt;label for="email"&gt;Email Address&lt;/label&gt;&lt;input type="email" id="email"&gt;</code></p>
 
-        <h2>WCAG 2.1 & 2.2 Explained Simply: What A, AA, and AAA Actually Mean</h2>
-        <p>The Web Content Accessibility Guidelines (WCAG) are the internationally recognised standard for digital accessibility, published by the W3C. They are organised into success criteria grouped under four principles: Perceivable, Operable, Understandable, and Robust (POUR). Each criterion is assigned a conformance level:</p>
-        
-        <ul>
-            <li><strong>Level A — The Absolute Minimum:</strong> Level A criteria represent the most fundamental barriers to access. Failing them makes content completely inaccessible to some users. Examples include providing alt text for images, ensuring all functionality is available from a keyboard, and not using flashing content that can trigger seizures. This is the floor, not the target.</li>
-            <li><strong>Level AA — The Legal and Industry Standard:</strong> Level AA is the benchmark specified in most legal frameworks, including the ADA technical guidance, Section 508, and the EU Web Accessibility Directive. It includes everything in Level A plus additional requirements like sufficient colour contrast, visible focus indicators, consistent navigation, and captions for live audio content. <em>If your site is accessible to AA, it is legally defensible in most jurisdictions.</em></li>
-            <li><strong>Level AAA — Enhanced Accessibility:</strong> Level AAA represents the highest level of conformance and is generally not required as a blanket policy for entire websites — many content types make full AAA compliance impractical. However, specific criteria from AAA (such as sign language interpretation for video, extended audio description, or a reading level below upper secondary education) may be required in certain regulated sectors like government, healthcare, and education.</li>
-        </ul>
-        <p>For most developers and agencies: target AA conformance on all new builds and treat AAA features as progressive enhancements.</p>
+            <h2>WCAG 2.1 & 2.2 Explained Simply: What A, AA, and AAA Actually Mean</h2>
+            <p>The Web Content Accessibility Guidelines (WCAG) are the internationally recognised standard for digital accessibility, published by the W3C. They are organised into success criteria grouped under four principles: Perceivable, Operable, Understandable, and Robust (POUR). Each criterion is assigned a conformance level:</p>
+            
+            <ul>
+                <li><strong>Level A — The Absolute Minimum:</strong> Level A criteria represent the most fundamental barriers to access. Failing them makes content completely inaccessible to some users. Examples include providing alt text for images, ensuring all functionality is available from a keyboard, and not using flashing content that can trigger seizures. This is the floor, not the target.</li>
+                <li><strong>Level AA — The Legal and Industry Standard:</strong> Level AA is the benchmark specified in most legal frameworks, including the ADA technical guidance, Section 508, and the EU Web Accessibility Directive. It includes everything in Level A plus additional requirements like sufficient colour contrast, visible focus indicators, consistent navigation, and captions for live audio content. <em>If your site is accessible to AA, it is legally defensible in most jurisdictions.</em></li>
+                <li><strong>Level AAA — Enhanced Accessibility:</strong> Level AAA represents the highest level of conformance and is generally not required as a blanket policy for entire websites — many content types make full AAA compliance impractical. However, specific criteria from AAA (such as sign language interpretation for video, extended audio description, or a reading level below upper secondary education) may be required in certain regulated sectors like government, healthcare, and education.</li>
+            </ul>
+            <p>For most developers and agencies: target AA conformance on all new builds and treat AAA features as progressive enhancements.</p>
 
-        <h2>Why Shift-Left Testing Saves Thousands of Dollars in QA</h2>
-        <p>"Shift-left" is a software development principle: the earlier in the development lifecycle you test, the cheaper it is to fix what you find. This is nowhere more true than in accessibility.</p>
-        <p>The cost to fix an accessibility bug scales dramatically depending on when it's caught:</p>
-        <ul>
-            <li><strong>In development (pre-build):</strong> Minutes of developer time. Free.</li>
-            <li><strong>In QA (post-build):</strong> Hours of QA engineer time + developer time. Moderate cost.</li>
-            <li><strong>In staging/production:</strong> Potential redesign, cross-browser retesting, deployment cycle. High cost.</li>
-            <li><strong>After a legal complaint:</strong> Legal fees, remediation sprint, settlement, reputational damage. Catastrophic cost.</li>
-        </ul>
-        <p>The Affilore AI Accessibility Tester is purpose-built for the leftmost shift possible — testing HTML fragments before they are even built into a live page. You catch missing labels, semantic errors, and contrast issues while you're still writing the code, not after a QA team or plaintiff's bot has found them in production.</p>
+            <h2>Why Shift-Left Testing Saves Thousands of Dollars in QA</h2>
+            <p>"Shift-left" is a software development principle: the earlier in the development lifecycle you test, the cheaper it is to fix what you find. This is nowhere more true than in accessibility.</p>
+            <p>The cost to fix an accessibility bug scales dramatically depending on when it's caught:</p>
+            <ul>
+                <li><strong>In development (pre-build):</strong> Minutes of developer time. Free.</li>
+                <li><strong>In QA (post-build):</strong> Hours of QA engineer time + developer time. Moderate cost.</li>
+                <li><strong>In staging/production:</strong> Potential redesign, cross-browser retesting, deployment cycle. High cost.</li>
+                <li><strong>After a legal complaint:</strong> Legal fees, remediation sprint, settlement, reputational damage. Catastrophic cost.</li>
+            </ul>
+            <p>The Affilore AI Accessibility Tester is purpose-built for the leftmost shift possible — testing HTML fragments before they are even built into a live page. You catch missing labels, semantic errors, and contrast issues while you're still writing the code, not after a QA team or plaintiff's bot has found them in production.</p>
 
-        <h2>Frequently Asked Questions About Web Accessibility</h2>
-        
-        <h3>What does "a11y" stand for?</h3>
-        <p>"a11y" is a numeronym — a word abbreviated using numbers. It stands for accessibility: a + 11 letters + y. Numeronyms are common in the tech industry (i18n for internationalisation, l10n for localisation). You'll see a11y used throughout developer communities and tooling as shorthand for accessibility work.</p>
+            <h2>Frequently Asked Questions About Web Accessibility</h2>
+            
+            <h3>What does "a11y" stand for?</h3>
+            <p>"a11y" is a numeronym — a word abbreviated using numbers. It stands for accessibility: a + 11 letters + y. Numeronyms are common in the tech industry (i18n for internationalisation, l10n for localisation). You'll see a11y used throughout developer communities and tooling as shorthand for accessibility work.</p>
 
-        <h3>Does accessibility actually impact Google rankings?</h3>
-        <p>Yes, in meaningful ways. Google's ranking algorithm does not audit for WCAG compliance directly, but many accessibility best practices are also core SEO best practices. Page structure with semantic HTML improves crawlability. Descriptive alt text feeds Google Images and improves image search ranking. Logical heading hierarchies improve content understanding. Good Core Web Vitals — themselves influenced by clean, efficient HTML — are a confirmed ranking factor. Accessible sites are, categorically, more indexable sites.</p>
+            <h3>Does accessibility actually impact Google rankings?</h3>
+            <p>Yes, in meaningful ways. Google's ranking algorithm does not audit for WCAG compliance directly, but many accessibility best practices are also core SEO best practices. Page structure with semantic HTML improves crawlability. Descriptive alt text feeds Google Images and improves image search ranking. Logical heading hierarchies improve content understanding. Good Core Web Vitals — themselves influenced by clean, efficient HTML — are a confirmed ranking factor. Accessible sites are, categorically, more indexable sites.</p>
 
-        <h3>Does this tool test the live website or just code snippets?</h3>
-        <p>The Affilore AI Accessibility Tester analyses HTML code that you paste directly into the tool. It does not crawl a live URL. This is intentional — it enables private analysis of code before it is ever deployed, which is the core value of shift-left testing. For full-site crawl testing of a live URL, this tool works best as a complement to browser-level extensions like axe DevTools or Google Lighthouse.</p>
+            <h3>Does this tool test the live website or just code snippets?</h3>
+            <p>The Affilore AI Accessibility Tester analyses HTML code that you paste directly into the tool. It does not crawl a live URL. This is intentional — it enables private analysis of code before it is ever deployed, which is the core value of shift-left testing. For full-site crawl testing of a live URL, this tool works best as a complement to browser-level extensions like axe DevTools or Google Lighthouse.</p>
 
-        <h3>What is the difference between WCAG 2.1 and WCAG 2.2?</h3>
-        <p>WCAG 2.2, published in October 2023, is a backwards-compatible update to WCAG 2.1. It adds 9 new success criteria, primarily focused on users with cognitive disabilities and low vision, and removes one criterion from 2.1 (4.1.1 Parsing, which became redundant as browsers matured). The most practically significant new additions include Focus Appearance (AA) — which formalises requirements for visible focus indicators — and Accessible Authentication (AA, minimum), which restricts cognitive tests like CAPTCHAs in login flows. If you were compliant with 2.1, reviewing the 9 new 2.2 criteria is the only required update.</p>
+            <h3>What is the difference between WCAG 2.1 and WCAG 2.2?</h3>
+            <p>WCAG 2.2, published in October 2023, is a backwards-compatible update to WCAG 2.1. It adds 9 new success criteria, primarily focused on users with cognitive disabilities and low vision, and removes one criterion from 2.1 (4.1.1 Parsing, which became redundant as browsers matured). The most practically significant new additions include Focus Appearance (AA) — which formalises requirements for visible focus indicators — and Accessible Authentication (AA, minimum), which restricts cognitive tests like CAPTCHAs in login flows. If you were compliant with 2.1, reviewing the 9 new 2.2 criteria is the only required update.</p>
 
-        <h3>Can I use this tool for client deliverables and audits?</h3>
-        <p>Absolutely. The tool output can be used as supporting documentation when delivering an accessibility report to a client. For formal, legally binding audits, you should supplement automated tool output with manual testing and testing by users with disabilities — no automated tool catches 100% of accessibility barriers. The industry benchmark is that automated tools reliably catch approximately 30%–40% of WCAG issues; the remainder require human judgement.</p>
+            <h3>Can I use this tool for client deliverables and audits?</h3>
+            <p>Absolutely. The tool output can be used as supporting documentation when delivering an accessibility report to a client. For formal, legally binding audits, you should supplement automated tool output with manual testing and testing by users with disabilities — no automated tool catches 100% of accessibility barriers. The industry benchmark is that automated tools reliably catch approximately 30%–40% of WCAG issues; the remainder require human judgement.</p>
 
-        <h3>Is there a file size limit for the HTML I can paste?</h3>
-        <p>The tool handles standard HTML fragments and page sections without issue. For very large, JavaScript-heavy single-page application codebases, testing individual components or template files is more practical than pasting an entire rendered DOM. Component-level testing also produces more actionable results — you know exactly which component contains each violation rather than hunting through thousands of lines.</p>
+            <h3>Is there a file size limit for the HTML I can paste?</h3>
+            <p>The tool handles standard HTML fragments and page sections without issue. For very large, JavaScript-heavy single-page application codebases, testing individual components or template files is more practical than pasting an entire rendered DOM. Component-level testing also produces more actionable results — you know exactly which component contains each violation rather than hunting through thousands of lines.</p>
 
-        <div style="text-align: center; margin-top: 40px;">
-            <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your Code Has Violations Right Now. Find Them Before Someone Else Does.</p>
-            <p style="color: #fff;">Every week without an accessibility audit is a week of compounding legal exposure and SEO underperformance. Scroll back to the top, paste in your HTML snippet, and run your first audit right now. It takes 30 seconds. The violations it finds could save you tens of thousands of dollars.</p>
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="color: var(--accent-gold); font-size: 1.2rem; font-weight: 600;">Your Code Has Violations Right Now. Find Them Before Someone Else Does.</p>
+                <p style="color: #fff;">Every week without an accessibility audit is a week of compounding legal exposure and SEO underperformance. Scroll back to the top, paste in your HTML snippet, and run your first audit right now. It takes 30 seconds. The violations it finds could save you tens of thousands of dollars.</p>
+            </div>
         </div>
     </div>
 
@@ -333,6 +342,7 @@
     </footer>
 
     <script>
+        // Menu Toggle
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
             const icon = document.querySelector('#mobileToggle i');
@@ -346,7 +356,7 @@
             }
         }
 
-        // Existing Tool Logic
+        // Accessibility Analysis Logic
         function analyzeCode() {
             const code = document.getElementById('htmlInput').value.trim();
             const resultsArea = document.getElementById('resultsArea');
