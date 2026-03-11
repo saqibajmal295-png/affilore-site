@@ -102,7 +102,7 @@
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; font-weight: 600;}
         .input-group input, .input-group textarea { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); color: #fff; outline: none; transition: 0.3s; font-size: 1rem; font-family: 'Outfit', sans-serif;}
-        .input-group textarea { resize: vertical; min-height: 100px; }
+        .input-group textarea { resize: vertical; min-height: 150px; }
         .input-group input:focus, .input-group textarea:focus { border-color: var(--accent-red); box-shadow: 0 0 10px var(--red-glow); }
 
         .btn-action { width: 100%; background: linear-gradient(135deg, var(--accent-red), #ff6b3b); color: #fff; border: none; padding: 15px; border-radius: 10px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px;}
@@ -119,22 +119,27 @@
         .pdf-section { margin-bottom: 20px; }
         .pdf-label { font-weight: bold; color: #475569; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 5px;}
         .pdf-value { font-size: 1.1rem; color: #0f172a; margin-bottom: 15px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 5px; min-height: 25px;}
-        .pdf-content-box { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 20px; min-height: 150px; white-space: pre-wrap;}
+        .pdf-content-box { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 20px; min-height: 250px; white-space: pre-wrap; font-size: 1.05rem; line-height: 1.6;}
 
         .notification { position: fixed; bottom: 30px; right: 30px; background: var(--accent-red); color: #fff; padding: 15px 25px; border-radius: 10px; font-weight: 700; transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 9999;}
         .notification.show { transform: translateY(0); opacity: 1; }
 
-        .article-container { max-width: 900px; margin: 80px auto; padding: 50px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; backdrop-filter: var(--glass-blur); line-height: 1.8; color: #d0d0d5; }
-        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 50px 0 20px; line-height: 1.3;}
+        /* FULL SEO ARTICLE SECTION */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); margin-top: 40px;}
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h2 { color: var(--accent-gold); font-size: 2.2rem; margin: 40px 0 20px; line-height: 1.3;}
         .article-container h2:first-child { margin-top: 0; }
         .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
         .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
+        .article-container li { margin-bottom: 10px; }
+        .article-container code { background: rgba(255,51,102,0.1); color: var(--accent-red); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.95rem; }
 
         footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
-        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; }
-        .footer-links a:hover { color: var(--accent-gold); }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
+        .footer-links a:hover { color: #ffd600; }
 
-        /* --- MOBILE FIXES --- */
+        /* MOBILE RESPONSIVE FIXES */
         @media (max-width: 900px) {
             .app-layout { grid-template-columns: 1fr; }
         }
@@ -147,11 +152,12 @@
             .tool-header h1 { font-size: 2.2rem; line-height: 1.2; }
             .tool-header p { font-size: 1rem; }
             
-            /* Responsive PDF Preview */
-            .preview-wrapper { padding: 10px; overflow-x: auto;}
-            .pdf-template { padding: 20px; min-width: 600px; /* Forces template to stay wide enough so layout doesn't break, user can scroll sideways */ }
+            /* Responsive PDF Preview - Allows horizontal scroll instead of breaking layout */
+            .preview-wrapper { padding: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch;}
+            .pdf-template { padding: 25px; min-width: 500px; /* Maintains PDF aspect structure */ }
+            .pdf-header h1 { font-size: 1.5rem; }
             
-            .article-container { padding: 30px 20px; }
+            .article-wrap { padding: 40px 20px; }
         }
     </style>
 </head>
@@ -247,13 +253,35 @@
         </div>
     </div>
 
-    <div class="article-container">
-        <h2>Why Client-Side Document Generation Matters</h2>
-        <p>In the age of cloud computing, it has become normalized to upload our sensitive data to third-party servers just to perform basic file conversions. This creates unnecessary privacy risks, especially when dealing with client names, financial proposals, or proprietary business logic.</p>
-        <p>The Affilore Form to PDF Converter fundamentally changes this dynamic. By leveraging modern JavaScript libraries like <code>html2pdf.js</code>, the entire conversion process happens directly inside your local web browser. Your data is never transmitted over the internet, stored in a database, or saved in a temporary server cache.</p>
+    <div class="article-wrap">
+        <div class="article-container">
+            <h2>The Privacy Risks of Cloud-Based PDF Converters</h2>
+            <p>Every single day, millions of users upload invoices, legal contracts, medical records, resumes, and proprietary business documents to free online PDF converters. What the vast majority of people fail to realize is that the moment you click "Upload," your sensitive, unencrypted data is transferred to a third-party server located somewhere else in the world.</p>
+            <p>Even if the service explicitly promises to delete your files after 24 hours, your data is unnecessarily exposed. It is vulnerable to network interception, server-side data breaches, and unauthorized access by the administrators of that service. The fundamental problem with traditional document conversion is the reliance on backend processing: your browser sends the file away, a remote server does the math, and it sends a PDF back.</p>
 
-        <h3>Instant Preview, Zero Latency</h3>
-        <p>Because the processing is handled by your device's CPU rather than a remote server, the live preview updates instantly as you type. Once you click download, the browser renders the DOM structure into a canvas, scales it to standard A4 dimensions, and serves the file directly to your downloads folder.</p>
+            <h2>Why Client-Side PDF Generation is the Future</h2>
+            <p>The Affilore Form to PDF Converter operates on a radically different, privacy-first architecture: <strong>100% client-side processing</strong>. By utilizing modern JavaScript rendering engines (specifically the powerful <code>html2pdf.js</code> library), the entire document conversion lifecycle happens locally within your own web browser.</p>
+            <p>When you type your document details into our form, the data is instantly bound to the DOM (Document Object Model) in the preview pane. When you click the Download button, your browser's own rendering engine captures the visual layout, scales it perfectly to a standard A4/Letter dimension, and compiles the binary PDF file directly to your hard drive. <strong>No data is ever sent to an Affilore server, nor is it stored in any database.</strong></p>
+
+            <h3>Key Benefits of Browser-Based Document Conversion</h3>
+            <ul>
+                <li><strong>Absolute Privacy (Zero Server Uploads):</strong> Your data literally never leaves your device. Because there is no cloud storage involved, there is a 0% chance of your document being involved in a server data breach.</li>
+                <li><strong>Instant Processing Speed:</strong> Because there is no network latency (waiting for an upload) or server queue (waiting in line behind other users), the PDF is generated by your CPU in milliseconds.</li>
+                <li><strong>Infinite Free Usage:</strong> Cloud-based tools have to pay for server computing power, which is why they often limit you to 2 or 3 conversions per day. Client-side tools use your device's computing power, meaning you can generate unlimited documents for free, forever.</li>
+                <li><strong>Works Offline:</strong> Once the web page is loaded in your browser, you could theoretically disconnect your Wi-Fi and the PDF generator would still work perfectly.</li>
+            </ul>
+
+            <h2>How to Use the Affilore Form to PDF Tool</h2>
+            <p>We designed this utility to be the fastest, lowest-friction way to generate a standardized, professional document without having to open heavy word processors like Microsoft Word or wait for Google Docs to load.</p>
+            <ul>
+                <li><strong>Enter Document Metadata:</strong> Fill in the Document Title, the Client/Company name, and your details. Watch the live preview update instantly on the right side of the screen.</li>
+                <li><strong>Write Your Content:</strong> Paste your project proposal, invoice details, meeting notes, or contract terms into the main content area. The preview pane will automatically expand to accommodate your text.</li>
+                <li><strong>Click Download:</strong> The tool will instantly compile the preview panel into a high-resolution, print-ready PDF document saved straight to your downloads folder.</li>
+            </ul>
+
+            <h3>Best Real-World Use Cases</h3>
+            <p>This utility is perfect for independent contractors and freelancers who need to generate quick invoices or scope-of-work documents on the fly. It is highly useful for developers building standardized bug reports, or simply for anyone who needs to convert plain text into a clean, locked, shareable format without sacrificing their data privacy to a random cloud server.</p>
+        </div>
     </div>
 
     <div class="notification" id="toast">Generating PDF...</div>
