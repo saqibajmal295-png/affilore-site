@@ -67,8 +67,8 @@
         .upload-subtext { color: var(--text-muted); font-size: 0.9rem; }
         input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-        /* Preview Area (Hidden by default) */
-        .preview-area { display: none; margin-top: 30px; }
+        /* Preview Area */
+        .preview-area { display: none; margin-top: 10px; }
         .image-preview-container { width: 100%; max-height: 400px; overflow: hidden; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; background: #000; display: flex; justify-content: center; align-items: center;}
         .image-preview-container img { max-width: 100%; max-height: 400px; object-fit: contain; }
         
@@ -78,19 +78,23 @@
         .info-value { font-family: 'Fira Code', monospace; color: var(--accent-gold); font-size: 1.2rem; }
 
         /* Controls */
-        .controls-wrapper { text-align: left; margin-bottom: 30px; }
+        .controls-wrapper { text-align: left; margin-bottom: 25px; }
         .controls-wrapper label { display: block; color: var(--text-main); font-weight: 600; margin-bottom: 15px; font-size: 1.1rem;}
         .scale-options { display: flex; gap: 15px; flex-wrap: wrap; }
         
-        .scale-btn { flex: 1; min-width: 100px; background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); padding: 12px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
-        .scale-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
-        .scale-btn.active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); box-shadow: 0 0 15px var(--cyan-glow); }
+        .scale-btn, .format-btn { flex: 1; min-width: 100px; background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); padding: 12px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1.1rem; text-align: center;}
+        .scale-btn:hover, .format-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+        .scale-btn.active, .format-btn.active { background: var(--accent-cyan); color: #000; border-color: var(--accent-cyan); box-shadow: 0 0 15px var(--cyan-glow); }
 
-        .btn-action { width: 100%; background: linear-gradient(135deg, var(--accent-cyan), #0088ff); color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 800; font-size: 1.2rem; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        .action-row { display: flex; gap: 15px; margin-top: 20px;}
+        .btn-action { flex: 2; background: linear-gradient(135deg, var(--accent-cyan), #0088ff); color: #000; border: none; padding: 18px; border-radius: 10px; font-weight: 800; font-size: 1.2rem; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;}
         .btn-action:hover { box-shadow: 0 0 25px var(--cyan-glow); transform: translateY(-2px); }
         .btn-action:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        .btn-outline { flex: 1; background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); font-size: 1.1rem; }
+        .btn-outline:hover { border-color: #ff3366; color: #ff3366; background: rgba(255, 51, 102, 0.05); box-shadow: none; }
 
-        .progress-container { display: none; margin-top: 20px; }
+        .progress-container { display: none; margin-top: 20px; text-align: left;}
         .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-top: 10px; }
         .progress-fill { height: 100%; width: 0%; background: var(--accent-magenta); transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent-magenta);}
 
@@ -118,6 +122,8 @@
             .mobile-menu-btn { display: block !important; }
             .panel { padding: 25px 15px; }
             .info-grid { grid-template-columns: 1fr; }
+            .action-row { flex-direction: column; }
+            .btn-outline, .btn-action { width: 100%; }
         }
     </style>
 </head>
@@ -191,9 +197,23 @@
                     </div>
                 </div>
 
-                <button class="btn-action" id="upscaleBtn" onclick="processImage()">
-                    <i class="fas fa-magic"></i> Upscale & Download
-                </button>
+                <div class="controls-wrapper">
+                    <label>Output Format:</label>
+                    <div class="scale-options">
+                        <button class="format-btn active" data-format="image/png" onclick="setFormat('image/png')">PNG (Lossless)</button>
+                        <button class="format-btn" data-format="image/jpeg" onclick="setFormat('image/jpeg')">JPG (Smaller)</button>
+                        <button class="format-btn" data-format="image/webp" onclick="setFormat('image/webp')">WEBP (Web)</button>
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <button class="btn-action btn-outline" onclick="resetTool()">
+                        <i class="fas fa-undo"></i> Upload Another
+                    </button>
+                    <button class="btn-action" id="upscaleBtn" onclick="processImage()">
+                        <i class="fas fa-magic"></i> Upscale & Download
+                    </button>
+                </div>
 
                 <div class="progress-container" id="progressContainer">
                     <div style="color: var(--text-muted); font-weight: 600; font-size: 0.9rem;" id="progressText">Processing image locally...</div>
@@ -313,7 +333,6 @@
     </footer>
 
     <script>
-        // Mobile Menu Toggle
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
             const icon = document.querySelector('#mobileToggle i');
@@ -321,7 +340,6 @@
             icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
         }
 
-        // App Logic
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const previewArea = document.getElementById('previewArea');
@@ -335,6 +353,8 @@
         let currentImage = null;
         let currentScale = 4;
         let originalFileName = "";
+        let currentFormat = "image/png";
+        let currentExtension = "png";
 
         // Drag & Drop Handlers
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -379,7 +399,6 @@
             reader.onload = function(e) {
                 currentImage = new Image();
                 currentImage.onload = function() {
-                    // Show Preview Area
                     dropZone.style.display = 'none';
                     previewArea.style.display = 'block';
                     imagePreview.src = e.target.result;
@@ -390,6 +409,16 @@
                 currentImage.src = e.target.result;
             }
             reader.readAsDataURL(file);
+        }
+
+        // NEW: Format Selection Logic
+        function setFormat(format) {
+            currentFormat = format;
+            currentExtension = format.split('/')[1];
+            if (currentExtension === 'jpeg') currentExtension = 'jpg';
+
+            document.querySelectorAll('.format-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-format="${format}"]`).classList.add('active');
         }
 
         function setScale(scale) {
@@ -405,16 +434,24 @@
             }
         }
 
+        // NEW: Reset Tool Logic
+        function resetTool() {
+            previewArea.style.display = 'none';
+            dropZone.style.display = 'block';
+            fileInput.value = '';
+            currentImage = null;
+            progressContainer.style.display = 'none';
+            progressFill.style.width = '0%';
+            upscaleBtn.disabled = false;
+        }
+
         function processImage() {
             if(!currentImage) return;
 
-            // UI Changes
             upscaleBtn.disabled = true;
             progressContainer.style.display = 'block';
             progressFill.style.width = '10%';
             
-            // Client-side processing simulation for UI (Canvas rendering is synchronous and blocks the thread, 
-            // so we use setTimeout to allow the browser to paint the progress bar first)
             setTimeout(() => {
                 progressFill.style.width = '50%';
                 
@@ -434,23 +471,21 @@
             canvas.width = targetWidth;
             canvas.height = targetHeight;
 
-            // Advanced Canvas Resampling Settings
+            // Advanced Resampling
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
 
-            // Draw scaled image
             ctx.drawImage(currentImage, 0, 0, targetWidth, targetHeight);
 
             progressFill.style.width = '100%';
 
-            // Export and Download
             setTimeout(() => {
                 const link = document.createElement('a');
-                link.download = `${originalFileName}_Affilore_${currentScale}x.png`;
-                link.href = canvas.toDataURL('image/png', 1.0); // Highest quality PNG
+                // NEW: Use the selected format and extension
+                link.download = `${originalFileName}_Affilore_${currentScale}x.${currentExtension}`;
+                link.href = canvas.toDataURL(currentFormat, 0.95); 
                 link.click();
 
-                // Reset UI
                 setTimeout(() => {
                     upscaleBtn.disabled = false;
                     progressContainer.style.display = 'none';
