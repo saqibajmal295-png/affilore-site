@@ -337,12 +337,7 @@
         <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
     </footer>       
     
-    <script type="module">
-        import { pipeline, env, RawImage } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.16.1';
-        
-        // Prevent local model search since we are hosted on GH Pages
-        env.allowLocalModels = false;
-
+                        <script>
         // UI Variables
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
@@ -360,9 +355,8 @@
         let originalFileName = "";
         let currentFormat = "image/png";
         let currentExtension = "png";
-        let upscalerModel = null;
 
-        // Make global functions available to inline HTML onclicks
+        // Global functions for inline HTML onclicks
         window.toggleMenu = function() {
             const menu = document.getElementById('mobileMenu');
             const icon = document.querySelector('#mobileToggle i');
@@ -427,6 +421,13 @@
                 alert("Please upload an image file (JPG, PNG, WEBP)");
                 return;
             }
+            
+            // Check file size (limit to 10MB to prevent mobile browser crashes)
+            if (file.size > 10 * 1024 * 1024) {
+                alert("File is too large. Please upload an image under 10MB.");
+                return;
+            }
+
             originalFileName = file.name.split('.')[0];
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -443,69 +444,29 @@
             reader.readAsDataURL(file);
         }
 
-        // HYBRID AI + CANVAS PROCESSING
-        window.processImage = async function() {
+        // HIGH-SPEED CANVAS PROCESSING
+        window.processImage = function() {
             if(!currentImage) return;
 
+            // UI Changes
             upscaleBtn.disabled = true;
             progressContainer.style.display = 'block';
-            progressFill.style.width = '2%';
-            progressText.innerText = "Connecting to AI Engine...";
-
-            let baseImageForCanvas = currentImage;
-
-            try {
-                // Step 1: Load AI Model with LIVE PROGRESS TRACKING
-                if (!upscalerModel) {
-                    upscalerModel = await pipeline('image-to-image', 'Xenova/swin2SR-classical-sr-x2-64', {
-                        progress_callback: (data) => {
-                            if (data.status === 'progress') {
-                                let percent = Math.round(data.progress);
-                                progressText.innerText = `Downloading AI Model: ${percent}%`;
-                                progressFill.style.width = percent + '%';
-                            } else if (data.status === 'ready') {
-                                progressText.innerText = "AI Ready! Processing image...";
-                            }
-                        }
-                    });
-                }
-
-                progressText.innerText = "AI Processing: Restoring Details... (Please wait)";
-                progressFill.style.width = '40%';
-                
-                try {
-                    // Run the Deep Learning Model
-                    const rawImage = await RawImage.fromURL(currentImage.src);
-                    const output = await upscalerModel(rawImage);
-                    
-                    const canvasAI = document.createElement('canvas');
-                    canvasAI.width = output.width;
-                    canvasAI.height = output.height;
-                    const ctxAI = canvasAI.getContext('2d');
-                    const imgData = new ImageData(new Uint8ClampedArray(output.data), output.width, output.height);
-                    ctxAI.putImageData(imgData, 0, 0);
-                    
-                    const aiImage = new Image();
-                    aiImage.src = canvasAI.toDataURL();
-                    await new Promise(r => aiImage.onload = r);
-                    baseImageForCanvas = aiImage;
-                    
-                } catch(aiError) {
-                    console.warn("AI Model skipped (likely memory limit on mobile). Using High-Speed Resampling.", aiError);
-                    progressText.innerText = "Optimizing via High-Speed Resampling...";
-                }
-
-            } catch (initError) {
-                // If network blocks HuggingFace or download fails, fallback safely
-                console.warn("Could not download AI model. Falling back to High-Speed Resampling.", initError);
-                progressText.innerText = "Network issue. Using High-Speed Resampling instead...";
-            }
-
-            progressFill.style.width = '80%';
-            progressText.innerText = "Scaling to Final Target Resolution...";
-
-            // Step 3: Scale to user's desired final size
+            progressText.innerText = "Analyzing image structure...";
+            progressFill.style.width = '20%';
+            
+            // Use setTimeout to allow the browser UI to update before heavy processing locks the thread
             setTimeout(() => {
+                progressText.innerText = "Applying High-Fidelity Resampling...";
+                progressFill.style.width = '60%';
+                
+                setTimeout(() => {
+                    executeUpscale();
+                }, 150); // slight delay to ensure UI paints the progress bar
+            }, 150);
+        }
+
+        function executeUpscale() {
+            try {
                 const canvas = document.getElementById('processingCanvas');
                 const ctx = canvas.getContext('2d');
                 
@@ -515,31 +476,43 @@
                 canvas.width = targetWidth;
                 canvas.height = targetHeight;
 
-                // Advanced Canvas Engine
+                // The Magic: Browser's native high-quality resampling algorithm
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
 
-                ctx.drawImage(baseImageForCanvas, 0, 0, targetWidth, targetHeight);
+                // Draw and scale the image
+                ctx.drawImage(currentImage, 0, 0, targetWidth, targetHeight);
 
+                progressText.innerText = "Finalizing output...";
                 progressFill.style.width = '100%';
-                progressText.innerText = "Complete! Downloading...";
 
-                // Export
+                // Export and Download
                 setTimeout(() => {
                     const link = document.createElement('a');
-                    link.download = `${originalFileName}_Affilore_${currentScale}x.${currentExtension}`;
+                    link.download = `${originalFileName}_Affilore_HD_${currentScale}x.${currentExtension}`;
+                    
+                    // High quality output
                     link.href = canvas.toDataURL(currentFormat, 0.95); 
                     link.click();
 
+                    // Reset UI
                     setTimeout(() => {
                         upscaleBtn.disabled = false;
                         progressContainer.style.display = 'none';
                         progressFill.style.width = '0%';
+                        progressText.innerText = "";
                     }, 1000);
-                }, 500);
-            }, 100);
+                }, 300);
+
+            } catch (error) {
+                console.error(error);
+                alert("The image is too large for your device's memory to upscale. Try a smaller upscale factor (2x).");
+                upscaleBtn.disabled = false;
+                progressContainer.style.display = 'none';
+            }
         }
     </script>
+
 
 </body>
 </html>
