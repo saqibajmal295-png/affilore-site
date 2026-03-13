@@ -110,19 +110,38 @@
         .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
         .footer-links a:hover { color: #ffd600; }
 
-        /* Mobile Fixes */
+        /* =========================================
+           MOBILE FIXES - COMPOUND INTEREST
+           ========================================= */
         @media (max-width: 900px) {
             .app-layout { grid-template-columns: 1fr; }
-            .primary .result-value { font-size: 2.2rem; }
         }
         @media (max-width: 768px) {
             .nav-links, .desktop-btn { display: none !important; }
             .mobile-menu-btn { display: block !important; }
-            .panel { padding: 20px 15px; }
-            .two-col { grid-template-columns: 1fr; }
-            .result-grid { grid-template-columns: 1fr; }
-            .result-card.primary { grid-column: span 1; }
-            .chart-container { height: 250px; }
+            
+            /* Tighten up spacing to reduce scrolling */
+            .tool-container { margin-top: 100px; padding: 0 15px; }
+            .panel { padding: 20px 15px; border-radius: 15px; }
+            .panel h3 { font-size: 1.1rem; margin-bottom: 15px; padding-bottom: 10px; }
+            
+            /* Slim down the massive input fields */
+            .input-group { margin-bottom: 15px; }
+            .input-group label { font-size: 0.85rem; margin-bottom: 5px; }
+            .input-group input, .input-group select { padding: 10px 15px; font-size: 1rem; }
+            
+            /* Keep Expected Return & Inflation side-by-side on mobile */
+            .two-col { grid-template-columns: 1fr 1fr; gap: 10px; }
+            
+            /* Make output cards fit neatly in a 2x2 grid */
+            .result-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+            .result-card { padding: 15px 10px; }
+            .result-label { font-size: 0.75rem; }
+            .result-value { font-size: 1.2rem; }
+            .primary .result-value { font-size: 1.8rem; }
+            
+            /* Shrink chart slightly so the whole UI fits on one screen */
+            .chart-container { height: 220px; margin-top: 10px; }
         }
     </style>
 </head>
