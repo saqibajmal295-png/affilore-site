@@ -127,6 +127,9 @@
         .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
         .footer-links a:hover { color: #ffd600; }
 
+        /* =========================================
+           MOBILE FIXES - MORTGAGE CALCULATOR
+           ========================================= */
         @media (max-width: 900px) {
             .app-layout { grid-template-columns: 1fr; }
             .table-panel { grid-column: span 1; }
@@ -134,9 +137,29 @@
         @media (max-width: 768px) {
             .nav-links, .desktop-btn { display: none !important; }
             .mobile-menu-btn { display: block !important; }
-            .panel { padding: 20px; }
-            .result-value-main { font-size: 2.5rem; }
-            .two-col { grid-template-columns: 1fr; }
+            
+            /* Tighten up spacing to reduce scrolling */
+            .tool-container { margin-top: 100px; padding: 0 15px; }
+            .panel { padding: 20px 15px; border-radius: 15px; }
+            .panel h3 { font-size: 1.1rem; margin-bottom: 15px; padding-bottom: 10px; }
+            
+            /* Slim down the massive input fields */
+            .input-group { margin-bottom: 15px; }
+            .input-group label { font-size: 0.85rem; margin-bottom: 5px; }
+            .input-group input, .input-group select { padding: 10px 15px; font-size: 1rem; }
+            
+            /* Keep related fields side-by-side on mobile! */
+            .two-col { grid-template-columns: 2fr 1fr; gap: 10px; }
+            
+            /* Compress the results area */
+            .results-wrapper { grid-template-columns: 1fr; gap: 10px; }
+            .result-main { grid-column: span 1; padding: 20px 15px; }
+            .result-value-main { font-size: 2.2rem; }
+            .result-value { font-size: 1.4rem; }
+            
+            /* Make the table fit cleanly */
+            .table-responsive { max-height: 400px; }
+            th, td { padding: 10px; font-size: 0.85rem; }
         }
     </style>
 </head>
