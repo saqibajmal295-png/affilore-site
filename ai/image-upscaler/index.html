@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free 8K Image Upscaler | Client-Side AI Enhancer | Affilore</title>
-    <meta name="description" content="Upscale images to 4K and 8K resolution instantly. 100% free, private client-side processing directly in your browser. No server uploads.">
+    <meta name="description" content="Upscale images to 4K and 8K resolution instantly using True AI. 100% free, private client-side processing directly in your browser.">
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
     <script>
@@ -59,6 +59,8 @@
 
         .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; backdrop-filter: var(--glass-blur); text-align: center;}
         
+        .ai-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(0, 240, 255, 0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-bottom: 20px;}
+
         /* Uploader Area */
         .upload-area { border: 2px dashed var(--accent-cyan); border-radius: 15px; padding: 60px 20px; background: rgba(0, 240, 255, 0.02); cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;}
         .upload-area:hover, .upload-area.dragover { background: rgba(0, 240, 255, 0.08); box-shadow: 0 0 20px var(--cyan-glow); }
@@ -94,7 +96,7 @@
         .btn-outline { flex: 1; background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); font-size: 1.1rem; }
         .btn-outline:hover { border-color: #ff3366; color: #ff3366; background: rgba(255, 51, 102, 0.05); box-shadow: none; }
 
-        .progress-container { display: none; margin-top: 20px; text-align: left;}
+        .progress-container { display: none; margin-top: 20px; text-align: left; background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);}
         .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-top: 10px; }
         .progress-fill { height: 100%; width: 0%; background: var(--accent-magenta); transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent-magenta);}
 
@@ -114,7 +116,6 @@
         .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
         .footer-links a:hover { color: #ffd600; }
 
-        /* Hidden Canvas for Processing */
         #processingCanvas { display: none; }
 
         @media (max-width: 768px) {
@@ -160,11 +161,15 @@
     <div class="tool-container">
         <div class="tool-header">
             <h1>8K Image Upscaler</h1>
-            <p>Enhance resolution and clarify details instantly. 100% client-side processing means zero server uploads and total privacy.</p>
+            <p>Enhance resolution and restore details using local deep learning. 100% private processing directly in your browser.</p>
         </div>
 
         <div class="panel">
             
+            <div class="ai-badge">
+                <i class="fas fa-brain"></i> Powered by Hugging Face Transformers.js
+            </div>
+
             <div class="upload-area" id="dropZone">
                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
                 <div class="upload-text">Drag & Drop or Click to Upload</div>
@@ -191,32 +196,33 @@
                 <div class="controls-wrapper">
                     <label>Select Upscale Factor:</label>
                     <div class="scale-options">
-                        <button class="scale-btn" data-scale="2" onclick="setScale(2)">2x Scale</button>
-                        <button class="scale-btn active" data-scale="4" onclick="setScale(4)">4x Scale</button>
-                        <button class="scale-btn" data-scale="8" onclick="setScale(8)">8x Scale</button>
+                        <button class="scale-btn" data-scale="2" onclick="window.setScale(2)">2x Scale</button>
+                        <button class="scale-btn active" data-scale="4" onclick="window.setScale(4)">4x Scale</button>
+                        <button class="scale-btn" data-scale="8" onclick="window.setScale(8)">8x Scale</button>
                     </div>
                 </div>
 
                 <div class="controls-wrapper">
                     <label>Output Format:</label>
                     <div class="scale-options">
-                        <button class="format-btn active" data-format="image/png" onclick="setFormat('image/png')">PNG (Lossless)</button>
-                        <button class="format-btn" data-format="image/jpeg" onclick="setFormat('image/jpeg')">JPG (Smaller)</button>
-                        <button class="format-btn" data-format="image/webp" onclick="setFormat('image/webp')">WEBP (Web)</button>
+                        <button class="format-btn active" data-format="image/png" onclick="window.setFormat('image/png')">PNG (Lossless)</button>
+                        <button class="format-btn" data-format="image/jpeg" onclick="window.setFormat('image/jpeg')">JPG (Smaller)</button>
+                        <button class="format-btn" data-format="image/webp" onclick="window.setFormat('image/webp')">WEBP (Web)</button>
                     </div>
                 </div>
 
                 <div class="action-row">
-                    <button class="btn-action btn-outline" onclick="resetTool()">
+                    <button class="btn-action btn-outline" onclick="window.resetTool()">
                         <i class="fas fa-undo"></i> Upload Another
                     </button>
-                    <button class="btn-action" id="upscaleBtn" onclick="processImage()">
+                    <button class="btn-action" id="upscaleBtn" onclick="window.processImage()">
                         <i class="fas fa-magic"></i> Upscale & Download
                     </button>
                 </div>
 
                 <div class="progress-container" id="progressContainer">
-                    <div style="color: var(--text-muted); font-weight: 600; font-size: 0.9rem;" id="progressText">Processing image locally...</div>
+                    <div style="color: #fff; font-weight: 600; font-size: 0.95rem; margin-bottom: 5px;" id="progressText">Initializing AI Engine...</div>
+                    <div style="color: var(--accent-cyan); font-size: 0.8rem; margin-bottom: 10px;">First use downloads the AI model (~40MB). Subsequent uses are instant.</div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
@@ -224,7 +230,6 @@
             </div>
 
             <canvas id="processingCanvas"></canvas>
-            
         </div>
     </div>
 
@@ -332,14 +337,13 @@
         <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
     </footer>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const icon = document.querySelector('#mobileToggle i');
-            menu.classList.toggle('open');
-            icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
-        }
+    <script type="module">
+        import { pipeline, env, RawImage } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.16.1';
+        
+        // Prevent local model search since we are hosted on GH Pages
+        env.allowLocalModels = false;
 
+        // UI Variables
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const previewArea = document.getElementById('previewArea');
@@ -349,93 +353,39 @@
         const upscaleBtn = document.getElementById('upscaleBtn');
         const progressContainer = document.getElementById('progressContainer');
         const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
 
         let currentImage = null;
         let currentScale = 4;
         let originalFileName = "";
         let currentFormat = "image/png";
         let currentExtension = "png";
+        let upscalerModel = null;
 
-        // Drag & Drop Handlers
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        // Make global functions available to inline HTML onclicks
+        window.toggleMenu = function() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileToggle i');
+            menu.classList.toggle('open');
+            icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
         }
 
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
-        });
-
-        dropZone.addEventListener('drop', handleDrop, false);
-        fileInput.addEventListener('change', handleFileSelect, false);
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            if(files.length > 0) handleFile(files[0]);
-        }
-
-        function handleFileSelect(e) {
-            if(e.target.files.length > 0) handleFile(e.target.files[0]);
-        }
-
-        function handleFile(file) {
-            if (!file.type.match('image.*')) {
-                alert("Please upload an image file (JPG, PNG, WEBP)");
-                return;
-            }
-
-            originalFileName = file.name.split('.')[0];
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                currentImage = new Image();
-                currentImage.onload = function() {
-                    dropZone.style.display = 'none';
-                    previewArea.style.display = 'block';
-                    imagePreview.src = e.target.result;
-                    
-                    origRes.innerText = `${currentImage.width} x ${currentImage.height}`;
-                    updateTargetRes();
-                }
-                currentImage.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-
-        // NEW: Format Selection Logic
-        function setFormat(format) {
+        window.setFormat = function(format) {
             currentFormat = format;
             currentExtension = format.split('/')[1];
             if (currentExtension === 'jpeg') currentExtension = 'jpg';
-
             document.querySelectorAll('.format-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`[data-format="${format}"]`).classList.add('active');
         }
 
-        function setScale(scale) {
+        window.setScale = function(scale) {
             currentScale = scale;
             document.querySelectorAll('.scale-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`[data-scale="${scale}"]`).classList.add('active');
             updateTargetRes();
         }
 
-        function updateTargetRes() {
-            if(currentImage) {
-                targetRes.innerText = `${currentImage.width * currentScale} x ${currentImage.height * currentScale}`;
-            }
-        }
-
-        // NEW: Reset Tool Logic
-        function resetTool() {
+        window.resetTool = function() {
             previewArea.style.display = 'none';
             dropZone.style.display = 'block';
             fileInput.value = '';
@@ -445,54 +395,148 @@
             upscaleBtn.disabled = false;
         }
 
-        function processImage() {
+        function updateTargetRes() {
+            if(currentImage) {
+                targetRes.innerText = `${currentImage.width * currentScale} x ${currentImage.height * currentScale}`;
+            }
+        }
+
+        // Drag & Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+        });
+
+        dropZone.addEventListener('drop', e => {
+            if(e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+        });
+        
+        fileInput.addEventListener('change', e => {
+            if(e.target.files.length > 0) handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (!file.type.match('image.*')) {
+                alert("Please upload an image file (JPG, PNG, WEBP)");
+                return;
+            }
+            originalFileName = file.name.split('.')[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentImage = new Image();
+                currentImage.onload = function() {
+                    dropZone.style.display = 'none';
+                    previewArea.style.display = 'block';
+                    imagePreview.src = e.target.result;
+                    origRes.innerText = `${currentImage.width} x ${currentImage.height}`;
+                    updateTargetRes();
+                }
+                currentImage.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        // HYBRID AI + CANVAS PROCESSING
+        window.processImage = async function() {
             if(!currentImage) return;
 
             upscaleBtn.disabled = true;
             progressContainer.style.display = 'block';
             progressFill.style.width = '10%';
-            
-            setTimeout(() => {
-                progressFill.style.width = '50%';
+
+            try {
+                // Step 1: Load AI Model (Downloads once, caches thereafter)
+                if (!upscalerModel) {
+                    progressText.innerText = "Downloading AI Weights from Hugging Face...";
+                    upscalerModel = await pipeline('image-to-image', 'Xenova/swin2SR-classical-sr-x2-64');
+                }
+
+                progressText.innerText = "AI Processing: Restoring Details...";
+                progressFill.style.width = '40%';
+
+                // Step 2: Use True AI to process the image (Generates missing details)
+                // We use a try/catch here because massive images might crash mobile RAM.
+                let baseImageForCanvas = currentImage;
                 
+                try {
+                    // Convert image to RawImage format required by transformers.js
+                    const rawImage = await RawImage.fromURL(currentImage.src);
+                    
+                    // Run the Deep Learning Model (This is the "True AI" part)
+                    const output = await upscalerModel(rawImage);
+                    
+                    // Convert AI output back to an Image object
+                    const canvasAI = document.createElement('canvas');
+                    canvasAI.width = output.width;
+                    canvasAI.height = output.height;
+                    const ctxAI = canvasAI.getContext('2d');
+                    const imgData = new ImageData(new Uint8ClampedArray(output.data), output.width, output.height);
+                    ctxAI.putImageData(imgData, 0, 0);
+                    
+                    // Use the AI-enhanced image as our new base
+                    const aiImage = new Image();
+                    aiImage.src = canvasAI.toDataURL();
+                    await new Promise(r => aiImage.onload = r);
+                    baseImageForCanvas = aiImage;
+                    
+                } catch(aiError) {
+                    console.log("AI Model skipped (likely memory limit). Falling back to pure Advanced Resampling.", aiError);
+                    progressText.innerText = "Optimizing via Advanced Canvas Resampling...";
+                }
+
+                progressFill.style.width = '80%';
+                progressText.innerText = "Scaling to Final Target Resolution...";
+
+                // Step 3: Scale to user's desired final size (4x or 8x)
                 setTimeout(() => {
-                    executeUpscale();
+                    const canvas = document.getElementById('processingCanvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    const targetWidth = currentImage.width * currentScale;
+                    const targetHeight = currentImage.height * currentScale;
+
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+
+                    // Advanced Canvas Engine to multiply the AI-enhanced base
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+
+                    ctx.drawImage(baseImageForCanvas, 0, 0, targetWidth, targetHeight);
+
+                    progressFill.style.width = '100%';
+                    progressText.innerText = "Complete! Downloading...";
+
+                    // Export
+                    setTimeout(() => {
+                        const link = document.createElement('a');
+                        link.download = `${originalFileName}_Affilore_AI_${currentScale}x.${currentExtension}`;
+                        link.href = canvas.toDataURL(currentFormat, 0.95); 
+                        link.click();
+
+                        setTimeout(() => {
+                            upscaleBtn.disabled = false;
+                            progressContainer.style.display = 'none';
+                            progressFill.style.width = '0%';
+                        }, 1000);
+                    }, 500);
                 }, 100);
-            }, 100);
-        }
 
-        function executeUpscale() {
-            const canvas = document.getElementById('processingCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            const targetWidth = currentImage.width * currentScale;
-            const targetHeight = currentImage.height * currentScale;
-
-            canvas.width = targetWidth;
-            canvas.height = targetHeight;
-
-            // Advanced Resampling
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = 'high';
-
-            ctx.drawImage(currentImage, 0, 0, targetWidth, targetHeight);
-
-            progressFill.style.width = '100%';
-
-            setTimeout(() => {
-                const link = document.createElement('a');
-                // NEW: Use the selected format and extension
-                link.download = `${originalFileName}_Affilore_${currentScale}x.${currentExtension}`;
-                link.href = canvas.toDataURL(currentFormat, 0.95); 
-                link.click();
-
-                setTimeout(() => {
-                    upscaleBtn.disabled = false;
-                    progressContainer.style.display = 'none';
-                    progressFill.style.width = '0%';
-                }, 1000);
-            }, 500);
+            } catch (error) {
+                alert("An error occurred during AI processing. Please try a smaller image.");
+                upscaleBtn.disabled = false;
+                progressContainer.style.display = 'none';
+                console.error(error);
+            }
         }
     </script>
 </body>
 </html>
+
