@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dynamic Mortgage & Amortization Calculator | Affilore</title>
     <meta name="description" content="Calculate your true mortgage costs. View a dynamic amortization schedule, visualize principal vs. interest, and download your private PDF report.">
 
@@ -79,7 +79,9 @@
         .input-group input.has-suffix { padding-right: 40px; }
         .input-group input:focus, .input-group select:focus { border-color: var(--accent-cyan); box-shadow: 0 0 10px var(--cyan-glow); }
 
-        .two-col { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; }
+        /* Grids */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .dp-row { grid-template-columns: 2fr 1fr; }
 
         /* Output Results */
         .results-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 20px;}
@@ -128,7 +130,7 @@
         .footer-links a:hover { color: #ffd600; }
 
         /* =========================================
-           MOBILE FIXES - MORTGAGE CALCULATOR
+           AGGRESSIVE MOBILE UI FIXES 
            ========================================= */
         @media (max-width: 900px) {
             .app-layout { grid-template-columns: 1fr; }
@@ -138,28 +140,37 @@
             .nav-links, .desktop-btn { display: none !important; }
             .mobile-menu-btn { display: block !important; }
             
-            /* Tighten up spacing to reduce scrolling */
-            .tool-container { margin-top: 100px; padding: 0 15px; }
-            .panel { padding: 20px 15px; border-radius: 15px; }
+            /* Add side margins and push content down past the header */
+            .tool-container { margin-top: 90px; padding: 0 15px; width: 100%; max-width: 100vw; overflow-x: hidden; }
+            .panel { padding: 20px 15px; border-radius: 12px; }
             .panel h3 { font-size: 1.1rem; margin-bottom: 15px; padding-bottom: 10px; }
             
-            /* Slim down the massive input fields */
-            .input-group { margin-bottom: 15px; }
-            .input-group label { font-size: 0.85rem; margin-bottom: 5px; }
-            .input-group input, .input-group select { padding: 10px 15px; font-size: 1rem; }
+            /* FORCED SIDE-BY-SIDE GRIDS */
+            .two-col { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+            .dp-row { display: grid !important; grid-template-columns: 1.5fr 1fr !important; gap: 10px !important; }
             
-            /* Keep related fields side-by-side on mobile! */
-            .two-col { grid-template-columns: 2fr 1fr; gap: 10px; }
+            /* Slim down the inputs */
+            .input-group { margin-bottom: 12px; }
+            .input-group label { font-size: 0.85rem; margin-bottom: 5px; }
+            .input-group input, .input-group select { padding: 12px 10px; font-size: 1rem; }
+            .input-group input.has-prefix { padding-left: 28px; }
+            .input-group input.has-suffix { padding-right: 32px; }
+            .input-prefix { left: 10px; font-size: 1rem; }
+            .input-suffix { right: 10px; font-size: 1rem; }
             
             /* Compress the results area */
-            .results-wrapper { grid-template-columns: 1fr; gap: 10px; }
-            .result-main { grid-column: span 1; padding: 20px 15px; }
+            .results-wrapper { display: flex; flex-direction: column; gap: 10px; }
+            .result-main { padding: 20px 15px; }
+            .result-card { padding: 15px; }
             .result-value-main { font-size: 2.2rem; }
             .result-value { font-size: 1.4rem; }
             
-            /* Make the table fit cleanly */
+            /* Fix the chart and table */
+            .chart-container { height: 200px; margin-top: 10px; }
+            .btn-pdf { width: 100%; justify-content: center; }
+            .table-header { flex-direction: column; align-items: flex-start; }
             .table-responsive { max-height: 400px; }
-            th, td { padding: 10px; font-size: 0.85rem; }
+            th, td { padding: 10px 5px; font-size: 0.85rem; }
         }
     </style>
 </head>
@@ -211,7 +222,7 @@
                     </div>
                 </div>
 
-                <div class="two-col">
+                <div class="two-col dp-row">
                     <div class="input-group">
                         <label>Down Payment</label>
                         <div class="input-wrapper">
@@ -523,7 +534,6 @@
     </footer>
 
     <script>
-        // Menu Toggle
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
             const icon = document.querySelector('#mobileToggle i');
@@ -531,15 +541,12 @@
             icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
         }
 
-        // Formatters
         const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
         const currencyExact = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        // Global State for PDF Export
         let pdfDataRows = [];
         let globalSummary = {};
 
-        // Sync Down Payment Inputs
         function syncDownPayment(source) {
             const price = parseFloat(document.getElementById('in-price').value) || 0;
             if (price === 0) return;
@@ -556,7 +563,6 @@
             calculate();
         }
 
-        // Chart Init
         let mortgageChart = null;
 
         function initChart() {
@@ -603,7 +609,6 @@
             const monthlyRate = (annualRate / 100) / 12;
             const totalPayments = years * 12;
 
-            // Mortgage Formula
             let monthlyPayment = 0;
             if (monthlyRate > 0) {
                 monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / (Math.pow(1 + monthlyRate, totalPayments) - 1);
@@ -614,12 +619,10 @@
             const totalAmountPaid = monthlyPayment * totalPayments;
             const totalInterest = totalAmountPaid - principal;
 
-            // Update UI Summary
             document.getElementById('out-monthly').innerText = currency.format(monthlyPayment);
             document.getElementById('out-principal').innerText = currency.format(principal);
             document.getElementById('out-interest').innerText = currency.format(totalInterest);
 
-            // Save for PDF
             globalSummary = {
                 price: currency.format(price),
                 loanAmount: currency.format(principal),
@@ -629,11 +632,9 @@
                 totalInterest: currency.format(totalInterest)
             };
 
-            // Update Chart
             mortgageChart.data.datasets[0].data = [principal, totalInterest];
             mortgageChart.update();
 
-            // Generate Amortization Table
             generateAmortization(principal, monthlyPayment, monthlyRate, totalPayments);
         }
 
@@ -662,9 +663,8 @@
                 yearPrincipal += principalPayment;
                 balance -= principalPayment;
 
-                if (balance < 0) balance = 0; // Handle rounding
+                if (balance < 0) balance = 0;
 
-                // Only log Annual Summaries to keep UI clean
                 if (month % 12 === 0 || month === totalPayments) {
                     const year = month / 12;
                     
@@ -677,7 +677,6 @@
                     `;
                     tbody.appendChild(tr);
 
-                    // Push to PDF array
                     pdfDataRows.push([
                         `Year ${year}`, 
                         currencyExact.format(yearInterest), 
@@ -685,7 +684,6 @@
                         currencyExact.format(balance)
                     ]);
 
-                    // Reset yearly accumulators
                     yearInterest = 0;
                     yearPrincipal = 0;
                 }
@@ -701,7 +699,6 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Header
             doc.setFontSize(22);
             doc.setTextColor(40, 40, 40);
             doc.text("Amortization Schedule", 14, 20);
@@ -710,7 +707,6 @@
             doc.setTextColor(100, 100, 100);
             doc.text("Generated by Affilore Private Calculator", 14, 28);
 
-            // Summary Box
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
             doc.text(`Loan Amount: ${globalSummary.loanAmount}`, 14, 40);
@@ -718,12 +714,11 @@
             doc.text(`Loan Term: ${globalSummary.term}`, 14, 56);
             
             doc.setFontSize(14);
-            doc.setTextColor(0, 120, 200); // Blue emphasis
+            doc.setTextColor(0, 120, 200);
             doc.text(`Monthly Payment: ${globalSummary.monthlyPayment}`, 100, 40);
-            doc.setTextColor(200, 50, 50); // Red emphasis
+            doc.setTextColor(200, 50, 50);
             doc.text(`Total Interest: ${globalSummary.totalInterest}`, 100, 48);
 
-            // Table
             doc.autoTable({
                 startY: 65,
                 head: [['Period', 'Interest Paid', 'Principal Paid', 'Remaining Balance']],
@@ -733,8 +728,8 @@
                 styles: { fontSize: 10, cellPadding: 5 },
                 columnStyles: {
                     0: { halign: 'center' },
-                    1: { halign: 'right', textColor: [200, 50, 50] }, // Red for interest
-                    2: { halign: 'right', textColor: [30, 130, 76] }, // Green for principal
+                    1: { halign: 'right', textColor: [200, 50, 50] },
+                    2: { halign: 'right', textColor: [30, 130, 76] },
                     3: { halign: 'right' }
                 }
             });
@@ -742,7 +737,6 @@
             doc.save("Affilore_Mortgage_Schedule.pdf");
         }
 
-        // Initialize
         window.onload = function() {
             initChart();
             calculate();
