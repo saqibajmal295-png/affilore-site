@@ -1,1 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Freelance Hourly to Salary Converter | Affilore</title>
+    <meta name="description" content="Stop using the 40-hour myth. Calculate your true take-home salary based on real billable hours, self-employment taxes, and business overhead. 100% private.">
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YRKMHHSYBC');
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #08080a; --text-main: #f0f0f5; --text-muted: #9ba1a6;
+            --accent-gold: #ffd600; --accent-glow: rgba(255, 214, 0, 0.4);
+            --accent-green: #00e676; --green-glow: rgba(0, 230, 118, 0.4);
+            --accent-red: #ff3366;
+            --card-bg: rgba(20, 20, 25, 0.7); --border-color: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(15px);
+        }
+
+        /* GLOBAL RESET TO PREVENT MOBILE BLOWOUTS */
+        html, body { max-width: 100vw; overflow-x: hidden; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: radial-gradient(circle at top, #111500 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-gold) 1px, transparent 1px); background-size: 50px 50px; opacity: 0.03; z-index: -2; pointer-events: none; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+
+        /* HEADER */
+        header { position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px; }
+        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-size: 1rem; font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links a:hover { background: var(--accent-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 8px var(--accent-glow); }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; font-size: 0.95rem; transition: all 0.3s ease; display: inline-block; -webkit-text-fill-color: #000; }
+        .header-btn:hover { box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.05); }
+        .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--accent-gold); font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none; }
+        
+        .mobile-overlay { position: fixed; top: 70px; left: 0; width: 100%; height: 0; background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur); overflow: hidden; transition: height 0.3s ease; z-index: 999; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .mobile-overlay.open { height: 360px; padding-top: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .mobile-overlay a { color: var(--text-main); font-size: 1.2rem; font-weight: 600; text-decoration: none; margin-bottom: 25px; transition: color 0.3s; opacity: 0; }
+        .mobile-overlay.open a { opacity: 1; transition: opacity 0.5s ease 0.1s; }
+        .mobile-overlay a:hover { color: var(--accent-gold); }
+        .mobile-overlay .mobile-custom-btn { background: var(--accent-gold); color: #000; padding: 12px 35px; border-radius: 25px; font-weight: 800; margin-top: 10px; -webkit-text-fill-color: #000; }
+
+        /* UI */
+        .tool-container { max-width: 1300px; margin: 120px auto 40px; padding: 0 20px; }
+        .tool-header { text-align: center; margin-bottom: 40px; }
+        .tool-header h1 { font-size: clamp(2rem, 5vw, 3.5rem); color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2;}
+        .tool-header p { color: var(--text-muted); font-size: clamp(1rem, 2vw, 1.2rem); margin-top: 10px;}
+
+        .app-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;}
+
+        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; backdrop-filter: var(--glass-blur); display: flex; flex-direction: column;}
+        .panel h3 { color: var(--accent-gold); margin-bottom: 25px; font-size: 1.3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+        .panel h3 i { color: var(--accent-green); }
+
+        /* Form Inputs */
+        .input-group { margin-bottom: 20px; width: 100%; }
+        .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.95rem; font-weight: 600;}
+        .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
+        .input-prefix { position: absolute; left: 15px; color: var(--accent-gold); font-weight: bold; font-size: 1.1rem;}
+        .input-suffix { position: absolute; right: 15px; color: var(--text-muted); font-weight: bold; }
+        
+        .input-group input { width: 100%; padding: 14px 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.5); color: #fff; outline: none; transition: 0.3s; font-size: 1.1rem; font-family: 'Fira Code', monospace; font-weight: 600;}
+        .input-group input.has-prefix { padding-left: 35px; }
+        .input-group input.has-suffix { padding-right: 45px; }
+        .input-group input:focus { border-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-glow); }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+
+        .alert-box { background: rgba(255, 51, 102, 0.05); border: 1px solid rgba(255, 51, 102, 0.3); padding: 15px; border-radius: 10px; color: var(--text-muted); font-size: 0.85rem; margin-top: -5px; margin-bottom: 20px; line-height: 1.5; }
+        .alert-box strong { color: #ff3366; }
+
+        /* Output Results */
+        .results-wrapper { display: flex; flex-direction: column; gap: 15px;}
+        .result-card { background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center;}
+        
+        .result-card.primary { background: linear-gradient(90deg, rgba(0, 230, 118, 0.1) 0%, transparent 100%); border-color: rgba(0, 230, 118, 0.3); flex-direction: column; align-items: flex-start; padding: 25px;}
+        .result-card.secondary { background: linear-gradient(90deg, rgba(255, 214, 0, 0.05) 0%, transparent 100%); border-color: rgba(255, 214, 0, 0.2); }
+        
+        .result-label { color: var(--text-muted); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+        .result-value { color: #fff; font-size: 1.5rem; font-family: 'Fira Code', monospace; font-weight: 700;}
+        
+        .primary .result-label { margin-bottom: 5px; color: var(--accent-green); }
+        .primary .result-value { font-size: 3rem; color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.2); line-height: 1;}
+        
+        .expense-val { color: var(--accent-red); }
+
+        .chart-container { width: 100%; height: 220px; position: relative; display: flex; justify-content: center; margin-top: 20px;}
+
+        /* Security Badge */
+        .security-badge { display: flex; align-items: center; gap: 10px; background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); color: var(--accent-green); padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-top: 20px; line-height: 1.4;}
+
+        /* SEO Article */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); margin-top: 40px;}
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h1, .article-container h2 { color: var(--accent-gold); margin-top: 40px; margin-bottom: 20px; line-height: 1.3;}
+        .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
+        .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
+        .article-container li { margin-bottom: 10px; }
+        .article-container hr { border: none; border-top: 1px solid var(--border-color); margin: 40px 0; }
+        .article-container strong { color: #fff; }
+
+        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
+        .footer-links a:hover { color: #ffd600; }
+
+        /* =========================================
+           ULTIMATE MOBILE UI FIX - 100% STACKED
+           ========================================= */
+        @media (max-width: 900px) {
+            .app-layout { display: flex; flex-direction: column; }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links, .desktop-btn { display: none !important; }
+            .mobile-menu-btn { display: block !important; }
+            
+            .tool-container { margin-top: 90px; padding: 0 10px; width: 100%; box-sizing: border-box; }
+            .panel { width: 100%; max-width: 100%; padding: 20px 15px; border-radius: 12px; box-sizing: border-box; }
+            .panel h3 { font-size: 1.1rem; margin-bottom: 12px; padding-bottom: 8px; }
+            
+            /* NUKE THE GRID - Stack everything vertically */
+            .two-col { display: flex !important; flex-direction: column !important; gap: 0 !important; width: 100%; }
+            
+            /* Slim inputs */
+            .input-group { margin-bottom: 12px; width: 100%; }
+            .input-group label { font-size: 0.85rem; margin-bottom: 5px; }
+            .input-group input { width: 100%; padding: 10px; font-size: 1rem; box-sizing: border-box; }
+            .input-group input.has-prefix { padding-left: 28px; }
+            .input-group input.has-suffix { padding-right: 35px; }
+            .input-prefix { left: 10px; font-size: 1rem; }
+            .input-suffix { right: 10px; font-size: 0.9rem; }
+            
+            /* Clean Results */
+            .results-wrapper { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+            .result-card { padding: 15px; flex-direction: column; align-items: flex-start; gap: 5px; width: 100%; box-sizing: border-box;}
+            .primary .result-value { font-size: 2.2rem; } 
+            .result-value { font-size: 1.3rem; }
+            
+            /* Chart */
+            .chart-container { height: 180px; margin-top: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <header>
+        <a href="../../index.html" class="logo">
+            <img src="../../logo.jpg" alt="Affilore Logo" class="logo-img">
+            Affilore
+        </a>
+        <nav class="nav-links">
+            <a href="../../index.html">Home</a>
+            <a href="../../index.html#categories">Categories</a>
+            <a href="../../about.html">About Us</a>
+        </nav>
+        <div class="header-right">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn desktop-btn">Custom Tool</a>
+            <button class="mobile-menu-btn" id="mobileToggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-overlay" id="mobileMenu">
+        <a href="../../index.html" onclick="toggleMenu()">Home</a>
+        <a href="../../index.html#categories" onclick="toggleMenu()">Categories</a>
+        <a href="../../about.html" onclick="toggleMenu()">About Us</a>
+        <a href="../../contact.html" onclick="toggleMenu()">Contact Us</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="mobile-custom-btn">Custom Tool</a>
+    </div>
+
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>Freelance Hourly to Salary Converter</h1>
+            <p>Stop using the 40-hour myth. Calculate your true take-home pay based on reality.</p>
+        </div>
+
+        <div class="app-layout">
+            <div class="panel">
+                <h3><i class="fas fa-sliders-h"></i> Freelance Metrics</h3>
+                
+                <div class="input-group">
+                    <label>Your Hourly Rate</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="in-rate" class="has-prefix" value="50" min="1" oninput="calculateSalary()">
+                    </div>
+                </div>
+
+                <div class="alert-box">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>The 40-Hour Myth:</strong> Successful freelancers only bill 20-25 hours per week. The rest is unbilled admin, sales, and marketing.
+                </div>
+
+                <div class="two-col">
+                    <div class="input-group">
+                        <label>Billable Hrs / Week</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="in-hrs" class="has-suffix" value="25" min="1" max="80" oninput="calculateSalary()">
+                            <span class="input-suffix">hrs</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Weeks Worked / Year</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="in-wks" class="has-suffix" value="48" min="1" max="52" oninput="calculateSalary()">
+                            <span class="input-suffix">wks</span>
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">(Accounts for sick days/vacation)</div>
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 10px 0 25px 0;">
+
+                <div class="input-group">
+                    <label>Monthly Biz Expenses (Software, Ads, Insurance)</label>
+                    <div class="input-wrapper">
+                        <span class="input-prefix">$</span>
+                        <input type="number" id="in-exp" class="has-prefix" value="600" min="0" oninput="calculateSalary()">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Estimated Tax Rate (Income + Self-Employment)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="in-tax" class="has-suffix" value="30" min="0" max="100" oninput="calculateSalary()">
+                        <span class="input-suffix">%</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel">
+                <h3><i class="fas fa-chart-pie"></i> The Reality Check</h3>
+                
+                <div class="results-wrapper">
+                    
+                    <div class="result-card secondary">
+                        <div class="result-label">Gross Annual Revenue</div>
+                        <div class="result-value" style="color: var(--accent-gold);" id="out-gross">$0</div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">Annual Business Expenses</div>
+                        <div class="result-value expense-val" id="out-exp">-$0</div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">Estimated Annual Taxes</div>
+                        <div class="result-value expense-val" id="out-tax">-$0</div>
+                    </div>
+
+                    <div class="result-card primary">
+                        <div class="result-label">True Take-Home Salary</div>
+                        <div class="result-value" id="out-net">$0</div>
+                        <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">What actually hits your personal bank account</div>
+                    </div>
+                    
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="salaryChart"></canvas>
+                </div>
+
+                <div class="security-badge">
+                    <i class="fas fa-lock" style="font-size: 1.5rem;"></i>
+                    <span><strong>100% Private:</strong> We do not track your income. This calculation happens locally on your device.</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="article-wrap">
+        <div class="article-container">
+            <h1>The Freelancer's Reality Check: Converting Hourly Rates to True Take-Home Salary</h1>
+
+            <p>As a Senior Financial Advisor who has spent over a decade consulting independent contractors, boutique agency owners, and high-income freelancers, I frequently encounter a disastrous mathematical illusion. It is the trap of the direct hourly conversion. A talented professional leaves a corporate job paying $40 an hour, starts a freelance business, and sets their freelance rate at $50 an hour, feeling incredibly accomplished. They multiply $50 by 40 hours a week, multiply that by 52 weeks a year, and eagerly anticipate a six-figure gross income of $104,000.</p>
+
+            <p>Fast forward eight months: they are completely exhausted, their business checking account is dangerously low, they are severely behind on their quarterly estimated taxes, and their actual, true take-home pay is closer to $38,000. They are working harder than ever but surviving on less.</p>
+
+            <p>Welcome to the freelancer's reality check. The transition from a traditional W-2 employee to an independent freelancer is not merely a change in tax forms; it is a fundamental shift in microeconomics. When you become a freelancer, you cease to be just a worker; you become an entire corporate infrastructure. You are simultaneously the CEO, the marketing department, the sales team, the human resources director, and the IT support desk. Every single corporate expense that was previously invisible to you is now deducted directly from your top-line revenue. In this comprehensive guide, we will dismantle the dangerous myths of freelance pricing, expose the hidden costs of independence, establish a bulletproof pricing framework, and explain why you must fiercely protect your financial data from predatory online calculators.</p>
+
+            <h2>The Dangerous Myth of the "40-Hour Billable Week"</h2>
+
+            <p>The most fatal miscalculation new freelancers make is assuming they can simply replicate the standard 40-hour corporate workweek in billable hours. In a traditional job, you are paid for 40 hours of presence. You are paid while you attend pointless meetings, while you chat at the water cooler, while you organize your desk, and while you troubleshoot a jammed printer. The company absorbs the cost of your non-productive time.</p>
+
+            <p>In the freelance economy, a client only pays for direct, highly productive output. They pay for the logo design, the lines of code, the drafted contract, or the polished article. They do not pay for the time you spend running your business.</p>
+
+            <h3>The Reality of Freelance Utilization Rates</h3>
+
+            <p>In the consulting world, we use a metric called the "Utilization Rate"—the percentage of your total working hours that are actually billed to a client. For a highly successful, established freelancer, a realistic utilization rate is between 50% and 60%. This means that out of a 40-hour workweek, you will only invoice for 20 to 25 hours.</p>
+
+            <p>Where do the other 15 to 20 hours go? They are consumed by the unavoidable administrative burdens of running a profitable enterprise:</p>
+
+            <ul>
+                <li><strong>Marketing and Lead Generation:</strong> Writing case studies, updating your portfolio, posting on LinkedIn, attending networking events, and maintaining your website to ensure a steady pipeline of future work.</li>
+                <li><strong>Sales and Proposals:</strong> Taking discovery calls with prospects, researching their business, writing custom proposals, negotiating scope, and drafting legally binding contracts. (Remember, you only get paid if the prospect signs; the hours spent pitching are entirely uncompensated).</li>
+                <li><strong>Administrative Overhead:</strong> Generating invoices, chasing down late payments from delinquent clients, reconciling your accounting software, organizing receipts, and interfacing with your CPA.</li>
+                <li><strong>Continuing Education:</strong> The market moves rapidly. You must dedicate unbilled hours to learning new software, understanding new industry regulations, or upgrading your core skills just to remain competitive.</li>
+            </ul>
+
+            <p>If you base your financial survival on billing 40 hours a week, you will either fail to hit your revenue targets, or you will be forced to work 70-hour weeks (40 billable + 30 administrative) until you suffer severe professional burnout. You must price your 20-25 billable hours high enough to subsidize the 15-20 hours of necessary, unbilled business management.</p>
+
+            <h2>The Hidden Costs of Independence: What Eats Your Hourly Rate</h2>
+
+            <p>Beyond the myth of the 40-hour billable week lies the stark reality of corporate overhead. When you leave a traditional employer, you leave behind an invisible safety net of benefits and employer-subsidized costs. These expenses do not disappear; they simply transfer directly onto your shoulders.</p>
+
+            <h3>The Brutal Reality of Self-Employment Taxes</h3>
+
+            <p>In the United States (and similarly in many other jurisdictions), traditional employees only see half of their payroll taxes deducted from their paycheck. The employer quietly pays the other half. For example, the Federal Insurance Contributions Act (FICA) tax, which funds Social Security and Medicare, totals 15.3%. A standard employee pays 7.65%, and the employer pays 7.65%. </p>
+
+            <p>When you are a freelancer, the IRS considers you to be both the employee and the employer. Therefore, you are responsible for the entire 15.3% Self-Employment Tax. This is calculated <em>on top</em> of your standard federal, state, and local income taxes. If you do not bake this massive tax liability into your hourly rate, you will face a devastating tax bill come April.</p>
+
+            <h3>Health Insurance, Retirement, and Paid Time Off</h3>
+
+            <p>Corporate compensation packages are usually worth 30% to 40% more than the base salary alone due to benefits. As a freelancer, you must fund these entirely out of pocket.</p>
+
+            <ul>
+                <li><strong>Health Insurance:</strong> Purchasing a private health insurance plan on the open market can cost a single individual anywhere from $400 to $800 a month, and family plans can easily exceed $1,500 a month, often with staggeringly high deductibles.</li>
+                <li><strong>Retirement Matching:</strong> You no longer have a corporate 401(k) match. If you want to retire, you must independently fund a Solo 401(k) or SEP IRA, removing further liquidity from your monthly cash flow.</li>
+                <li><strong>Paid Time Off (PTO) and Sick Leave:</strong> If you take a two-week vacation, your income drops to zero. If you catch the flu and cannot work for five days, your income drops to zero. A true freelance rate must be inflated to cover 52 weeks of living expenses using only 46 to 48 weeks of actual revenue generation.</li>
+            </ul>
+
+            <h3>Software, Hardware, and Operational Overhead</h3>
+
+            <p>Every tool required to do your job is now a line-item expense. This includes your laptop depreciation, specialized industry software (Adobe Creative Cloud, IDEs, legal databases), CRM systems, web hosting, high-speed internet, legal liability insurance, and the physical space you use as a home office. These subscriptions bleed your gross revenue month after month.</p>
+
+            <h2>The "Rule of Thirds": A Bulletproof Framework for Freelance Pricing</h2>
+
+            <p>To survive the transition from employee to business owner, you must radically shift how you view your incoming revenue. One hundred dollars deposited into your business checking account is not one hundred dollars of personal wealth. To ensure financial stability, I advise all my clients to rigorously implement the <strong>Rule of Thirds</strong>. </p>
+
+            <p>Whenever an invoice is paid, that gross revenue must be mentally (and ideally, physically) divided into three distinct buckets:</p>
+
+            <ul>
+                <li><strong>One-Third for Taxes:</strong> Immediately transfer 30% to 35% of every payment into a separate, high-yield savings account dedicated solely to the government. This covers your federal income tax, state income tax, and the heavy 15.3% self-employment tax. If you have money left over after paying your quarterly estimates, consider it a bonus—but never treat this money as your own.</li>
+                <li><strong>One-Third for Business Expenses:</strong> This bucket funds the machinery of your business. It pays for your health insurance premiums, your software subscriptions, your new laptop, your marketing efforts, and crucially, it builds your business emergency fund to cover periods of illness or client drought.</li>
+                <li><strong>One-Third for True Take-Home Pay:</strong> This is your actual "salary." This is the money you transfer to your personal checking account to pay your residential rent, buy groceries, fund your personal life, and invest in your personal future. By acknowledging that your hourly rate must subsidize these three buckets, you protect yourself from the catastrophic trap of underpricing.</li>
+            </ul>
+
+            <h2>The Privacy Threat: Why Client-Side Calculators Are Mandatory</h2>
+
+            <p>As you begin to model your freelance pricing, you will likely turn to online "Hourly to Salary" calculators. Be incredibly wary. The vast majority of these tools provided by major job boards and financial aggregators are designed as data-harvesting funnels.</p>
+
+            <p>When you type your desired hourly rate, your anticipated expenses, and your tax bracket into a cloud-based calculator, you are handing over a highly precise portrait of your financial aspirations and economic standing. This data is routinely logged, associated with your browser fingerprint or IP address, and sold to third-party marketing firms who will aggressively target you with ads for high-interest business loans, expensive tax prep software, or dubious "freelance mastermind" courses.</p>
+
+            <p>Financial modelling requires absolute privacy. The only secure way to calculate your true take-home pay is by using a <strong>local, client-side calculator</strong>. A client-side tool processes all the mathematics directly within your own web browser using JavaScript. Your target income, your business expenses, and your tax estimates are never transmitted to a remote server. The moment you close the tab, your financial data vanishes forever, keeping your business strategies secure and your peace of mind intact.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="../../about.html">About Us</a>
+            <a href="../../contact.html">Contact Us</a>
+            <a href="../../privacy.html">Privacy Policy</a>
+            <a href="../../terms.html">Terms & Conditions</a>
+        </div>
+        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileToggle i');
+            menu.classList.toggle('open');
+            icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        }
+
+        const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+        let salaryChart = null;
+
+        function initChart() {
+            const ctx = document.getElementById('salaryChart').getContext('2d');
+            Chart.defaults.color = '#9ba1a6';
+            Chart.defaults.font.family = 'Outfit';
+            
+            salaryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Take-Home Pay', 'Taxes', 'Business Expenses'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: ['#00e676', '#ff3366', '#ffd600'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'right', labels: { usePointStyle: true, padding: 15, font: {size: 13} } },
+                        tooltip: { backgroundColor: 'rgba(0,0,0,0.9)', padding: 12, bodyFont: { size: 14, family: 'Fira Code' } }
+                    }
+                }
+            });
+        }
+
+        function calculateSalary() {
+            // Inputs
+            const rate = parseFloat(document.getElementById('in-rate').value) || 0;
+            const hrs = parseFloat(document.getElementById('in-hrs').value) || 0;
+            const wks = parseFloat(document.getElementById('in-wks').value) || 0;
+            const monthlyExp = parseFloat(document.getElementById('in-exp').value) || 0;
+            const taxRate = parseFloat(document.getElementById('in-tax').value) / 100 || 0;
+
+            // Math
+            const grossAnnual = rate * hrs * wks;
+            const annualExp = monthlyExp * 12;
+            
+            let taxableIncome = grossAnnual - annualExp;
+            if (taxableIncome < 0) taxableIncome = 0;
+
+            const annualTax = taxableIncome * taxRate;
+            let netTakeHome = grossAnnual - annualExp - annualTax;
+            if (netTakeHome < 0) netTakeHome = 0;
+
+            // Update UI
+            document.getElementById('out-gross').innerText = currency.format(grossAnnual);
+            document.getElementById('out-exp').innerText = "-" + currency.format(annualExp);
+            document.getElementById('out-tax').innerText = "-" + currency.format(annualTax);
+            document.getElementById('out-net').innerText = currency.format(netTakeHome);
+
+            // Update Chart
+            if(salaryChart) {
+                salaryChart.data.datasets[0].data = [netTakeHome, annualTax, annualExp];
+                salaryChart.update();
+            }
+        }
+
+        window.onload = function() {
+            initChart();
+            calculateSalary();
+        };
+    </script>
+</body>
+</html>
