@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affilore - Premium SEO & Micro-SaaS Tools</title>
     <meta name="description" content="Affilore provides high search volume, premium, and free SEO tools, calculators, and micro-SaaS utilities.">
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -12,8 +13,10 @@
         gtag('js', new Date());
         gtag('config', 'G-YRKMHHSYBC');
     </script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
             --bg-color: #08080a;
@@ -164,7 +167,7 @@
         .tool-card-img {
             width: 100%;
             height: 200px;
-            object-fit: cover; /* Forces image to crop nicely instead of stretching */
+            object-fit: cover;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
@@ -186,7 +189,7 @@
             padding: 25px;
             display: flex;
             flex-direction: column;
-            flex-grow: 1; /* Pushes the button to the bottom */
+            flex-grow: 1; 
         }
 
         .tool-card-body h3 {
@@ -197,12 +200,11 @@
         }
 
         .btn-use {
-            margin-top: auto; /* Aligns buttons at the bottom of the cards */
+            margin-top: auto; 
             display: block;
             width: 100%;
             text-align: center;
             background: transparent;
-            color: var(--text-main);
             border: 1px solid var(--accent-gold);
             color: var(--accent-gold);
             padding: 14px 20px;
@@ -282,17 +284,9 @@
             .main-search { flex-direction: column; gap: 10px; }
             .main-search button { position: static; width: 100%; border-radius: 30px; }
 
-            /* Tool Card Mobile Adjustments */
-            .tools-grid {
-                grid-template-columns: 1fr; /* Forces exactly 1 column on mobile */
-                gap: 20px;
-            }
-            .tool-card-img {
-                height: 220px; /* Taller on mobile to look cinematic */
-            }
-            .tool-card-body {
-                padding: 20px;
-            }
+            .tools-grid { grid-template-columns: 1fr; gap: 20px; }
+            .tool-card-img { height: 220px; }
+            .tool-card-body { padding: 20px; }
         }
     </style>
 </head>
@@ -307,9 +301,9 @@
         </a>
         <nav class="nav-links">
             <a href="/">Home</a>
-            <a href="#categories">Categories</a>
-            <a href="about">About Us</a>
-            <a href="contact">Contact Us</a>
+            <a href="/#categories">Categories</a>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
         </nav>
         <div class="header-right">
             <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn desktop-btn">Custom Tool</a>
@@ -321,9 +315,9 @@
 
     <div class="mobile-overlay" id="mobileMenu">
         <a href="/" onclick="toggleMenu()">Home</a>
-        <a href="#categories" onclick="toggleMenu()">Categories</a>
-        <a href="about" onclick="toggleMenu()">About Us</a>
-        <a href="contact" onclick="toggleMenu()">Contact Us</a>
+        <a href="/#categories" onclick="toggleMenu()">Categories</a>
+        <a href="/about" onclick="toggleMenu()">About Us</a>
+        <a href="/contact" onclick="toggleMenu()">Contact Us</a>
         <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="mobile-custom-btn">Custom Tool</a>
     </div>
 
@@ -373,13 +367,13 @@
                 </div>
             </div>
             <div class="tool-card">
-    <img src="seo/schema-generator/schema-thumb.jpeg" alt="JSON-LD Schema Generator" class="tool-card-img">
-    <div class="badge" style="color: #38bdf8; border-color: var(--blue-glow);">SEO & Marketing</div>
-    <div class="tool-card-body">
-        <h3>Enterprise Schema Generator</h3>
-        <a href="seo/schema-generator/" class="btn-use">Launch Tool →</a>
-    </div>
-</div>
+                <img src="seo/schema-generator/schema-thumb.jpeg" alt="JSON-LD Schema Generator" class="tool-card-img">
+                <div class="badge" style="color: #38bdf8; border-color: var(--blue-glow);">SEO & Marketing</div>
+                <div class="tool-card-body">
+                    <h3>Enterprise Schema Generator</h3>
+                    <a href="seo/schema-generator/" class="btn-use">Launch Tool →</a>
+                </div>
+            </div>
             <div class="tool-card" data-index="6">
                 <img src="health/tdee-calculator/tdee-thumb.jpeg" alt="Advanced TDEE Calculator" class="tool-card-img">
                 <div class="badge" style="color: #00e676; border-color: rgba(0, 230, 118, 0.4);">Health & Fitness</div>
@@ -463,8 +457,6 @@
                 </div>
             </div>
             
-           
-            
             <div class="tool-card" data-index="5">
                 <img src="dev/api-monitor/api-thumbnail.jpeg" alt="API Monitoring Dashboard" class="tool-card-img">
                 <div class="badge">Dev Tools</div>
@@ -532,7 +524,7 @@
                 <div class="category-icon">🚀</div>
                 <h3>SEO & Marketing Tools</h3>
             </a>
-            <a href="category-health.html" class="category-card">
+            <a href="category-health" class="category-card">
                 <div class="category-icon" style="color: #00e676;">🧬</div>
                 <h3>Health & Fitness</h3>
             </a>
@@ -540,7 +532,7 @@
                 <div class="category-icon">💰</div>
                 <h3>Financial Calculators</h3>
             </a>
-            <a href="category-business.html" class="category-card">
+            <a href="category-business" class="category-card">
                 <div class="category-icon" style="color: #00f0ff;">💼</div>
                 <h3>Business & Operations</h3>
             </a>
@@ -586,17 +578,17 @@
                 <h4>Navigation</h4>
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="about">About Us</a></li>
-                    <li><a href="contact">Contact Us</a></li>
-                    <li><a href="#categories">All Categories</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact Us</a></li>
+                    <li><a href="/#categories">All Categories</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>Legal</h4>
                 <ul>
-                    <li><a href="terms">Terms & Conditions</a></li>
-                    <li><a href="privacy">Privacy Policy</a></li>
-                    <li><a href="cookies">Cookie Policy</a></li>
+                    <li><a href="/terms">Terms & Conditions</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/cookies">Cookie Policy</a></li>
                 </ul>
             </div>
             <div class="footer-col">
