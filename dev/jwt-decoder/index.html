@@ -33,7 +33,6 @@
             --jwt-blue: #38bdf8;
         }
 
-        /* GLOBAL RESET TO PREVENT MOBILE BLOWOUTS */
         html, body { max-width: 100vw; overflow-x: hidden; margin: 0; padding: 0; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background: radial-gradient(circle at top, #11081a 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
@@ -99,15 +98,15 @@
         /* Security Badge */
         .security-badge { display: flex; align-items: center; gap: 10px; background: rgba(0, 230, 118, 0.05); border: 1px solid rgba(0, 230, 118, 0.2); color: var(--accent-green); padding: 15px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; margin-top: 15px; line-height: 1.4;}
 
-        /* SEO Article */
+        /* SEO Article Styling */
         .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); margin-top: 40px;}
         .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
-        .article-container h1, .article-container h2 { color: var(--accent-gold); margin-top: 40px; margin-bottom: 20px; line-height: 1.3;}
+        .article-container h2 { color: var(--accent-gold); margin-top: 40px; margin-bottom: 20px; font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.3;}
         .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
+        .article-container h4 { color: var(--accent-cyan); font-size: 1.2rem; margin: 20px 0 10px; }
         .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
         .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
         .article-container li { margin-bottom: 10px; }
-        .article-container hr { border: none; border-top: 1px solid var(--border-color); margin: 40px 0; }
         .article-container strong { color: #fff; }
         .article-container pre { background: #111; padding: 20px; border-radius: 10px; overflow-x: auto; border: 1px solid var(--border-color); margin-bottom: 20px; font-family: 'Fira Code', monospace;}
         .article-container code { color: var(--accent-cyan); font-family: 'Fira Code', monospace; }
@@ -116,9 +115,7 @@
         .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
         .footer-links a:hover { color: #ffd600; }
 
-        /* =========================================
-           ULTIMATE MOBILE UI FIX - 100% STACKED
-           ========================================= */
+        /* MOBILE FIXES */
         @media (max-width: 900px) {
             .app-layout { display: flex; flex-direction: column; }
         }
@@ -215,127 +212,82 @@
                     <div id="out-signature" class="signature-display">Awaiting token...</div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <div class="article-wrap">
         <div class="article-container">
-            <article>
-              <header>
-                <h1>The Developer's Guide to JWTs: Stateless Authentication and Token Security</h1>
-                <p>JSON Web Tokens have become the backbone of modern authentication. But with great power comes great responsibility — and a minefield of security pitfalls that most developers walk straight into. This guide breaks down everything you need to know about JWTs, from their internal anatomy to the critical mistakes that can expose your users' data.</p>
-              </header>
+            <h2>The Developer's Guide to JWTs: Stateless Authentication and Token Security</h2>
+            <p>JSON Web Tokens have become the backbone of modern authentication. But with great power comes great responsibility — and a minefield of security pitfalls that most developers walk straight into. This guide breaks down everything you need to know about JWTs, from their internal anatomy to the critical mistakes that can expose your users' data.</p>
 
-              <section>
-                <h2>What Exactly Is a JSON Web Token (JWT)?</h2>
-                <p>A <strong>JSON Web Token (JWT)</strong>, pronounced "jot," is an open standard (<strong>RFC 7519</strong>) that defines a compact, self-contained method for securely transmitting information between two parties as a JSON object. Unlike opaque session identifiers that mean nothing on their own, a JWT carries meaningful, verifiable data within its structure. This makes it the preferred authentication mechanism for RESTful APIs, single-page applications (SPAs), and microservice architectures where scalability and statelessness are paramount.</p>
-                <p>At its core, a JWT is simply a long, URL-safe string. But that string is meticulously engineered. It consists of three distinct parts, each separated by a dot (<code>.</code>), and each serving a critical purpose in the authentication lifecycle.</p>
-              </section>
+            <h3>What Exactly Is a JSON Web Token (JWT)?</h3>
+            <p>A <strong>JSON Web Token (JWT)</strong>, pronounced "jot," is an open standard (<strong>RFC 7519</strong>) that defines a compact, self-contained method for securely transmitting information between two parties as a JSON object. Unlike opaque session identifiers that mean nothing on their own, a JWT carries meaningful, verifiable data within its structure. This makes it the preferred authentication mechanism for RESTful APIs, single-page applications (SPAs), and microservice architectures where scalability and statelessness are paramount.</p>
+            <p>At its core, a JWT is simply a long, URL-safe string. But that string is meticulously engineered. It consists of three distinct parts, each separated by a dot (<code>.</code>), and each serving a critical purpose in the authentication lifecycle.</p>
 
-              <section>
-                <h2>The Three-Part Anatomy of a JWT</h2>
-                <p>Every JWT you encounter follows the exact same structure: <code>xxxxx.yyyyy.zzzzz</code>. Understanding each segment is the first step to using them securely.</p>
+            <h3>The Three-Part Anatomy of a JWT</h3>
+            <p>Every JWT you encounter follows the exact same structure: <code>xxxxx.yyyyy.zzzzz</code>. Understanding each segment is the first step to using them securely.</p>
 
-                <h3>1. The Header</h3>
-                <p>The header is a Base64Url-encoded JSON object that contains metadata about the token itself. It typically declares two things: the <strong>type of token</strong> (which is <code>JWT</code>) and the <strong>signing algorithm</strong> being used, such as <code>HS256</code> (HMAC with SHA-256) or <code>RS256</code> (RSA with SHA-256).</p>
-                <pre><code>{
+            <h4>1. The Header</h4>
+            <p>The header is a Base64Url-encoded JSON object that contains metadata about the token itself. It typically declares two things: the <strong>type of token</strong> (which is <code>JWT</code>) and the <strong>signing algorithm</strong> being used, such as <code>HS256</code> (HMAC with SHA-256) or <code>RS256</code> (RSA with SHA-256).</p>
+            <pre><code>{
   "alg": "HS256",
   "typ": "JWT"
 }</code></pre>
-                <p>This small piece of metadata tells the receiving server exactly how to verify the token's integrity. A mismatch or manipulation of the algorithm field is itself a well-known attack vector — the infamous <strong>"alg: none" attack</strong> — which is why robust JWT libraries validate the algorithm against a server-side allowlist rather than blindly trusting the header.</p>
+            <p>This small piece of metadata tells the receiving server exactly how to verify the token's integrity. A mismatch or manipulation of the algorithm field is itself a well-known attack vector — the infamous <strong>"alg: none" attack</strong> — which is why robust JWT libraries validate the algorithm against a server-side allowlist rather than blindly trusting the header.</p>
 
-                <h3>2. The Payload (Claims)</h3>
-                <p>The payload is the heart of the token. It contains the <strong>claims</strong> — statements about the user and any additional metadata. Claims are categorized into three types:</p>
-                <ul>
-                  <li><strong>Registered Claims:</strong> A set of predefined, recommended claims defined by the JWT specification. These include <code>iss</code> (issuer), <code>exp</code> (expiration time), <code>sub</code> (subject), and <code>iat</code> (issued at). They provide standardized token lifecycle management.</li>
-                  <li><strong>Public Claims:</strong> Custom claims defined by the developer that are intended to be shared. To avoid collisions, they should be registered in the IANA JSON Web Token Claims registry or use a collision-resistant namespace.</li>
-                  <li><strong>Private Claims:</strong> Custom claims agreed upon between the parties exchanging the token, such as a user's role (<code>"role": "admin"</code>) or a tenant ID in a multi-tenant application.</li>
-                </ul>
-                <pre><code>{
+            <h4>2. The Payload (Claims)</h4>
+            <p>The payload is the heart of the token. It contains the <strong>claims</strong> — statements about the user and any additional metadata. Claims are categorized into three types:</p>
+            <ul>
+                <li><strong>Registered Claims:</strong> A set of predefined, recommended claims defined by the JWT specification. These include <code>iss</code> (issuer), <code>exp</code> (expiration time), <code>sub</code> (subject), and <code>iat</code> (issued at). They provide standardized token lifecycle management.</li>
+                <li><strong>Public Claims:</strong> Custom claims defined by the developer that are intended to be shared. To avoid collisions, they should be registered in the IANA JSON Web Token Claims registry or use a collision-resistant namespace.</li>
+                <li><strong>Private Claims:</strong> Custom claims agreed upon between the parties exchanging the token, such as a user's role (<code>"role": "admin"</code>) or a tenant ID in a multi-tenant application.</li>
+            </ul>
+            <pre><code>{
   "sub": "user_98421",
   "name": "Jane Doe",
   "role": "editor",
   "iat": 1710423857,
   "exp": 1710427457
 }</code></pre>
-                <p>It is absolutely critical to understand that the payload is <strong>encoded, not encrypted</strong>. Anyone who intercepts the token can decode the payload and read its contents. This means you should <strong>never</strong> store sensitive information like passwords, social security numbers, or secret API keys inside a JWT payload.</p>
+            <p>It is absolutely critical to understand that the payload is <strong>encoded, not encrypted</strong>. Anyone who intercepts the token can decode the payload and read its contents. This means you should <strong>never</strong> store sensitive information like passwords, social security numbers, or secret API keys inside a JWT payload.</p>
 
-                <h3>3. The Signature</h3>
-                <p>The signature is the component that guarantees the token's integrity. It is created by taking the encoded header, the encoded payload, a secret key, and the algorithm specified in the header, and then signing them.</p>
-                <pre><code>HMACSHA256(
+            <h4>3. The Signature</h4>
+            <p>The signature is the component that guarantees the token's integrity. It is created by taking the encoded header, the encoded payload, a secret key, and the algorithm specified in the header, and then signing them.</p>
+            <pre><code>HMACSHA256(
   base64UrlEncode(header) + "." + base64UrlEncode(payload),
   your-256-bit-secret
 )</code></pre>
-                <p>When a server receives a JWT, it recalculates the signature using its own secret key. If the recalculated signature matches the one in the token, the server can trust that the data has not been tampered with and that it was issued by a legitimate authority. If even a single character in the header or payload was altered, the signature verification will fail.</p>
-              </section>
+            <p>When a server receives a JWT, it recalculates the signature using its own secret key. If the recalculated signature matches the one in the token, the server can trust that the data has not been tampered with and that it was issued by a legitimate authority. If even a single character in the header or payload was altered, the signature verification will fail.</p>
 
-              <section>
-                <h2>Stateful Sessions vs. Stateless JWT Authentication: A Fundamental Shift</h2>
-                <p>To appreciate why JWTs have gained such widespread adoption, you need to understand the problem they solve. Traditional web authentication relies on <strong>stateful sessions</strong>, and the difference between the two approaches is architectural.</p>
+            <h3>Stateful Sessions vs. Stateless JWT Authentication</h3>
+            <p>To appreciate why JWTs have gained such widespread adoption, you need to understand the problem they solve. Traditional web authentication relies on <strong>stateful sessions</strong>, and the difference between the two approaches is architectural.</p>
 
-                <h3>How Traditional Stateful Sessions Work</h3>
-                <p>In a session-based model, the server does the heavy lifting. When a user logs in, the server creates a <strong>session record</strong> in a server-side store — often a database like Redis or PostgreSQL. It then sends the client a simple, meaningless <strong>session ID</strong> (usually stored in a cookie). On every subsequent request, the client sends this session ID back, and the server must look it up in its store to identify the user and their permissions. The server is the single source of truth.</p>
-                <p>This model works, but it comes with significant scaling challenges. Every server instance needs access to the shared session store. If you scale horizontally with a load balancer, you either need <strong>sticky sessions</strong> (routing users to the same server) or a centralized, highly available session store. This introduces latency, a single point of failure, and operational complexity.</p>
+            <h4>How Traditional Stateful Sessions Work</h4>
+            <p>In a session-based model, the server does the heavy lifting. When a user logs in, the server creates a <strong>session record</strong> in a server-side store — often a database like Redis or PostgreSQL. It then sends the client a simple, meaningless <strong>session ID</strong> (usually stored in a cookie). On every subsequent request, the client sends this session ID back, and the server must look it up in its store to identify the user and their permissions. The server is the single source of truth.</p>
+            <p>This model works, but it comes with significant scaling challenges. Every server instance needs access to the shared session store. If you scale horizontally with a load balancer, you either need <strong>sticky sessions</strong> (routing users to the same server) or a centralized, highly available session store. This introduces latency, a single point of failure, and operational complexity.</p>
 
-                <h3>How Stateless JWT Authentication Works</h3>
-                <p>JWT-based authentication flips the model entirely. The server does <strong>not</strong> store any session state. When a user logs in, the server generates a JWT containing the user's identity and permissions, signs it with a secret key, and sends it to the client. On every subsequent request, the client sends the JWT (typically in the <code>Authorization: Bearer</code> header). The server simply <strong>verifies the signature</strong> and reads the claims directly from the token. No database lookup is required.</p>
-                <p>This statelessness means any server in your cluster can independently validate the token. There is no need for a shared session store, sticky sessions, or complex cache synchronization. This makes JWTs the natural choice for <strong>microservices</strong>, <strong>serverless functions</strong>, and <strong>distributed systems</strong> where horizontal scaling is a core requirement.</p>
-                <p>However, statelessness has a trade-off: <strong>revocation is hard</strong>. You cannot easily "log out" a user by deleting a server-side session. The token remains valid until it expires. This is why short expiration times combined with a <strong>refresh token rotation strategy</strong> are essential security practices in any JWT implementation.</p>
-              </section>
+            <h4>How Stateless JWT Authentication Works</h4>
+            <p>JWT-based authentication flips the model entirely. The server does <strong>not</strong> store any session state. When a user logs in, the server generates a JWT containing the user's identity and permissions, signs it with a secret key, and sends it to the client. On every subsequent request, the client sends the JWT (typically in the <code>Authorization: Bearer</code> header). The server simply <strong>verifies the signature</strong> and reads the claims directly from the token. No database lookup is required.</p>
+            <p>This statelessness means any server in your cluster can independently validate the token. There is no need for a shared session store, sticky sessions, or complex cache synchronization. This makes JWTs the natural choice for <strong>microservices</strong>, <strong>serverless functions</strong>, and <strong>distributed systems</strong> where horizontal scaling is a core requirement.</p>
 
-              <section>
-                <h2>The Massive Security Risk of Online JWT Decoders</h2>
-                <p>Here is where theory meets a harsh, real-world reality that too many developers ignore. During development and debugging, you will inevitably need to <strong>inspect a JWT</strong> — to check its claims, verify its expiration, or debug an authorization failure. The most common instinct is to search for an online JWT decoder and paste the token into a web form.</p>
-                <p><strong>This is one of the most dangerous habits a developer can have.</strong></p>
-                <p>When you paste a production or staging JWT into a server-hosted online decoder, you are transmitting a live authentication credential to a third-party server. Consider the attack surface you have just created:</p>
+            <h3>The Massive Security Risk of Online JWT Decoders</h3>
+            <p>Here is where theory meets a harsh, real-world reality that too many developers ignore. During development and debugging, you will inevitably need to <strong>inspect a JWT</strong> — to check its claims, verify its expiration, or debug an authorization failure. The most common instinct is to search for an online JWT decoder and paste the token into a web form.</p>
+            <p><strong>This is one of the most dangerous habits a developer can have.</strong></p>
+            <p>When you paste a production or staging JWT into a server-hosted online decoder, you are transmitting a live authentication credential to a third-party server. Consider the attack surface you have just created:</p>
 
-                <h3>1. Token Interception via Server Logs</h3>
-                <p>The moment your token leaves your browser and hits a remote server, it can be logged. Web servers routinely log request payloads, query parameters, and POST body data. Even if the tool's creators have good intentions, their server infrastructure — reverse proxies, CDN edge nodes, application performance monitoring (APM) tools, and web application firewalls (WAFs) — may be recording every token that passes through. Your production JWT, complete with user identity and roles, is now sitting in a log file on a server you do not control.</p>
+            <ul>
+                <li><strong>Token Interception via Server Logs:</strong> The moment your token leaves your browser and hits a remote server, it can be logged. Web servers routinely log request payloads and query parameters.</li>
+                <li><strong>Replay Attacks:</strong> A JWT is a bearer token. Whoever holds it can use it. If an attacker gets your token from a server log, they can replay it against your API and impersonate the user.</li>
+                <li><strong>Third-Party Supply Chain Risk:</strong> The decoder website itself could be compromised, meaning every token pasted into it is silently exfiltrated to an attacker.</li>
+            </ul>
 
-                <h3>2. Man-in-the-Middle (MITM) Attacks</h3>
-                <p>While HTTPS encrypts data in transit, the token is fully exposed at the server endpoint. If the third-party service has a compromised TLS certificate, a misconfigured CDN, or is operating behind a corporate proxy that performs TLS inspection, your token can be intercepted before it even reaches the decoder application. You are trusting the entire network path between you and that server with a key to your system.</p>
+            <h3>The Only Secure Alternative: A 100% Client-Side JWT Debugger</h3>
+            <p>The solution to this critical vulnerability is straightforward: <strong>never send your tokens to a server you don't own</strong>. Instead, use a JWT debugger that operates entirely within your browser, on the client side, with zero network requests.</p>
+            <p>A truly client-side JWT debugger runs all of its decoding and verification logic using <strong>JavaScript executed exclusively in your browser's runtime environment</strong>. When you paste a token into such a tool, the Base64Url decoding of the header and payload happens locally, in your browser's memory. The token never touches a remote server. There is no API call, no POST request, no analytics event containing the token value. Your credential stays on your machine.</p>
 
-                <h3>3. Replay Attacks</h3>
-                <p>A JWT is a <strong>bearer token</strong>. Whoever holds it can use it. If a malicious actor obtains your token from a server log or a network interception, they can replay it against your API and impersonate the user until the token expires. If the token has a long expiration time — a common misconfiguration — the window of vulnerability could be hours or even days. The attacker gains full access to everything that user is authorized to do.</p>
-
-                <h3>4. Third-Party Supply Chain Risk</h3>
-                <p>Online tools are software, and software has vulnerabilities. The decoder website itself could be compromised through a supply chain attack — a malicious dependency in their JavaScript bundle, a cross-site scripting (XSS) vulnerability, or a compromised developer account. In such a scenario, every token pasted into the tool is silently exfiltrated to an attacker's command-and-control server, and neither you nor the tool's maintainers would know.</p>
-              </section>
-
-              <section>
-                <h2>The Only Secure Alternative: A 100% Client-Side JWT Debugger</h2>
-                <p>The solution to this critical vulnerability is straightforward: <strong>never send your tokens to a server you don't own</strong>. Instead, use a JWT debugger that operates entirely within your browser, on the client side, with zero network requests.</p>
-
-                <h3>What Does "100% Client-Side" Actually Mean?</h3>
-                <p>A truly client-side JWT debugger runs all of its decoding and verification logic using <strong>JavaScript executed exclusively in your browser's runtime environment</strong>. When you paste a token into such a tool, the Base64Url decoding of the header and payload happens locally, in your browser's memory. The token never touches a remote server. There is no API call, no POST request, no analytics event containing the token value. Your credential stays on your machine.</p>
-
-                <h3>The Benefits of an Offline-Capable Debugger</h3>
-                <p>The gold standard goes one step further: <strong>offline capability</strong>. A JWT debugger built as a static HTML page can be cached by your browser and used even without an internet connection. This provides an ironclad guarantee that no data exfiltration can occur, because there is literally no network pathway available.</p>
-                <ul>
-                  <li><strong>Zero Data Transmission:</strong> Your tokens are never sent over the network. They exist only in your browser's local memory and are discarded when you close the tab or clear the input.</li>
-                  <li><strong>No Server-Side Logging:</strong> Because there is no server, there are no server logs, no APM traces, and no third-party infrastructure recording your credentials.</li>
-                  <li><strong>Immune to Supply Chain Attacks:</strong> A well-built client-side tool uses minimal, auditable dependencies. With no server component, the attack surface is reduced to the browser itself.</li>
-                  <li><strong>Works Anywhere, Anytime:</strong> Whether you are debugging on an airplane, in a restricted corporate network, or in a secure environment with no external internet access, an offline-capable tool is always available.</li>
-                </ul>
-
-                <h3>Integrating Secure Practices Into Your Workflow</h3>
-                <p>Making the switch is not just about choosing the right tool; it is about building a <strong>security-first culture</strong> within your development team. Here are actionable steps:</p>
-                <ul>
-                  <li><strong>Establish a team policy:</strong> Ensure every developer on your team knows that pasting production tokens into online tools is a violation of your security protocols.</li>
-                  <li><strong>Bookmark a trusted client-side tool:</strong> Remove the friction of searching for a decoder. Make a vetted, client-side JWT debugger the team default.</li>
-                  <li><strong>Use short-lived tokens:</strong> Implement access tokens with expiration times of 15 minutes or less. Pair them with secure, HTTP-only refresh tokens to maintain user sessions. This limits the blast radius of any token exposure.</li>
-                  <li><strong>Audit your token payloads:</strong> Regularly review what claims you are embedding in your JWTs. Strip out any information that is not strictly necessary for authorization. The less data in the token, the less data at risk.</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2>Conclusion: Own Your Tokens, Own Your Security</h2>
-                <p>JSON Web Tokens are an elegant and powerful solution for stateless authentication in modern web applications. Their self-contained structure eliminates the need for server-side session stores, simplifies horizontal scaling, and provides a flexible framework for authorization across distributed systems. But their power demands respect.</p>
-                <p>The most critical takeaway from this guide is this: <strong>a JWT is a credential, and it must be treated as one</strong>. You would never paste a database password into a random website. Your authentication tokens deserve the same level of protection. By understanding the three-part structure of a JWT, appreciating the difference between stateful and stateless authentication, and recognizing the severe risks of server-hosted decoders, you are equipped to build more secure systems.</p>
-                <p>Adopt a <strong>100% client-side JWT debugger</strong> as your standard tool. It is not a convenience — it is a necessity. In a world where a single leaked token can lead to a full account takeover, keeping your credentials off third-party servers is not optional. It is the baseline of professional application security.</p>
-              </section>
-            </article>
+            <h3>Conclusion: Own Your Tokens, Own Your Security</h3>
+            <p>The most critical takeaway from this guide is this: <strong>a JWT is a credential, and it must be treated as one</strong>. You would never paste a database password into a random website. Your authentication tokens deserve the same level of protection. By understanding the three-part structure of a JWT, and recognizing the severe risks of server-hosted decoders, you are equipped to build more secure systems.</p>
+            <p>Adopt a <strong>100% client-side JWT debugger</strong> as your standard tool. It is not a convenience — it is a necessity. In a world where a single leaked token can lead to a full account takeover, keeping your credentials off third-party servers is not optional. It is the baseline of professional application security.</p>
         </div>
     </div>
 
@@ -357,7 +309,6 @@
             icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
         }
 
-        // Syntax highlighting logic
         function syntaxHighlight(json) {
             if (typeof json != 'string') {
                  json = JSON.stringify(json, undefined, 2);
@@ -407,17 +358,14 @@
             try {
                 inputEl.classList.remove('error');
                 
-                // Decode Header
                 const headerRaw = atob(parts[0].replace(/-/g, '+').replace(/_/g, '/'));
                 const headerJson = JSON.parse(headerRaw);
                 headerEl.innerHTML = syntaxHighlight(headerJson);
 
-                // Decode Payload
                 const payloadRaw = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'));
                 const payloadJson = JSON.parse(payloadRaw);
                 payloadEl.innerHTML = syntaxHighlight(payloadJson);
 
-                // Format Signature
                 signatureEl.innerText = parts[2];
 
             } catch (e) {
