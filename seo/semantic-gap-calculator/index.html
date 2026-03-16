@@ -418,10 +418,12 @@
             unlockBtn.disabled = true;
             unlockBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Saving...`;
             
-            try {
+try {
+                // Save to Firestore (Fire and Forget - no 'await')
                 const db = window._firebaseDb;
                 const { collection: col, addDoc: add, serverTimestamp: ts } = window._firestoreFns;
-                await add(col(db, "leads"), {
+                
+                add(col(db, "leads"), {
                     email: email,
                     score: calculatedScore,
                     breakdown: scoreBreakdown ? {
@@ -432,10 +434,13 @@
                     } : null,
                     source: 'semantic-seo-gap-calculator',
                     timestamp: ts()
-                });
+                }).catch(err => console.error('Firestore backend error:', err));
+                
             } catch (err) {
-                console.error('Firestore write error:', err);
+                console.error('Setup error:', err);
             }
+            
+            // Immediately reveal the score, no matter what happens with the database
             revealScore();
         }
         window.handleUnlock = handleUnlock;
