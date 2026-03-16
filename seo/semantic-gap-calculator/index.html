@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic SEO Gap Calculator | Affilore</title>
+    <meta name="description" content="Calculate your Semantic SEO Gap Score and uncover hidden ranking vulnerabilities. Free B2B tool by Affilore.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'] },
+                    colors: {
+                        neon: '#FFD700',
+                        'neon-dim': 'rgba(255, 215, 0, 0.15)',
+                        'neon-glow': 'rgba(255, 215, 0, 0.35)',
+                        deep: '#0f0f0f',
+                        surface: '#161618',
+                        panel: '#1a1a1e',
+                        'panel-hover': '#222226',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f0f0f; }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 8px; }
+        /* Glassmorphism panel */
+        .glass {
+            background: rgba(26, 26, 30, 0.65);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .glass-strong {
+            background: rgba(26, 26, 30, 0.85);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        /* Neon glow button */
+        .btn-neon {
+            background: #FFD700;
+            color: #0f0f0f;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.25), 0 0 60px rgba(255, 215, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-neon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 0 80px rgba(255, 215, 0, 0.15);
+        }
+        .btn-neon:active { transform: translateY(0); }
+        .btn-neon:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        /* Slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            outline: none;
+            transition: background 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #FFD700;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+            border: 2px solid #0f0f0f;
+            transition: box-shadow 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #FFD700;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+            border: 2px solid #0f0f0f;
+        }
+        /* Toggle switch */
+        .toggle-track {
+            width: 52px;
+            height: 28px;
+            border-radius: 999px;
+            background: #2a2a2e;
+            cursor: pointer;
+            transition: background 0.25s;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .toggle-track.active {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+        .toggle-knob {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #666;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .toggle-track.active .toggle-knob {
+            left: 27px;
+            background: #FFD700;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+        /* Dropdown */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+        /* Blurred result overlay */
+        .result-blur {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+        }
+        /* Fade animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); }
+            50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.3); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .animate-fade-up { animation: fadeInUp 0.5s ease both; }
+        .animate-fade-scale { animation: fadeInScale 0.4s ease both; }
+        .animate-pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+        /* Fake chart bars */
+        .fake-bar {
+            border-radius: 4px;
+            background: linear-gradient(90deg, rgba(255,215,0,0.2), rgba(255,215,0,0.08));
+        }
+        /* Score ring */
+        .score-ring {
+            width: 160px;
+            height: 160px;
+        }
+        .score-ring circle {
+            fill: none;
+            stroke-width: 8;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .score-ring .track { stroke: rgba(255,255,255,0.05); }
+        .score-ring .fill-ring {
+            stroke: #FFD700;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 8px rgba(255,215,0,0.4));
+        }
+        /* Gradient bg blob */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        /* Email input focus ring */
+        .email-input:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.15);
+        }
+        /* Score color utilities */
+        .score-danger { color: #ef4444; }
+        .score-warning { color: #f59e0b; }
+        .score-ok { color: #FFD700; }
+        .score-good { color: #22c55e; }
+    </style>
+</head>
+<body class="min-h-screen text-gray-100 font-inter overflow-x-hidden">
+    <!-- Background Blobs -->
+    <div class="bg-blob" style="width:500px;height:500px;top:-150px;left:-100px;background:rgba(255,215,0,0.025);"></div>
+    <div class="bg-blob" style="width:400px;height:400px;bottom:-100px;right:-80px;background:rgba(255,215,0,0.02);"></div>
+    <!-- Main Container -->
+    <div class="relative z-10 max-w-2xl mx-auto px-4 py-12 sm:py-20">
+        <!-- Header -->
+        <header class="text-center mb-10 animate-fade-up">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase mb-5"
+                 style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);color:#FFD700;">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                Affilore
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black tracking-tight leading-tight mb-3">
+                Semantic SEO <span class="text-neon">Gap</span> Calculator
+            </h1>
+            <p class="text-gray-500 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+                Quantify your semantic search vulnerability in 30 seconds. Discover how much revenue you're leaving on the table.
+            </p>
+        </header>
+        <!-- Calculator Card -->
+        <div class="glass rounded-2xl p-6 sm:p-8 mb-6 animate-fade-up" style="animation-delay:0.1s;" id="calculatorCard">
+            <!-- Input 1: GBP Optimization Slider -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-3">
+                    <label class="text-sm font-semibold text-gray-300 flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs" style="background:rgba(255,215,0,0.1);">
+                            <svg class="w-3.5 h-3.5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </span>
+                        Google Business Profile Optimization
+                    </label>
+                    <span id="gbpValue" class="text-neon font-bold text-lg tabular-nums">5</span>
+                </div>
+                <input type="range" id="gbpSlider" min="1" max="10" value="5"
+                       class="w-full"
+                       style="background: linear-gradient(to right, #FFD700 45%, #2a2a2e 45%);">
+                <div class="flex justify-between text-xs text-gray-600 mt-1.5 px-0.5">
+                    <span>1 — Not Optimized</span>
+                    <span>10 — Fully Optimized</span>
+                </div>
+            </div>
+            <!-- Input 2: Localized Service Pages -->
+            <div class="mb-8">
+                <label class="text-sm font-semibold text-gray-300 flex items-center gap-2 mb-3">
+                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs" style="background:rgba(255,215,0,0.1);">
+                        <svg class="w-3.5 h-3.5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </span>
+                    Localized Service Pages
+                </label>
+                <input type="number" id="servicePages" min="0" max="999" value="0" placeholder="0"
+                       class="w-full px-4 py-3 rounded-xl text-sm font-medium text-gray-100 placeholder-gray-600 transition-all duration-200 focus:outline-none focus:border-neon focus:ring-2 focus:ring-neon/15"
+                       style="background:#111113;border:1px solid rgba(255,255,255,0.06);">
+                <p class="text-xs text-gray-600 mt-1.5">Total number of location-specific service pages on your site</p>
+            </div>
+            <!-- Input 3: Local Schema Markup Toggle -->
+            <div class="mb-8">
+                <label class="text-sm font-semibold text-gray-300 flex items-center gap-2 mb-3">
+                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs" style="background:rgba(255,215,0,0.1);">
+                        <svg class="w-3.5 h-3.5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </span>
+                    Local Schema Markup Implemented?
+                </label>
+                <div class="flex items-center gap-4">
+                    <div class="toggle-track" id="schemaToggle" onclick="toggleSchema()">
+                        <div class="toggle-knob"></div>
+                    </div>
+                    <span id="schemaLabel" class="text-sm font-medium text-gray-500">No</span>
+                </div>
+            </div>
+            <!-- Input 4: Content Frequency Dropdown -->
+            <div class="mb-8">
+                <label class="text-sm font-semibold text-gray-300 flex items-center gap-2 mb-3">
+                    <span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs" style="background:rgba(255,215,0,0.1);">
+                        <svg class="w-3.5 h-3.5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </span>
+                    Entity-Focused Content Frequency
+                </label>
+                <select id="contentFrequency"
+                        class="w-full px-4 py-3 rounded-xl text-sm font-medium text-gray-100 transition-all duration-200 focus:outline-none focus:border-neon focus:ring-2 focus:ring-neon/15 cursor-pointer"
+                        style="background:#111113;border:1px solid rgba(255,255,255,0.06);">
+                    <option value="never">Never</option>
+                    <option value="rarely">Rarely</option>
+                    <option value="monthly" selected>Monthly</option>
+                    <option value="weekly">Weekly</option>
+                </select>
+                <p class="text-xs text-gray-600 mt-1.5">How often you publish entity-rich, topically-relevant content</p>
+            </div>
+            <!-- CTA Button -->
+            <button id="calculateBtn" onclick="handleCalculate()" class="btn-neon w-full py-3.5 rounded-xl text-sm font-bold tracking-wide flex items-center justify-center gap-2.5 cursor-pointer">
+                <svg class="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Calculate Semantic Gap
+            </button>
+        </div>
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- RESULT SECTION (hidden initially) -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="resultSection" class="hidden">
+            <!-- Locked State: Blurred Chart + Email Gate -->
+            <div id="lockedState" class="relative glass-strong rounded-2xl overflow-hidden animate-fade-scale">
+                <!-- Fake blurred chart background -->
+                <div class="result-blur p-6 sm:p-8">
+                    <div class="flex items-center justify-between mb-5">
+                        <div>
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Your Semantic Gap</p>
+                            <p class="text-4xl font-black text-neon mt-1">7█</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Risk Level</p>
+                            <p class="text-lg font-bold text-red-400 mt-1">█████</p>
+                        </div>
+                    </div>
+                    <!-- Fake bar chart -->
+                    <div class="space-y-3 mb-5">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-500 w-20 text-right">GBP</span>
+                            <div class="flex-1 h-5 rounded fake-bar" style="width:65%"></div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-500 w-20 text-right">Pages</span>
+                            <div class="flex-1 h-5 rounded fake-bar" style="width:40%"></div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-500 w-20 text-right">Schema</span>
+                            <div class="flex-1 h-5 rounded fake-bar" style="width:85%"></div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-gray-500 w-20 text-right">Content</span>
+                            <div class="flex-1 h-5 rounded fake-bar" style="width:55%"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="rounded-lg p-3 text-center" style="background:rgba(255,255,255,0.03);">
+                            <p class="text-lg font-bold text-neon">██</p>
+                            <p class="text-xs text-gray-600">Gaps Found</p>
+                        </div>
+                        <div class="rounded-lg p-3 text-center" style="background:rgba(255,255,255,0.03);">
+                            <p class="text-lg font-bold text-red-400">██</p>
+                            <p class="text-xs text-gray-600">Risk Score</p>
+                        </div>
+                        <div class="rounded-lg p-3 text-center" style="background:rgba(255,255,255,0.03);">
+                            <p class="text-lg font-bold text-green-400">██</p>
+                            <p class="text-xs text-gray-600">Quick Wins</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Email Capture Overlay -->
+                <div class="absolute inset-0 flex items-center justify-center p-6" style="background:rgba(15,15,15,0.6);backdrop-filter:blur(2px);">
+                    <div class="w-full max-w-sm text-center">
+                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse-glow" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);">
+                            <svg class="w-6 h-6 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-100 mb-1.5">Unlock Your Full Report</h3>
+                        <p class="text-xs text-gray-500 mb-5 leading-relaxed">Enter your B2B email to unlock your exact Semantic Gap Score and custom fix report.</p>
+                        <div id="emailError" class="hidden text-xs text-red-400 mb-2 font-medium"></div>
+                        <div class="flex gap-2">
+                            <input type="email" id="emailInput" placeholder="you@company.com"
+                                   class="email-input flex-1 px-4 py-3 rounded-xl text-sm font-medium text-gray-100 placeholder-gray-600 transition-all duration-200"
+                                   style="background:#111113;border:1px solid rgba(255,255,255,0.08);">
+                            <button id="unlockBtn" onclick="handleUnlock()" class="btn-neon px-5 py-3 rounded-xl text-sm font-bold whitespace-nowrap flex items-center gap-2 cursor-pointer">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                                Unlock
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-700 mt-3">🔒 No spam. We only send your free report.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- Unlocked State: The real score -->
+            <!-- ═══════════════════════════════════════════ -->
+            <div id="unlockedState" class="hidden">
+                <!-- Score Hero -->
+                <div class="glass-strong rounded-2xl p-6 sm:p-8 text-center mb-4 animate-fade-scale">
+                    <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold mb-5">Your Semantic SEO Gap Score</p>
+                    <!-- SVG Ring -->
+                    <div class="score-ring mx-auto relative mb-5">
+                        <svg viewBox="0 0 160 160" class="w-full h-full">
+                            <circle class="track" cx="80" cy="80" r="70"/>
+                            <circle class="fill-ring" id="scoreRing" cx="80" cy="80" r="70"/>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="scoreNumber" class="text-4xl font-black text-neon tabular-nums">0</span>
+                            <span class="text-xs text-gray-500 font-medium">/100</span>
+                        </div>
+                    </div>
+                    <div id="riskBadge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3"></div>
+                    <p id="riskDescription" class="text-sm text-gray-500 max-w-xs mx-auto leading-relaxed"></p>
+                </div>
+                <!-- Breakdown -->
+                <div class="glass rounded-2xl p-6 sm:p-8 mb-4 animate-fade-up" style="animation-delay:0.15s;">
+                    <h3 class="text-sm font-bold text-gray-300 uppercase tracking-widest mb-5 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                        Score Breakdown
+                    </h3>
+                    <div class="space-y-4" id="breakdownBars"></div>
+                </div>
+                <!-- Recommendations -->
+                <div class="glass rounded-2xl p-6 sm:p-8 animate-fade-up" style="animation-delay:0.3s;">
+                    <h3 class="text-sm font-bold text-gray-300 uppercase tracking-widest mb-5 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                        Recommended Actions
+                    </h3>
+                    <div class="space-y-3" id="recommendations"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer class="text-center pt-16 pb-8">
+            <p class="text-xs text-gray-700">100% client-side calculation. Your data never leaves your browser.</p>
+            <p class="text-xs text-gray-700 mt-1">Built by <a href="#" class="text-neon hover:underline font-medium">Affilore</a></p>
+        </footer>
+    </div>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- FIREBASE + APPLICATION LOGIC -->
+    <!-- ═══════════════════════════════════════════ -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJvC9cuYgPnQizRXcUlkSjMIpfx5ZnUR4",
+            authDomain: "affilore-tools.firebaseapp.com",
+            projectId: "affilore-tools",
+            storageBucket: "affilore-tools.firebasestorage.app",
+            messagingSenderId: "784975934186",
+            appId: "1:784975934186:web:9079f37a0a110fbda95d93",
+            measurementId: "G-PGF82QMPWB"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        // ── Expose to global scope for onclick handlers ──
+        window._firebaseDb = db;
+        window._firestoreFns = { collection, addDoc, serverTimestamp };
+    </script>
+    <script>
+        /* ══════════════════════════════════════════════
+           STATE
+           ══════════════════════════════════════════════ */
+        let schemaEnabled = false;
+        let calculatedScore = null;
+        let scoreBreakdown = null;
+        /* ══════════════════════════════════════════════
+           SLIDER LIVE UPDATE
+           ══════════════════════════════════════════════ */
+        const gbpSlider = document.getElementById('gbpSlider');
+        const gbpValue = document.getElementById('gbpValue');
+        function updateSliderTrack() {
+            const val = gbpSlider.value;
+            const pct = ((val - 1) / 9) * 100;
+            gbpSlider.style.background = `linear-gradient(to right, #FFD700 ${pct}%, #2a2a2e ${pct}%)`;
+            gbpValue.textContent = val;
+        }
+        gbpSlider.addEventListener('input', updateSliderTrack);
+        updateSliderTrack();
+        /* ══════════════════════════════════════════════
+           SCHEMA TOGGLE
+           ══════════════════════════════════════════════ */
+        function toggleSchema() {
+            schemaEnabled = !schemaEnabled;
+            const track = document.getElementById('schemaToggle');
+            const label = document.getElementById('schemaLabel');
+            track.classList.toggle('active', schemaEnabled);
+            label.textContent = schemaEnabled ? 'Yes' : 'No';
+            label.className = `text-sm font-medium ${schemaEnabled ? 'text-neon' : 'text-gray-500'}`;
+        }
+        window.toggleSchema = toggleSchema;
+        /* ══════════════════════════════════════════════
+           SCORING ALGORITHM
+           ══════════════════════════════════════════════ */
+        function calculateScore() {
+            const gbp = parseInt(gbpSlider.value);
+            const pages = parseInt(document.getElementById('servicePages').value) || 0;
+            const schema = schemaEnabled;
+            const frequency = document.getElementById('contentFrequency').value;
+            // ── Component scores (each 0-25, inverted so higher = bigger gap) ──
+            // GBP: 10=perfect(0 gap), 1=terrible(25 gap)
+            const gbpGap = Math.round(((10 - gbp) / 9) * 25);
+            // Service Pages: 0=worst(25), 50+=best(0) — logarithmic curve
+            const pagesCapped = Math.min(pages, 100);
+            const pagesGap = Math.round((1 - Math.min(pagesCapped / 50, 1)) * 25);
+            // Schema: yes=0, no=25
+            const schemaGap = schema ? 0 : 25;
+            // Content Frequency: weekly=0, never=25
+            const freqMap = { 'never': 25, 'rarely': 18, 'monthly': 10, 'weekly': 0 };
+            const contentGap = freqMap[frequency] ?? 15;
+            const totalGap = gbpGap + pagesGap + schemaGap + contentGap;
+            const finalScore = Math.min(Math.max(totalGap, 0), 100);
+            scoreBreakdown = {
+                gbp: { score: gbpGap, max: 25, label: 'GBP Optimization', rawValue: gbp },
+                pages: { score: pagesGap, max: 25, label: 'Localized Pages', rawValue: pages },
+                schema: { score: schemaGap, max: 25, label: 'Schema Markup', rawValue: schema ? 'Yes' : 'No' },
+                content: { score: contentGap, max: 25, label: 'Content Frequency', rawValue: frequency.charAt(0).toUpperCase() + frequency.slice(1) },
+            };
+            return finalScore;
+        }
+        /* ══════════════════════════════════════════════
+           HANDLE CALCULATE CLICK
+           ══════════════════════════════════════════════ */
+        function handleCalculate() {
+            calculatedScore = calculateScore();
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('lockedState').classList.remove('hidden');
+            document.getElementById('unlockedState').classList.add('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        window.handleCalculate = handleCalculate;
+        /* ══════════════════════════════════════════════
+           HANDLE EMAIL UNLOCK
+           ══════════════════════════════════════════════ */
+        async function handleUnlock() {
+            const emailInput = document.getElementById('emailInput');
+            const email = emailInput.value.trim();
+            const errorEl = document.getElementById('emailError');
+            const unlockBtn = document.getElementById('unlockBtn');
+            // Validate
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                errorEl.textContent = 'Please enter a valid B2B email address.';
+                errorEl.classList.remove('hidden');
+                emailInput.style.borderColor = '#ef4444';
+                return;
+            }
+            // Block free email domains
+            const freeDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com', 'icloud.com', 'mail.com', 'protonmail.com', 'yandex.com'];
+            const domain = email.split('@')[1]?.toLowerCase();
+            // Note: we still allow free domains but show them the result — this is a soft gate.
+            errorEl.classList.add('hidden');
+            emailInput.style.borderColor = '';
+            // Show loading state
+            unlockBtn.disabled = true;
+            unlockBtn.innerHTML = `
+                <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10" opacity="0.2"/><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"/></svg>
+                Saving…
+            `;
+            try {
+                // Save to Firestore
+                const db = window._firebaseDb;
+                const { collection: col, addDoc: add, serverTimestamp: ts } = window._firestoreFns;
+                await add(col(db, "leads"), {
+                    email: email,
+                    score: calculatedScore,
+                    breakdown: scoreBreakdown ? {
+                        gbp: scoreBreakdown.gbp.score,
+                        pages: scoreBreakdown.pages.score,
+                        schema: scoreBreakdown.schema.score,
+                        content: scoreBreakdown.content.score,
+                    } : null,
+                    source: 'semantic-seo-gap-calculator',
+                    timestamp: ts()
+                });
+            } catch (err) {
+                console.error('Firestore write error:', err);
+                // Continue anyway — still reveal the score even if Firestore fails
+            }
+            // Reveal score
+            revealScore();
+        }
+        window.handleUnlock = handleUnlock;
+        /* ══════════════════════════════════════════════
+           REVEAL THE SCORE
+           ══════════════════════════════════════════════ */
+        function revealScore() {
+            document.getElementById('lockedState').classList.add('hidden');
+            document.getElementById('unlockedState').classList.remove('hidden');
+            const score = calculatedScore;
+            // ── Animate score ring ──
+            const circumference = 2 * Math.PI * 70; // r=70
+            const offset = circumference - (score / 100) * circumference;
+            const ring = document.getElementById('scoreRing');
+            ring.style.strokeDasharray = circumference;
+            setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+            // ── Animate score number ──
+            const scoreNum = document.getElementById('scoreNumber');
+            let current = 0;
+            const step = Math.ceil(score / 40);
+            const interval = setInterval(() => {
+                current = Math.min(current + step, score);
+                scoreNum.textContent = current;
+                if (current >= score) clearInterval(interval);
+            }, 30);
+            // ── Risk badge ──
+            const badge = document.getElementById('riskBadge');
+            const desc = document.getElementById('riskDescription');
+            let riskLevel, riskColor, riskBg, riskText;
+            if (score >= 75) {
+                riskLevel = '🔴 Critical Gap';
+                riskColor = 'text-red-400';
+                riskBg = 'rgba(239,68,68,0.1)';
+                riskText = 'rgba(239,68,68,0.3)';
+                desc.textContent = 'Your semantic SEO foundation has severe vulnerabilities. Competitors are likely capturing significant traffic share in your market. Immediate action is required.';
+            } else if (score >= 50) {
+                riskLevel = '🟠 Significant Gap';
+                riskColor = 'text-orange-400';
+                riskBg = 'rgba(251,146,60,0.1)';
+                riskText = 'rgba(251,146,60,0.3)';
+                desc.textContent = 'Noticeable gaps in your semantic strategy. You\'re likely losing 30-50% of potential local search visibility to better-optimized competitors.';
+            } else if (score >= 25) {
+                riskLevel = '🟡 Moderate Gap';
+                riskColor = 'text-yellow-400';
+                riskBg = 'rgba(250,204,21,0.1)';
+                riskText = 'rgba(250,204,21,0.3)';
+                desc.textContent = 'Your semantic foundations are decent but have room for improvement. Tightening a few areas will yield strong incremental gains.';
+            } else {
+                riskLevel = '🟢 Minimal Gap';
+                riskColor = 'text-green-400';
+                riskBg = 'rgba(34,197,94,0.1)';
+                riskText = 'rgba(34,197,94,0.3)';
+                desc.textContent = 'Your semantic SEO strategy is strong. Focus on maintaining your competitive edge and exploring advanced entity optimization.';
+            }
+            badge.className = `inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${riskColor}`;
+            badge.style.background = riskBg;
+            badge.style.border = `1px solid ${riskText}`;
+            badge.textContent = riskLevel;
+            // ── Breakdown bars ──
+            const barsContainer = document.getElementById('breakdownBars');
+            barsContainer.innerHTML = Object.entries(scoreBreakdown).map(([key, data]) => {
+                const pct = Math.round((data.score / data.max) * 100);
+                const barColor = pct >= 75 ? '#ef4444' : pct >= 50 ? '#f59e0b' : pct >= 25 ? '#FFD700' : '#22c55e';
+                return `
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-semibold text-gray-400">${data.label}</span>
+                            <span class="text-xs font-bold tabular-nums" style="color:${barColor}">${data.score}/${data.max}</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full" style="background:rgba(255,255,255,0.04);">
+                            <div class="h-full rounded-full transition-all duration-1000" style="width:${pct}%;background:${barColor};box-shadow:0 0 8px ${barColor}40;"></div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Current: ${data.rawValue}</p>
+                    </div>
+                `;
+            }).join('');
+            // ── Recommendations ──
+            const recsContainer = document.getElementById('recommendations');
+            const recs = [];
+            if (scoreBreakdown.gbp.score > 10) {
+                recs.push({ icon: '📍', title: 'Optimize Google Business Profile', desc: 'Complete all GBP fields, add photos weekly, respond to reviews within 24h, and use location-specific keywords in your business description.' });
+            }
+            if (scoreBreakdown.pages.score > 10) {
+                recs.push({ icon: '📄', title: 'Create More Localized Service Pages', desc: 'Build dedicated pages for each service in each location you serve. Include local landmarks, neighborhoods, and NLP-friendly entity references.' });
+            }
+            if (scoreBreakdown.schema.score > 0) {
+                recs.push({ icon: '🧩', title: 'Implement Local Schema Markup', desc: 'Add LocalBusiness, Service, and FAQ schema to your pages. This helps search engines understand your entity relationships and local relevance.' });
+            }
+            if (scoreBreakdown.content.score > 10) {
+                recs.push({ icon: '✍️', title: 'Increase Entity-Focused Content Cadence', desc: 'Publish weekly content that references your core service entities, locations, and topically-relevant terms to build topical authority.' });
+            }
+            if (recs.length === 0) {
+                recs.push({ icon: '🏆', title: 'Maintain Your Competitive Edge', desc: 'Your semantic strategy is strong. Focus on emerging opportunities: voice search optimization, AI overview targeting, and deepening your entity graph.' });
+            }
+            recsContainer.innerHTML = recs.map(r => `
+                <div class="flex gap-3 p-4 rounded-xl transition-colors duration-200" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);">
+                    <span class="text-lg flex-shrink-0 mt-0.5">${r.icon}</span>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-200 mb-1">${r.title}</p>
+                        <p class="text-xs text-gray-500 leading-relaxed">${r.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+            // Scroll to unlocked
+            document.getElementById('unlockedState').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        /* ══════════════════════════════════════════════
+           EMAIL ENTER KEY
+           ══════════════════════════════════════════════ */
+        document.getElementById('emailInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleUnlock();
+        });
+    </script>
+</body>
+</html>
