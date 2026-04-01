@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Interactive CSS Grid Layout Generator | Affilore</title>
+    <meta name="description" content="Visually design complex CSS Grid layouts. Generate responsive grid-template-columns, gaps, and minmax code instantly. 100% client-side.">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YRKMHHSYBC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-YRKMHHSYBC');
+    </script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ========== AFFILORE GLOBAL THEME ========== */
+        :root {
+            --bg-color: #08080a; --text-main: #f0f0f5; --text-muted: #9ba1a6;
+            --accent-gold: #ffd600; --accent-glow: rgba(255, 214, 0, 0.4);
+            --accent-dev: #00e5ff; --dev-glow: rgba(0, 229, 255, 0.4);
+            --card-bg: rgba(20, 20, 25, 0.7); --border-color: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(15px);
+        }
+
+        html, body { max-width: 100vw; overflow-x: hidden; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: radial-gradient(circle at top, #00181f 0%, var(--bg-color) 70%); background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+        .bg-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(var(--accent-dev) 1px, transparent 1px); background-size: 50px 50px; opacity: 0.03; z-index: -2; pointer-events: none; }
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+
+        /* HEADER */
+        header { position: fixed; top: 0; width: 100%; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(8, 8, 10, 0.8); backdrop-filter: var(--glass-blur); border-bottom: 1px solid var(--border-color); z-index: 1000; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px; }
+        .logo-img { height: 35px; width: auto; mix-blend-mode: screen; filter: drop-shadow(0 0 8px var(--accent-glow)); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-size: 1rem; font-weight: 600; background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links a:hover { background: var(--accent-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 8px var(--accent-glow); }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .header-btn { background: var(--accent-gold); color: #000; padding: 10px 24px; border-radius: 25px; font-weight: 700; font-size: 0.95rem; transition: all 0.3s ease; display: inline-block; -webkit-text-fill-color: #000; }
+        .header-btn:hover { box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.05); }
+        .mobile-menu-btn { display: none; background: transparent; border: none; color: var(--accent-gold); font-size: 1.8rem; cursor: pointer; transition: transform 0.3s; outline: none; }
+        
+        .mobile-overlay { position: fixed; top: 70px; left: 0; width: 100%; height: 0; background: rgba(8, 8, 10, 0.95); backdrop-filter: var(--glass-blur); overflow: hidden; transition: height 0.3s ease; z-index: 999; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .mobile-overlay.open { height: 360px; padding-top: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .mobile-overlay a { color: var(--text-main); font-size: 1.2rem; font-weight: 600; text-decoration: none; margin-bottom: 25px; transition: color 0.3s; opacity: 0; }
+        .mobile-overlay.open a { opacity: 1; transition: opacity 0.5s ease 0.1s; }
+        .mobile-overlay a:hover { color: var(--accent-gold); }
+        .mobile-overlay .mobile-custom-btn { background: var(--accent-gold); color: #000; padding: 12px 35px; border-radius: 25px; font-weight: 800; margin-top: 10px; -webkit-text-fill-color: #000; }
+
+        /* ========== TOOL SPECIFIC UI ========== */
+        .tool-container { max-width: 1400px; margin: 120px auto 40px; padding: 0 20px; }
+        .tool-header { text-align: center; margin-bottom: 40px; }
+        .tool-header h1 { font-size: clamp(2rem, 5vw, 3.5rem); color: #fff; background: linear-gradient(180deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2;}
+        .tool-header h1 .accent { background: var(--accent-dev); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px var(--dev-glow);}
+        .tool-header p { color: var(--text-muted); font-size: clamp(1rem, 2vw, 1.1rem); margin-top: 15px; max-width: 700px; margin-inline: auto;}
+
+        .app-layout { display: grid; grid-template-columns: 350px 1fr; gap: 30px; margin-bottom: 40px;}
+
+        .panel { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 25px; backdrop-filter: var(--glass-blur); box-shadow: 0 4px 24px rgba(0,0,0,0.2); display: flex; flex-direction: column;}
+        .panel h3 { color: var(--accent-dev); margin-bottom: 20px; font-size: 1.2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+
+        /* Control Panel */
+        .input-group { margin-bottom: 20px; width: 100%; }
+        .input-group label { display: flex; align-items: center; justify-content: space-between; color: var(--text-muted); margin-bottom: 8px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+        
+        .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
+        .input-suffix { position: absolute; right: 15px; color: var(--text-muted); font-weight: bold; font-size: 0.85rem;}
+        
+        input[type="text"], input[type="number"] { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.6); color: #fff; outline: none; transition: 0.3s; font-size: 1rem; font-family: 'Fira Code', monospace;}
+        input.has-suffix { padding-right: 40px; }
+        input:focus { border-color: var(--accent-dev); box-shadow: 0 0 10px var(--dev-glow); }
+        
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
+        .hint-text { font-size: 0.75rem; color: #666; margin-top: 5px; font-family: 'Outfit', sans-serif;}
+
+        /* Visual Canvas */
+        .canvas-wrapper { flex-grow: 1; background: rgba(0,0,0,0.5); border: 2px dashed rgba(0, 229, 255, 0.3); border-radius: 15px; padding: 20px; display: flex; align-items: stretch; justify-content: stretch; min-height: 400px; position: relative;}
+        
+        #grid-preview { width: 100%; height: 100%; display: grid; transition: all 0.3s ease; }
+        
+        .grid-item { background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), transparent); border: 1px solid rgba(0, 229, 255, 0.4); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Fira Code', monospace; color: var(--accent-dev); font-weight: bold; font-size: 1.2rem; transition: 0.3s; box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.05);}
+        .grid-item:hover { background: rgba(0, 229, 255, 0.2); transform: scale(0.98); }
+
+        /* Code Output Area */
+        .code-panel { margin-top: 30px; background: #0a0a0f; border: 1px solid var(--border-color); border-radius: 15px; overflow: hidden; }
+        .code-header { background: rgba(255,255,255,0.05); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .code-title { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;}
+        .code-title i { color: var(--accent-dev); }
+        
+        .btn-copy { background: rgba(0, 229, 255, 0.1); color: var(--accent-dev); border: 1px solid rgba(0, 229, 255, 0.3); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px;}
+        .btn-copy:hover { background: var(--accent-dev); color: #000; box-shadow: 0 0 10px var(--dev-glow);}
+        
+        .code-block { padding: 20px; margin: 0; font-family: 'Fira Code', monospace; font-size: 0.95rem; color: #d0d0d5; overflow-x: auto; white-space: pre-wrap; line-height: 1.5;}
+        .token-prop { color: #38bdf8; }
+        .token-val { color: #a855f7; }
+        .token-class { color: #00e676; }
+
+        /* Security Badge */
+        .security-badge { display: flex; align-items: center; gap: 10px; background: rgba(0, 229, 255, 0.05); border: 1px solid rgba(0, 229, 255, 0.2); color: var(--accent-dev); padding: 15px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-top: 20px; line-height: 1.4;}
+
+        /* SEO Article Styling */
+        .article-wrap { background: var(--bg-color); padding: 80px 5%; border-top: 1px solid var(--border-color); margin-top: 40px;}
+        .article-container { max-width: 900px; margin: 0 auto; color: #d0d0d5; line-height: 1.8; }
+        .article-container h2 { color: var(--accent-dev); margin-top: 40px; margin-bottom: 20px; font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.3;}
+        .article-container h3 { color: #fff; font-size: 1.5rem; margin: 30px 0 15px; }
+        .article-container p { margin-bottom: 20px; font-size: 1.1rem; }
+        .article-container ul { padding-left: 20px; margin-bottom: 20px; font-size: 1.1rem;}
+        .article-container li { margin-bottom: 10px; }
+        .article-container strong { color: #fff; }
+        .article-container pre { background: #0a0a0f; padding: 20px; border-radius: 10px; overflow-x: auto; border: 1px solid var(--border-color); margin-bottom: 20px; font-family: 'Fira Code', monospace; color: #38bdf8;}
+        .article-container code { font-family: 'Fira Code', monospace; color: var(--accent-dev); background: rgba(0, 229, 255, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.9em;}
+
+        footer { background: rgba(10, 10, 12, 0.9); border-top: 1px solid var(--border-color); padding: 40px 5%; text-align: center; }
+        .footer-links a { color: var(--text-muted); margin: 0 15px; font-size: 0.9rem; text-decoration: none;}
+        .footer-links a:hover { color: #ffd600; }
+
+        /* ========== MOBILE FIXES ========== */
+        @media (max-width: 900px) {
+            .app-layout { grid-template-columns: 1fr; }
+            .canvas-wrapper { min-height: 300px; }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links, .desktop-btn { display: none !important; }
+            .mobile-menu-btn { display: block !important; }
+            
+            .tool-container { margin-top: 90px; padding: 0 10px; width: 100%; box-sizing: border-box; }
+            .panel { width: 100%; max-width: 100%; padding: 20px 15px; border-radius: 12px; box-sizing: border-box; }
+            
+            .two-col { grid-template-columns: 1fr; gap: 0;}
+            .input-group { margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <header>
+        <a href="../../index.html" class="logo">
+            <img src="../../logo.jpg" alt="Affilore Logo" class="logo-img">
+            Affilore
+        </a>
+        <nav class="nav-links">
+            <a href="../../index.html">Home</a>
+            <a href="../../index.html#categories">Categories</a>
+            <a href="../../about.html">About Us</a>
+        </nav>
+        <div class="header-right">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="header-btn desktop-btn">Custom Tool</a>
+            <button class="mobile-menu-btn" id="mobileToggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-overlay" id="mobileMenu">
+        <a href="../../index.html" onclick="toggleMenu()">Home</a>
+        <a href="../../index.html#categories" onclick="toggleMenu()">Categories</a>
+        <a href="../../about.html" onclick="toggleMenu()">About Us</a>
+        <a href="../../contact.html" onclick="toggleMenu()">Contact Us</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com" target="_blank" class="mobile-custom-btn">Custom Tool</a>
+    </div>
+
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1>CSS Grid <span class="accent">Generator</span></h1>
+            <p>Visually build responsive, multi-dimensional layouts. Export production-ready CSS instantly without writing a single media query.</p>
+        </div>
+
+        <div class="app-layout">
+            <div class="panel">
+                <h3><i class="fas fa-sliders-h"></i> Grid Parameters</h3>
+                
+                <div class="input-group">
+                    <label>Columns (grid-template-columns)</label>
+                    <input type="text" id="in-cols" value="1fr 1fr 1fr" oninput="updateGrid()">
+                    <div class="hint-text">Try: repeat(auto-fit, minmax(200px, 1fr))</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Rows (grid-template-rows)</label>
+                    <input type="text" id="in-rows" value="1fr 1fr 1fr" oninput="updateGrid()">
+                    <div class="hint-text">E.g.: 100px 1fr 50px</div>
+                </div>
+
+                <div class="two-col">
+                    <div class="input-group">
+                        <label>Column Gap</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="in-col-gap" class="has-suffix" value="20" min="0" oninput="updateGrid()">
+                            <span class="input-suffix">px</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Row Gap</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="in-row-gap" class="has-suffix" value="20" min="0" oninput="updateGrid()">
+                            <span class="input-suffix">px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 0; margin-top: 10px;">
+                    <label>Number of Divs (Preview)</label>
+                    <input type="number" id="in-divs" value="9" min="1" max="50" oninput="updateGrid()">
+                </div>
+
+                <div class="security-badge">
+                    <i class="fas fa-laptop-code" style="font-size: 1.5rem;"></i>
+                    <span><strong>No Server Needed:</strong> Build proprietary app shells and client layouts safely. Code generates 100% locally.</span>
+                </div>
+            </div>
+
+            <div class="panel" style="background: rgba(15, 15, 20, 0.8);">
+                <h3 style="margin-bottom: 15px;"><i class="fas fa-eye"></i> Live Canvas</h3>
+                
+                <div class="canvas-wrapper">
+                    <div id="grid-preview">
+                        </div>
+                </div>
+
+                <div class="code-panel">
+                    <div class="code-header">
+                        <div class="code-title"><i class="fab fa-css3-alt"></i> CSS Output</div>
+                        <button class="btn-copy" onclick="copyCode()" id="copyBtn"><i class="far fa-copy"></i> Copy CSS</button>
+                    </div>
+                    <pre class="code-block" id="code-output"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article-wrap">
+        <div class="article-container">
+            <h2>The Paradigm Shift: Why CSS Grid Changes Everything</h2>
+            <p>For over a decade, frontend developers lived in a world of workarounds. We floated elements and cleared them. We wrestled with <code>inline-block</code> quirks, negative margins, and the infamous "clearfix" hack. When Flexbox arrived, it felt like liberation — and it was, but only in one dimension. Flexbox excels at distributing items along a <em>single axis</em>, either a row or a column. It was never designed to control the full two-dimensional plane of a webpage simultaneously.</p>
+            <p>That is the fundamental paradigm shift that <strong>CSS Grid</strong> brings to the table. While Flexbox thinks in lines, Grid thinks in sheets. It gives you native, browser-level control over both rows and columns at the same time, without nesting, without JavaScript, and without compromise. The W3C didn't just give developers a new layout tool — they gave us an entirely new mental model for thinking about space on a screen.</p>
+            <p>Understanding when to use each technology is the mark of a senior developer. The rule is elegantly simple:</p>
+            <ul>
+              <li><strong>Use Flexbox</strong> when you have a single row or column of items and you need to control their alignment and distribution along that one axis — navigation bars, button groups, card rows that wrap naturally.</li>
+              <li><strong>Use CSS Grid</strong> when you need to control the layout in both dimensions simultaneously — full page layouts, dashboard panels, image galleries, complex application shells.</li>
+            </ul>
+            <p>Trying to build a full-page application layout with Flexbox alone is like trying to tile a floor using only a single-row strip of tiles at a time. You can eventually get there, but you're fighting the tool every step of the way. Grid is the right tool for the job, and once you internalize that distinction, you'll never look back.</p>
+
+            <h2>The Magic of the Fractional Unit: Responsive Design Without the Math</h2>
+            <p>Before CSS Grid, creating proportional, fluid column layouts required percentage-based widths and meticulous math. Want three equal columns? Each gets <code>33.333%</code>. Add a gap between them? Now you need to subtract gutter widths from each column using <code>calc()</code>. It was tedious, error-prone, and brittle whenever design requirements changed.</p>
+            <p>CSS Grid introduced a unit that solves this problem entirely: the <strong>fractional unit, <code>fr</code></strong>.</p>
+            <p>The <code>fr</code> unit represents a fraction of the <strong>available free space</strong> in a grid container. The browser calculates the total available space, subtracts any fixed-width columns and gaps, and then distributes the remaining space proportionally according to the <code>fr</code> values you've assigned. This is revolutionary for a simple reason: the browser does the math, not you.</p>
+
+            <h3>Practical Examples of the <code>fr</code> Unit</h3>
+            <p>Creating three equal columns used to require percentages and a calculator. With <code>fr</code>, it reads like plain English:</p>
+            <pre><code>.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+}</code></pre>
+            <p>Each column gets exactly one-third of the available space, and the gap is handled natively without any math. Need a classic content-plus-sidebar layout where the main content takes twice the width? One line:</p>
+            <pre><code>.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}</code></pre>
+            <p>You can also mix fixed units with fractional ones, and this is where <code>fr</code> truly shines. A fixed sidebar with a fluid main content area is achieved cleanly:</p>
+            <pre><code>.app-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+}</code></pre>
+            <p>The sidebar is always <code>280px</code>. The main content area claims every single remaining pixel. If the viewport changes, the sidebar stays fixed and the content area adapts automatically. No media queries needed for this fundamental behavior. This is the single most powerful quality-of-life improvement CSS Grid delivers over every previous layout method.</p>
+
+            <h2>Auto-Fit and Minmax(): Responsive Grids Without a Single Media Query</h2>
+            <p>If the <code>fr</code> unit is CSS Grid's most useful invention, then the combination of <code>auto-fit</code> and <code>minmax()</code> is its most impressive magic trick. Together, these two features let you build a fully responsive, multi-column grid layout that gracefully reflows from a single column on mobile to four or five columns on a widescreen monitor — <strong>without writing a single media query.</strong></p>
+
+            <h3>Understanding <code>minmax()</code></h3>
+            <p>The <code>minmax()</code> function defines a size range for a grid track. It accepts two arguments: a minimum size and a maximum size. The browser will make the track as large as possible up to the maximum, but never smaller than the minimum.</p>
+            <pre><code>grid-template-columns: minmax(280px, 1fr);</code></pre>
+            <p>This single track definition tells the browser: "this column should be at least <code>280px</code> wide, but if there's more space available, let it grow to fill a fractional unit of that space."</p>
+
+            <h3>The Power of <code>auto-fit</code></h3>
+            <p>Now combine that with <code>auto-fit</code> inside the <code>repeat()</code> function. Instead of specifying a fixed number of columns, <code>auto-fit</code> tells the grid to create as many columns as will fit given the track's size constraints:</p>
+            <pre><code>.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}</code></pre>
+            <p>Read this declaration aloud: <em>"Repeat as many columns as will fit, where each column is a minimum of 280 pixels wide and a maximum of one fractional unit."</em> On a <code>1200px</code> wide container, this produces four columns. On a <code>600px</code> wide container (a phone), only two columns fit, so the grid reflows to two. On a very small screen, one column remains. This entire behavior is handled by the browser's layout engine with zero media queries. This is not a trick or a hack — it is CSS Grid working exactly as designed.</p>
+            <p><strong>The difference between <code>auto-fit</code> and <code>auto-fill</code>:</strong> When there are fewer items than can fill a row, <code>auto-fill</code> creates empty phantom columns to fill the remaining space, while <code>auto-fit</code> collapses those empty tracks to zero width, allowing existing items to stretch and fill the row. For most responsive card grids, <code>auto-fit</code> is the correct choice.</p>
+
+            <h2>Grid Template Areas: Layouts That Read Like a Blueprint</h2>
+            <p>Complex application layouts — those with a header, a sidebar, a main content area, and a footer — have historically required deeply nested HTML and layers of CSS. CSS Grid's <code>grid-template-areas</code> property eliminates that complexity by letting you define your layout using a visual, text-based map inside your CSS file.</p>
+
+            <h3>Defining Named Grid Areas</h3>
+            <p>The syntax is remarkably intuitive. Each string in the value represents a row, and each word represents a column cell with a name. Repeating a name across cells makes that element span those cells automatically.</p>
+            <pre><code>.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: 64px 1fr 48px;
+  grid-template-areas:
+    "sidebar  header"
+    "sidebar  main"
+    "sidebar  footer";
+  min-height: 100vh;
+}</code></pre>
+            <p>Now, assign each child element to its named area using the <code>grid-area</code> property:</p>
+            <pre><code>header  { grid-area: header;  }
+.sidebar { grid-area: sidebar;  }
+main    { grid-area: main;    }
+footer  { grid-area: footer;  }
+</code></pre>
+            <p>That's the entire layout. No positioning hacks, no absolute coordinates, no floats. The sidebar spans all three rows automatically because its name occupies all three rows in the template. The HTML source order becomes irrelevant to the visual layout — a powerful capability for accessibility and SEO, where source order matters for screen readers and crawlers but visual presentation needs to differ.</p>
+
+            <h3>Best Practices for Grid Template Areas</h3>
+            <ul>
+              <li><strong>Use semantic, descriptive names.</strong> Names like <code>header</code>, <code>sidebar</code>, <code>main</code>, and <code>footer</code> make the template self-documenting. Avoid abstract names like <code>col-a</code> or <code>zone-1</code>.</li>
+              <li><strong>Use a dot (<code>.</code>) for empty cells.</strong> If you need an intentionally empty cell in your grid, a single period acts as a placeholder without creating a named area.</li>
+              <li><strong>Combine with media queries for responsive rearrangement.</strong> The real power of <code>grid-template-areas</code> emerges at breakpoints. You can completely redefine the visual layout for mobile by rewriting the template string — without changing a single line of HTML.</li>
+            </ul>
+
+            <h2>Why a Visual CSS Grid Generator Is a Professional-Grade Workflow Essential</h2>
+            <p>Understanding CSS Grid theory is one thing. Translating a designer's Figma mockup into a precise grid definition under deadline pressure is another. Even experienced developers face the same pain points: visualizing how <code>grid-column: 2 / 4</code> maps to a specific design, debugging why a grid item is placed in an unexpected cell, or generating the boilerplate for a complex asymmetric layout from scratch.</p>
+            <p>This is precisely why <strong>a visual, client-side CSS Grid Generator</strong> belongs in every modern developer's toolkit. These tools allow you to:</p>
+            <ul>
+              <li><strong>Visually design your grid</strong> by dragging and resizing columns and rows on a live canvas, instantly seeing the resulting CSS declarations update in real time.</li>
+              <li><strong>Eliminate syntax errors</strong> that arise from manually writing complex <code>grid-template</code> shorthand properties, which are notoriously difficult to read and write correctly by hand.</li>
+              <li><strong>Generate named area templates</strong> visually by clicking cells and assigning names, rather than mentally mapping a text grid to a visual layout.</li>
+              <li><strong>Save hours of boilerplate</strong> by exporting production-ready CSS that covers column definitions, row definitions, gap values, and named area assignments in one clean block of code.</li>
+            </ul>
+            <p>The critical word here is <strong>client-side</strong>. A client-side grid generator runs entirely in your browser — no server, no account, no data transmission. This matters for professional workflows where you may be prototyping proprietary application layouts, internal dashboard designs, or client work under NDA. Your layout designs never leave your machine. There is no risk of intellectual property exposure, no infrastructure dependencies, and no latency — the tool works instantly, offline if necessary, because all logic executes locally in JavaScript.</p>
+            <p>The modern approach is clear: <strong>think in grids, write in fractions, define in areas, and generate with tools.</strong> Stop wrestling with CSS. Start composing with it.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="../../about.html">About Us</a>
+            <a href="../../contact.html">Contact Us</a>
+            <a href="../../privacy.html">Privacy Policy</a>
+            <a href="../../terms.html">Terms & Conditions</a>
+        </div>
+        <p style="color: var(--text-muted); margin-top: 20px; font-size: 0.9rem;">&copy; 2026 Affilore.com. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const icon = document.querySelector('#mobileToggle i');
+            menu.classList.toggle('open');
+            icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        }
+
+        function updateGrid() {
+            const cols = document.getElementById('in-cols').value || '1fr';
+            const rows = document.getElementById('in-rows').value || '1fr';
+            const colGap = document.getElementById('in-col-gap').value || '0';
+            const rowGap = document.getElementById('in-row-gap').value || '0';
+            const numDivs = parseInt(document.getElementById('in-divs').value) || 1;
+
+            const gridContainer = document.getElementById('grid-preview');
+            
+            // Apply styles to visual canvas
+            gridContainer.style.gridTemplateColumns = cols;
+            gridContainer.style.gridTemplateRows = rows;
+            gridContainer.style.columnGap = colGap + 'px';
+            gridContainer.style.rowGap = rowGap + 'px';
+
+            // Populate divs
+            gridContainer.innerHTML = '';
+            for (let i = 1; i <= numDivs; i++) {
+                const div = document.createElement('div');
+                div.className = 'grid-item';
+                div.innerText = i;
+                gridContainer.appendChild(div);
+            }
+
+            // Generate CSS Output string
+            const cssString = 
+`<span class="token-class">.grid-container</span> {
+  <span class="token-prop">display</span>: <span class="token-val">grid</span>;
+  <span class="token-prop">grid-template-columns</span>: <span class="token-val">${cols}</span>;
+  <span class="token-prop">grid-template-rows</span>: <span class="token-val">${rows}</span>;
+  <span class="token-prop">gap</span>: <span class="token-val">${rowGap}px ${colGap}px</span>;
+}`;
+            
+            document.getElementById('code-output').innerHTML = cssString;
+            
+            // Reset Copy Button
+            const btn = document.getElementById('copyBtn');
+            btn.innerHTML = '<i class="far fa-copy"></i> Copy CSS';
+            btn.style.color = 'var(--accent-dev)';
+        }
+
+        function copyCode() {
+            const cols = document.getElementById('in-cols').value || '1fr';
+            const rows = document.getElementById('in-rows').value || '1fr';
+            const colGap = document.getElementById('in-col-gap').value || '0';
+            const rowGap = document.getElementById('in-row-gap').value || '0';
+
+            const rawCSS = 
+`.grid-container {
+  display: grid;
+  grid-template-columns: ${cols};
+  grid-template-rows: ${rows};
+  gap: ${rowGap}px ${colGap}px;
+}`;
+            
+            navigator.clipboard.writeText(rawCSS).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.style.color = '#00e676';
+            });
+        }
+
+        window.onload = () => { updateGrid(); };
+    </script>
+</body>
+</html>
