@@ -1,0 +1,15 @@
+/* Global Theme & Aesthetics */
+
+:root {
+  --primary-accent: #FFD700;
+  --bg-color: #000000;
+  --text-color: #FFFFFF;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  /* Dot pattern using radial gradient */
+  background-image: radial-gradient(var(--primary-accent) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
