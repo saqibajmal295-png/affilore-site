@@ -121,3 +121,45 @@ h1:not(.gradient-text), h2:not(.gradient-text), h3:not(.gradient-text) {
   color: transparent !important;
   -webkit-text-fill-color: transparent !important;
 }
+
+/* Cookie Banner Styles */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+}
+.cookie-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 20px;
+  gap: 20px;
+}
+.cookie-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.cookie-content a {
+  color: #FFD700;
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  .cookie-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}

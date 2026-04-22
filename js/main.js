@@ -72,4 +72,24 @@ document.addEventListener('DOMContentLoaded', function() {
             "retina_detect": true
         });
     }
+
+    // Cookie Banner Logic
+    if (!localStorage.getItem('cookieConsent')) {
+        const banner = document.createElement('div');
+        banner.className = 'cookie-banner';
+        banner.innerHTML = `
+            <div class="cookie-content">
+                <p>We use cookies to improve your experience and analyze site traffic. By continuing to use our site, you agree to our <a href="/privacy-policy/">Privacy Policy</a> and <a href="/terms/">Terms of Service</a>.</p>
+                <div class="cookie-buttons">
+                    <button id="accept-cookies" class="btn btn--primary" style="padding: 10px 20px; font-size: 0.9rem; border-radius: 30px; cursor: pointer;">Accept All</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(banner);
+
+        document.getElementById('accept-cookies').addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'true');
+            banner.style.display = 'none';
+        });
+    }
 });
