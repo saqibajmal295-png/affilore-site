@@ -1,4 +1,9 @@
-/* Global Theme & Aesthetics */
+import os
+
+base_path = 'g:/Affilore'
+main_css_path = os.path.join(base_path, 'css/main.css')
+
+css_content = """/* Global Theme & Aesthetics */
 
 :root {
   /* Use golden color #FFD700 and rgba(255, 215, 0, ...) for accents */
@@ -227,3 +232,9 @@ h1:not(.gradient-text), h2:not(.gradient-text), h3:not(.gradient-text) {
     text-align: center;
   }
 }
+"""
+
+with open(main_css_path, 'w', encoding='utf-8') as f:
+    f.write(css_content)
+
+print("Fixed main.css syntax error and updated colors to golden.")
