@@ -2,9 +2,9 @@
 
 :root {
   --primary-accent: #FFD700;
-  --bg-color: #0a0a0a;
+  --bg-color: #000000;
   --text-color: #FFFFFF;
-  --premium-gradient: linear-gradient(135deg, #F9D423 0%, #FF4E50 100%);
+  --premium-gradient: linear-gradient(135deg, #FFDF00 0%, #FFB300 100%);
   
   /* Force Pure White Text */
   --color-text-primary: #FFFFFF;

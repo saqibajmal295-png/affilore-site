@@ -18,10 +18,10 @@
   --color-surface-border: rgba(255, 255, 255, 0.06);
   --color-surface-border-hover: rgba(255, 255, 255, 0.12);
 
-  --color-text-primary: #f0f0f5;
-  --color-text-secondary: #a0a0b8;
-  --color-text-tertiary: #6a6a82;
-  --color-text-muted: #4a4a60;
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #FFFFFF;
+  --color-text-tertiary: #FFFFFF;
+  --color-text-muted: #FFFFFF;
 
   /* Accent — Amber/Gold */
   --color-accent: #f59e0b;
