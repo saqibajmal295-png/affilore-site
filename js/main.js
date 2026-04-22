@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 },
                 "color": {
-                    "value": ["#FFD700", "#FFDF00", "#FFC300"]
+                    "value": ["#F5A623", "#F5A623", "#D48C1C"]
                 },
                 "shape": {
                     "type": "circle",
