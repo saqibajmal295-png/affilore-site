@@ -5,13 +5,38 @@
     "category": "Coffee & Espresso"
   },
   {
+    "title": "De'Longhi Eletta Explore Review",
+    "url": "/coffee/delonghi-eletta-explore-review/",
+    "category": "Coffee & Espresso"
+  },
+  {
     "title": "Roborock Qrevo QV 35A Review",
     "url": "/home-cleaning/roborock-qrevo-qv35a-review/",
     "category": "Home Cleaning"
   },
   {
+    "title": "Tineco Floor One S7 Pro Review",
+    "url": "/home/tineco-s7-pro-review/",
+    "category": "Home"
+  },
+  {
+    "title": "Eufy S330 Video Smart Lock Review",
+    "url": "/home/eufy-s330-review/",
+    "category": "Home"
+  },
+  {
+    "title": "Levoit Vital 200S Air Purifier Review",
+    "url": "/air-quality/levoit-vital-200s-review/",
+    "category": "Air Quality"
+  },
+  {
     "title": "Ninja SP151 Air Fryer Toaster Oven Review",
     "url": "/smart-kitchen/ninja-foodi-sp351/",
+    "category": "Smart Kitchen"
+  },
+  {
+    "title": "MEATER 2 Plus Review",
+    "url": "/smart-kitchen/meater-2-plus-review/",
     "category": "Smart Kitchen"
   }
 ]
