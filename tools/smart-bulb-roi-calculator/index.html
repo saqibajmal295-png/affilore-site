@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home ROI & Energy Calculator - Affilore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand: '#F5A623', dark: '#0a0a0a', panel: '#151515' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-dark text-white antialiased">
+  <header class="py-6 px-4 border-b border-white/10">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <a href="/" class="text-brand font-bold text-2xl tracking-tight flex items-center gap-2">
+        <div class="w-8 h-8 bg-brand text-black rounded flex items-center justify-center font-black">A</div>
+        affilore
+      </a>
+      <a href="/free-tools/" class="text-sm text-gray-400 hover:text-white transition">&larr; Back to Tools</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <!-- Tool Container -->
+    <div class="bg-panel border border-white/10 rounded-2xl p-6 md:p-10 mb-16 shadow-2xl">
+      <h1 class="text-3xl md:text-4xl font-bold mb-3">Smart Home ROI & Energy Calculator</h1>
+      <p class="text-gray-400 mb-8">Calculate your exact annual electricity costs and determine if upgrading to smart LED lighting is a financially sound investment.</p>
+      
+      <div class="grid md:grid-cols-2 gap-10">
+        <!-- Inputs -->
+        <div class="space-y-5">
+          <div>
+            <label class="block text-sm font-bold text-gray-300 mb-1">Number of Bulbs in House</label>
+            <input type="number" id="bulbs-input" value="40" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-300 mb-1">Average Hours Used per Day</label>
+            <input type="number" id="hours-input" value="5" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-300 mb-1">Electricity Rate (Cents per kWh)</label>
+            <input type="number" id="rate-input" value="16" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+            <p class="text-xs text-gray-500 mt-1">US national average is ~16 cents.</p>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="flex flex-col">
+          <div class="p-6 bg-black/50 rounded-xl border border-brand/30 h-full flex flex-col justify-between">
+            <div>
+              <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4 border-b border-gray-700 pb-2">Annual Electricity Cost Comparison</h3>
+              
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-gray-300">Old Incandescent (60W)</span>
+                <span id="cost-inc" class="font-mono text-red-400 font-bold">$0.00</span>
+              </div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-gray-300">Standard LED (9W)</span>
+                <span id="cost-led" class="font-mono text-green-400 font-bold">$0.00</span>
+              </div>
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-gray-300">Smart LED (9W + Standby)</span>
+                <span id="cost-smart" class="font-mono text-brand font-bold">$0.00</span>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-4 bg-gradient-to-r from-brand/10 to-transparent border-l-4 border-brand text-left rounded-r-lg">
+              <h4 class="font-bold text-md text-white mb-1">Ready to build your smart ecosystem?</h4>
+              <p class="text-gray-400 text-xs mb-3 leading-relaxed">Stop wasting money on grid heat. Invest your energy savings into the undisputed king of smart lighting networks.</p>
+              <a href="/home/philips-hue-a19-review/" class="inline-block bg-brand text-black px-4 py-2 rounded font-bold text-xs hover:bg-yellow-500 transition">Read Philips Hue Review &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO Article -->
+    <article class="prose prose-invert prose-brand max-w-none" style="font-size: 1.1rem; line-height: 1.8;">
+      <h2 class="text-3xl font-bold text-white mb-6">Do Smart Bulbs Actually Save Money? The 2026 Energy Report</h2>
+      
+      <p>Upgrading a home from legacy incandescent lighting to modern LEDs is one of the very few home improvements that offers a guaranteed, mathematically verifiable Return on Investment (ROI). However, as we move deeper into 2026, the question is no longer "Should I buy LEDs?" Instead, consumers are asking, "Are smart bulbs worth the premium price, and do they use electricity when turned off?"</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Brutal Inefficiency of Incandescent Bulbs</h3>
+      <p>Legacy 60-watt incandescent bulbs are an engineering disaster masquerading as a light source. By the laws of thermodynamics, an incandescent bulb converts roughly 90% of the electrical energy it consumes directly into heat. Only about 10% of the energy is actually converted into visible light.</p>
+      
+      <p>If you have 40 incandescent bulbs in your home, and you run them for 5 hours a day at the national average electricity rate of 16 cents per kilowatt-hour, you are paying over $350 a year just to illuminate your home. Furthermore, because these bulbs burn so hot, the filament degrades quickly, resulting in a lifespan of roughly 1,000 hours. You are constantly paying to replace them.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Standard LED Revolution</h3>
+      <p>A standard "dumb" LED bulb requires only 9 watts to produce the exact same amount of lumens (brightness) as a 60-watt incandescent. This represents an immediate 85% reduction in your lighting energy costs.</p>
+      
+      <p>Replacing those same 40 bulbs drops your annual lighting electricity bill from $350 down to roughly $50. Because LEDs do not rely on burning filaments, their operational lifespan is staggering—often rated for 15,000 to 25,000 hours. They pay for themselves in electricity savings within the first six months of use.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Smart Bulb "Phantom Draw" (Vampire Energy)</h3>
+      <p>When you transition from a standard LED to a Wi-Fi or Zigbee-enabled Smart LED, the financial calculus shifts slightly. A smart bulb is essentially a tiny computer with a wireless radio. Even when you tell Alexa or Siri to "turn off the lights," the bulb is not physically severed from the electrical grid.</p>
+      
+      <p>It enters a standby mode, keeping its radio active so it can "listen" for the next command. This phenomenon is known as "phantom draw" or "vampire energy." Most modern smart bulbs draw between 0.2 and 0.5 watts while turned off. Over the course of a year, 40 smart bulbs sitting in standby mode 19 hours a day will consume roughly 130 kWh of electricity. That equates to about $20 extra on your annual electric bill.</p>
+      
+      <p>So, do smart bulbs use more energy than standard LEDs? Yes. But they still use drastically less than incandescents.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Why Invest in a Premium Smart Ecosystem?</h3>
+      <p>If smart bulbs cost more upfront and incur a slight phantom energy draw, why upgrade? The answer lies in ecosystem automation, security, and quality of life.</p>
+      
+      <p>Systems utilizing Zigbee protocols (like the <strong>Philips Hue</strong> ecosystem) create incredibly robust, self-healing mesh networks. Unlike cheap Wi-Fi bulbs that clog up your router's bandwidth and constantly disconnect, Zigbee hubs operate independently and flawlessly.</p>
+      
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li><strong>Adaptive Lighting:</strong> Smart ecosystems can automatically shift from cool, energizing blue light in the morning to warm, sleep-inducing amber tones as the sun sets, aligning with your circadian rhythm.</li>
+        <li><strong>Automation Savings:</strong> While they have a phantom draw, smart bulbs save energy by ensuring lights are never left on accidentally. Geofencing can automatically shut off every light in the house the moment your smartphone leaves the driveway.</li>
+        <li><strong>Security:</strong> Randomized lighting schedules when you are on vacation create the perfect illusion of occupancy, deterring break-ins far more effectively than a static porch light.</li>
+      </ul>
+      
+      <p>The transition to LED is mandatory for any financially responsible homeowner. The transition to Smart LED is an investment in ultimate home convenience and automation. Use the calculator above to see your exact savings, and allocate that budget toward building a reliable, premium smart home network.</p>
+    </article>
+  </main>
+
+  <script>
+    const bulbsInput = document.getElementById('bulbs-input');
+    const hoursInput = document.getElementById('hours-input');
+    const rateInput = document.getElementById('rate-input');
+    
+    const costInc = document.getElementById('cost-inc');
+    const costLed = document.getElementById('cost-led');
+    const costSmart = document.getElementById('cost-smart');
+
+    function calculate() {
+      const bulbs = parseFloat(bulbsInput.value) || 0;
+      const hoursOn = parseFloat(hoursInput.value) || 0;
+      const hoursOff = 24 - hoursOn;
+      const rate = (parseFloat(rateInput.value) || 0) / 100; // cents to dollars
+
+      const days = 365;
+
+      // Incandescent (60W)
+      const kwhInc = (60 * bulbs * hoursOn * days) / 1000;
+      const cInc = kwhInc * rate;
+
+      // LED (9W)
+      const kwhLed = (9 * bulbs * hoursOn * days) / 1000;
+      const cLed = kwhLed * rate;
+
+      // Smart LED (9W on, 0.5W off)
+      const kwhSmartOn = kwhLed;
+      const kwhSmartOff = (0.5 * bulbs * hoursOff * days) / 1000;
+      const cSmart = (kwhSmartOn + kwhSmartOff) * rate;
+
+      costInc.textContent = '$' + cInc.toFixed(2);
+      costLed.textContent = '$' + cLed.toFixed(2);
+      costSmart.textContent = '$' + cSmart.toFixed(2);
+    }
+
+    [bulbsInput, hoursInput, rateInput].forEach(el => {
+      el.addEventListener('input', calculate);
+    });
+
+    calculate();
+  </script>
+</body>
+</html>

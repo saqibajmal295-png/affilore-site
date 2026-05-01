@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CADR Room-to-Purifier Matcher - Affilore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand: '#F5A623', dark: '#0a0a0a', panel: '#151515' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-dark text-white antialiased">
+  <header class="py-6 px-4 border-b border-white/10">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <a href="/" class="text-brand font-bold text-2xl tracking-tight flex items-center gap-2">
+        <div class="w-8 h-8 bg-brand text-black rounded flex items-center justify-center font-black">A</div>
+        affilore
+      </a>
+      <a href="/free-tools/" class="text-sm text-gray-400 hover:text-white transition">&larr; Back to Tools</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <!-- Tool Container -->
+    <div class="bg-panel border border-white/10 rounded-2xl p-6 md:p-10 mb-16 shadow-2xl">
+      <h1 class="text-3xl md:text-4xl font-bold mb-3">CADR "Room-to-Purifier" Matcher</h1>
+      <p class="text-gray-400 mb-8">Stop guessing. Calculate the exact Clean Air Delivery Rate (CADR) your room needs based on its cubic volume and your specific air quality hazards.</p>
+      
+      <div class="grid md:grid-cols-2 gap-10">
+        <!-- Inputs -->
+        <div class="space-y-5">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-gray-300 mb-1">Room Length (ft)</label>
+              <input type="number" id="len-input" value="20" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-gray-300 mb-1">Room Width (ft)</label>
+              <input type="number" id="wid-input" value="15" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-300 mb-1">Ceiling Height (ft)</label>
+            <input type="number" id="hei-input" value="9" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-300 mb-1">Air Quality Needs</label>
+            <select id="ach-input" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none text-white appearance-none">
+              <option value="2">Standard Maintenance (2 ACH)</option>
+              <option value="4">Allergies / Pet Dander (4 ACH)</option>
+              <option value="5" selected>Wildfire Smoke / Asthma (5 ACH)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="flex flex-col justify-center">
+          <div class="p-6 bg-black/50 rounded-xl border border-brand/30 text-center">
+            <h3 class="text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">Minimum CADR Required</h3>
+            <div class="text-5xl md:text-6xl font-black text-brand mb-1"><span id="cadr-result">225</span></div>
+            <p class="text-xs text-gray-500 mt-2">Cubic Feet per Minute (CFM)</p>
+            
+            <div class="mt-8 p-4 bg-gradient-to-r from-brand/10 to-transparent border-l-4 border-brand text-left rounded-r-lg">
+              <h4 class="font-bold text-md text-white mb-1">Need massive coverage?</h4>
+              <p class="text-gray-400 text-xs mb-3 leading-relaxed">For massive open-concept rooms needing 400+ CADR, the Dyson Big+Quiet BP03 is the undisputed king of long-range projection.</p>
+              <a href="/air-quality/dyson-big-quiet-review/" class="inline-block bg-brand text-black px-4 py-2 rounded font-bold text-xs hover:bg-yellow-500 transition">Read the Brutal Truth &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO Article -->
+    <article class="prose prose-invert prose-brand max-w-none" style="font-size: 1.1rem; line-height: 1.8;">
+      <h2 class="text-3xl font-bold text-white mb-6">What is CADR? How to Size an Air Purifier for Open Concept Homes</h2>
+      
+      <p>Walking down the appliance aisle of a big-box retailer, you will see endless claims printed on air purifier boxes: "Cleans up to 1,500 square feet!" or "Perfect for extra-large living rooms!" In the vast majority of cases, these marketing claims are highly misleading, if not outright deceptive. They rely on the consumer's lack of understanding regarding the single most critical metric in the air quality industry: CADR.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Truth About Clean Air Delivery Rate (CADR)</h3>
+      <p>CADR stands for <strong>Clean Air Delivery Rate</strong>. Developed by the Association of Home Appliance Manufacturers (AHAM), it is an objective, standardized metric that measures the actual volume of filtered air an appliance delivers, expressed in Cubic Feet per Minute (CFM). A purifier might have a medical-grade true HEPA filter, but if its internal fan is weak, it simply won't pull enough air through that filter to make a difference in a large room.</p>
+      
+      <p>Manufacturers often exaggerate square footage claims by calculating their coverage based on a completely unrealistic assumption: that the air in the room only needs to be cleaned once per hour. This brings us to the second crucial metric: ACH.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Why ACH (Air Changes Per Hour) Matters</h3>
+      <p>ACH indicates how many times the total volume of air in your room is pushed through the purifier's filters every 60 minutes. If an air purifier box claims it covers 1,000 square feet, read the fine print. Usually, it says "Based on 1 Air Change per Hour."</p>
+      
+      <p>Here is why that is a problem:</p>
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li><strong>1 to 2 ACH:</strong> Barely adequate for basic dust maintenance in a perfectly sealed room with zero active pollutants.</li>
+        <li><strong>4 ACH:</strong> The absolute minimum standard recommended by allergists and AHAM for allergy sufferers, pet owners, and older homes with poor ventilation.</li>
+        <li><strong>5 ACH (The Gold Standard):</strong> Required for dealing with active, aggressive hazards like seasonal wildfire smoke, heavy indoor cooking emissions, or severe asthma triggers. At 5 ACH, the air is completely scrubbed every 12 minutes.</li>
+      </ul>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Mathematical Reality of Open Concept Living</h3>
+      <p>Sizing an air purifier based on square footage alone is fundamentally flawed because you live in a three-dimensional space, not a flat plane. A 300-square-foot room with 8-foot ceilings has a volume of 2,400 cubic feet. That same 300-square-foot footprint with vaulted 12-foot ceilings has a volume of 3,600 cubic feet. It requires 50% more filtration power to clean, despite having the exact same floor space.</p>
+      
+      <p>To accurately size your machine, you must use the formula integrated into the tool above: <code>CADR = (Length × Width × Height × Desired ACH) / 60</code>.</p>
+      <p>When you run this math for a modern, open-concept living room that bleeds into a kitchen and a dining area, the volume scales massively. A combined space of 800 square feet with 9-foot ceilings requires a staggering 600 CADR to achieve 5 Air Changes Per Hour. Most standard bedroom purifiers top out at 150 CADR. If you place a small machine in an open-concept living room, it will run loudly on maximum speed 24/7, burn out its motor prematurely, and make virtually zero impact on the air quality on the other side of the room.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Solution for Massive Spaces</h3>
+      <p>If the math reveals that your room requires a CADR of 400 or higher, you have two options. The first is to buy multiple smaller units and space them out. The second is to invest in heavy-duty architecture designed specifically for immense volume and airflow projection.</p>
+      
+      <p>This is where engineering marvels like the <strong>Dyson Purifier Big+Quiet Formaldehyde BP03</strong> justify their premium price tags. Dyson utilized aerodynamic principles inspired by jet engines to achieve cone aerodynamics, allowing the machine to project 87 liters of purified air per second across over 32 feet of distance. Instead of just cleaning the air immediately surrounding the unit, it creates a powerful circulation pattern that physically pulls contaminated air from the far corners of open-concept spaces back into its HEPA H13 filters.</p>
+      
+      <p>Do not waste money undersizing your air purifiers. Run the math, determine your necessary CADR, and buy the appropriate hardware to protect your lungs.</p>
+    </article>
+  </main>
+
+  <script>
+    const lenInput = document.getElementById('len-input');
+    const widInput = document.getElementById('wid-input');
+    const heiInput = document.getElementById('hei-input');
+    const achInput = document.getElementById('ach-input');
+    const cadrResult = document.getElementById('cadr-result');
+
+    function calculate() {
+      const l = parseFloat(lenInput.value) || 0;
+      const w = parseFloat(widInput.value) || 0;
+      const h = parseFloat(heiInput.value) || 0;
+      const ach = parseFloat(achInput.value) || 0;
+      
+      const volume = l * w * h;
+      const cadr = (volume * ach) / 60;
+      cadrResult.textContent = Math.ceil(cadr);
+    }
+
+    [lenInput, widInput, heiInput, achInput].forEach(el => {
+      el.addEventListener('input', calculate);
+    });
+
+    calculate();
+  </script>
+</body>
+</html>

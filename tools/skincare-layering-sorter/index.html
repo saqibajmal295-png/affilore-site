@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skincare Layering Sorter - Affilore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand: '#F5A623', dark: '#0a0a0a', panel: '#151515' }
+        }
+      }
+    }
+  </script>
+  <style>
+    .checkbox-custom:checked + div { background-color: rgba(245, 166, 35, 0.2); border-color: #F5A623; }
+    .checkbox-custom:checked + div .check-icon { opacity: 1; }
+  </style>
+</head>
+<body class="bg-dark text-white antialiased">
+  <header class="py-6 px-4 border-b border-white/10">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <a href="/" class="text-brand font-bold text-2xl tracking-tight flex items-center gap-2">
+        <div class="w-8 h-8 bg-brand text-black rounded flex items-center justify-center font-black">A</div>
+        affilore
+      </a>
+      <a href="/free-tools/" class="text-sm text-gray-400 hover:text-white transition">&larr; Back to Tools</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <!-- Tool Container -->
+    <div class="bg-panel border border-white/10 rounded-2xl p-6 md:p-10 mb-16 shadow-2xl">
+      <h1 class="text-3xl md:text-4xl font-bold mb-3">Skincare Step-by-Step Layering Sorter</h1>
+      <p class="text-gray-400 mb-8">Select the products currently in your routine. We will sort them into the scientifically correct order based on pH levels and molecular weight.</p>
+      
+      <div class="grid md:grid-cols-2 gap-10">
+        <!-- Inputs -->
+        <div>
+          <h3 class="text-lg font-bold mb-4 text-white">Select Your Products:</h3>
+          <div class="space-y-3" id="product-list">
+            <!-- Cleanser -->
+            <label class="block cursor-pointer relative">
+              <input type="checkbox" value="cleanser" class="checkbox-custom absolute opacity-0 w-0 h-0" checked>
+              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
+                <span class="font-semibold">Cleanser</span>
+                <span class="check-icon opacity-0 text-brand">✓</span>
+              </div>
+            </label>
+            <!-- Exfoliant -->
+            <label class="block cursor-pointer relative">
+              <input type="checkbox" value="exfoliant" class="checkbox-custom absolute opacity-0 w-0 h-0">
+              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
+                <span class="font-semibold">AHA / BHA Pad (Exfoliant)</span>
+                <span class="check-icon opacity-0 text-brand">✓</span>
+              </div>
+            </label>
+            <!-- Toner -->
+            <label class="block cursor-pointer relative">
+              <input type="checkbox" value="toner" class="checkbox-custom absolute opacity-0 w-0 h-0">
+              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
+                <span class="font-semibold">Hydrating Toner</span>
+                <span class="check-icon opacity-0 text-brand">✓</span>
+              </div>
+            </label>
+            <!-- Vitamin C -->
+            <label class="block cursor-pointer relative">
+              <input type="checkbox" value="vitc" class="checkbox-custom absolute opacity-0 w-0 h-0">
+              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
+                <span class="font-semibold">Vitamin C Serum</span>
+                <span class="check-icon opacity-0 text-brand">✓</span>
+              </div>
+            </label>
+            <!-- Retinol -->
+            <label class="block cursor-pointer relative">
+              <input type="checkbox" value="retinol" class="checkbox-custom absolute opacity-0 w-0 h-0">
+              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
+                <span class="font-semibold">Retinol / Retinoid</span>
+                <span class="check-icon opacity-0 text-brand">✓</span>
+              </div>
+            </label>
+            <!-- Moisturizer -->
+            <label class="block cursor-pointer relative">
+              <input type="checkbox" value="moisturizer" class="checkbox-custom absolute opacity-0 w-0 h-0" checked>
+              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
+                <span class="font-semibold">Moisturizer</span>
+                <span class="check-icon opacity-0 text-brand">✓</span>
+              </div>
+            </label>
+            <!-- SPF -->
+            <label class="block cursor-pointer relative">
+              <input type="checkbox" value="spf" class="checkbox-custom absolute opacity-0 w-0 h-0" checked>
+              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
+                <span class="font-semibold">Sunscreen (SPF)</span>
+                <span class="check-icon opacity-0 text-brand">✓</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="flex flex-col">
+          <div class="p-6 bg-black/50 rounded-xl border border-brand/30 h-full">
+            <h3 class="text-brand font-bold uppercase tracking-wider mb-4 border-b border-brand/20 pb-2">Your Routine Order</h3>
+            
+            <div id="routine-warning" class="hidden mb-4 p-3 bg-red-900/40 border border-red-500/50 rounded text-red-200 text-xs">
+              <strong>⚠️ Warning:</strong> You selected both Vitamin C and Retinol/AHA. Do not mix these in the same application. Move Retinol to PM only.
+            </div>
+
+            <ol id="routine-list" class="list-decimal pl-5 space-y-3 font-semibold text-gray-200 mb-6"></ol>
+            
+            <div id="cta-card" class="hidden mt-auto p-4 bg-gradient-to-r from-brand/10 to-transparent border-l-4 border-brand text-left rounded-r-lg">
+              <h4 class="font-bold text-md text-white mb-1">Maximize Your Glow Step</h4>
+              <p class="text-gray-400 text-xs mb-3 leading-relaxed">Liquid exfoliants can be messy. Upgrade your routine with the pre-soaked Medicube Zero Pore Pad 2.0 for clinical-grade AHA/BHA delivery.</p>
+              <a href="/skin-beauty/medicube-zero-pore-pad-review/" class="inline-block bg-brand text-black px-4 py-2 rounded font-bold text-xs hover:bg-yellow-500 transition">Read the Review &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO Article -->
+    <article class="prose prose-invert prose-brand max-w-none" style="font-size: 1.1rem; line-height: 1.8;">
+      <h2 class="text-3xl font-bold text-white mb-6">The Scientific Order to Layer Your Skincare (2026 Guide)</h2>
+      
+      <p>Walking into a Sephora or browsing beauty TikTok today is an overwhelming experience. Consumers are bombarded with serums, ampoules, essences, acids, and barrier creams. The harsh reality of modern skincare is that spending $300 on premium active ingredients is entirely useless if you apply them in the wrong order. Incorrect layering can lead to product pilling, ingredient deactivation, and severe chemical burns.</p>
+
+      <p>The science of skincare layering relies on two absolute, unbreakable rules: <strong>Texture (thinnest to thickest)</strong> and <strong>pH dependency</strong>. If you violate these rules, your expensive serums will never penetrate your stratum corneum (the outermost layer of the skin).</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Rule 1: Molecular Weight and Texture (Thinnest to Thickest)</h3>
+      <p>Skin acts as a highly effective barrier—its primary biological job is to keep things out. To force ingredients past this barrier, formulations rely on specific molecular sizes. Water-based, watery serums (like Hyaluronic Acid or lightweight Vitamin C) have small molecular structures designed to penetrate deeply and quickly.</p>
+      
+      <p>Conversely, heavy creams, facial oils, and sunscreens contain large molecules and occlusive ingredients (like silicones, shea butter, or petroleum derivatives). Their job is to sit on top of the skin and create a seal, trapping moisture underneath. If you apply a thick moisturizer <em>before</em> a watery serum, the serum’s active ingredients will physically bounce off the occlusive layer. The product will evaporate into the air instead of absorbing into your skin.</p>
+      
+      <p>The hierarchy is always: Liquid &rarr; Serum &rarr; Lotion &rarr; Cream &rarr; Oil.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Rule 2: pH Dependency and Active Conflicts</h3>
+      <p>The skin's natural "acid mantle" hovers around a pH of 5.5. Certain active ingredients require highly acidic environments to function, while others require a neutral environment. Mixing them destroys their efficacy.</p>
+      
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li><strong>Exfoliants (AHA/BHA):</strong> These are highly acidic (pH 3.0 - 4.0). They must be applied directly to clean skin immediately after washing. Applying them over a neutral moisturizer neutralizes the acid, rendering the exfoliant useless.</li>
+        <li><strong>Vitamin C (L-Ascorbic Acid):</strong> Also highly acidic and notoriously unstable. It should be applied in the morning directly after cleansing or toning to protect against free radicals.</li>
+        <li><strong>Retinol / Retinoids:</strong> These are powerful cell-communicating ingredients applied in the PM. They generally operate best at a slightly higher pH. If you apply acidic AHA/BHA immediately followed by Retinol, the drastic pH shift degrades the Retinol and massively increases your risk of a compromised skin barrier (redness, flaking, stinging).</li>
+      </ul>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Danger Zone: Ingredients You Should Never Mix</h3>
+      <p>The biggest mistake in 2026 skincare trends is the "kitchen sink" approach—slapping 15 different actives on your face at once. You must separate conflicting ingredients into your AM and PM routines.</p>
+      
+      <p>Never mix Vitamin C with Retinol in the same application. Never mix strong chemical exfoliants (like 2% BHA or Glycolic Acid) with Retinol unless the formulation explicitly blends them. If you attempt to chemically exfoliate your skin and force rapid cell turnover with Retinol simultaneously, you will destroy your lipid barrier.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Optimizing the Exfoliation Step</h3>
+      <p>Exfoliation is the gateway to glowing skin, but it is notoriously difficult to get right. Liquid toners often spill, and estimating the correct dosage on a cotton pad is tricky. This is why pre-soaked, perfectly dosed pads have become the gold standard.</p>
+      
+      <p>If you find that your serums aren't absorbing or your makeup is caking, a high-quality chemical exfoliant is required. The <strong>Medicube Zero Pore Pad 2.0</strong> has dominated the market because it perfectly calibrates the AHA/BHA dosage into an embossed, dual-sided pad. It provides chemical exfoliation to melt the "glue" holding dead skin cells together, while the textured side provides gentle physical exfoliation. It operates at the perfect pH to prep the skin, ensuring every expensive serum you layer on top actually penetrates and performs.</p>
+      
+      <p>Use the sorting tool above to audit your current routine. Strip it back to the basics: cleanse, treat (one active per routine), moisturize, and protect. Your skin barrier will thank you.</p>
+    </article>
+  </main>
+
+  <script>
+    const checkboxes = document.querySelectorAll('.checkbox-custom');
+    const routineList = document.getElementById('routine-list');
+    const routineWarning = document.getElementById('routine-warning');
+    const ctaCard = document.getElementById('cta-card');
+
+    const productOrder = {
+      'cleanser': { name: 'Cleanser (AM & PM)', weight: 10 },
+      'exfoliant': { name: 'AHA / BHA Pad (1-3x a week)', weight: 20 },
+      'toner': { name: 'Hydrating Toner', weight: 30 },
+      'vitc': { name: 'Vitamin C Serum (AM focus)', weight: 40 },
+      'retinol': { name: 'Retinol (PM ONLY)', weight: 50 },
+      'moisturizer': { name: 'Moisturizer', weight: 60 },
+      'spf': { name: 'Sunscreen / SPF (AM ONLY)', weight: 70 }
+    };
+
+    function updateRoutine() {
+      const selected = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+      
+      // Check for conflicts
+      if ((selected.includes('retinol') && selected.includes('exfoliant')) || 
+          (selected.includes('retinol') && selected.includes('vitc'))) {
+        routineWarning.classList.remove('hidden');
+      } else {
+        routineWarning.classList.add('hidden');
+      }
+
+      // Check for CTA
+      if (selected.includes('exfoliant')) {
+        ctaCard.classList.remove('hidden');
+      } else {
+        ctaCard.classList.add('hidden');
+      }
+
+      // Sort
+      selected.sort((a, b) => productOrder[a].weight - productOrder[b].weight);
+
+      // Render
+      routineList.innerHTML = '';
+      if(selected.length === 0) {
+        routineList.innerHTML = '<li class="text-gray-500 list-none">Select products to see your routine.</li>';
+        return;
+      }
+
+      selected.forEach(key => {
+        const li = document.createElement('li');
+        li.textContent = productOrder[key].name;
+        routineList.appendChild(li);
+      });
+    }
+
+    checkboxes.forEach(cb => cb.addEventListener('change', updateRoutine));
+    updateRoutine();
+  </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Precision Barista Ratio Calculator - Affilore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand: '#F5A623', dark: '#0a0a0a', panel: '#151515' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-dark text-white antialiased">
+  <header class="py-6 px-4 border-b border-white/10">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <a href="/" class="text-brand font-bold text-2xl tracking-tight flex items-center gap-2">
+        <div class="w-8 h-8 bg-brand text-black rounded flex items-center justify-center font-black">A</div>
+        affilore
+      </a>
+      <a href="/free-tools/" class="text-sm text-gray-400 hover:text-white transition">&larr; Back to Tools</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <!-- Tool Container -->
+    <div class="bg-panel border border-white/10 rounded-2xl p-6 md:p-10 mb-16 shadow-2xl">
+      <h1 class="text-3xl md:text-4xl font-bold mb-3">Precision Barista Ratio Calculator</h1>
+      <p class="text-gray-400 mb-8">Dial in your perfect espresso or pour-over by calculating the exact coffee grounds required for your target water volume and brew ratio.</p>
+      
+      <div class="grid md:grid-cols-2 gap-10">
+        <!-- Inputs -->
+        <div class="space-y-8">
+          <div>
+            <label class="block text-sm font-bold text-gray-300 mb-2">Target Water Volume (ml / grams)</label>
+            <div class="flex items-center gap-4">
+              <input type="range" id="water-slider" min="30" max="1000" value="250" class="w-full accent-brand">
+              <input type="number" id="water-input" value="250" class="w-24 bg-dark border border-white/20 rounded p-2 text-center focus:border-brand outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-300 mb-2">Brew Ratio (1:X)</label>
+            <div class="flex items-center gap-4">
+              <input type="range" id="ratio-slider" min="1" max="20" step="0.5" value="15" class="w-full accent-brand">
+              <div class="w-24 bg-dark border border-white/20 rounded p-2 text-center text-brand font-bold">1 : <span id="ratio-display">15</span></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500 mt-2 px-1">
+              <span>Espresso (1:2)</span>
+              <span>Filter (1:15)</span>
+              <span>Cold Brew (1:8)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="flex flex-col justify-center">
+          <div class="p-6 bg-black/50 rounded-xl border border-brand/30 text-center">
+            <h3 class="text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">Required Coffee Grounds</h3>
+            <div class="text-5xl md:text-6xl font-black text-brand mb-1"><span id="coffee-result">16.7</span><span class="text-2xl text-gray-300 ml-1">g</span></div>
+            <p class="text-xs text-gray-500 mt-2">Use a high-precision scale for accuracy.</p>
+            
+            <div class="mt-8 p-4 bg-gradient-to-r from-brand/10 to-transparent border-l-4 border-brand text-left rounded-r-lg">
+              <h4 class="font-bold text-md text-white mb-1">Tired of dialing in manually?</h4>
+              <p class="text-gray-400 text-xs mb-3 leading-relaxed">The Breville Barista Touch Impress features auto-dosing and intelligent tamping, completely eliminating the guesswork from your morning routine.</p>
+              <a href="/coffee/breville-touch-impress-review/" class="inline-block bg-brand text-black px-4 py-2 rounded font-bold text-xs hover:bg-yellow-500 transition">Upgrade Your Setup &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO Article -->
+    <article class="prose prose-invert prose-brand max-w-none" style="font-size: 1.1rem; line-height: 1.8;">
+      <h2 class="text-3xl font-bold text-white mb-6">The Ultimate Guide to Espresso and Pour-Over Ratios in 2026</h2>
+      
+      <p>Whether you are pulling a concentrated shot of espresso on a high-end machine or meticulously crafting a morning pour-over, the fundamental science of coffee extraction relies heavily on one specific metric: your brew ratio. In the specialty coffee world, the brew ratio is the proportional relationship between the amount of dry coffee grounds and the total amount of water used in the brewing process.</p>
+      
+      <p>For decades, casual coffee drinkers relied on the highly inaccurate method of "scoops per cup." However, beans vary wildly in size, density, and roast level. A scoop of dense, lightly roasted Ethiopian Yirgacheffe will weigh significantly more than a scoop of dark, oily Sumatra. By utilizing a precision barista ratio calculator and measuring by mass (grams) rather than volume, you eliminate these variables and take total control over your coffee's extraction yield and total dissolved solids (TDS).</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Understanding the Golden Ratios</h3>
+      <p>Different brewing methods require drastically different ratios to achieve the perfect balance of acidity, sweetness, and bitterness. Here are the industry standards for 2026:</p>
+      
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li><strong>Espresso (1:2 to 1:2.5):</strong> Espresso is highly concentrated. A standard modern double shot uses 18 grams of dry coffee to produce roughly 36 to 45 grams of liquid espresso. This tight ratio creates the syrupy texture and intense flavor profile required to push through milk in lattes and cappuccinos.</li>
+        <li><strong>Pour-Over / Filter (1:15 to 1:17):</strong> For methods like the V60, Chemex, or standard drip machines, a wider ratio is necessary. The "Golden Ratio" established by the Specialty Coffee Association (SCA) hovers around 1:15 to 1:18. A 1:15 ratio yields a richer, fuller-bodied cup, while a 1:17 ratio highlights delicate floral and fruity notes in lighter roasts.</li>
+        <li><strong>French Press (1:12 to 1:15):</strong> Because immersion brewing is inherently less efficient at extraction than percolation (water flowing through the bed), a slightly tighter ratio is often used to ensure adequate strength.</li>
+        <li><strong>Cold Brew (1:8 for concentrate, 1:15 for ready-to-drink):</strong> Cold water extraction takes significantly longer (12-24 hours). Making a 1:8 concentrate allows you to dilute the final product with water or milk over ice.</li>
+      </ul>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Science of Extraction and Dialing In</h3>
+      <p>Using a calculator to find your exact coffee weight is only step one. Step two is "dialing in." When water hits coffee grounds, it extracts compounds in a specific sequence: acidic/fruity notes first, sweet/sugary notes second, and bitter/astringent notes last. If your coffee tastes overwhelmingly sour, it is under-extracted. You either need to grind finer (to increase surface area) or increase your water ratio to pull out more sweetness.</p>
+      
+      <p>Conversely, if your coffee tastes hollow, dry, or excessively bitter, it is over-extracted. To fix this, you should grind coarser or decrease your water ratio. Precision is everything. Being off by even 1 or 2 grams of coffee can shift a shot of espresso from a vibrant, balanced delicacy to an undrinkable, battery-acid nightmare.</p>
+
+      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Why Manual Preparation Isn't For Everyone</h3>
+      <p>While the ritual of weighing beans down to the tenth of a gram, executing a perfect WDT (Weiss Distribution Technique), and manually tamping is a beautiful morning hobby for some, it is undeniably tedious for others. The reality of modern kitchen appliances is that you no longer have to suffer through the manual dialing-in process if you don't want to.</p>
+      
+      <p>This is precisely why prosumer machines like the <strong>Breville Barista Touch Impress</strong> have dominated the 2026 market. By integrating a commercial-grade grinder with an adaptive dosing system and an intelligent tamping lever, the machine effectively does the math for you. It reads the puck depth, adjusts the dose automatically, and delivers a calibrated 10kg tamp. It bridges the gap between the chaotic science of ratios and the simple desire for a phenomenal cup of coffee before you head to work.</p>
+
+      <p>Regardless of whether you choose the path of the manual purist or the tech-assisted home barista, understanding your coffee-to-water ratio is the single most important variable in your kitchen. Use the calculator above to establish your baseline, invest in a high-quality digital scale, and never settle for a mediocre cup of coffee again.</p>
+    </article>
+  </main>
+
+  <script>
+    const waterSlider = document.getElementById('water-slider');
+    const waterInput = document.getElementById('water-input');
+    const ratioSlider = document.getElementById('ratio-slider');
+    const ratioDisplay = document.getElementById('ratio-display');
+    const coffeeResult = document.getElementById('coffee-result');
+
+    function calculate() {
+      const water = parseFloat(waterInput.value);
+      const ratio = parseFloat(ratioSlider.value);
+      if(water > 0 && ratio > 0) {
+        const coffee = (water / ratio).toFixed(1);
+        coffeeResult.textContent = coffee;
+      }
+    }
+
+    waterSlider.addEventListener('input', (e) => {
+      waterInput.value = e.target.value;
+      calculate();
+    });
+
+    waterInput.addEventListener('input', (e) => {
+      waterSlider.value = e.target.value;
+      calculate();
+    });
+
+    ratioSlider.addEventListener('input', (e) => {
+      ratioDisplay.textContent = e.target.value;
+      calculate();
+    });
+
+    calculate(); // init
+  </script>
+</body>
+</html>
