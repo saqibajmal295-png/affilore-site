@@ -3,144 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recipe Yield & Unit Scaler - Affilore</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brand: '#F5A623', dark: '#0a0a0a', panel: '#151515' }
-        }
-      }
+  <title>Recipe Yield & Unit Scaler — Affilore</title>
+  <meta name="description" content="Instantly scale recipe ingredients up or down with unit conversions. Free interactive recipe scaler tool by Affilore.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand: #F5A623; --bg: #060608; --panel: #0e0e12; --card: #141418;
+      --border: rgba(255,255,255,0.07); --text: #e8e8ec; --muted: #8a8a96;
+      --green: #22c55e; --orange: #f97316;
     }
-  </script>
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .bg-blur { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-blur span { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.12; }
+    .bg-blur .b1 { width: 600px; height: 600px; background: var(--orange); top: -200px; left: -100px; }
+    .bg-blur .b2 { width: 500px; height: 500px; background: var(--green); bottom: -150px; right: -100px; }
+    .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    header { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    header .inner { display: flex; align-items: center; justify-content: space-between; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brand); font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 32px; height: 32px; background: var(--brand); color: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; }
+    .back-link { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+    .back-link:hover { color: #fff; }
+    .tool-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin: 40px 0; box-shadow: 0 0 80px rgba(249,115,22,0.04); }
+    @media(max-width:640px){ .tool-panel { padding: 24px 16px; } }
+    h1 { font-size: 2.2rem; font-weight: 900; line-height: 1.15; margin-bottom: 6px; }
+    @media(max-width:640px){ h1 { font-size: 1.5rem; } }
+    .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 32px; line-height: 1.5; }
+
+    label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .input-group { margin-bottom: 20px; }
+    input[type="number"], select, textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; color: #fff; font-size: 1rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
+    input[type="number"]:focus, select:focus, textarea:focus { border-color: var(--brand); }
+    textarea { resize: vertical; min-height: 160px; font-family: 'Inter', monospace; line-height: 1.7; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    /* Quick multiply */
+    .quick-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+    .quick-btn { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .quick-btn:hover { border-color: var(--brand); color: #fff; }
+    .quick-btn.active { background: var(--brand); color: #000; border-color: var(--brand); }
+
+    .scale-btn { width: 100%; background: var(--brand); color: #000; border: none; padding: 14px; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+    .scale-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,166,35,0.3); }
+
+    .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    @media(max-width:700px){ .tool-grid { grid-template-columns: 1fr; } }
+
+    /* Result */
+    .result-panel { background: linear-gradient(145deg, rgba(249,115,22,0.05), rgba(34,197,94,0.03)); border: 1px solid rgba(245,166,35,0.15); border-radius: 16px; padding: 24px; }
+    .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    .result-header h3 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .result-header .factor { font-size: 0.85rem; font-weight: 800; color: var(--brand); }
+    .result-list { font-size: 0.95rem; line-height: 1.9; }
+    .result-list .line { display: flex; gap: 8px; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+    .result-list .line .qty { color: var(--brand); font-weight: 800; min-width: 70px; }
+    .result-list .line .rest { color: var(--text); }
+    .result-list .line-unchanged { color: var(--muted); font-style: italic; padding: 4px 0; }
+
+    /* Conversion toggle */
+    .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .toggle-label { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+    .toggle-switch { width: 44px; height: 24px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.3s; }
+    .toggle-switch.on { background: var(--brand); border-color: var(--brand); }
+    .toggle-switch::after { content: ''; position: absolute; width: 18px; height: 18px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: transform 0.3s; }
+    .toggle-switch.on::after { transform: translateX(20px); }
+
+    /* Stats bar */
+    .stats-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .stat-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+    .stat-item .s-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+    .stat-item .s-value { font-size: 1.1rem; font-weight: 800; color: #fff; }
+
+    .cta-card { margin-top: 24px; padding: 20px; border-radius: 14px; background: linear-gradient(135deg, rgba(245,166,35,0.08), transparent); border-left: 4px solid var(--brand); }
+    .cta-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .cta-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .cta-btn { display: inline-block; background: var(--brand); color: #000; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,166,35,0.3); }
+
+    article { margin: 60px 0; }
+    article h2 { font-size: 2rem; font-weight: 800; margin-bottom: 20px; }
+    article h3 { font-size: 1.4rem; font-weight: 700; margin-top: 40px; margin-bottom: 14px; color: #fff; }
+    article p { color: var(--muted); font-size: 1.05rem; line-height: 1.85; margin-bottom: 18px; }
+    article ul { padding-left: 24px; margin-bottom: 18px; }
+    article li { color: var(--muted); font-size: 1.05rem; line-height: 1.85; margin-bottom: 8px; }
+    article li strong { color: #fff; }
+  </style>
 </head>
-<body class="bg-dark text-white antialiased">
-  <header class="py-6 px-4 border-b border-white/10">
-    <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <a href="/" class="text-brand font-bold text-2xl tracking-tight flex items-center gap-2">
-        <div class="w-8 h-8 bg-brand text-black rounded flex items-center justify-center font-black">A</div>
-        affilore
-      </a>
-      <a href="/free-tools/" class="text-sm text-gray-400 hover:text-white transition">&larr; Back to Tools</a>
-    </div>
-  </header>
+<body>
+  <div class="bg-blur"><span class="b1"></span><span class="b2"></span></div>
+  <header><div class="inner"><a href="/" class="logo"><div class="logo-icon">A</div>affilore</a><a href="/free-tools/" class="back-link">&larr; All Free Tools</a></div></header>
 
-  <main class="max-w-4xl mx-auto px-4 py-12">
-    <!-- Tool Container -->
-    <div class="bg-panel border border-white/10 rounded-2xl p-6 md:p-10 mb-16 shadow-2xl">
-      <h1 class="text-3xl md:text-4xl font-bold mb-3">Recipe Yield & Unit Scaler</h1>
-      <p class="text-gray-400 mb-8">Paste your ingredient list below to instantly scale the recipe up or down without doing mental math.</p>
-      
-      <div class="grid md:grid-cols-2 gap-10">
-        <!-- Inputs -->
-        <div class="space-y-6">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-bold text-gray-300 mb-1">Original Servings</label>
-              <input type="number" id="orig-servings" value="4" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+  <div class="wrapper">
+    <div class="tool-panel">
+      <h1>Recipe Yield & Unit Scaler</h1>
+      <p class="subtitle">Paste your ingredient list, set your desired servings, and get perfectly scaled quantities — with optional metric conversions.</p>
+
+      <div class="tool-grid">
+        <div>
+          <div class="row-2">
+            <div class="input-group">
+              <label>Original Servings</label>
+              <input type="number" id="orig" value="4" min="1">
             </div>
-            <div>
-              <label class="block text-sm font-bold text-gray-300 mb-1">Desired Servings</label>
-              <input type="number" id="new-servings" value="12" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none text-brand font-bold">
+            <div class="input-group">
+              <label>Desired Servings</label>
+              <input type="number" id="dest" value="12" min="1">
             </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-bold text-gray-300 mb-1">Paste Ingredient List</label>
-            <textarea id="ingredients-input" rows="8" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none resize-none font-mono text-sm leading-relaxed" placeholder="1 cup all-purpose flour
-0.5 tsp baking soda
-2 eggs
-200 ml milk"></textarea>
+          <label>Quick Scale</label>
+          <div class="quick-btns" id="quick-btns">
+            <button class="quick-btn" data-factor="0.5">½×</button>
+            <button class="quick-btn" data-factor="1">1×</button>
+            <button class="quick-btn" data-factor="2">2×</button>
+            <button class="quick-btn active" data-factor="3">3×</button>
+            <button class="quick-btn" data-factor="4">4×</button>
+            <button class="quick-btn" data-factor="5">5×</button>
           </div>
 
-          <button id="scale-btn" class="w-full bg-brand text-black font-bold py-3 rounded-lg hover:bg-yellow-500 transition">Scale Recipe</button>
+          <div class="toggle-row">
+            <div class="toggle-switch" id="metric-toggle"></div>
+            <span class="toggle-label">Convert cups → grams (approximate)</span>
+          </div>
+
+          <div class="input-group">
+            <label>Paste Ingredient List</label>
+            <textarea id="ingredients" placeholder="2 cups all-purpose flour
+1/2 tsp baking soda
+3 large eggs
+1.5 cups whole milk
+0.25 cup sugar
+1 tbsp vanilla extract"></textarea>
+          </div>
+
+          <button class="scale-btn" id="scale-btn">Scale Recipe →</button>
         </div>
 
-        <!-- Result -->
-        <div class="flex flex-col h-full">
-          <div class="p-6 bg-black/50 rounded-xl border border-brand/30 flex-1 flex flex-col">
-            <h3 class="text-gray-400 text-sm font-bold uppercase tracking-wider mb-4 border-b border-gray-700 pb-2">Scaled Ingredients</h3>
-            <div id="scaled-result" class="font-mono text-sm leading-relaxed whitespace-pre-wrap flex-1 text-gray-200">Paste ingredients and click Scale...</div>
-            
-            <div class="mt-8 p-4 bg-gradient-to-r from-brand/10 to-transparent border-l-4 border-brand text-left rounded-r-lg">
-              <h4 class="font-bold text-md text-white mb-1">Scaling up? You'll need bigger gear.</h4>
-              <p class="text-gray-400 text-xs mb-3 leading-relaxed">Don't try to cram a 3x batch of dough into a cereal bowl. Handle massive recipe scaling like a pro with the indestructible 26-Piece Stainless Steel Mixing Bowl Set.</p>
-              <a href="/smart-kitchen/26pc-mixing-bowl-review/" class="inline-block bg-brand text-black px-4 py-2 rounded font-bold text-xs hover:bg-yellow-500 transition">View Kitchen Essentials &rarr;</a>
+        <div>
+          <div class="result-panel">
+            <div class="result-header">
+              <h3>Scaled Ingredients</h3>
+              <span class="factor" id="factor-display">×3.0</span>
             </div>
+            <div class="result-list" id="result-list">
+              <p style="color:var(--muted); text-align:center; padding:40px 0; font-size:0.9rem;">Paste ingredients and click Scale...</p>
+            </div>
+            <div class="stats-bar" id="stats-bar" style="display:none;">
+              <div class="stat-item"><div class="s-label">Lines Scaled</div><div class="s-value" id="stat-lines">0</div></div>
+              <div class="stat-item"><div class="s-label">Scale Factor</div><div class="s-value" id="stat-factor">3×</div></div>
+              <div class="stat-item"><div class="s-label">Output Servings</div><div class="s-value" id="stat-servings">12</div></div>
+            </div>
+          </div>
+
+          <div class="cta-card">
+            <h4>Scaling up? You'll need bigger gear.</h4>
+            <p>Don't try to cram a 3× batch of dough into a cereal bowl. Handle massive recipe scaling with the indestructible 26-Piece Stainless Steel Mixing Bowl Set.</p>
+            <a href="/smart-kitchen/26pc-mixing-bowl-review/" class="cta-btn">View Kitchen Essentials →</a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SEO Article -->
-    <article class="prose prose-invert prose-brand max-w-none" style="font-size: 1.1rem; line-height: 1.8;">
-      <h2 class="text-3xl font-bold text-white mb-6">How to Scale Baking Recipes Without Ruining the Ratios</h2>
-      
-      <p>Anyone who has ever tried to casually double a cake recipe knows that baking is incredibly unforgiving. Cooking a soup or a stir-fry is an art form; you can add a pinch of this or a dash of that until it tastes right. Baking, on the other hand, is applied chemistry. The moment heat hits your batter, a complex series of scientific reactions—leavening, protein coagulation, and starch gelatinization—must occur in perfect sequence. If your mathematical ratios are off, your cake will collapse, your bread will be dense, and your cookies will burn.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Danger of Volume Measurements</h3>
-      <p>The standard American kitchen relies heavily on volume measurements: cups, tablespoons, and teaspoons. While fine for casual cooking, volume is the enemy of precision baking.</p>
-      
-      <p>Consider a cup of all-purpose flour. If you gently spoon the flour into the cup and level it off with a knife, it will weigh approximately 120 grams. If you dig the measuring cup directly into the bag, packing the flour down tightly, that exact same "cup" can weigh up to 150 grams. That is a 25% discrepancy. If you double a recipe using packed cups, you are suddenly adding 60 grams of excess flour. Your dough will be dry, tough, and overworked.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Baker's Percentages Explained</h3>
-      <p>Professional bakers do not use cups, and they rarely look at traditional recipe lists. They use "Baker's Percentages." In this system, the total weight of the flour in the recipe always equals 100%. Every other ingredient is calculated as a percentage of that flour weight.</p>
-      
-      <p>For example, a classic lean bread dough consists of:</p>
-      <ul class="list-disc pl-6 space-y-2 mb-6">
-        <li><strong>Flour:</strong> 100%</li>
-        <li><strong>Water (Hydration):</strong> 70%</li>
-        <li><strong>Salt:</strong> 2%</li>
-        <li><strong>Yeast:</strong> 1%</li>
-      </ul>
-      
-      <p>If you want to bake 1,000 grams of flour, you instantly know you need 700 grams of water, 20 grams of salt, and 10 grams of yeast. If you only have 435 grams of flour left in your pantry, you simply multiply 435 by 0.70 to find your required water weight. This system scales infinitely, from a single loaf in a home kitchen to a massive commercial bakery churning out thousands of baguettes a day.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Scaling Spices and Leavening Agents</h3>
-      <p>While multiplying flour and sugar is relatively straightforward (especially when using grams), scaling leavening agents (baking soda, baking powder) and strong spices requires caution. Chemical leaveners do not always scale linearly.</p>
-      
-      <p>If you are tripling a recipe, you might not need exactly three times the baking powder. Too much baking powder causes the batter to rise rapidly in the oven before the structural proteins have time to set. The air bubbles pop, and the cake violently collapses in the center. As a general rule of thumb, if you are scaling a recipe by a factor of 3 or more, reduce the scaled leavening agent by about 10-15% to prevent over-expansion.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Kitchen Prep Gear: Why Equipment Matters</h3>
-      <p>One of the most common mistakes home cooks make when scaling recipes is failing to scale their equipment. You cannot triple a cookie dough recipe in a standard 4-quart mixing bowl. The ingredients will fly over the edges when you turn on the hand mixer, and the flour will not incorporate evenly, leading to overworked, tough gluten strands.</p>
-      
-      <p>When you commit to scaling recipes—whether for meal prep, the holidays, or large gatherings—you must have the hardware to support it. A comprehensive set of deep, stainless steel mixing bowls is non-negotiable. They do not retain odors or grease (which can ruin a meringue), they can be placed over simmering water as a double boiler, and they provide the sheer volume necessary to aggressively fold large batters without making a mess on your counter.</p>
-      
-      <p>Before you begin your next massive baking project, paste your recipe into the scaler tool above, verify your ratios, and ensure you have the bowls and pans required to handle the volume.</p>
+    <article>
+      <h2>How to Scale Baking Recipes Without Ruining the Ratios</h2>
+      <p>Anyone who has ever tried to casually double a cake recipe knows that baking is incredibly unforgiving. Cooking a soup or stir-fry is an art form; you can add a pinch of this or a dash of that until it tastes right. Baking, on the other hand, is applied chemistry. The moment heat hits your batter, a complex series of scientific reactions—leavening, protein coagulation, and starch gelatinization—must occur in perfect sequence. If your mathematical ratios are off, your cake will collapse, your bread will be dense, and your cookies will burn.</p>
+      <h3>The Danger of Volume Measurements</h3>
+      <p>The standard American kitchen relies heavily on volume measurements: cups, tablespoons, and teaspoons. A cup of all-purpose flour gently spooned weighs approximately 120 grams. If you dig the measuring cup directly into the bag, packing it down, that exact same "cup" can weigh up to 150 grams. That is a 25% discrepancy. If you double a recipe using packed cups, you are suddenly adding 60 grams of excess flour. Your dough will be dry, tough, and overworked.</p>
+      <h3>Baker's Percentages Explained</h3>
+      <p>Professional bakers use "Baker's Percentages." In this system, the total weight of the flour always equals 100%. Every other ingredient is calculated as a percentage of that flour weight. A classic lean bread: Flour 100%, Water 70%, Salt 2%, Yeast 1%. If you want to bake 1,000 grams of flour, you need 700g water, 20g salt, 10g yeast. This system scales infinitely.</p>
+      <h3>Scaling Spices and Leavening Agents</h3>
+      <p>Chemical leaveners do not always scale linearly. Too much baking powder causes the batter to rise rapidly before structural proteins set. As a general rule of thumb, if you are scaling a recipe by a factor of 3 or more, reduce the scaled leavening agent by about 10-15% to prevent over-expansion. Strong spices like cinnamon and nutmeg should also be scaled conservatively — taste becomes exponentially more concentrated at higher volumes.</p>
+      <h3>Kitchen Prep Gear: Why Equipment Matters</h3>
+      <p>One of the most common mistakes home cooks make when scaling recipes is failing to scale their equipment. You cannot triple a cookie dough recipe in a standard 4-quart mixing bowl. A comprehensive set of deep, stainless steel mixing bowls is non-negotiable. They do not retain odors or grease, they can be placed over simmering water as a double boiler, and they provide the sheer volume necessary to aggressively fold large batters without making a mess on your counter. Before your next massive baking project, paste your recipe into the scaler tool above, verify your ratios, and ensure you have the bowls and pans required to handle the volume.</p>
     </article>
-  </main>
+  </div>
 
   <script>
-    const origInput = document.getElementById('orig-servings');
-    const newInput = document.getElementById('new-servings');
-    const ingredientsInput = document.getElementById('ingredients-input');
+    const origI = document.getElementById('orig');
+    const destI = document.getElementById('dest');
+    const ingredientsI = document.getElementById('ingredients');
     const scaleBtn = document.getElementById('scale-btn');
-    const scaledResult = document.getElementById('scaled-result');
+    const resultList = document.getElementById('result-list');
+    const factorDisplay = document.getElementById('factor-display');
+    const statsBar = document.getElementById('stats-bar');
+    const metricToggle = document.getElementById('metric-toggle');
+    let useMetric = false;
+
+    metricToggle.addEventListener('click', () => { useMetric = !useMetric; metricToggle.classList.toggle('on', useMetric); });
+
+    // Quick scale buttons
+    document.getElementById('quick-btns').addEventListener('click', (e) => {
+      const btn = e.target.closest('.quick-btn');
+      if(!btn) return;
+      document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const factor = parseFloat(btn.dataset.factor);
+      const orig = parseFloat(origI.value) || 1;
+      destI.value = Math.round(orig * factor);
+    });
+
+    // Cup/tbsp/tsp to grams (approximate for flour)
+    const cupConversions = {
+      'cup': 120, 'cups': 120,
+      'tbsp': 8, 'tablespoon': 8, 'tablespoons': 8,
+      'tsp': 3, 'teaspoon': 3, 'teaspoons': 3
+    };
 
     scaleBtn.addEventListener('click', () => {
-      const orig = parseFloat(origInput.value);
-      const dest = parseFloat(newInput.value);
-      const text = ingredientsInput.value;
-
-      if (!orig || !dest || !text) {
-        scaledResult.textContent = "Please provide valid inputs.";
-        return;
-      }
+      const orig = parseFloat(origI.value) || 1;
+      const dest = parseFloat(destI.value) || 1;
+      const text = ingredientsI.value.trim();
+      if(!text) { resultList.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px;">Please paste ingredients first.</p>'; return; }
 
       const ratio = dest / orig;
+      factorDisplay.textContent = '×' + ratio.toFixed(1);
+
       const lines = text.split('\n');
-      
-      const regex = /^([\d\.\/]+)(.*)/;
-      
-      const scaledLines = lines.map(line => {
-        const match = line.trim().match(regex);
-        if (match) {
+      let scaledCount = 0;
+
+      const html = lines.map(line => {
+        const trimmed = line.trim();
+        if(!trimmed) return '';
+
+        // Match numbers (including fractions like 1/2)
+        const match = trimmed.match(/^([\d]+(?:\/[\d]+)?(?:\.\d+)?)\s*(.*)/);
+        if(match) {
           let numStr = match[1];
-          let remainder = match[2];
-          
-          let num = 0;
-          if (numStr.includes('/')) {
+          let rest = match[2];
+          let num;
+
+          if(numStr.includes('/')) {
             const parts = numStr.split('/');
             num = parseFloat(parts[0]) / parseFloat(parts[1]);
           } else {
@@ -148,14 +243,33 @@
           }
 
           if(!isNaN(num)) {
-            const scaledNum = (num * ratio).toFixed(2).replace(/\.00$/, '');
-            return `<span class="text-brand font-bold">${scaledNum}</span>${remainder}`;
+            scaledCount++;
+            let scaledNum = num * ratio;
+            let displayNum = scaledNum % 1 === 0 ? scaledNum.toString() : scaledNum.toFixed(2);
+
+            // Metric conversion
+            if(useMetric) {
+              for(const [unit, grams] of Object.entries(cupConversions)) {
+                if(rest.toLowerCase().startsWith(unit + ' ') || rest.toLowerCase() === unit) {
+                  const gramsVal = scaledNum * grams;
+                  rest = 'g ' + rest.replace(new RegExp('^' + unit + '\\s*', 'i'), '');
+                  displayNum = Math.round(gramsVal).toString();
+                  break;
+                }
+              }
+            }
+
+            return `<div class="line"><span class="qty">${displayNum}</span><span class="rest">${rest}</span></div>`;
           }
         }
-        return line;
-      });
+        return `<div class="line-unchanged">${trimmed}</div>`;
+      }).filter(Boolean).join('');
 
-      scaledResult.innerHTML = scaledLines.join('<br>');
+      resultList.innerHTML = html || '<p style="color:var(--muted);">No numeric ingredients found.</p>';
+      statsBar.style.display = 'grid';
+      document.getElementById('stat-lines').textContent = scaledCount;
+      document.getElementById('stat-factor').textContent = ratio.toFixed(1) + '×';
+      document.getElementById('stat-servings').textContent = dest;
     });
   </script>
 </body>

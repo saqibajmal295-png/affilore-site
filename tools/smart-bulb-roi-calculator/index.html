@@ -3,163 +3,315 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Home ROI & Energy Calculator - Affilore</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brand: '#F5A623', dark: '#0a0a0a', panel: '#151515' }
-        }
-      }
+  <title>Smart Home ROI & Energy Calculator — Affilore</title>
+  <meta name="description" content="Calculate annual electricity costs and savings for upgrading to smart LED lighting. Free interactive energy ROI calculator by Affilore.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand: #F5A623; --bg: #060608; --panel: #0e0e12; --card: #141418;
+      --border: rgba(255,255,255,0.07); --text: #e8e8ec; --muted: #8a8a96;
+      --green: #22c55e; --red: #ef4444; --blue: #3b82f6;
     }
-  </script>
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .bg-blur { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-blur span { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.12; }
+    .bg-blur .b1 { width: 600px; height: 600px; background: var(--green); top: -200px; right: -100px; }
+    .bg-blur .b2 { width: 500px; height: 500px; background: var(--brand); bottom: -150px; left: -100px; }
+    .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    header { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    header .inner { display: flex; align-items: center; justify-content: space-between; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brand); font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 32px; height: 32px; background: var(--brand); color: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; }
+    .back-link { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+    .back-link:hover { color: #fff; }
+    .tool-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin: 40px 0; box-shadow: 0 0 80px rgba(34,197,94,0.04); }
+    @media(max-width:640px){ .tool-panel { padding: 24px 16px; } }
+    h1 { font-size: 2.2rem; font-weight: 900; line-height: 1.15; margin-bottom: 6px; }
+    @media(max-width:640px){ h1 { font-size: 1.5rem; } }
+    .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 32px; line-height: 1.5; }
+
+    label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .input-group { margin-bottom: 20px; }
+    input[type="number"], select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; color: #fff; font-size: 1rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
+    input[type="number"]:focus, select:focus { border-color: var(--brand); }
+    input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); outline: none; margin: 8px 0; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--brand); cursor: grab; box-shadow: 0 0 12px rgba(245,166,35,0.5); }
+    .slider-row { display: flex; align-items: center; gap: 12px; }
+    .slider-row input[type="number"] { width: 90px; text-align: center; flex-shrink: 0; }
+
+    .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    @media(max-width:700px){ .tool-grid { grid-template-columns: 1fr; } }
+
+    /* Comparison bars */
+    .compare-section { margin-bottom: 24px; }
+    .compare-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .compare-label { width: 140px; flex-shrink: 0; font-size: 0.82rem; font-weight: 600; }
+    .compare-bar-track { flex: 1; height: 32px; background: rgba(255,255,255,0.04); border-radius: 8px; overflow: hidden; position: relative; }
+    .compare-bar-fill { height: 100%; border-radius: 8px; transition: width 0.6s ease; display: flex; align-items: center; padding: 0 12px; font-size: 0.78rem; font-weight: 800; min-width: 60px; }
+    .compare-cost { width: 80px; text-align: right; font-weight: 800; font-size: 0.95rem; flex-shrink: 0; }
+
+    /* Savings card */
+    .savings-card { background: linear-gradient(145deg, rgba(34,197,94,0.08), rgba(245,166,35,0.04)); border: 1px solid rgba(34,197,94,0.2); border-radius: 16px; padding: 28px; text-align: center; margin-bottom: 20px; }
+    .savings-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+    .savings-value { font-size: 3rem; font-weight: 900; color: var(--green); line-height: 1; }
+    .savings-sub { font-size: 0.85rem; color: var(--muted); margin-top: 6px; }
+
+    /* Detail grid */
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+    @media(max-width:400px){ .detail-grid { grid-template-columns: 1fr; } }
+    .detail-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+    .detail-item .di-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+    .detail-item .di-value { font-size: 1.1rem; font-weight: 800; color: #fff; }
+
+    /* 5-year projection */
+    .projection { margin-top: 24px; }
+    .proj-header { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 12px; }
+    .proj-table { width: 100%; border-collapse: collapse; }
+    .proj-table th, .proj-table td { padding: 8px 12px; text-align: center; font-size: 0.8rem; border-bottom: 1px solid var(--border); }
+    .proj-table th { color: var(--muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.06em; }
+    .proj-table td { color: var(--text); font-weight: 600; }
+    .proj-table .red { color: var(--red); }
+    .proj-table .green { color: var(--green); }
+    .proj-table .brand { color: var(--brand); }
+
+    .cta-card { margin-top: 24px; padding: 20px; border-radius: 14px; background: linear-gradient(135deg, rgba(245,166,35,0.08), transparent); border-left: 4px solid var(--brand); }
+    .cta-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .cta-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .cta-btn { display: inline-block; background: var(--brand); color: #000; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,166,35,0.3); }
+
+    article { margin: 60px 0; }
+    article h2 { font-size: 2rem; font-weight: 800; margin-bottom: 20px; }
+    article h3 { font-size: 1.4rem; font-weight: 700; margin-top: 40px; margin-bottom: 14px; color: #fff; }
+    article p { color: var(--muted); font-size: 1.05rem; line-height: 1.85; margin-bottom: 18px; }
+    article ul { padding-left: 24px; margin-bottom: 18px; }
+    article li { color: var(--muted); font-size: 1.05rem; line-height: 1.85; margin-bottom: 8px; }
+    article li strong { color: #fff; }
+  </style>
 </head>
-<body class="bg-dark text-white antialiased">
-  <header class="py-6 px-4 border-b border-white/10">
-    <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <a href="/" class="text-brand font-bold text-2xl tracking-tight flex items-center gap-2">
-        <div class="w-8 h-8 bg-brand text-black rounded flex items-center justify-center font-black">A</div>
-        affilore
-      </a>
-      <a href="/free-tools/" class="text-sm text-gray-400 hover:text-white transition">&larr; Back to Tools</a>
-    </div>
-  </header>
+<body>
+  <div class="bg-blur"><span class="b1"></span><span class="b2"></span></div>
+  <header><div class="inner"><a href="/" class="logo"><div class="logo-icon">A</div>affilore</a><a href="/free-tools/" class="back-link">&larr; All Free Tools</a></div></header>
 
-  <main class="max-w-4xl mx-auto px-4 py-12">
-    <!-- Tool Container -->
-    <div class="bg-panel border border-white/10 rounded-2xl p-6 md:p-10 mb-16 shadow-2xl">
-      <h1 class="text-3xl md:text-4xl font-bold mb-3">Smart Home ROI & Energy Calculator</h1>
-      <p class="text-gray-400 mb-8">Calculate your exact annual electricity costs and determine if upgrading to smart LED lighting is a financially sound investment.</p>
-      
-      <div class="grid md:grid-cols-2 gap-10">
-        <!-- Inputs -->
-        <div class="space-y-5">
-          <div>
-            <label class="block text-sm font-bold text-gray-300 mb-1">Number of Bulbs in House</label>
-            <input type="number" id="bulbs-input" value="40" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+  <div class="wrapper">
+    <div class="tool-panel">
+      <h1>Smart Home ROI & Energy Calculator</h1>
+      <p class="subtitle">Calculate exact annual electricity costs for incandescent, LED, and smart LED — including phantom draw, replacement costs, and a 5-year total cost projection.</p>
+
+      <div class="tool-grid">
+        <div>
+          <div class="input-group">
+            <label>Number of Bulbs in House</label>
+            <div class="slider-row">
+              <input type="range" id="bulbs-slider" min="1" max="100" value="40">
+              <input type="number" id="bulbs-input" value="40" min="1" max="500">
+            </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-bold text-gray-300 mb-1">Average Hours Used per Day</label>
-            <input type="number" id="hours-input" value="5" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
+          <div class="input-group">
+            <label>Average Hours Used per Day</label>
+            <div class="slider-row">
+              <input type="range" id="hours-slider" min="1" max="24" value="5">
+              <input type="number" id="hours-input" value="5" min="1" max="24">
+            </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-bold text-gray-300 mb-1">Electricity Rate (Cents per kWh)</label>
-            <input type="number" id="rate-input" value="16" class="w-full bg-dark border border-white/20 rounded p-3 focus:border-brand outline-none">
-            <p class="text-xs text-gray-500 mt-1">US national average is ~16 cents.</p>
+          <div class="input-group">
+            <label>Electricity Rate (Cents / kWh)</label>
+            <div class="slider-row">
+              <input type="range" id="rate-slider" min="5" max="50" value="16">
+              <input type="number" id="rate-input" value="16" min="1" max="100">
+            </div>
+            <p style="font-size:0.72rem;color:var(--muted);margin-top:4px;">US avg: 16¢ | CA: 30¢ | EU avg: 35¢</p>
+          </div>
+
+          <div class="input-group">
+            <label>Bulb Cost per Unit ($)</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+              <div>
+                <p style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;">Incandescent</p>
+                <input type="number" id="cost-inc-bulb" value="1.50" step="0.1" min="0">
+              </div>
+              <div>
+                <p style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;">Standard LED</p>
+                <input type="number" id="cost-led-bulb" value="3" step="0.5" min="0">
+              </div>
+              <div>
+                <p style="font-size:0.7rem;color:var(--muted);margin-bottom:4px;">Smart LED</p>
+                <input type="number" id="cost-smart-bulb" value="12" step="1" min="0">
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Result -->
-        <div class="flex flex-col">
-          <div class="p-6 bg-black/50 rounded-xl border border-brand/30 h-full flex flex-col justify-between">
-            <div>
-              <h3 class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4 border-b border-gray-700 pb-2">Annual Electricity Cost Comparison</h3>
-              
-              <div class="flex justify-between items-center mb-3">
-                <span class="text-gray-300">Old Incandescent (60W)</span>
-                <span id="cost-inc" class="font-mono text-red-400 font-bold">$0.00</span>
-              </div>
-              <div class="flex justify-between items-center mb-3">
-                <span class="text-gray-300">Standard LED (9W)</span>
-                <span id="cost-led" class="font-mono text-green-400 font-bold">$0.00</span>
-              </div>
-              <div class="flex justify-between items-center mb-3">
-                <span class="text-gray-300">Smart LED (9W + Standby)</span>
-                <span id="cost-smart" class="font-mono text-brand font-bold">$0.00</span>
-              </div>
+        <div>
+          <!-- Cost comparison bars -->
+          <div class="compare-section">
+            <div class="compare-row">
+              <span class="compare-label" style="color:var(--red);">Incandescent</span>
+              <div class="compare-bar-track"><div class="compare-bar-fill" id="bar-inc" style="background:var(--red);width:100%;">60W</div></div>
+              <span class="compare-cost" id="cost-inc" style="color:var(--red);">$0</span>
             </div>
-            
-            <div class="mt-6 p-4 bg-gradient-to-r from-brand/10 to-transparent border-l-4 border-brand text-left rounded-r-lg">
-              <h4 class="font-bold text-md text-white mb-1">Ready to build your smart ecosystem?</h4>
-              <p class="text-gray-400 text-xs mb-3 leading-relaxed">Stop wasting money on grid heat. Invest your energy savings into the undisputed king of smart lighting networks.</p>
-              <a href="/home/philips-hue-a19-review/" class="inline-block bg-brand text-black px-4 py-2 rounded font-bold text-xs hover:bg-yellow-500 transition">Read Philips Hue Review &rarr;</a>
+            <div class="compare-row">
+              <span class="compare-label" style="color:var(--green);">Standard LED</span>
+              <div class="compare-bar-track"><div class="compare-bar-fill" id="bar-led" style="background:var(--green);width:15%;">9W</div></div>
+              <span class="compare-cost" id="cost-led" style="color:var(--green);">$0</span>
             </div>
+            <div class="compare-row">
+              <span class="compare-label" style="color:var(--brand);">Smart LED</span>
+              <div class="compare-bar-track"><div class="compare-bar-fill" id="bar-smart" style="background:var(--brand);width:18%;">9W + 0.5W</div></div>
+              <span class="compare-cost" id="cost-smart" style="color:var(--brand);">$0</span>
+            </div>
+          </div>
+
+          <!-- Savings highlight -->
+          <div class="savings-card">
+            <div class="savings-label">Annual Savings (Smart LED vs Incandescent)</div>
+            <div class="savings-value" id="savings-value">$0</div>
+            <div class="savings-sub" id="savings-sub">That's $0/month back in your pocket</div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-item"><div class="di-label">CO₂ Saved / Year</div><div class="di-value" id="co2-saved">0 lbs</div></div>
+            <div class="detail-item"><div class="di-label">Payback Period</div><div class="di-value" id="payback">0 months</div></div>
+            <div class="detail-item"><div class="di-label">Phantom Draw Cost</div><div class="di-value" id="phantom-cost">$0/yr</div></div>
+            <div class="detail-item"><div class="di-label">Bulb Replacements Saved</div><div class="di-value" id="bulbs-saved">0/yr</div></div>
+          </div>
+
+          <!-- 5-year projection -->
+          <div class="projection">
+            <div class="proj-header">5-Year Total Cost of Ownership</div>
+            <table class="proj-table">
+              <thead><tr><th></th><th>Year 1</th><th>Year 3</th><th>Year 5</th></tr></thead>
+              <tbody>
+                <tr><td>Incandescent</td><td class="red" id="p-inc-1"></td><td class="red" id="p-inc-3"></td><td class="red" id="p-inc-5"></td></tr>
+                <tr><td>LED</td><td class="green" id="p-led-1"></td><td class="green" id="p-led-3"></td><td class="green" id="p-led-5"></td></tr>
+                <tr><td>Smart LED</td><td class="brand" id="p-smt-1"></td><td class="brand" id="p-smt-3"></td><td class="brand" id="p-smt-5"></td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SEO Article -->
-    <article class="prose prose-invert prose-brand max-w-none" style="font-size: 1.1rem; line-height: 1.8;">
-      <h2 class="text-3xl font-bold text-white mb-6">Do Smart Bulbs Actually Save Money? The 2026 Energy Report</h2>
-      
+    <div class="cta-card" style="max-width:960px;margin:0 auto 60px;">
+      <h4>Ready to build your smart ecosystem?</h4>
+      <p>Stop wasting money on grid heat. Invest your energy savings into the undisputed king of smart lighting networks — the Philips Hue A19 White & Color Ambiance Starter Kit.</p>
+      <a href="/home/philips-hue-a19-review/" class="cta-btn">Read Philips Hue Review →</a>
+    </div>
+
+    <article>
+      <h2>Do Smart Bulbs Actually Save Money? The 2026 Energy Report</h2>
       <p>Upgrading a home from legacy incandescent lighting to modern LEDs is one of the very few home improvements that offers a guaranteed, mathematically verifiable Return on Investment (ROI). However, as we move deeper into 2026, the question is no longer "Should I buy LEDs?" Instead, consumers are asking, "Are smart bulbs worth the premium price, and do they use electricity when turned off?"</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Brutal Inefficiency of Incandescent Bulbs</h3>
-      <p>Legacy 60-watt incandescent bulbs are an engineering disaster masquerading as a light source. By the laws of thermodynamics, an incandescent bulb converts roughly 90% of the electrical energy it consumes directly into heat. Only about 10% of the energy is actually converted into visible light.</p>
-      
-      <p>If you have 40 incandescent bulbs in your home, and you run them for 5 hours a day at the national average electricity rate of 16 cents per kilowatt-hour, you are paying over $350 a year just to illuminate your home. Furthermore, because these bulbs burn so hot, the filament degrades quickly, resulting in a lifespan of roughly 1,000 hours. You are constantly paying to replace them.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Standard LED Revolution</h3>
-      <p>A standard "dumb" LED bulb requires only 9 watts to produce the exact same amount of lumens (brightness) as a 60-watt incandescent. This represents an immediate 85% reduction in your lighting energy costs.</p>
-      
-      <p>Replacing those same 40 bulbs drops your annual lighting electricity bill from $350 down to roughly $50. Because LEDs do not rely on burning filaments, their operational lifespan is staggering—often rated for 15,000 to 25,000 hours. They pay for themselves in electricity savings within the first six months of use.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Smart Bulb "Phantom Draw" (Vampire Energy)</h3>
-      <p>When you transition from a standard LED to a Wi-Fi or Zigbee-enabled Smart LED, the financial calculus shifts slightly. A smart bulb is essentially a tiny computer with a wireless radio. Even when you tell Alexa or Siri to "turn off the lights," the bulb is not physically severed from the electrical grid.</p>
-      
-      <p>It enters a standby mode, keeping its radio active so it can "listen" for the next command. This phenomenon is known as "phantom draw" or "vampire energy." Most modern smart bulbs draw between 0.2 and 0.5 watts while turned off. Over the course of a year, 40 smart bulbs sitting in standby mode 19 hours a day will consume roughly 130 kWh of electricity. That equates to about $20 extra on your annual electric bill.</p>
-      
-      <p>So, do smart bulbs use more energy than standard LEDs? Yes. But they still use drastically less than incandescents.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Why Invest in a Premium Smart Ecosystem?</h3>
-      <p>If smart bulbs cost more upfront and incur a slight phantom energy draw, why upgrade? The answer lies in ecosystem automation, security, and quality of life.</p>
-      
-      <p>Systems utilizing Zigbee protocols (like the <strong>Philips Hue</strong> ecosystem) create incredibly robust, self-healing mesh networks. Unlike cheap Wi-Fi bulbs that clog up your router's bandwidth and constantly disconnect, Zigbee hubs operate independently and flawlessly.</p>
-      
-      <ul class="list-disc pl-6 space-y-2 mb-6">
-        <li><strong>Adaptive Lighting:</strong> Smart ecosystems can automatically shift from cool, energizing blue light in the morning to warm, sleep-inducing amber tones as the sun sets, aligning with your circadian rhythm.</li>
-        <li><strong>Automation Savings:</strong> While they have a phantom draw, smart bulbs save energy by ensuring lights are never left on accidentally. Geofencing can automatically shut off every light in the house the moment your smartphone leaves the driveway.</li>
-        <li><strong>Security:</strong> Randomized lighting schedules when you are on vacation create the perfect illusion of occupancy, deterring break-ins far more effectively than a static porch light.</li>
-      </ul>
-      
-      <p>The transition to LED is mandatory for any financially responsible homeowner. The transition to Smart LED is an investment in ultimate home convenience and automation. Use the calculator above to see your exact savings, and allocate that budget toward building a reliable, premium smart home network.</p>
+      <h3>The Brutal Inefficiency of Incandescent Bulbs</h3>
+      <p>Legacy 60-watt incandescent bulbs convert roughly 90% of the electrical energy they consume directly into heat. Only about 10% is actually converted into visible light. If you have 40 incandescent bulbs and run them 5 hours a day at 16 cents per kWh, you are paying over $350 a year just to illuminate your home. Because these bulbs burn so hot, their filaments degrade quickly, resulting in a lifespan of roughly 1,000 hours. You are constantly paying to replace them.</p>
+      <h3>The Standard LED Revolution</h3>
+      <p>A standard LED bulb requires only 9 watts to produce the exact same lumens as a 60W incandescent — an immediate 85% reduction in energy costs. Replacing 40 bulbs drops your annual lighting bill from $350 down to roughly $50. LEDs are rated for 15,000 to 25,000 hours. They pay for themselves within the first six months.</p>
+      <h3>The Smart Bulb "Phantom Draw"</h3>
+      <p>A smart bulb is essentially a tiny computer with a wireless radio. Even when turned off, it enters standby mode, keeping its radio active. This "phantom draw" is typically 0.2-0.5 watts. Over a year, 40 smart bulbs in standby 19 hours a day consume roughly 130 kWh — about $20 extra on your annual bill. So yes, smart bulbs use more energy than dumb LEDs, but they still use drastically less than incandescents.</p>
+      <h3>The 5-Year Total Cost of Ownership</h3>
+      <p>The true financial picture only becomes clear when you factor in bulb replacement costs. A single incandescent at 1,000 hours of lifespan needs replacement roughly every 200 days at 5 hours/day usage. Over 5 years, that is nearly 10 replacements per socket. LEDs at 25,000 hours may never need replacement during the same period. Smart LEDs at 15,000 hours might need one replacement. When you add electricity costs + replacement costs, smart LEDs dominate the total cost of ownership by year 3.</p>
+      <h3>Why Invest in a Premium Smart Ecosystem?</h3>
+      <p>Systems utilizing Zigbee protocols (like <strong>Philips Hue</strong>) create incredibly robust, self-healing mesh networks. Unlike cheap Wi-Fi bulbs that clog your router, Zigbee hubs operate independently. Adaptive lighting shifts from energizing blue light in the morning to sleep-inducing amber tones at night. Geofencing automatically shuts off every light when your smartphone leaves the driveway. Randomized lighting schedules during vacations deter break-ins far more effectively than a static porch light. The transition to Smart LED is an investment in ultimate home convenience, automation, and long-term savings.</p>
     </article>
-  </main>
+  </div>
 
   <script>
-    const bulbsInput = document.getElementById('bulbs-input');
-    const hoursInput = document.getElementById('hours-input');
-    const rateInput = document.getElementById('rate-input');
-    
-    const costInc = document.getElementById('cost-inc');
-    const costLed = document.getElementById('cost-led');
-    const costSmart = document.getElementById('cost-smart');
+    const bulbsSlider = document.getElementById('bulbs-slider'), bulbsInput = document.getElementById('bulbs-input');
+    const hoursSlider = document.getElementById('hours-slider'), hoursInput = document.getElementById('hours-input');
+    const rateSlider = document.getElementById('rate-slider'), rateInput = document.getElementById('rate-input');
+    const costIncBulb = document.getElementById('cost-inc-bulb');
+    const costLedBulb = document.getElementById('cost-led-bulb');
+    const costSmartBulb = document.getElementById('cost-smart-bulb');
 
-    function calculate() {
+    function sync(s, i) {
+      s.addEventListener('input', () => { i.value = s.value; calc(); });
+      i.addEventListener('input', () => { s.value = i.value; calc(); });
+    }
+    sync(bulbsSlider, bulbsInput);
+    sync(hoursSlider, hoursInput);
+    sync(rateSlider, rateInput);
+    [costIncBulb, costLedBulb, costSmartBulb].forEach(el => el.addEventListener('input', calc));
+
+    function fmt(n) { return '$' + n.toFixed(0); }
+
+    function calc() {
       const bulbs = parseFloat(bulbsInput.value) || 0;
       const hoursOn = parseFloat(hoursInput.value) || 0;
       const hoursOff = 24 - hoursOn;
-      const rate = (parseFloat(rateInput.value) || 0) / 100; // cents to dollars
-
+      const rate = (parseFloat(rateInput.value) || 0) / 100;
       const days = 365;
 
-      // Incandescent (60W)
-      const kwhInc = (60 * bulbs * hoursOn * days) / 1000;
+      // Watts
+      const wInc = 60, wLed = 9, wSmart = 9, wStandby = 0.5;
+
+      // Annual electricity
+      const kwhInc = (wInc * bulbs * hoursOn * days) / 1000;
+      const kwhLed = (wLed * bulbs * hoursOn * days) / 1000;
+      const kwhSmart = ((wSmart * bulbs * hoursOn) + (wStandby * bulbs * hoursOff)) * days / 1000;
+
       const cInc = kwhInc * rate;
-
-      // LED (9W)
-      const kwhLed = (9 * bulbs * hoursOn * days) / 1000;
       const cLed = kwhLed * rate;
+      const cSmart = kwhSmart * rate;
 
-      // Smart LED (9W on, 0.5W off)
-      const kwhSmartOn = kwhLed;
-      const kwhSmartOff = (0.5 * bulbs * hoursOff * days) / 1000;
-      const cSmart = (kwhSmartOn + kwhSmartOff) * rate;
+      document.getElementById('cost-inc').textContent = fmt(cInc) + '/yr';
+      document.getElementById('cost-led').textContent = fmt(cLed) + '/yr';
+      document.getElementById('cost-smart').textContent = fmt(cSmart) + '/yr';
 
-      costInc.textContent = '$' + cInc.toFixed(2);
-      costLed.textContent = '$' + cLed.toFixed(2);
-      costSmart.textContent = '$' + cSmart.toFixed(2);
+      // Bars (relative to incandescent)
+      const max = Math.max(cInc, 1);
+      document.getElementById('bar-inc').style.width = '100%';
+      document.getElementById('bar-led').style.width = Math.max(5, (cLed / max) * 100) + '%';
+      document.getElementById('bar-smart').style.width = Math.max(5, (cSmart / max) * 100) + '%';
+
+      // Savings
+      const savings = cInc - cSmart;
+      document.getElementById('savings-value').textContent = fmt(savings);
+      document.getElementById('savings-sub').textContent = `That's ${fmt(savings / 12)}/month back in your pocket`;
+
+      // CO2 (1 kWh ≈ 0.92 lbs CO2)
+      const co2 = ((kwhInc - kwhSmart) * 0.92);
+      document.getElementById('co2-saved').textContent = Math.round(co2).toLocaleString() + ' lbs';
+
+      // Phantom draw cost
+      const phantomKwh = (wStandby * bulbs * hoursOff * days) / 1000;
+      document.getElementById('phantom-cost').textContent = fmt(phantomKwh * rate) + '/yr';
+
+      // Bulb replacements
+      const incLifeH = 1000;
+      const annualHours = hoursOn * days;
+      const incReplacements = Math.floor((annualHours * bulbs) / incLifeH);
+      document.getElementById('bulbs-saved').textContent = incReplacements + '/yr';
+
+      // Payback
+      const bulbCostInc = parseFloat(costIncBulb.value) || 0;
+      const bulbCostSmart = parseFloat(costSmartBulb.value) || 0;
+      const upfrontDiff = (bulbCostSmart - bulbCostInc) * bulbs;
+      const monthlySavings = savings / 12;
+      const paybackMonths = monthlySavings > 0 ? Math.ceil(upfrontDiff / monthlySavings) : 0;
+      document.getElementById('payback').textContent = paybackMonths + ' mo';
+
+      // 5-year projection (electricity + replacement)
+      const incBulbCostPerYear = incReplacements * bulbCostInc;
+      const bulbCostLed = parseFloat(costLedBulb.value) || 0;
+      const ledLifeH = 25000;
+      const smartLifeH = 15000;
+
+      for (const yr of [1, 3, 5]) {
+        const incTotal = (cInc * yr) + (incBulbCostPerYear * yr);
+        const ledReplacements = Math.max(0, Math.floor((annualHours * bulbs * yr) / ledLifeH));
+        const ledTotal = (cLed * yr) + (bulbCostLed * bulbs) + (ledReplacements * bulbCostLed);
+        const smartReplacements = Math.max(0, Math.floor((annualHours * bulbs * yr) / smartLifeH));
+        const smartTotal = (cSmart * yr) + (bulbCostSmart * bulbs) + (smartReplacements * bulbCostSmart);
+
+        document.getElementById('p-inc-' + yr).textContent = fmt(incTotal);
+        document.getElementById('p-led-' + yr).textContent = fmt(ledTotal);
+        document.getElementById('p-smt-' + yr).textContent = fmt(smartTotal);
+      }
     }
 
-    [bulbsInput, hoursInput, rateInput].forEach(el => {
-      el.addEventListener('input', calculate);
-    });
-
-    calculate();
+    calc();
   </script>
 </body>
 </html>

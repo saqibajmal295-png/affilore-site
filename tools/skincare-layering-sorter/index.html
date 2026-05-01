@@ -3,215 +3,320 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skincare Layering Sorter - Affilore</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { brand: '#F5A623', dark: '#0a0a0a', panel: '#151515' }
-        }
-      }
-    }
-  </script>
+  <title>Skincare Step-by-Step Layering Sorter — Affilore</title>
+  <meta name="description" content="Sort your skincare products into the scientifically correct order for AM and PM routines. Free interactive layering tool by Affilore.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    .checkbox-custom:checked + div { background-color: rgba(245, 166, 35, 0.2); border-color: #F5A623; }
-    .checkbox-custom:checked + div .check-icon { opacity: 1; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --brand: #F5A623; --bg: #060608; --panel: #0e0e12; --card: #141418;
+      --border: rgba(255,255,255,0.07); --text: #e8e8ec; --muted: #8a8a96;
+      --pink: #ec4899; --green: #22c55e; --red: #ef4444; --blue: #60a5fa;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .bg-blur { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-blur span { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.12; }
+    .bg-blur .b1 { width: 600px; height: 600px; background: var(--pink); top: -200px; left: -100px; }
+    .bg-blur .b2 { width: 500px; height: 500px; background: var(--brand); bottom: -150px; right: -100px; }
+    .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    header { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    header .inner { display: flex; align-items: center; justify-content: space-between; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brand); font-weight: 800; font-size: 1.3rem; }
+    .logo-icon { width: 32px; height: 32px; background: var(--brand); color: #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; }
+    .back-link { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+    .back-link:hover { color: #fff; }
+    .tool-panel { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin: 40px 0; box-shadow: 0 0 80px rgba(236,72,153,0.04); }
+    @media(max-width:640px){ .tool-panel { padding: 24px 16px; } }
+    h1 { font-size: 2.2rem; font-weight: 900; line-height: 1.15; margin-bottom: 6px; }
+    @media(max-width:640px){ h1 { font-size: 1.5rem; } }
+    .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 24px; line-height: 1.5; }
+
+    /* Skin type */
+    .skin-types { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .skin-btn { padding: 8px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.25s; }
+    .skin-btn:hover { border-color: var(--pink); color: #fff; }
+    .skin-btn.active { background: var(--pink); color: #fff; border-color: var(--pink); }
+
+    .tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    @media(max-width:700px){ .tool-grid { grid-template-columns: 1fr; } }
+
+    /* Checkbox cards */
+    .product-list { display: flex; flex-direction: column; gap: 8px; }
+    .product-card {
+      display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      cursor: pointer; transition: all 0.2s; user-select: none;
+    }
+    .product-card:hover { border-color: rgba(255,255,255,0.15); }
+    .product-card.selected { border-color: var(--pink); background: rgba(236,72,153,0.06); }
+    .product-card .check {
+      width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: all 0.2s; font-size: 13px; color: transparent;
+    }
+    .product-card.selected .check { background: var(--pink); border-color: var(--pink); color: #fff; }
+    .product-card .info { flex: 1; }
+    .product-card .info .name { font-weight: 700; font-size: 0.9rem; }
+    .product-card .info .desc { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+    /* Result */
+    .result-panel { background: linear-gradient(145deg, rgba(236,72,153,0.05), rgba(245,166,35,0.03)); border: 1px solid rgba(236,72,153,0.15); border-radius: 16px; padding: 24px; }
+    .routine-tab-bar { display: flex; gap: 4px; margin-bottom: 20px; background: var(--bg); border-radius: 10px; padding: 4px; }
+    .routine-tab { flex: 1; text-align: center; padding: 8px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; color: var(--muted); transition: all 0.2s; }
+    .routine-tab.active { background: var(--pink); color: #fff; }
+
+    .step-list { display: flex; flex-direction: column; gap: 10px; min-height: 120px; }
+    .step-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--pink); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
+    .step-info .step-name { font-weight: 700; font-size: 0.88rem; }
+    .step-info .step-note { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+    .step-info .step-wait { font-size: 0.68rem; color: var(--brand); font-weight: 600; margin-top: 3px; }
+
+    .warning-box { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+    .warning-box strong { color: var(--red); font-size: 0.82rem; }
+    .warning-box p { font-size: 0.78rem; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 0.9rem; }
+
+    .cta-card { margin-top: 24px; padding: 20px; border-radius: 14px; background: linear-gradient(135deg, rgba(245,166,35,0.08), transparent); border-left: 4px solid var(--brand); }
+    .cta-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .cta-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .cta-btn { display: inline-block; background: var(--brand); color: #000; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,166,35,0.3); }
+
+    article { margin: 60px 0; }
+    article h2 { font-size: 2rem; font-weight: 800; margin-bottom: 20px; }
+    article h3 { font-size: 1.4rem; font-weight: 700; margin-top: 40px; margin-bottom: 14px; color: #fff; }
+    article p { color: var(--muted); font-size: 1.05rem; line-height: 1.85; margin-bottom: 18px; }
+    article ul { padding-left: 24px; margin-bottom: 18px; }
+    article li { color: var(--muted); font-size: 1.05rem; line-height: 1.85; margin-bottom: 8px; }
+    article li strong { color: #fff; }
   </style>
 </head>
-<body class="bg-dark text-white antialiased">
-  <header class="py-6 px-4 border-b border-white/10">
-    <div class="max-w-4xl mx-auto flex items-center justify-between">
-      <a href="/" class="text-brand font-bold text-2xl tracking-tight flex items-center gap-2">
-        <div class="w-8 h-8 bg-brand text-black rounded flex items-center justify-center font-black">A</div>
-        affilore
-      </a>
-      <a href="/free-tools/" class="text-sm text-gray-400 hover:text-white transition">&larr; Back to Tools</a>
-    </div>
-  </header>
+<body>
+  <div class="bg-blur"><span class="b1"></span><span class="b2"></span></div>
+  <header><div class="inner"><a href="/" class="logo"><div class="logo-icon">A</div>affilore</a><a href="/free-tools/" class="back-link">&larr; All Free Tools</a></div></header>
 
-  <main class="max-w-4xl mx-auto px-4 py-12">
-    <!-- Tool Container -->
-    <div class="bg-panel border border-white/10 rounded-2xl p-6 md:p-10 mb-16 shadow-2xl">
-      <h1 class="text-3xl md:text-4xl font-bold mb-3">Skincare Step-by-Step Layering Sorter</h1>
-      <p class="text-gray-400 mb-8">Select the products currently in your routine. We will sort them into the scientifically correct order based on pH levels and molecular weight.</p>
-      
-      <div class="grid md:grid-cols-2 gap-10">
-        <!-- Inputs -->
+  <div class="wrapper">
+    <div class="tool-panel">
+      <h1>Skincare Layering Sorter</h1>
+      <p class="subtitle">Select your products and skin type. We'll sort them into the scientifically correct AM and PM order with wait times and conflict warnings.</p>
+
+      <div class="skin-types" id="skin-types">
+        <button class="skin-btn" data-skin="oily">Oily</button>
+        <button class="skin-btn active" data-skin="combination">Combination</button>
+        <button class="skin-btn" data-skin="dry">Dry</button>
+        <button class="skin-btn" data-skin="sensitive">Sensitive</button>
+      </div>
+
+      <div class="tool-grid">
+        <!-- Products -->
         <div>
-          <h3 class="text-lg font-bold mb-4 text-white">Select Your Products:</h3>
-          <div class="space-y-3" id="product-list">
-            <!-- Cleanser -->
-            <label class="block cursor-pointer relative">
-              <input type="checkbox" value="cleanser" class="checkbox-custom absolute opacity-0 w-0 h-0" checked>
-              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
-                <span class="font-semibold">Cleanser</span>
-                <span class="check-icon opacity-0 text-brand">✓</span>
-              </div>
-            </label>
-            <!-- Exfoliant -->
-            <label class="block cursor-pointer relative">
-              <input type="checkbox" value="exfoliant" class="checkbox-custom absolute opacity-0 w-0 h-0">
-              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
-                <span class="font-semibold">AHA / BHA Pad (Exfoliant)</span>
-                <span class="check-icon opacity-0 text-brand">✓</span>
-              </div>
-            </label>
-            <!-- Toner -->
-            <label class="block cursor-pointer relative">
-              <input type="checkbox" value="toner" class="checkbox-custom absolute opacity-0 w-0 h-0">
-              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
-                <span class="font-semibold">Hydrating Toner</span>
-                <span class="check-icon opacity-0 text-brand">✓</span>
-              </div>
-            </label>
-            <!-- Vitamin C -->
-            <label class="block cursor-pointer relative">
-              <input type="checkbox" value="vitc" class="checkbox-custom absolute opacity-0 w-0 h-0">
-              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
-                <span class="font-semibold">Vitamin C Serum</span>
-                <span class="check-icon opacity-0 text-brand">✓</span>
-              </div>
-            </label>
-            <!-- Retinol -->
-            <label class="block cursor-pointer relative">
-              <input type="checkbox" value="retinol" class="checkbox-custom absolute opacity-0 w-0 h-0">
-              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
-                <span class="font-semibold">Retinol / Retinoid</span>
-                <span class="check-icon opacity-0 text-brand">✓</span>
-              </div>
-            </label>
-            <!-- Moisturizer -->
-            <label class="block cursor-pointer relative">
-              <input type="checkbox" value="moisturizer" class="checkbox-custom absolute opacity-0 w-0 h-0" checked>
-              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
-                <span class="font-semibold">Moisturizer</span>
-                <span class="check-icon opacity-0 text-brand">✓</span>
-              </div>
-            </label>
-            <!-- SPF -->
-            <label class="block cursor-pointer relative">
-              <input type="checkbox" value="spf" class="checkbox-custom absolute opacity-0 w-0 h-0" checked>
-              <div class="border border-white/20 rounded-lg p-3 flex items-center justify-between transition hover:border-white/40">
-                <span class="font-semibold">Sunscreen (SPF)</span>
-                <span class="check-icon opacity-0 text-brand">✓</span>
-              </div>
-            </label>
+          <div class="product-list" id="product-list">
+            <div class="product-card selected" data-id="cleanser">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Cleanser</div><div class="desc">Gel, foam, or cream cleanser</div></div>
+            </div>
+            <div class="product-card" data-id="oil-cleanser">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Oil Cleanser (Double Cleanse)</div><div class="desc">PM only — removes sunscreen and makeup</div></div>
+            </div>
+            <div class="product-card" data-id="exfoliant">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">AHA / BHA Exfoliant Pad</div><div class="desc">Chemical exfoliation (2-3x per week)</div></div>
+            </div>
+            <div class="product-card" data-id="toner">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Hydrating Toner / Essence</div><div class="desc">Prep skin for active absorption</div></div>
+            </div>
+            <div class="product-card" data-id="vitc">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Vitamin C Serum</div><div class="desc">Antioxidant — AM focus recommended</div></div>
+            </div>
+            <div class="product-card" data-id="niacinamide">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Niacinamide Serum</div><div class="desc">Pore minimizer, oil control</div></div>
+            </div>
+            <div class="product-card" data-id="ha">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Hyaluronic Acid</div><div class="desc">Hydration booster — apply to damp skin</div></div>
+            </div>
+            <div class="product-card" data-id="retinol">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Retinol / Retinoid</div><div class="desc">PM only — cell turnover accelerator</div></div>
+            </div>
+            <div class="product-card" data-id="eye-cream">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Eye Cream</div><div class="desc">Targeted under-eye treatment</div></div>
+            </div>
+            <div class="product-card selected" data-id="moisturizer">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Moisturizer</div><div class="desc">Barrier repair and hydration seal</div></div>
+            </div>
+            <div class="product-card" data-id="face-oil">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Face Oil</div><div class="desc">Occlusive — locks everything in</div></div>
+            </div>
+            <div class="product-card selected" data-id="spf">
+              <div class="check">✓</div>
+              <div class="info"><div class="name">Sunscreen (SPF 30+)</div><div class="desc">AM only — non-negotiable final step</div></div>
+            </div>
           </div>
         </div>
 
         <!-- Result -->
-        <div class="flex flex-col">
-          <div class="p-6 bg-black/50 rounded-xl border border-brand/30 h-full">
-            <h3 class="text-brand font-bold uppercase tracking-wider mb-4 border-b border-brand/20 pb-2">Your Routine Order</h3>
-            
-            <div id="routine-warning" class="hidden mb-4 p-3 bg-red-900/40 border border-red-500/50 rounded text-red-200 text-xs">
-              <strong>⚠️ Warning:</strong> You selected both Vitamin C and Retinol/AHA. Do not mix these in the same application. Move Retinol to PM only.
+        <div>
+          <div class="result-panel">
+            <div class="routine-tab-bar">
+              <div class="routine-tab active" data-tab="am" id="tab-am">☀️ AM Routine</div>
+              <div class="routine-tab" data-tab="pm" id="tab-pm">🌙 PM Routine</div>
             </div>
+            <div id="warnings"></div>
+            <div class="step-list" id="step-list"></div>
+          </div>
 
-            <ol id="routine-list" class="list-decimal pl-5 space-y-3 font-semibold text-gray-200 mb-6"></ol>
-            
-            <div id="cta-card" class="hidden mt-auto p-4 bg-gradient-to-r from-brand/10 to-transparent border-l-4 border-brand text-left rounded-r-lg">
-              <h4 class="font-bold text-md text-white mb-1">Maximize Your Glow Step</h4>
-              <p class="text-gray-400 text-xs mb-3 leading-relaxed">Liquid exfoliants can be messy. Upgrade your routine with the pre-soaked Medicube Zero Pore Pad 2.0 for clinical-grade AHA/BHA delivery.</p>
-              <a href="/skin-beauty/medicube-zero-pore-pad-review/" class="inline-block bg-brand text-black px-4 py-2 rounded font-bold text-xs hover:bg-yellow-500 transition">Read the Review &rarr;</a>
-            </div>
+          <div class="cta-card" id="cta-card" style="display:none;">
+            <h4>Maximize Your Glow Step</h4>
+            <p>Pre-soaked pads deliver clinical-grade AHA/BHA in a perfectly calibrated dose. The Medicube Zero Pore Pad 2.0 is the gold standard.</p>
+            <a href="/skin-beauty/medicube-zero-pore-pad-review/" class="cta-btn">Read the Review →</a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SEO Article -->
-    <article class="prose prose-invert prose-brand max-w-none" style="font-size: 1.1rem; line-height: 1.8;">
-      <h2 class="text-3xl font-bold text-white mb-6">The Scientific Order to Layer Your Skincare (2026 Guide)</h2>
-      
+    <article>
+      <h2>The Scientific Order to Layer Your Skincare (2026 Guide)</h2>
       <p>Walking into a Sephora or browsing beauty TikTok today is an overwhelming experience. Consumers are bombarded with serums, ampoules, essences, acids, and barrier creams. The harsh reality of modern skincare is that spending $300 on premium active ingredients is entirely useless if you apply them in the wrong order. Incorrect layering can lead to product pilling, ingredient deactivation, and severe chemical burns.</p>
-
-      <p>The science of skincare layering relies on two absolute, unbreakable rules: <strong>Texture (thinnest to thickest)</strong> and <strong>pH dependency</strong>. If you violate these rules, your expensive serums will never penetrate your stratum corneum (the outermost layer of the skin).</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Rule 1: Molecular Weight and Texture (Thinnest to Thickest)</h3>
-      <p>Skin acts as a highly effective barrier—its primary biological job is to keep things out. To force ingredients past this barrier, formulations rely on specific molecular sizes. Water-based, watery serums (like Hyaluronic Acid or lightweight Vitamin C) have small molecular structures designed to penetrate deeply and quickly.</p>
-      
-      <p>Conversely, heavy creams, facial oils, and sunscreens contain large molecules and occlusive ingredients (like silicones, shea butter, or petroleum derivatives). Their job is to sit on top of the skin and create a seal, trapping moisture underneath. If you apply a thick moisturizer <em>before</em> a watery serum, the serum’s active ingredients will physically bounce off the occlusive layer. The product will evaporate into the air instead of absorbing into your skin.</p>
-      
-      <p>The hierarchy is always: Liquid &rarr; Serum &rarr; Lotion &rarr; Cream &rarr; Oil.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Rule 2: pH Dependency and Active Conflicts</h3>
-      <p>The skin's natural "acid mantle" hovers around a pH of 5.5. Certain active ingredients require highly acidic environments to function, while others require a neutral environment. Mixing them destroys their efficacy.</p>
-      
-      <ul class="list-disc pl-6 space-y-2 mb-6">
-        <li><strong>Exfoliants (AHA/BHA):</strong> These are highly acidic (pH 3.0 - 4.0). They must be applied directly to clean skin immediately after washing. Applying them over a neutral moisturizer neutralizes the acid, rendering the exfoliant useless.</li>
-        <li><strong>Vitamin C (L-Ascorbic Acid):</strong> Also highly acidic and notoriously unstable. It should be applied in the morning directly after cleansing or toning to protect against free radicals.</li>
-        <li><strong>Retinol / Retinoids:</strong> These are powerful cell-communicating ingredients applied in the PM. They generally operate best at a slightly higher pH. If you apply acidic AHA/BHA immediately followed by Retinol, the drastic pH shift degrades the Retinol and massively increases your risk of a compromised skin barrier (redness, flaking, stinging).</li>
-      </ul>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">The Danger Zone: Ingredients You Should Never Mix</h3>
-      <p>The biggest mistake in 2026 skincare trends is the "kitchen sink" approach—slapping 15 different actives on your face at once. You must separate conflicting ingredients into your AM and PM routines.</p>
-      
-      <p>Never mix Vitamin C with Retinol in the same application. Never mix strong chemical exfoliants (like 2% BHA or Glycolic Acid) with Retinol unless the formulation explicitly blends them. If you attempt to chemically exfoliate your skin and force rapid cell turnover with Retinol simultaneously, you will destroy your lipid barrier.</p>
-
-      <h3 class="text-2xl font-bold text-white mt-10 mb-4">Optimizing the Exfoliation Step</h3>
-      <p>Exfoliation is the gateway to glowing skin, but it is notoriously difficult to get right. Liquid toners often spill, and estimating the correct dosage on a cotton pad is tricky. This is why pre-soaked, perfectly dosed pads have become the gold standard.</p>
-      
-      <p>If you find that your serums aren't absorbing or your makeup is caking, a high-quality chemical exfoliant is required. The <strong>Medicube Zero Pore Pad 2.0</strong> has dominated the market because it perfectly calibrates the AHA/BHA dosage into an embossed, dual-sided pad. It provides chemical exfoliation to melt the "glue" holding dead skin cells together, while the textured side provides gentle physical exfoliation. It operates at the perfect pH to prep the skin, ensuring every expensive serum you layer on top actually penetrates and performs.</p>
-      
+      <p>The science of skincare layering relies on two absolute, unbreakable rules: <strong>Texture (thinnest to thickest)</strong> and <strong>pH dependency</strong>. If you violate these rules, your expensive serums will never penetrate your stratum corneum.</p>
+      <h3>Rule 1: Molecular Weight and Texture</h3>
+      <p>Skin acts as a highly effective barrier. Water-based, watery serums (like Hyaluronic Acid or lightweight Vitamin C) have small molecular structures designed to penetrate deeply and quickly. Conversely, heavy creams, facial oils, and sunscreens contain large molecules and occlusive ingredients. Their job is to sit on top of the skin and create a seal. If you apply a thick moisturizer before a watery serum, the serum's active ingredients will physically bounce off the occlusive layer. The hierarchy is always: Liquid → Serum → Lotion → Cream → Oil.</p>
+      <h3>Rule 2: pH Dependency and Active Conflicts</h3>
+      <p>The skin's natural "acid mantle" hovers around a pH of 5.5. Certain active ingredients require highly acidic environments to function, while others require a neutral environment. Exfoliants (AHA/BHA) at pH 3.0-4.0 must be applied directly to clean skin. Vitamin C (L-Ascorbic Acid) is also highly acidic and unstable. Retinol operates best at a slightly higher pH. If you apply acidic AHA/BHA immediately followed by Retinol, the drastic pH shift degrades the Retinol and massively increases your risk of a compromised skin barrier.</p>
+      <h3>The Importance of Wait Times</h3>
+      <p>One of the most underrated aspects of skincare layering is wait time between steps. After applying a low-pH active like an AHA/BHA exfoliant, waiting 60-90 seconds allows the acid to work at its optimal pH before the next product neutralizes it. After Vitamin C, a 30-60 second wait ensures full absorption before layering a heavier product on top. Skipping wait times is one of the primary reasons people experience product pilling — where products ball up on the skin surface instead of absorbing.</p>
+      <h3>Skin Type Considerations</h3>
+      <p>Your skin type dictates which products you should prioritize and which you should avoid. Oily skin benefits enormously from BHA (salicylic acid) exfoliants and lightweight, water-based serums like niacinamide. Dry skin should prioritize hyaluronic acid on damp skin followed by a rich cream and an occlusive face oil. Sensitive skin types should introduce actives one at a time, never combining multiple exfoliants, and always buffering retinol by applying it over moisturizer rather than on bare skin.</p>
+      <h3>Optimizing the Exfoliation Step</h3>
+      <p>Exfoliation is the gateway to glowing skin, but it is notoriously difficult to get right. This is why pre-soaked, perfectly dosed pads have become the gold standard. The <strong>Medicube Zero Pore Pad 2.0</strong> has dominated the market because it perfectly calibrates the AHA/BHA dosage into an embossed, dual-sided pad. It operates at the perfect pH to prep the skin, ensuring every expensive serum you layer on top actually penetrates and performs.</p>
       <p>Use the sorting tool above to audit your current routine. Strip it back to the basics: cleanse, treat (one active per routine), moisturize, and protect. Your skin barrier will thank you.</p>
     </article>
-  </main>
+  </div>
 
   <script>
-    const checkboxes = document.querySelectorAll('.checkbox-custom');
-    const routineList = document.getElementById('routine-list');
-    const routineWarning = document.getElementById('routine-warning');
-    const ctaCard = document.getElementById('cta-card');
-
-    const productOrder = {
-      'cleanser': { name: 'Cleanser (AM & PM)', weight: 10 },
-      'exfoliant': { name: 'AHA / BHA Pad (1-3x a week)', weight: 20 },
-      'toner': { name: 'Hydrating Toner', weight: 30 },
-      'vitc': { name: 'Vitamin C Serum (AM focus)', weight: 40 },
-      'retinol': { name: 'Retinol (PM ONLY)', weight: 50 },
-      'moisturizer': { name: 'Moisturizer', weight: 60 },
-      'spf': { name: 'Sunscreen / SPF (AM ONLY)', weight: 70 }
+    const products = {
+      'cleanser':     { name: 'Cleanser', am: true, pm: true, order: 10, wait: null, note: 'Use lukewarm water' },
+      'oil-cleanser': { name: 'Oil Cleanser', am: false, pm: true, order: 5, wait: null, note: 'First step of double cleanse (PM)' },
+      'exfoliant':    { name: 'AHA/BHA Exfoliant Pad', am: true, pm: true, order: 20, wait: '60-90 sec', note: '2-3× per week only', conflicts: ['retinol'] },
+      'toner':        { name: 'Hydrating Toner', am: true, pm: true, order: 30, wait: '30 sec', note: 'Pat in gently, don\'t rub' },
+      'vitc':         { name: 'Vitamin C Serum', am: true, pm: false, order: 40, wait: '60 sec', note: 'AM only — antioxidant shield', conflicts: ['retinol', 'exfoliant'] },
+      'niacinamide':  { name: 'Niacinamide Serum', am: true, pm: true, order: 45, wait: '30 sec', note: 'Great for oily/combo skin' },
+      'ha':           { name: 'Hyaluronic Acid', am: true, pm: true, order: 50, wait: '30 sec', note: 'Apply to damp skin for max effect' },
+      'retinol':      { name: 'Retinol / Retinoid', am: false, pm: true, order: 55, wait: '2-3 min', note: 'PM only — start 2× per week', conflicts: ['vitc', 'exfoliant'] },
+      'eye-cream':    { name: 'Eye Cream', am: true, pm: true, order: 60, wait: null, note: 'Tap with ring finger gently' },
+      'moisturizer':  { name: 'Moisturizer', am: true, pm: true, order: 70, wait: '60 sec', note: 'Seal in all actives' },
+      'face-oil':     { name: 'Face Oil', am: false, pm: true, order: 75, wait: null, note: 'Last skincare step (PM)' },
+      'spf':          { name: 'Sunscreen SPF 30+', am: true, pm: false, order: 80, wait: '15 min before sun', note: 'Non-negotiable AM final step' }
     };
 
-    function updateRoutine() {
-      const selected = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
-      
-      // Check for conflicts
-      if ((selected.includes('retinol') && selected.includes('exfoliant')) || 
-          (selected.includes('retinol') && selected.includes('vitc'))) {
-        routineWarning.classList.remove('hidden');
-      } else {
-        routineWarning.classList.add('hidden');
-      }
+    let currentTab = 'am';
+    let skinType = 'combination';
 
-      // Check for CTA
-      if (selected.includes('exfoliant')) {
-        ctaCard.classList.remove('hidden');
-      } else {
-        ctaCard.classList.add('hidden');
-      }
+    const cards = document.querySelectorAll('.product-card');
+    const stepList = document.getElementById('step-list');
+    const warningsDiv = document.getElementById('warnings');
+    const ctaCard = document.getElementById('cta-card');
 
-      // Sort
-      selected.sort((a, b) => productOrder[a].weight - productOrder[b].weight);
-
-      // Render
-      routineList.innerHTML = '';
-      if(selected.length === 0) {
-        routineList.innerHTML = '<li class="text-gray-500 list-none">Select products to see your routine.</li>';
-        return;
-      }
-
-      selected.forEach(key => {
-        const li = document.createElement('li');
-        li.textContent = productOrder[key].name;
-        routineList.appendChild(li);
+    // Toggle products
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('selected');
+        render();
       });
+    });
+
+    // Tabs
+    document.getElementById('tab-am').addEventListener('click', () => { currentTab = 'am'; updateTabs(); render(); });
+    document.getElementById('tab-pm').addEventListener('click', () => { currentTab = 'pm'; updateTabs(); render(); });
+    function updateTabs() {
+      document.getElementById('tab-am').classList.toggle('active', currentTab === 'am');
+      document.getElementById('tab-pm').classList.toggle('active', currentTab === 'pm');
     }
 
-    checkboxes.forEach(cb => cb.addEventListener('change', updateRoutine));
-    updateRoutine();
+    // Skin types
+    document.getElementById('skin-types').addEventListener('click', (e) => {
+      const btn = e.target.closest('.skin-btn');
+      if(!btn) return;
+      document.querySelectorAll('.skin-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      skinType = btn.dataset.skin;
+      render();
+    });
+
+    function render() {
+      const selected = Array.from(cards).filter(c => c.classList.contains('selected')).map(c => c.dataset.id);
+      const isAM = currentTab === 'am';
+
+      // Filter by routine
+      const filtered = selected.filter(id => {
+        const p = products[id];
+        return isAM ? p.am : p.pm;
+      }).sort((a, b) => products[a].order - products[b].order);
+
+      // Check conflicts
+      warningsDiv.innerHTML = '';
+      const conflicts = [];
+      selected.forEach(id => {
+        if(products[id].conflicts) {
+          products[id].conflicts.forEach(cid => {
+            if(selected.includes(cid)) {
+              const pair = [id, cid].sort().join('-');
+              if(!conflicts.includes(pair)) conflicts.push(pair);
+            }
+          });
+        }
+      });
+
+      if(conflicts.length > 0) {
+        let html = '<div class="warning-box"><strong>⚠️ Active Ingredient Conflicts Detected</strong>';
+        conflicts.forEach(pair => {
+          const [a, b] = pair.split('-');
+          html += `<p><strong>${products[a]?.name || a}</strong> and <strong>${products[b]?.name || b}</strong> should NOT be used in the same routine. Separate into AM and PM.</p>`;
+        });
+        html += '</div>';
+        warningsDiv.innerHTML = html;
+      }
+
+      // Render steps
+      if(filtered.length === 0) {
+        stepList.innerHTML = '<div class="empty-state">Select products to build your routine.</div>';
+      } else {
+        stepList.innerHTML = filtered.map((id, i) => {
+          const p = products[id];
+          let noteExtra = '';
+          if(skinType === 'sensitive' && id === 'retinol') noteExtra = ' • Buffer over moisturizer';
+          if(skinType === 'oily' && id === 'face-oil') noteExtra = ' • Optional for oily skin';
+          if(skinType === 'dry' && id === 'ha') noteExtra = ' • Critical — apply to damp skin';
+          return `<div class="step-item">
+            <div class="step-num">${i + 1}</div>
+            <div class="step-info">
+              <div class="step-name">${p.name}</div>
+              <div class="step-note">${p.note}${noteExtra}</div>
+              ${p.wait ? `<div class="step-wait">⏱ Wait ${p.wait} before next step</div>` : ''}
+            </div>
+          </div>`;
+        }).join('');
+      }
+
+      // CTA
+      ctaCard.style.display = selected.includes('exfoliant') ? 'block' : 'none';
+    }
+
+    render();
   </script>
 </body>
 </html>
