@@ -1,0 +1,13 @@
+{
+    "status": "success",
+    "data": {
+        "product_name": "De'Longhi La Specialista Maestro Espresso Machine",
+        "price": 1299.95,
+        "asin": "B08C96D599",
+        "top_flaws": [
+            "The auto-tamping lever occasionally leaves grounds uneven, requiring manual leveling anyway.",
+            "The milk frothing sensor is hyper-sensitive and throws error codes if a single drop of dried milk blocks the steam tip.",
+            "The machine takes nearly 15 minutes to fully pre-heat the active temperature stabilization elements before the first shot."
+        ]
+    }
+}
