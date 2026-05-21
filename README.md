@@ -1,72 +1,41 @@
-# Affilore — Amazon Affiliate Website
+# Affilore — Premium Client-Side Web Tool Directory
 
-A fully static, responsive Amazon affiliate website optimized for **GitHub Pages** hosting. No backend, no databases, no API keys required.
+A highly optimized, fully responsive directory of client-side web utility tools built for developers, digital creators, and home operators. 
+
+Hosted statically on **GitHub Pages**, Affilore provides privacy-first, serverless tools that perform all computations 100% locally in the user's browser.
 
 ## 🚀 Quick Start
 
-1. Clone this repository
-2. Open `index.html` in your browser — that's it!
+1. Clone this repository.
+2. Open `index.html` in your web browser.
+3. For local web serving:
+   ```bash
+   npx serve .
+   ```
 
-### Local Development
-```bash
-npx serve .
-```
-
-### Deploy to GitHub Pages
-1. Push this repo to GitHub
-2. Go to **Settings → Pages**
-3. Set source to **main** branch, root `/`
-4. Your site will be live at `https://yourusername.github.io/affilore/`
-
-## 📁 Structure
+## 📁 Repository Structure
 
 ```
-├── index.html      # Homepage — reviews grid, editor's picks, categories
-├── review.html     # Product review template — video, comparison, pros/cons
-├── styles.css      # Complete design system & responsive styles
-├── main.js         # Lightweight interactivity (no frameworks)
-└── README.md
+├── index.html               # Main directory homepage (grid layout)
+├── styles.css               # Global CSS stylesheet (Premium dark-gold palette)
+├── about-us.html            # About page outlining the philosophy of Affilore
+├── terms.html               # Terms of Service for utilizing free web utilities
+├── privacy-policy.html      # AdSense-compliant privacy policy
+├── sitemap.xml              # Search engine discoverability sitemap
+└── tools/                   # Interactive client-side utility applications
+    ├── cadr-room-matcher/   # CADR Air Purifier Matcher
+    ├── coffee-ratio-calculator/ # Coffee Ratio Calculator
+    ├── recipe-yield-scaler/ # Recipe Yield Scaler
+    ├── skincare-layering-sorter/ # Skincare Layering Sorter
+    └── smart-bulb-roi-calculator/ # Smart Bulb ROI Calculator
 ```
 
-## ✨ Features
+## ✨ Design & Optimization
 
-- **Dark premium theme** with amber/gold accents
-- **Massive video hero** placeholder on review pages (YouTube/Vimeo ready)
-- **Product comparison table** with winner badges and inline CTAs
-- **Pros & Cons** cards with visual indicators
-- **Highly visible "Check Price on Amazon"** CTA buttons placed strategically
-- **Sticky sidebar** with product card, rating breakdown, and table of contents
-- **Score bars** with animated fill on scroll
-- **Editor's Choice** ranked list on homepage
-- **Scroll-triggered animations** using IntersectionObserver
-- **Fully responsive** — mobile, tablet, desktop
-- **SEO optimized** — proper meta tags, semantic HTML, heading hierarchy
-- **Affiliate disclosure** in footer (FTC compliant)
-- **Zero dependencies** — pure HTML, CSS, JavaScript
-
-## 🎨 Customization
-
-### Adding a New Review
-1. Copy `review.html` and rename it (e.g., `best-laptops-2026.html`)
-2. Update the content: title, video embed, comparison table data, pros/cons
-3. Replace `#` href placeholders with your Amazon affiliate links
-4. Add a new card on the homepage linking to your review
-
-### Embedding Videos
-Replace the video placeholder in the review template:
-```html
-<iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
-```
-
-### Amazon Affiliate Links
-Replace all `href="#"` on CTA buttons with your Amazon affiliate URLs:
-```html
-<a href="https://amazon.com/dp/PRODUCT_ID?tag=YOUR_AFFILIATE_TAG" class="btn btn--cta">
-  Check Price on Amazon →
-</a>
-```
+- **Premium Dark Palette:** Dark slate/black theme styled with modern glassmorphic panels and gold/amber highlights.
+- **Client-Side Processing:** Privacy-focused tools with 0% data transmission to the backend. Calculations are instant and completely secure.
+- **Google AdSense Ready:** AdSense-compliant structure featuring top-tier nav layouts and legal pages.
+- **Responsive Layout:** Tailored with vanilla CSS for flawless viewing on mobile, tablet, and desktop viewports.
 
 ## 📜 License
 
