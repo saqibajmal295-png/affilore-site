@@ -688,36 +688,37 @@ body {
   opacity: 1;
 }
 
-/* Ensure position relative for absolute canvas placement contexts */
+/* Clean block positioning resets */
 body {
     background-color: #050505 !important;
-    position: relative;
-    overflow-x: hidden;
+    position: static !important; /* Forces layout engines to standard block mapping */
 }
 
-/* Cyber-luxury dark yellow ambient backdrop glow nodes */
-body::before {
-    content: "";
+/* Force all functional content, typography layers, and cards above the canvas canvas layout */
+nav, header, main, footer, .container, .workspace, .card, .panel, div[class*="grid"] {
+    position: relative !important;
+    z-index: 2 !important; /* Keeps interactive links and assets at highest priority stacking layer */
+}
+
+/* Premium cyber-luxury dark yellow ambient background glow nodes */
+.premium-bg-glow {
     position: fixed;
-    top: -10%;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80vw;
-    height: 60vh;
-    background: radial-gradient(circle, rgba(255, 193, 7, 0.08) 0%, rgba(255, 193, 7, 0) 70%);
-    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 50% -10%, rgba(255, 193, 7, 0.07) 0%, rgba(255, 193, 7, 0) 65%);
+    z-index: 1;
     pointer-events: none;
 }
 
-/* Lock relative stacking indices on layout nodes to prevent canvas masking anomalies */
-nav, header, main, footer, .container, .workspace, .card, .panel {
-    position: relative;
-    z-index: 1;
-}
-
+/* Secure canvas background element layering boundaries */
 canvas#global-particle-canvas {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1; /* Sits completely safely behind active grid elements */
     pointer-events: none;
 }
