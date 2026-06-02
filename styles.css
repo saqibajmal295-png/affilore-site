@@ -687,3 +687,37 @@ body {
 .modal-toast.show {
   opacity: 1;
 }
+
+/* Ensure position relative for absolute canvas placement contexts */
+body {
+    background-color: #050505 !important;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Cyber-luxury dark yellow ambient backdrop glow nodes */
+body::before {
+    content: "";
+    position: fixed;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 60vh;
+    background: radial-gradient(circle, rgba(255, 193, 7, 0.08) 0%, rgba(255, 193, 7, 0) 70%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Lock relative stacking indices on layout nodes to prevent canvas masking anomalies */
+nav, header, main, footer, .container, .workspace, .card, .panel {
+    position: relative;
+    z-index: 1;
+}
+
+canvas#global-particle-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
