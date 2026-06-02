@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Advanced Cron Job Generator & Interactive Parser — build, visualize, and validate cron expressions instantly in your browser.">
+<title>CronForge — Advanced Cron Expression Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--surface:#18181b;--surface-hover:#1f1f23;--border:#27272a;
+  --border-hover:#3f3f46;--text:#f4f4f5;--text-muted:#a1a1aa;--text-dim:#71717a;
+  --gold:#FFC107;--gold-dim:#b8860b;--gold-glow:rgba(255,193,7,.25);
+  --gold-soft:rgba(255,193,7,.08);--crimson:#ef4444;--crimson-glow:rgba(239,68,68,.3);
+  --emerald:#10b981;--emerald-glow:rgba(16,185,129,.25);
+  --blue:#3b82f6;--blue-glow:rgba(59,130,246,.2);
+  --radius:12px;--radius-sm:8px;--radius-xs:6px;
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4);
+  --shadow-md:0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.6);
+  --shadow-gold:0 0 20px rgba(255,193,7,.15);
+  --transition:all .2s cubic-bezier(.4,0,.2,1);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+::selection{background:var(--gold);color:var(--bg)}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-dim)}
+/* ─── PRIVACY BANNER ─── */
+.privacy-banner{
+  background:linear-gradient(135deg,rgba(16,185,129,.06),rgba(59,130,246,.06));
+  border-bottom:1px solid rgba(16,185,129,.15);
+  padding:10px 24px;text-align:center;font-size:.8rem;color:var(--text-muted);
+  letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:8px;
+  backdrop-filter:blur(10px);position:sticky;top:0;z-index:100;
+}
+.privacy-banner .shield{font-size:1rem}
+.privacy-banner strong{color:var(--emerald);font-weight:600}
+/* ─── HEADER ─── */
+.header{
+  padding:40px 24px 32px;text-align:center;position:relative;
+}
+.header::after{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:600px;height:300px;
+  background:radial-gradient(ellipse,rgba(255,193,7,.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+.logo{
+  font-size:2.2rem;font-weight:900;letter-spacing:-.04em;
+  background:linear-gradient(135deg,var(--gold) 0%,#f59e0b 50%,var(--gold) 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:shimmer 4s ease-in-out infinite;
+  margin-bottom:6px;
+}
+@keyframes shimmer{0%,100%{background-position:0% center}50%{background-position:200% center}}
+.subtitle{color:var(--text-dim);font-size:.9rem;font-weight:400;letter-spacing:.03em}
+/* ─── CONTAINER ─── */
+.container{max-width:960px;margin:0 auto;padding:0 20px 60px}
+/* ─── CRON INPUT BAR ─── */
+.cron-input-section{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 32px;margin-bottom:24px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow-md);
+}
+.cron-input-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-glow),transparent);
+}
+.cron-input-label{
+  font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--text-dim);font-weight:600;margin-bottom:12px;display:block;
+}
+.cron-input-wrapper{display:flex;gap:12px;align-items:stretch}
+.cron-fields-display{
+  display:flex;flex:1;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-sm);overflow:hidden;position:relative;
+}
+.cron-field-input{
+  flex:1;text-align:center;font-family:var(--mono);font-size:1.4rem;font-weight:600;
+  background:transparent;border:none;color:var(--text);padding:16px 4px;
+  outline:none;min-width:0;transition:var(--transition);position:relative;
+  letter-spacing:.02em;
+}
+.cron-field-input:focus{background:rgba(255,193,7,.04)}
+.cron-field-input.error{color:var(--crimson);text-shadow:0 0 10px var(--crimson-glow)}
+.cron-field-sep{
+  display:flex;align-items:center;color:var(--text-dim);font-family:var(--mono);
+  font-size:1.1rem;user-select:none;padding:0 2px;
+}
+.cron-field-label{
+  position:absolute;bottom:-22px;left:0;right:0;text-align:center;
+  font-size:.6rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;
+  font-weight:500;
+}
+.cron-field-wrapper{flex:1;position:relative;display:flex;flex-direction:column;align-items:stretch}
+.cron-field-wrapper + .cron-field-wrapper{border-left:1px solid var(--border)}
+.cron-field-wrapper .cron-field-label{padding-top:4px}
+.cron-string-combined{
+  flex:1;font-family:var(--mono);font-size:1.4rem;font-weight:600;
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);
+  color:var(--text);padding:16px 20px;outline:none;text-align:center;
+  letter-spacing:.15em;transition:var(--transition);
+}
+.cron-string-combined:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+.cron-string-combined.error{border-color:var(--crimson);box-shadow:0 0 0 3px var(--crimson-glow)}
+.cron-action-btn{
+  background:var(--gold);color:var(--bg);border:none;border-radius:var(--radius-sm);
+  padding:0 20px;font-family:var(--font);font-size:.8rem;font-weight:700;
+  cursor:pointer;transition:var(--transition);text-transform:uppercase;
+  letter-spacing:.06em;white-space:nowrap;display:flex;align-items:center;gap:6px;
+}
+.cron-action-btn:hover{
+  background:#f59e0b;box-shadow:var(--shadow-gold);transform:translateY(-1px);
+}
+.cron-action-btn:active{transform:translateY(0)}
+.cron-action-btn.copied{background:var(--emerald)}
+/* ─── HUMAN READABLE ─── */
+.human-readable{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 28px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px;
+  box-shadow:var(--shadow-sm);min-height:64px;
+}
+.human-icon{
+  font-size:1.3rem;flex-shrink:0;width:40px;height:40px;
+  background:var(--gold-soft);border-radius:var(--radius-xs);
+  display:flex;align-items:center;justify-content:center;
+}
+.human-text{
+  font-size:1rem;color:var(--text);line-height:1.7;flex:1;
+  font-weight:400;
+}
+.human-text .highlight{
+  color:var(--gold);font-weight:600;
+  background:var(--gold-soft);padding:1px 6px;border-radius:4px;
+  font-family:var(--mono);font-size:.9em;
+}
+.error-message{
+  background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);
+  border-radius:var(--radius);padding:16px 24px;margin-bottom:24px;
+  display:none;align-items:flex-start;gap:12px;color:#fca5a5;font-size:.85rem;
+}
+.error-message.visible{display:flex}
+.error-message .err-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.error-message .err-fields{flex:1}
+.error-message .err-field-name{color:var(--crimson);font-weight:600;font-family:var(--mono)}
+/* ─── TAB NAVIGATION ─── */
+.tabs-section{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;margin-bottom:24px;box-shadow:var(--shadow-md);
+}
+.tab-nav{
+  display:flex;border-bottom:1px solid var(--border);background:rgba(0,0,0,.2);
+  overflow-x:auto;
+}
+.tab-btn{
+  flex:1;padding:14px 12px;background:transparent;border:none;
+  color:var(--text-dim);font-family:var(--font);font-size:.78rem;font-weight:600;
+  cursor:pointer;transition:var(--transition);position:relative;
+  text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.tab-btn .tab-icon{font-size:1.1rem}
+.tab-btn:hover{color:var(--text-muted);background:rgba(255,255,255,.02)}
+.tab-btn.active{color:var(--gold)}
+.tab-btn.active::after{
+  content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;
+  background:var(--gold);border-radius:1px;
+  box-shadow:0 0 8px var(--gold-glow);
+}
+.tab-btn.error-tab{color:var(--crimson)}
+.tab-btn.error-tab.active::after{background:var(--crimson);box-shadow:0 0 8px var(--crimson-glow)}
+.tab-panel{display:none;padding:28px;animation:fadeIn .25s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+/* ─── MODE SELECTOR ─── */
+.mode-selector{
+  display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;
+}
+.mode-btn{
+  padding:8px 18px;background:var(--bg);border:1px solid var(--border);
+  border-radius:20px;color:var(--text-muted);font-family:var(--font);
+  font-size:.78rem;font-weight:500;cursor:pointer;transition:var(--transition);
+}
+.mode-btn:hover{border-color:var(--border-hover);color:var(--text)}
+.mode-btn.active{
+  background:var(--gold-soft);border-color:var(--gold);color:var(--gold);font-weight:600;
+}
+/* ─── CHIP GRID ─── */
+.chip-grid{
+  display:grid;gap:6px;
+}
+.chip-grid.minutes-grid,.chip-grid.seconds-grid{grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}
+.chip-grid.hours-grid{grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}
+.chip-grid.dom-grid{grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}
+.chip-grid.month-grid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr))}
+.chip-grid.dow-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}
+.chip{
+  padding:10px 4px;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-xs);text-align:center;font-family:var(--mono);
+  font-size:.82rem;font-weight:500;color:var(--text-muted);cursor:pointer;
+  transition:var(--transition);user-select:none;
+}
+.chip:hover{border-color:var(--border-hover);color:var(--text);background:var(--surface-hover)}
+.chip.selected{
+  background:var(--gold-soft);border-color:var(--gold);color:var(--gold);
+  font-weight:700;box-shadow:0 0 12px rgba(255,193,7,.1);
+}
+/* ─── INTERVAL / RANGE ─── */
+.interval-row,.range-row{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:8px 0;
+}
+.interval-row label,.range-row label{
+  color:var(--text-muted);font-size:.85rem;font-weight:500;white-space:nowrap;
+}
+.num-input{
+  width:72px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-xs);color:var(--text);font-family:var(--mono);
+  font-size:.95rem;font-weight:500;text-align:center;outline:none;
+  transition:var(--transition);
+}
+.num-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+.num-input.error{border-color:var(--crimson);box-shadow:0 0 0 3px var(--crimson-glow)}
+/* ─── NEXT RUNS TABLE ─── */
+.next-runs-section{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;margin-bottom:24px;box-shadow:var(--shadow-md);
+}
+.section-header{
+  padding:18px 28px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(0,0,0,.15);
+}
+.section-title{
+  font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text-dim);font-weight:700;display:flex;align-items:center;gap:8px;
+}
+.section-title .sec-icon{font-size:1rem}
+.runs-table{width:100%;border-collapse:collapse}
+.runs-table th{
+  padding:12px 28px;text-align:left;font-size:.7rem;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--text-dim);font-weight:600;
+  border-bottom:1px solid var(--border);background:rgba(0,0,0,.1);
+}
+.runs-table td{
+  padding:14px 28px;border-bottom:1px solid rgba(39,39,42,.5);
+  font-family:var(--mono);font-size:.85rem;color:var(--text-muted);
+}
+.runs-table tr:last-child td{border-bottom:none}
+.runs-table tr:hover td{background:rgba(255,255,255,.015);color:var(--text)}
+.runs-table .run-number{
+  color:var(--gold);font-weight:700;width:40px;
+}
+.runs-table .run-date{color:var(--text);font-weight:500}
+.runs-table .run-relative{color:var(--text-dim);font-size:.78rem}
+.no-runs{padding:32px;text-align:center;color:var(--text-dim);font-size:.85rem}
+/* ─── ACTIONS BAR ─── */
+.actions-bar{
+  display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;
+}
+.action-btn{
+  padding:12px 22px;border-radius:var(--radius-sm);font-family:var(--font);
+  font-size:.8rem;font-weight:600;cursor:pointer;transition:var(--transition);
+  display:flex;align-items:center;gap:8px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text-muted);
+}
+.action-btn:hover{
+  border-color:var(--border-hover);color:var(--text);background:var(--surface-hover);
+  transform:translateY(-1px);box-shadow:var(--shadow-sm);
+}
+.action-btn:active{transform:translateY(0)}
+.action-btn.primary{
+  background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:700;
+}
+.action-btn.primary:hover{
+  background:#f59e0b;box-shadow:var(--shadow-gold);
+}
+.action-btn .btn-icon{font-size:1rem}
+.action-btn.copied{background:var(--emerald);border-color:var(--emerald);color:#fff}
+/* ─── PRESETS ─── */
+.presets-section{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow-md);margin-bottom:24px;
+}
+.preset-list{padding:16px 24px;display:flex;flex-direction:column;gap:6px}
+.preset-item{
+  display:flex;align-items:center;gap:12px;padding:10px 16px;
+  background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xs);
+  cursor:pointer;transition:var(--transition);
+}
+.preset-item:hover{border-color:var(--border-hover);background:var(--surface-hover)}
+.preset-cron{
+  font-family:var(--mono);font-size:.85rem;color:var(--gold);font-weight:600;
+  min-width:120px;
+}
+.preset-desc{font-size:.8rem;color:var(--text-muted);flex:1}
+.preset-delete{
+  background:none;border:none;color:var(--text-dim);cursor:pointer;
+  font-size:1rem;padding:4px;transition:var(--transition);border-radius:4px;
+}
+.preset-delete:hover{color:var(--crimson);background:rgba(239,68,68,.1)}
+.preset-empty{
+  padding:32px;text-align:center;color:var(--text-dim);font-size:.85rem;
+}
+/* ─── COMMON EXPRESSIONS ─── */
+.common-section{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow-md);
+}
+.common-grid{
+  padding:20px 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;
+}
+.common-item{
+  padding:10px 14px;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-xs);cursor:pointer;transition:var(--transition);
+}
+.common-item:hover{border-color:var(--gold);background:var(--gold-soft)}
+.common-item .ci-cron{
+  font-family:var(--mono);font-size:.8rem;color:var(--gold);font-weight:600;
+  margin-bottom:2px;
+}
+.common-item .ci-desc{font-size:.72rem;color:var(--text-dim)}
+/* ─── SAVE MODAL ─── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;
+  align-items:center;justify-content:center;backdrop-filter:blur(4px);
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:32px;width:90%;max-width:440px;box-shadow:var(--shadow-lg);
+  animation:modalIn .2s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal h3{font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--text)}
+.modal input[type="text"]{
+  width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-xs);color:var(--text);font-family:var(--font);
+  font-size:.9rem;outline:none;margin-bottom:16px;transition:var(--transition);
+}
+.modal input[type="text"]:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-glow)}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end}
+/* ─── FOOTER ─── */
+.footer{
+  text-align:center;padding:40px 20px;color:var(--text-dim);font-size:.75rem;
+  border-top:1px solid var(--border);margin-top:20px;
+}
+.footer a{color:var(--gold);text-decoration:none}
+/* ─── RESPONSIVE ─── */
+@media(max-width:640px){
+  .cron-input-wrapper{flex-direction:column}
+  .cron-field-input{font-size:1.1rem;padding:12px 2px}
+  .tab-btn{padding:10px 6px;font-size:.65rem}
+  .tab-btn .tab-icon{font-size:.95rem}
+  .runs-table th,.runs-table td{padding:10px 14px;font-size:.78rem}
+  .common-grid{grid-template-columns:1fr}
+  .actions-bar{flex-direction:column}
+  .action-btn{justify-content:center}
+  .header{padding:28px 16px 24px}
+  .logo{font-size:1.6rem}
+}
+/* ─── TOOLTIP ─── */
+.tooltip{
+  position:absolute;background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius-xs);padding:6px 12px;font-size:.72rem;
+  color:var(--text-muted);pointer-events:none;white-space:nowrap;
+  box-shadow:var(--shadow-md);z-index:50;opacity:0;transition:opacity .15s;
+}
+.tooltip.visible{opacity:1}
+/* ─── PULSE DOT ─── */
+.pulse-dot{
+  width:6px;height:6px;background:var(--emerald);border-radius:50%;
+  display:inline-block;animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+<!-- PRIVACY BANNER -->
+<div class="privacy-banner">
+  <span class="shield">🔒</span>
+  <span><strong>Privacy First:</strong> All task evaluation and cron string mapping execute 100% locally in your browser sandbox. No data leaves your machine.</span>
+  <span class="pulse-dot"></span>
+</div>
+<!-- HEADER -->
+<header class="header">
+  <h1 class="logo">⚡ CronForge</h1>
+  <p class="subtitle">Advanced Cron Expression Generator & Interactive Parser</p>
+</header>
+<main class="container">
+  <!-- CRON INPUT BAR -->
+  <section class="cron-input-section" id="cronInputSection">
+    <span class="cron-input-label">Cron Expression</span>
+    <div class="cron-input-wrapper">
+      <div class="cron-fields-display">
+        <div class="cron-field-wrapper">
+          <input type="text" class="cron-field-input" id="fieldMinute" value="*" data-field="minute" maxlength="20" spellcheck="false" autocomplete="off" aria-label="Minute">
+          <span class="cron-field-label">Minute</span>
+        </div>
+        <span class="cron-field-sep"> </span>
+        <div class="cron-field-wrapper">
+          <input type="text" class="cron-field-input" id="fieldHour" value="*" data-field="hour" maxlength="20" spellcheck="false" autocomplete="off" aria-label="Hour">
+          <span class="cron-field-label">Hour</span>
+        </div>
+        <span class="cron-field-sep"> </span>
+        <div class="cron-field-wrapper">
+          <input type="text" class="cron-field-input" id="fieldDom" value="*" data-field="dom" maxlength="20" spellcheck="false" autocomplete="off" aria-label="Day of Month">
+          <span class="cron-field-label">Day (M)</span>
+        </div>
+        <span class="cron-field-sep"> </span>
+        <div class="cron-field-wrapper">
+          <input type="text" class="cron-field-input" id="fieldMonth" value="*" data-field="month" maxlength="20" spellcheck="false" autocomplete="off" aria-label="Month">
+          <span class="cron-field-label">Month</span>
+        </div>
+        <span class="cron-field-sep"> </span>
+        <div class="cron-field-wrapper">
+          <input type="text" class="cron-field-input" id="fieldDow" value="*" data-field="dow" maxlength="20" spellcheck="false" autocomplete="off" aria-label="Day of Week">
+          <span class="cron-field-label">Day (W)</span>
+        </div>
+      </div>
+      <button class="cron-action-btn" id="copyBtn" title="Copy cron expression">
+        <span class="btn-icon">📋</span> COPY
+      </button>
+    </div>
+  </section>
+  <!-- HUMAN READABLE -->
+  <div class="human-readable" id="humanReadable">
+    <div class="human-icon">📖</div>
+    <div class="human-text" id="humanText">Runs <span class="highlight">every minute</span></div>
+  </div>
+  <!-- ERROR DISPLAY -->
+  <div class="error-message" id="errorDisplay">
+    <span class="err-icon">⚠️</span>
+    <div class="err-fields" id="errorFields"></div>
+  </div>
+  <!-- TABS -->
+  <section class="tabs-section">
+    <nav class="tab-nav" id="tabNav">
+      <button class="tab-btn active" data-tab="minute"><span class="tab-icon">⏱️</span>Minutes</button>
+      <button class="tab-btn" data-tab="hour"><span class="tab-icon">🕐</span>Hours</button>
+      <button class="tab-btn" data-tab="dom"><span class="tab-icon">📅</span>Day of Month</button>
+      <button class="tab-btn" data-tab="month"><span class="tab-icon">🗓️</span>Month</button>
+      <button class="tab-btn" data-tab="dow"><span class="tab-icon">📆</span>Day of Week</button>
+    </nav>
+    <!-- MINUTE PANEL -->
+    <div class="tab-panel active" id="panel-minute">
+      <div class="mode-selector">
+        <button class="mode-btn active" data-mode="every" data-field="minute">Every minute</button>
+        <button class="mode-btn" data-mode="interval" data-field="minute">Every N minutes</button>
+        <button class="mode-btn" data-mode="specific" data-field="minute">Specific minutes</button>
+        <button class="mode-btn" data-mode="range" data-field="minute">Range</button>
+      </div>
+      <div class="mode-content" id="mode-minute-every"></div>
+      <div class="mode-content" id="mode-minute-interval" style="display:none">
+        <div class="interval-row">
+          <label>Every</label>
+          <input type="number" class="num-input" id="minuteInterval" min="1" max="59" value="5">
+          <label>minute(s)</label>
+          <label style="margin-left:8px">starting at minute</label>
+          <input type="number" class="num-input" id="minuteIntervalStart" min="0" max="59" value="0">
+        </div>
+      </div>
+      <div class="mode-content" id="mode-minute-specific" style="display:none">
+        <div class="chip-grid minutes-grid" id="minuteChips"></div>
+      </div>
+      <div class="mode-content" id="mode-minute-range" style="display:none">
+        <div class="range-row">
+          <label>From minute</label>
+          <input type="number" class="num-input" id="minuteRangeStart" min="0" max="59" value="0">
+          <label>to minute</label>
+          <input type="number" class="num-input" id="minuteRangeEnd" min="0" max="59" value="30">
+        </div>
+      </div>
+    </div>
+    <!-- HOUR PANEL -->
+    <div class="tab-panel" id="panel-hour">
+      <div class="mode-selector">
+        <button class="mode-btn active" data-mode="every" data-field="hour">Every hour</button>
+        <button class="mode-btn" data-mode="interval" data-field="hour">Every N hours</button>
+        <button class="mode-btn" data-mode="specific" data-field="hour">Specific hours</button>
+        <button class="mode-btn" data-mode="range" data-field="hour">Range</button>
+      </div>
+      <div class="mode-content" id="mode-hour-every"></div>
+      <div class="mode-content" id="mode-hour-interval" style="display:none">
+        <div class="interval-row">
+          <label>Every</label>
+          <input type="number" class="num-input" id="hourInterval" min="1" max="23" value="2">
+          <label>hour(s)</label>
+          <label style="margin-left:8px">starting at hour</label>
+          <input type="number" class="num-input" id="hourIntervalStart" min="0" max="23" value="0">
+        </div>
+      </div>
+      <div class="mode-content" id="mode-hour-specific" style="display:none">
+        <div class="chip-grid hours-grid" id="hourChips"></div>
+      </div>
+      <div class="mode-content" id="mode-hour-range" style="display:none">
+        <div class="range-row">
+          <label>From hour</label>
+          <input type="number" class="num-input" id="hourRangeStart" min="0" max="23" value="9">
+          <label>to hour</label>
+          <input type="number" class="num-input" id="hourRangeEnd" min="0" max="23" value="17">
+        </div>
+      </div>
+    </div>
+    <!-- DOM PANEL -->
+    <div class="tab-panel" id="panel-dom">
+      <div class="mode-selector">
+        <button class="mode-btn active" data-mode="every" data-field="dom">Every day</button>
+        <button class="mode-btn" data-mode="interval" data-field="dom">Every N days</button>
+        <button class="mode-btn" data-mode="specific" data-field="dom">Specific days</button>
+        <button class="mode-btn" data-mode="range" data-field="dom">Range</button>
+      </div>
+      <div class="mode-content" id="mode-dom-every"></div>
+      <div class="mode-content" id="mode-dom-interval" style="display:none">
+        <div class="interval-row">
+          <label>Every</label>
+          <input type="number" class="num-input" id="domInterval" min="1" max="31" value="2">
+          <label>day(s)</label>
+          <label style="margin-left:8px">starting on day</label>
+          <input type="number" class="num-input" id="domIntervalStart" min="1" max="31" value="1">
+        </div>
+      </div>
+      <div class="mode-content" id="mode-dom-specific" style="display:none">
+        <div class="chip-grid dom-grid" id="domChips"></div>
+      </div>
+      <div class="mode-content" id="mode-dom-range" style="display:none">
+        <div class="range-row">
+          <label>From day</label>
+          <input type="number" class="num-input" id="domRangeStart" min="1" max="31" value="1">
+          <label>to day</label>
+          <input type="number" class="num-input" id="domRangeEnd" min="1" max="31" value="15">
+        </div>
+      </div>
+    </div>
+    <!-- MONTH PANEL -->
+    <div class="tab-panel" id="panel-month">
+      <div class="mode-selector">
+        <button class="mode-btn active" data-mode="every" data-field="month">Every month</button>
+        <button class="mode-btn" data-mode="interval" data-field="month">Every N months</button>
+        <button class="mode-btn" data-mode="specific" data-field="month">Specific months</button>
+        <button class="mode-btn" data-mode="range" data-field="month">Range</button>
+      </div>
+      <div class="mode-content" id="mode-month-every"></div>
+      <div class="mode-content" id="mode-month-interval" style="display:none">
+        <div class="interval-row">
+          <label>Every</label>
+          <input type="number" class="num-input" id="monthInterval" min="1" max="12" value="2">
+          <label>month(s)</label>
+          <label style="margin-left:8px">starting in month</label>
+          <input type="number" class="num-input" id="monthIntervalStart" min="1" max="12" value="1">
+        </div>
+      </div>
+      <div class="mode-content" id="mode-month-specific" style="display:none">
+        <div class="chip-grid month-grid" id="monthChips"></div>
+      </div>
+      <div class="mode-content" id="mode-month-range" style="display:none">
+        <div class="range-row">
+          <label>From month</label>
+          <input type="number" class="num-input" id="monthRangeStart" min="1" max="12" value="1">
+          <label>to month</label>
+          <input type="number" class="num-input" id="monthRangeEnd" min="1" max="12" value="6">
+        </div>
+      </div>
+    </div>
+    <!-- DOW PANEL -->
+    <div class="tab-panel" id="panel-dow">
+      <div class="mode-selector">
+        <button class="mode-btn active" data-mode="every" data-field="dow">Every day</button>
+        <button class="mode-btn" data-mode="interval" data-field="dow">Every N days</button>
+        <button class="mode-btn" data-mode="specific" data-field="dow">Specific days</button>
+        <button class="mode-btn" data-mode="range" data-field="dow">Range</button>
+      </div>
+      <div class="mode-content" id="mode-dow-every"></div>
+      <div class="mode-content" id="mode-dow-interval" style="display:none">
+        <div class="interval-row">
+          <label>Every</label>
+          <input type="number" class="num-input" id="dowInterval" min="1" max="7" value="2">
+          <label>day(s) of the week</label>
+          <label style="margin-left:8px">starting on</label>
+          <input type="number" class="num-input" id="dowIntervalStart" min="0" max="6" value="0">
+        </div>
+      </div>
+      <div class="mode-content" id="mode-dow-specific" style="display:none">
+        <div class="chip-grid dow-grid" id="dowChips"></div>
+      </div>
+      <div class="mode-content" id="mode-dow-range" style="display:none">
+        <div class="range-row">
+          <label>From day</label>
+          <input type="number" class="num-input" id="dowRangeStart" min="0" max="6" value="1">
+          <label>to day</label>
+          <input type="number" class="num-input" id="dowRangeEnd" min="0" max="6" value="5">
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- NEXT RUNS -->
+  <section class="next-runs-section" id="nextRunsSection">
+    <div class="section-header">
+      <span class="section-title"><span class="sec-icon">🚀</span> Next Scheduled Executions</span>
+    </div>
+    <table class="runs-table">
+      <thead><tr><th>#</th><th>Date & Time</th><th>Relative</th></tr></thead>
+      <tbody id="runsBody"></tbody>
+    </table>
+  </section>
+  <!-- ACTIONS BAR -->
+  <div class="actions-bar">
+    <button class="action-btn primary" id="copyFullBtn"><span class="btn-icon">📋</span> Copy Expression</button>
+    <button class="action-btn" id="savePresetBtn"><span class="btn-icon">💾</span> Save Preset</button>
+    <button class="action-btn" id="resetBtn"><span class="btn-icon">🔄</span> Reset</button>
+    <button class="action-btn" id="exportJsonBtn"><span class="btn-icon">📦</span> Export JSON</button>
+  </div>
+  <!-- SAVED PRESETS -->
+  <section class="presets-section" id="presetsSection">
+    <div class="section-header">
+      <span class="section-title"><span class="sec-icon">💾</span> Saved Presets</span>
+    </div>
+    <div class="preset-list" id="presetList"></div>
+  </section>
+  <!-- COMMON EXPRESSIONS -->
+  <section class="common-section" style="margin-top:24px">
+    <div class="section-header">
+      <span class="section-title"><span class="sec-icon">⚡</span> Common Expressions</span>
+    </div>
+    <div class="common-grid" id="commonGrid"></div>
+  </section>
+</main>
+<!-- SAVE PRESET MODAL -->
+<div class="modal-overlay" id="saveModal">
+  <div class="modal">
+    <h3>💾 Save Preset</h3>
+    <input type="text" id="presetName" placeholder="Enter a name for this preset…" maxlength="60">
+    <div class="modal-actions">
+      <button class="action-btn" id="modalCancel">Cancel</button>
+      <button class="action-btn primary" id="modalSave">Save</button>
+    </div>
+  </div>
+</div>
+<!-- FOOTER -->
+<footer class="footer">
+  CronForge — Built with ❤️ &amp; vanilla JS. 100% client-side. Zero dependencies.
+</footer>
+<script>
+(() => {
+  'use strict';
+  // ─── CONSTANTS ─────────────────────────────────────────
+  const MONTH_NAMES = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const MONTH_FULL = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOW_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const DOW_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const FIELD_CONFIGS = {
+    minute: { min: 0, max: 59, label: 'Minute' },
+    hour:   { min: 0, max: 23, label: 'Hour' },
+    dom:    { min: 1, max: 31, label: 'Day of Month' },
+    month:  { min: 1, max: 12, label: 'Month' },
+    dow:    { min: 0, max: 6,  label: 'Day of Week' }
+  };
+  const COMMON_EXPRESSIONS = [
+    { cron: '* * * * *',     desc: 'Every minute' },
+    { cron: '*/5 * * * *',   desc: 'Every 5 minutes' },
+    { cron: '*/15 * * * *',  desc: 'Every 15 minutes' },
+    { cron: '0 * * * *',     desc: 'Every hour' },
+    { cron: '0 */2 * * *',   desc: 'Every 2 hours' },
+    { cron: '0 0 * * *',     desc: 'Every day at midnight' },
+    { cron: '0 12 * * *',    desc: 'Every day at noon' },
+    { cron: '0 9 * * 1-5',   desc: 'Weekdays at 9 AM' },
+    { cron: '0 0 * * 0',     desc: 'Every Sunday at midnight' },
+    { cron: '0 0 1 * *',     desc: 'First day of every month' },
+    { cron: '0 0 1 1 *',     desc: 'Every January 1st' },
+    { cron: '30 4 * * *',    desc: 'Daily at 4:30 AM' },
+  ];
+  const STORAGE_KEY = 'cronforge_presets';
+  // ─── DOM REFS ──────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const fieldInputs = {
+    minute: $('fieldMinute'),
+    hour: $('fieldHour'),
+    dom: $('fieldDom'),
+    month: $('fieldMonth'),
+    dow: $('fieldDow')
+  };
+  // ─── STATE ─────────────────────────────────────────────
+  const state = {
+    fields: { minute: '*', hour: '*', dom: '*', month: '*', dow: '*' },
+    modes: { minute: 'every', hour: 'every', dom: 'every', month: 'every', dow: 'every' },
+    selections: { minute: new Set(), hour: new Set(), dom: new Set(), month: new Set(), dow: new Set() },
+    errors: { minute: null, hour: null, dom: null, month: null, dow: null },
+    activeTab: 'minute',
+    suppressSync: false
+  };
+  // ─── INIT CHIPS ────────────────────────────────────────
+  function buildChips() {
+    // Minutes
+    const mGrid = $('minuteChips');
+    for (let i = 0; i <= 59; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = String(i).padStart(2, '0');
+      chip.dataset.value = i;
+      chip.addEventListener('click', () => toggleChip('minute', i, chip));
+      mGrid.appendChild(chip);
+    }
+    // Hours
+    const hGrid = $('hourChips');
+    for (let i = 0; i <= 23; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = String(i).padStart(2, '0') + ':00';
+      chip.dataset.value = i;
+      chip.addEventListener('click', () => toggleChip('hour', i, chip));
+      hGrid.appendChild(chip);
+    }
+    // Day of Month
+    const dGrid = $('domChips');
+    for (let i = 1; i <= 31; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = i;
+      chip.dataset.value = i;
+      chip.addEventListener('click', () => toggleChip('dom', i, chip));
+      dGrid.appendChild(chip);
+    }
+    // Month
+    const moGrid = $('monthChips');
+    for (let i = 1; i <= 12; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = MONTH_NAMES[i];
+      chip.dataset.value = i;
+      chip.addEventListener('click', () => toggleChip('month', i, chip));
+      moGrid.appendChild(chip);
+    }
+    // Day of Week
+    const dwGrid = $('dowChips');
+    for (let i = 0; i <= 6; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = DOW_NAMES[i];
+      chip.dataset.value = i;
+      chip.addEventListener('click', () => toggleChip('dow', i, chip));
+      dwGrid.appendChild(chip);
+    }
+  }
+  function toggleChip(field, value, chipEl) {
+    const sel = state.selections[field];
+    if (sel.has(value)) {
+      sel.delete(value);
+      chipEl.classList.remove('selected');
+    } else {
+      sel.add(value);
+      chipEl.classList.add('selected');
+    }
+    syncFromTabs(field);
+  }
+  // ─── TAB SWITCHING ─────────────────────────────────────
+  function initTabs() {
+    const btns = document.querySelectorAll('.tab-btn');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        $('panel-' + btn.dataset.tab).classList.add('active');
+        state.activeTab = btn.dataset.tab;
+      });
+    });
+  }
+  // ─── MODE SWITCHING ────────────────────────────────────
+  function initModes() {
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const field = btn.dataset.field;
+        const mode = btn.dataset.mode;
+        const panel = $('panel-' + field);
+        panel.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        panel.querySelectorAll('.mode-content').forEach(c => c.style.display = 'none');
+        const content = $('mode-' + field + '-' + mode);
+        if (content) content.style.display = '';
+        state.modes[field] = mode;
+        syncFromTabs(field);
+      });
+    });
+  }
+  // ─── SYNC: TABS → CRON STRING ──────────────────────────
+  function syncFromTabs(field) {
+    if (state.suppressSync) return;
+    const mode = state.modes[field];
+    const cfg = FIELD_CONFIGS[field];
+    let val = '*';
+    if (mode === 'every') {
+      val = '*';
+    } else if (mode === 'interval') {
+      const intEl = $(field + 'Interval');
+      const startEl = $(field + 'IntervalStart');
+      const interval = parseInt(intEl?.value) || 1;
+      const start = parseInt(startEl?.value) || cfg.min;
+      val = start === cfg.min ? `*/${interval}` : `${start}/${interval}`;
+    } else if (mode === 'specific') {
+      const sel = state.selections[field];
+      if (sel.size === 0) {
+        val = '*';
+      } else {
+        val = Array.from(sel).sort((a, b) => a - b).join(',');
+      }
+    } else if (mode === 'range') {
+      const startEl = $(field + 'RangeStart');
+      const endEl = $(field + 'RangeEnd');
+      const s = parseInt(startEl?.value) || cfg.min;
+      const e = parseInt(endEl?.value) || cfg.max;
+      val = `${s}-${e}`;
+    }
+    state.fields[field] = val;
+    fieldInputs[field].value = val;
+    validate();
+    updateHumanReadable();
+    updateNextRuns();
+  }
+  // ─── SYNC: CRON STRING → TABS ──────────────────────────
+  function syncFromInput(field) {
+    state.suppressSync = true;
+    const val = fieldInputs[field].value.trim() || '*';
+    state.fields[field] = val;
+    const cfg = FIELD_CONFIGS[field];
+    const panel = $('panel-' + field);
+    // Determine mode from the value
+    let mode = 'every';
+    if (val === '*') {
+      mode = 'every';
+    } else if (val.includes('/')) {
+      mode = 'interval';
+      const parts = val.split('/');
+      const base = parts[0] === '*' ? cfg.min : parseInt(parts[0]) || cfg.min;
+      const step = parseInt(parts[1]) || 1;
+      const intEl = $(field + 'Interval');
+      const startEl = $(field + 'IntervalStart');
+      if (intEl) intEl.value = step;
+      if (startEl) startEl.value = base;
+    } else if (val.includes(',')) {
+      mode = 'specific';
+      const nums = val.split(',').map(v => parseInt(v)).filter(v => !isNaN(v));
+      state.selections[field] = new Set(nums);
+      refreshChips(field);
+    } else if (val.includes('-') && !val.includes('/')) {
+      mode = 'range';
+      const parts = val.split('-');
+      const s = parseInt(parts[0]) || cfg.min;
+      const e = parseInt(parts[1]) || cfg.max;
+      const startEl = $(field + 'RangeStart');
+      const endEl = $(field + 'RangeEnd');
+      if (startEl) startEl.value = s;
+      if (endEl) endEl.value = e;
+    } else if (/^\d+$/.test(val)) {
+      mode = 'specific';
+      state.selections[field] = new Set([parseInt(val)]);
+      refreshChips(field);
+    }
+    state.modes[field] = mode;
+    // Update mode buttons
+    panel.querySelectorAll('.mode-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.mode === mode);
+    });
+    panel.querySelectorAll('.mode-content').forEach(c => c.style.display = 'none');
+    const content = $('mode-' + field + '-' + mode);
+    if (content) content.style.display = '';
+    state.suppressSync = false;
+    validate();
+    updateHumanReadable();
+    updateNextRuns();
+  }
+  function refreshChips(field) {
+    const gridId = {
+      minute: 'minuteChips', hour: 'hourChips', dom: 'domChips',
+      month: 'monthChips', dow: 'dowChips'
+    }[field];
+    const grid = $(gridId);
+    if (!grid) return;
+    grid.querySelectorAll('.chip').forEach(chip => {
+      const v = parseInt(chip.dataset.value);
+      chip.classList.toggle('selected', state.selections[field].has(v));
+    });
+  }
+  // ─── VALIDATION ────────────────────────────────────────
+  function validate() {
+    const fieldNames = ['minute', 'hour', 'dom', 'month', 'dow'];
+    const errors = [];
+    fieldNames.forEach(field => {
+      const val = state.fields[field];
+      const cfg = FIELD_CONFIGS[field];
+      const err = validateField(val, cfg.min, cfg.max);
+      state.errors[field] = err;
+      fieldInputs[field].classList.toggle('error', !!err);
+      // Tab error state
+      const tabBtn = document.querySelector(`.tab-btn[data-tab="${field}"]`);
+      if (tabBtn) tabBtn.classList.toggle('error-tab', !!err);
+      if (err) errors.push({ field: cfg.label, message: err });
+    });
+    const errDisplay = $('errorDisplay');
+    const errFields = $('errorFields');
+    if (errors.length > 0) {
+      errFields.innerHTML = errors.map(e =>
+        `<div><span class="err-field-name">${e.field}:</span> ${e.message}</div>`
+      ).join('');
+      errDisplay.classList.add('visible');
+    } else {
+      errDisplay.classList.remove('visible');
+    }
+    return errors.length === 0;
+  }
+  function validateField(val, min, max) {
+    if (!val || val.trim() === '') return 'Field cannot be empty';
+    val = val.trim();
+    if (val === '*') return null;
+    // Step: */N or X/N
+    if (val.includes('/')) {
+      const parts = val.split('/');
+      if (parts.length !== 2) return 'Invalid step format';
+      const base = parts[0];
+      const step = parts[1];
+      if (base !== '*') {
+        const bNum = parseInt(base);
+        if (isNaN(bNum) || bNum < min || bNum > max) return `Base value must be ${min}-${max}`;
+      }
+      const sNum = parseInt(step);
+      if (isNaN(sNum) || sNum < 1) return 'Step must be ≥ 1';
+      return null;
+    }
+    // List: N,N,N
+    const parts = val.split(',');
+    for (const part of parts) {
+      // Range: N-N
+      if (part.includes('-')) {
+        const rParts = part.split('-');
+        if (rParts.length !== 2) return 'Invalid range format';
+        const s = parseInt(rParts[0]);
+        const e = parseInt(rParts[1]);
+        if (isNaN(s) || isNaN(e)) return 'Range values must be numbers';
+        if (s < min || s > max || e < min || e > max) return `Values must be ${min}-${max}`;
+        if (s > e) return 'Range start must be ≤ end';
+      } else {
+        const n = parseInt(part);
+        if (isNaN(n)) return `"${part}" is not a valid number`;
+        if (n < min || n > max) return `Value ${n} out of range (${min}-${max})`;
+      }
+    }
+    return null;
+  }
+  // ─── HUMAN-READABLE TRANSLATION ────────────────────────
+  function updateHumanReadable() {
+    const { minute, hour, dom, month, dow } = state.fields;
+    const hasErrors = Object.values(state.errors).some(e => e !== null);
+    if (hasErrors) {
+      $('humanText').innerHTML = '<span style="color:#fca5a5">⚠️ Fix errors in the expression to see the description</span>';
+      return;
+    }
+    const parts = [];
+    // Minute description
+    const minDesc = describeField(minute, 0, 59, 'minute', 'minutes');
+    // Hour description
+    const hourDesc = describeField(hour, 0, 23, 'hour', 'hours');
+    // DOM description
+    const domDesc = describeField(dom, 1, 31, 'day', 'days of the month', v => ordinal(v));
+    // Month description
+    const monthDesc = describeField(month, 1, 12, 'month', 'months', v => MONTH_FULL[v] || v);
+    // DOW description
+    const dowDesc = describeField(dow, 0, 6, 'day of the week', 'days of the week', v => DOW_FULL[v] || v);
+    let sentence = 'Runs ';
+    // Build time part
+    if (minute === '*' && hour === '*') {
+      sentence += '<span class="highlight">every minute</span>';
+    } else if (minute === '*' && hour !== '*') {
+      sentence += '<span class="highlight">every minute</span> ' + hourDesc;
+    } else if (hour === '*') {
+      sentence += minDesc + ' <span class="highlight">every hour</span>';
+    } else {
+      sentence += minDesc;
+      if (hourDesc) sentence += ' ' + hourDesc;
+    }
+    // DOM
+    if (dom !== '*') {
+      sentence += ', ' + domDesc;
+    }
+    // Month
+    if (month !== '*') {
+      sentence += ', ' + monthDesc;
+    }
+    // DOW
+    if (dow !== '*') {
+      sentence += ', ' + dowDesc;
+    }
+    $('humanText').innerHTML = sentence;
+  }
+  function describeField(val, min, max, singular, plural, formatter) {
+    if (val === '*') return '';
+    const fmt = formatter || (v => v);
+    if (val.includes('/')) {
+      const parts = val.split('/');
+      const step = parseInt(parts[1]);
+      const base = parts[0] === '*' ? min : parseInt(parts[0]);
+      if (base === min) {
+        return `<span class="highlight">every ${step} ${step === 1 ? singular : plural}</span>`;
+      }
+      return `<span class="highlight">every ${step} ${step === 1 ? singular : plural}</span> starting at <span class="highlight">${fmt(base)}</span>`;
+    }
+    if (val.includes(',')) {
+      const nums = val.split(',').map(v => parseInt(v)).filter(v => !isNaN(v));
+      if (nums.length <= 4) {
+        const formatted = nums.map(n => `<span class="highlight">${fmt(n)}</span>`);
+        return `at ${singular} ${formatted.join(', ')}`;
+      }
+      return `at <span class="highlight">${nums.length} specific ${plural}</span>`;
+    }
+    if (val.includes('-')) {
+      const parts = val.split('-');
+      return `from <span class="highlight">${fmt(parseInt(parts[0]))}</span> to <span class="highlight">${fmt(parseInt(parts[1]))}</span>`;
+    }
+    const n = parseInt(val);
+    if (!isNaN(n)) {
+      return `at ${singular} <span class="highlight">${fmt(n)}</span>`;
+    }
+    return `<span class="highlight">${val}</span>`;
+  }
+  function ordinal(n) {
+    const s = ['th','st','nd','rd'];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+  // ─── NEXT RUN CALCULATION ──────────────────────────────
+  function updateNextRuns() {
+    const body = $('runsBody');
+    const hasErrors = Object.values(state.errors).some(e => e !== null);
+    if (hasErrors) {
+      body.innerHTML = '<tr><td colspan="3" class="no-runs">Fix errors to see next run times</td></tr>';
+      return;
+    }
+    const runs = getNextRuns(5);
+    if (runs.length === 0) {
+      body.innerHTML = '<tr><td colspan="3" class="no-runs">No matching dates found in the near future</td></tr>';
+      return;
+    }
+    const now = new Date();
+    body.innerHTML = runs.map((run, i) => {
+      const dateStr = run.toLocaleDateString('en-US', {
+        weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+      });
+      const timeStr = run.toLocaleTimeString('en-US', {
+        hour: '2-digit', minute: '2-digit', hour12: true
+      });
+      const rel = relativeTime(run, now);
+      return `<tr>
+        <td class="run-number">${i + 1}</td>
+        <td class="run-date">${dateStr} at ${timeStr}</td>
+        <td class="run-relative">${rel}</td>
+      </tr>`;
+    }).join('');
+  }
+  function expandField(val, min, max) {
+    if (val === '*') return null; // null means "all values"
+    const results = new Set();
+    const parts = val.split(',');
+    for (const part of parts) {
+      if (part.includes('/')) {
+        const [base, stepStr] = part.split('/');
+        const step = parseInt(stepStr) || 1;
+        const start = base === '*' ? min : parseInt(base);
+        for (let i = start; i <= max; i += step) {
+          results.add(i);
+        }
+      } else if (part.includes('-')) {
+        const [s, e] = part.split('-').map(Number);
+        for (let i = s; i <= e; i++) results.add(i);
+      } else {
+        const n = parseInt(part);
+        if (!isNaN(n)) results.add(n);
+      }
+    }
+    return results;
+  }
+  function getNextRuns(count) {
+    const minutes = expandField(state.fields.minute, 0, 59);
+    const hours = expandField(state.fields.hour, 0, 23);
+    const doms = expandField(state.fields.dom, 1, 31);
+    const months = expandField(state.fields.month, 1, 12);
+    const dows = expandField(state.fields.dow, 0, 6);
+    const runs = [];
+    const now = new Date();
+    const cursor = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes());
+    cursor.setMinutes(cursor.getMinutes() + 1);
+    const maxIterations = 525960; // ~1 year of minutes
+    let iterations = 0;
+    while (runs.length < count && iterations < maxIterations) {
+      iterations++;
+      const m = cursor.getMinutes();
+      const h = cursor.getHours();
+      const d = cursor.getDate();
+      const mo = cursor.getMonth() + 1;
+      const dw = cursor.getDay();
+      const matchMinute = !minutes || minutes.has(m);
+      const matchHour = !hours || hours.has(h);
+      const matchDom = !doms || doms.has(d);
+      const matchMonth = !months || months.has(mo);
+      const matchDow = !dows || dows.has(dw);
+      // Standard cron: if both dom and dow are restricted, match either
+      const domRestricted = doms !== null;
+      const dowRestricted = dows !== null;
+      let matchDay;
+      if (domRestricted && dowRestricted) {
+        matchDay = matchDom || matchDow;
+      } else {
+        matchDay = matchDom && matchDow;
+      }
+      if (matchMinute && matchHour && matchDay && matchMonth) {
+        runs.push(new Date(cursor));
+      }
+      cursor.setMinutes(cursor.getMinutes() + 1);
+    }
+    return runs;
+  }
+  function relativeTime(date, now) {
+    const diff = date - now;
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1) return 'now';
+    if (minutes < 60) return `in ${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `in ${hours}h ${minutes % 60}m`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `in ${days} day${days > 1 ? 's' : ''}`;
+    const mos = Math.floor(days / 30);
+    return `in ~${mos} month${mos > 1 ? 's' : ''}`;
+  }
+  // ─── COPY ──────────────────────────────────────────────
+  function getCronString() {
+    return `${state.fields.minute} ${state.fields.hour} ${state.fields.dom} ${state.fields.month} ${state.fields.dow}`;
+  }
+  function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+      const originalHTML = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<span class="btn-icon">✅</span> Copied!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = originalHTML;
+      }, 1500);
+    }).catch(() => {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      const originalHTML = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = '<span class="btn-icon">✅</span> Copied!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = originalHTML;
+      }, 1500);
+    });
+  }
+  // ─── PRESETS ───────────────────────────────────────────
+  function loadPresets() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    } catch { return []; }
+  }
+  function savePresets(presets) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(presets));
+  }
+  function renderPresets() {
+    const presets = loadPresets();
+    const list = $('presetList');
+    if (presets.length === 0) {
+      list.innerHTML = '<div class="preset-empty">No saved presets yet. Click "Save Preset" to store your expressions.</div>';
+      return;
+    }
+    list.innerHTML = presets.map((p, i) => `
+      <div class="preset-item" data-index="${i}">
+        <span class="preset-cron">${escapeHtml(p.cron)}</span>
+        <span class="preset-desc">${escapeHtml(p.name)}</span>
+        <button class="preset-delete" data-index="${i}" title="Delete preset">✕</button>
+      </div>
+    `).join('');
+    list.querySelectorAll('.preset-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (e.target.classList.contains('preset-delete')) return;
+        const idx = parseInt(item.dataset.index);
+        const preset = presets[idx];
+        if (preset) applyCronString(preset.cron);
+      });
+    });
+    list.querySelectorAll('.preset-delete').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.index);
+        const presets = loadPresets();
+        presets.splice(idx, 1);
+        savePresets(presets);
+        renderPresets();
+      });
+    });
+  }
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+  // ─── APPLY CRON STRING ─────────────────────────────────
+  function applyCronString(cronStr) {
+    const parts = cronStr.trim().split(/\s+/);
+    if (parts.length !== 5) return;
+    const fields = ['minute', 'hour', 'dom', 'month', 'dow'];
+    fields.forEach((field, i) => {
+      fieldInputs[field].value = parts[i];
+      state.fields[field] = parts[i];
+      syncFromInput(field);
+    });
+  }
+  // ─── COMMON EXPRESSIONS ───────────────────────────────
+  function buildCommonExpressions() {
+    const grid = $('commonGrid');
+    COMMON_EXPRESSIONS.forEach(expr => {
+      const item = document.createElement('div');
+      item.className = 'common-item';
+      item.innerHTML = `<div class="ci-cron">${expr.cron}</div><div class="ci-desc">${expr.desc}</div>`;
+      item.addEventListener('click', () => applyCronString(expr.cron));
+      grid.appendChild(item);
+    });
+  }
+  // ─── EVENT BINDINGS ────────────────────────────────────
+  function initEvents() {
+    // Field inputs
+    Object.keys(fieldInputs).forEach(field => {
+      fieldInputs[field].addEventListener('input', () => syncFromInput(field));
+      fieldInputs[field].addEventListener('blur', () => syncFromInput(field));
+    });
+    // Interval / range inputs
+    ['minute', 'hour', 'dom', 'month', 'dow'].forEach(field => {
+      const intervalEl = $(field + 'Interval');
+      const intervalStartEl = $(field + 'IntervalStart');
+      const rangeStartEl = $(field + 'RangeStart');
+      const rangeEndEl = $(field + 'RangeEnd');
+      [intervalEl, intervalStartEl, rangeStartEl, rangeEndEl].forEach(el => {
+        if (el) el.addEventListener('input', () => syncFromTabs(field));
+      });
+    });
+    // Copy buttons
+    $('copyBtn').addEventListener('click', () => copyToClipboard(getCronString(), $('copyBtn')));
+    $('copyFullBtn').addEventListener('click', () => copyToClipboard(getCronString(), $('copyFullBtn')));
+    // Reset
+    $('resetBtn').addEventListener('click', () => {
+      applyCronString('* * * * *');
+    });
+    // Save preset
+    $('savePresetBtn').addEventListener('click', () => {
+      $('presetName').value = '';
+      $('saveModal').classList.add('open');
+      setTimeout(() => $('presetName').focus(), 100);
+    });
+    $('modalCancel').addEventListener('click', () => $('saveModal').classList.remove('open'));
+    $('modalSave').addEventListener('click', () => {
+      const name = $('presetName').value.trim() || getCronString();
+      const presets = loadPresets();
+      presets.push({ name, cron: getCronString(), created: Date.now() });
+      savePresets(presets);
+      renderPresets();
+      $('saveModal').classList.remove('open');
+    });
+    $('presetName').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') $('modalSave').click();
+      if (e.key === 'Escape') $('modalCancel').click();
+    });
+    // Export JSON
+    $('exportJsonBtn').addEventListener('click', () => {
+      const data = {
+        expression: getCronString(),
+        fields: { ...state.fields },
+        humanReadable: $('humanText').textContent,
+        generatedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cronforge-${getCronString().replace(/\s+/g, '_').replace(/\*/g, 'star')}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+    // Close modal on overlay click
+    $('saveModal').addEventListener('click', (e) => {
+      if (e.target === $('saveModal')) $('saveModal').classList.remove('open');
+    });
+    // Keyboard: Escape closes modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && $('saveModal').classList.contains('open')) {
+        $('saveModal').classList.remove('open');
+      }
+    });
+  }
+  // ─── BOOT ──────────────────────────────────────────────
+  function init() {
+    buildChips();
+    initTabs();
+    initModes();
+    initEvents();
+    buildCommonExpressions();
+    renderPresets();
+    validate();
+    updateHumanReadable();
+    updateNextRuns();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
+
+<style>
+  .cron-docs {
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    line-height: 1.75;
+    padding: 4rem 1.5rem;
+    border-top: 1px solid #21262d;
+  }
+  .cron-docs .docs-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .cron-docs h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #e6edf3;
+    margin: 3rem 0 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #21262d;
+    letter-spacing: -0.02em;
+  }
+  .cron-docs h2:first-of-type { margin-top: 0; }
+  .cron-docs p {
+    color: #8b949e;
+    margin: 0 0 1.25rem;
+    font-size: 0.96rem;
+  }
+  .cron-docs strong { color: #c9d1d9; }
+  .cron-docs code {
+    background: #161b22;
+    color: #79c0ff;
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 0.87em;
+    border: 1px solid #30363d;
+  }
+
+  /* ── Table ────────────────────────────────────────── */
+  .cron-table-wrap {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #21262d;
+    margin: 1.5rem 0 2rem;
+  }
+  .cron-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    min-width: 560px;
+  }
+  .cron-table thead tr { background: #161b22; }
+  .cron-table th {
+    text-align: left;
+    padding: 0.85rem 1.1rem;
+    color: #58a6ff;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid #21262d;
+    white-space: nowrap;
+  }
+  .cron-table td {
+    padding: 0.8rem 1.1rem;
+    border-bottom: 1px solid #21262d;
+    color: #c9d1d9;
+    vertical-align: top;
+  }
+  .cron-table tbody tr:last-child td { border-bottom: none; }
+  .cron-table tbody tr:hover { background: #161b22; transition: background 0.15s; }
+  .cron-table .fn {
+    color: #3fb950;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    white-space: nowrap;
+  }
+  .cron-table .rng {
+    color: #ffa657;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+  }
+  .cron-table .ops { white-space: nowrap; }
+  .cron-table .ops code { margin-right: 3px; }
+
+  /* ── Security callout ─────────────────────────────── */
+  .security-callout {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-left: 3px solid #3fb950;
+    border-radius: 8px;
+    padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0 1.75rem;
+  }
+  .security-callout .badge {
+    display: inline-block;
+    background: rgba(63,185,80,0.1);
+    color: #3fb950;
+    border: 1px solid rgba(63,185,80,0.3);
+    border-radius: 20px;
+    padding: 0.2em 0.9em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+  }
+  .security-callout .callout-headline {
+    margin: 0 0 0.85rem;
+    color: #c9d1d9;
+    font-weight: 600;
+    font-size: 0.97rem;
+  }
+  .security-callout ul {
+    margin: 0;
+    padding-left: 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+  .security-callout ul li {
+    color: #8b949e;
+    font-size: 0.94rem;
+  }
+  .security-callout ul li strong { color: #3fb950; }
+
+  /* ── FAQ Accordion ────────────────────────────────── */
+  .faq-subtext {
+    color: #8b949e;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .faq-list details {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .faq-list details[open] { border-color: #58a6ff; }
+  .faq-list details summary {
+    padding: 1.1rem 1.25rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.96rem;
+    color: #e6edf3;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .faq-list details summary::-webkit-details-marker { display: none; }
+  .faq-list details summary:hover { background: #1c2128; }
+  .faq-list details[open] summary {
+    color: #58a6ff;
+    border-bottom: 1px solid #21262d;
+  }
+  .faq-list details summary .faq-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #21262d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    line-height: 1;
+    color: #8b949e;
+    transition: transform 0.2s ease, background 0.2s, color 0.2s;
+  }
+  .faq-list details[open] summary .faq-icon {
+    transform: rotate(45deg);
+    background: rgba(88,166,255,0.1);
+    color: #58a6ff;
+  }
+  .faq-answer {
+    padding: 1.15rem 1.25rem 1.3rem;
+    color: #8b949e;
+    font-size: 0.94rem;
+    line-height: 1.78;
+  }
+  .faq-answer p { margin: 0 0 0.9rem; color: #8b949e; }
+  .faq-answer p:last-child { margin-bottom: 0; }
+  .faq-answer ul {
+    margin: 0.5rem 0 0.9rem;
+    padding-left: 1.35rem;
+  }
+  .faq-answer ul li { margin-bottom: 0.45rem; }
+  .faq-answer ul li:last-child { margin-bottom: 0; }
+</style>
+
+<section class="cron-docs" aria-label="Cron Job Generator Documentation">
+  <div class="docs-inner">
+
+    <!-- ── Intro ── -->
+    <h2>How to Use This Cron Job Generator</h2>
+    <p>
+      This <strong>cron job generator online free</strong> gives developers, sysadmins, and DevOps engineers a
+      zero-friction path to building, validating, and copying precise cron expressions — without memorising the full
+      POSIX specification. The visual <strong>crontab expression builder</strong> above translates human-readable
+      schedule intent into a production-ready 5-field string you can paste directly into any Unix-like
+      <code>crontab</code>, CI/CD pipeline, or cloud scheduler.
+    </p>
+    <p>
+      Whether you are scheduling nightly database backups, hourly health-check pings, or monthly report generation,
+      understanding <strong>how to read cron syntax Linux</strong> empowers you to debug existing entries, verify
+      generated output, and author custom expressions when edge-case schedules demand it.
+    </p>
+
+    <!-- ── 5-Field Architecture ── -->
+    <h2>Demystifying the 5-Field Linux Cron Architecture</h2>
+    <p>
+      Every standard Linux crontab expression is a space-delimited string of exactly five positional fields. Knowing
+      what each field controls — and which wildcard operators it accepts — is the foundation of confident cron
+      literacy. The table below maps each position to its numeric bounds, supported operators, and a concrete usage example.
+    </p>
+
+    <div class="cron-table-wrap" role="region" aria-label="Cron field reference table">
+      <table class="cron-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Field</th>
+            <th>Allowed Range</th>
+            <th>Operators</th>
+            <th>Example &amp; Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="fn">Minute</td>
+            <td class="rng">0 – 59</td>
+            <td class="ops"><code>*</code><code>/</code><code>-</code><code>,</code></td>
+            <td><code>*/15</code> — every 15 minutes</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="fn">Hour</td>
+            <td class="rng">0 – 23</td>
+            <td class="ops"><code>*</code><code>/</code><code>-</code><code>,</code></td>
+            <td><code>0,12</code> — at midnight and noon</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="fn">Day of Month</td>
+            <td class="rng">1 – 31</td>
+            <td class="ops"><code>*</code><code>/</code><code>-</code><code>,</code><code>?</code></td>
+            <td><code>1,15</code> — 1st and 15th of each month</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="fn">Month</td>
+            <td class="rng">1 – 12</td>
+            <td class="ops"><code>*</code><code>/</code><code>-</code><code>,</code></td>
+            <td><code>3-6</code> — March through June</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="fn">Day of Week</td>
+            <td class="rng">0 – 7 (0 &amp; 7 = Sun)</td>
+            <td class="ops"><code>*</code><code>/</code><code>-</code><code>,</code><code>?</code></td>
+            <td><code>1-5</code> — Monday through Friday</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      <strong>Operator quick-reference:</strong> The asterisk (<code>*</code>) matches every valid value in its field.
+      The slash (<code>/</code>) defines a step interval — <code>*/5</code> in the Minute field fires every 5 minutes.
+      The hyphen (<code>-</code>) sets an inclusive range between two values. The comma (<code>,</code>) enumerates
+      discrete values within a single field, letting you target multiple non-sequential points without duplicating
+      crontab lines.
+    </p>
+
+    <!-- ── Security Section ── -->
+    <h2>The Security Risk of Online Schedulers</h2>
+    <p>
+      Using a generic <strong>crontab expression builder</strong> that processes your schedule server-side introduces
+      an operational risk most developers never consider: <strong>backend visibility into your automation
+      architecture.</strong> The cadence of your jobs silently reveals your deployment windows, reporting cycles,
+      financial data pulls, and scraping targets.
+    </p>
+
+    <div class="security-callout" role="note" aria-label="Affilore privacy advantage">
+      <span class="badge">✓ Privacy-First Architecture</span>
+      <p class="callout-headline">How Affilore eliminates scheduler exposure entirely.</p>
+      <ul>
+        <li>
+          <strong>Server-side builders log your inputs.</strong> When a remote server parses your expression, it can
+          trivially infer the timing of your most sensitive pipelines from the pattern alone — no code required.
+        </li>
+        <li>
+          <strong>Network hops expand your attack surface.</strong> Any expression transmitted over a network — even
+          over HTTPS — can be observed by proxies, browser extensions, or compromised intermediaries sitting between
+          you and the endpoint.
+        </li>
+        <li>
+          <strong>Affilore computes entirely in RAM.</strong> This <strong>secure automated crontab scheduler</strong>
+          parses, validates, and generates every expression 100% client-side, inside your browser's memory. No
+          expression, partial input, or schedule metadata ever leaves your device. Zero network requests. Zero logging.
+        </li>
+        <li>
+          <strong>Stateless by design.</strong> When you close this tab, all input is purged from memory — no database
+          of user-generated schedules, no analytics fingerprinting your workflow timing, and no retained session data
+          that a future breach could expose.
+        </li>
+      </ul>
+    </div>
+
+    <p>
+      For teams operating in regulated industries — fintech, healthcare, legal, or critical SaaS infrastructure —
+      treating your automation schedule as sensitive configuration data is not paranoia; it is standard operational
+      hygiene. A truly <strong>secure automated crontab scheduler</strong> should never need to phone home to do its
+      job.
+    </p>
+
+    <!-- ── FAQ Accordion ── -->
+    <h2>Frequently Asked Questions</h2>
+    <p class="faq-subtext">Practical answers to the edge cases developers encounter most when working with cron expressions.</p>
+
+    <div class="faq-list">
+
+      <details>
+        <summary>
+          What is the operational difference between 5-field Linux cron and 6-field Quartz syntax?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq-answer">
+          <p>
+            Standard POSIX/Vixie cron uses <strong>five fields</strong> — Minute, Hour, Day of Month, Month, Day of
+            Week — and is the format natively supported by <code>/etc/crontab</code>, <code>crontab -e</code>, and
+            virtually every Linux-based scheduler, including AWS EventBridge, GCP Cloud Scheduler, and GitHub Actions
+            scheduled workflows.
+          </p>
+          <p>
+            <strong>Quartz Scheduler</strong> — ubiquitous in Java enterprise environments and tools like Spring
+            Framework, Jenkins, and Quartz.NET — prepends a mandatory <strong>Seconds</strong> field, producing a
+            6-field (or optionally 7-field, with a trailing Year column) format. Its field order reads:
+            <code>Seconds Minutes Hours Day-of-Month Month Day-of-Week [Year]</code>.
+          </p>
+          <p>
+            This generator targets the universal 5-field Linux standard. If you are configuring a Quartz-based
+            system, simply prepend your desired seconds value (e.g., <code>0</code>) to the left of any expression
+            this tool produces to achieve full compatibility.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          How do non-standard macro shorthands like @daily, @hourly, and @reboot work?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq-answer">
+          <p>
+            Many modern cron implementations — including Vixie cron, cronie, and systemd timers in compatibility
+            mode — support a set of <strong>@ nickname macros</strong> that act as human-readable aliases for common
+            5-field expressions:
+          </p>
+          <ul>
+            <li><code>@reboot</code> — runs once at system startup; has no direct 5-field equivalent</li>
+            <li><code>@yearly</code> / <code>@annually</code> — equivalent to <code>0 0 1 1 *</code></li>
+            <li><code>@monthly</code> — equivalent to <code>0 0 1 * *</code></li>
+            <li><code>@weekly</code> — equivalent to <code>0 0 * * 0</code></li>
+            <li><code>@daily</code> / <code>@midnight</code> — equivalent to <code>0 0 * * *</code></li>
+            <li><code>@hourly</code> — equivalent to <code>0 * * * *</code></li>
+          </ul>
+          <p>
+            These macros are <strong>not part of the POSIX standard</strong> and are unsupported in many cloud
+            schedulers, containerised environments running minimal cron daemons, and all Quartz-based systems. For
+            maximum portability, always prefer the explicit 5-field expressions this tool generates over shorthand
+            macros, and verify <code>@reboot</code> support independently against your target daemon.
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          Are there system memory constraints when processing continuous automated cron tasks?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </summary>
+        <div class="faq-answer">
+          <p>
+            At the OS scheduler level, cron itself is remarkably lightweight — the daemon typically holds under 1 MB
+            of resident memory and forks a fresh child process per job rather than maintaining long-lived workers.
+            The memory constraint to plan for is the <strong>spawned job</strong>, not the scheduling daemon.
+          </p>
+          <ul>
+            <li>
+              <strong>Concurrency collisions</strong> — a job scheduled every 5 minutes that takes 8 minutes to run
+              will accumulate overlapping instances. Use <code>flock</code> lock files or tools like
+              <code>run-one</code> to prevent stacking and runaway memory consumption.
+            </li>
+            <li>
+              <strong>ulimit ceilings</strong> — per-user memory limits defined in
+              <code>/etc/security/limits.conf</code> apply to all cron-spawned processes. Large ETL or inference jobs
+              may require explicit <code>ulimit -v</code> overrides inside the crontab command string.
+            </li>
+            <li>
+              <strong>Container environments</strong> — Kubernetes CronJobs inherit the pod's resource requests and
+              limits. Always define explicit memory requests to prevent OOMKill termination of scheduled tasks during
+              cluster contention events.
+            </li>
+          </ul>
+          <p>
+            Because this tool computes expressions entirely in your browser's RAM with no server round-trips, it
+            introduces zero infrastructure load — every parse and validation operation is handled locally by the V8
+            engine with negligible memory footprint.
+          </p>
+        </div>
+      </details>
+
+    </div><!-- /.faq-list -->
+
+  </div><!-- /.docs-inner -->
+</section>
