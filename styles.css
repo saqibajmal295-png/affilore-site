@@ -690,40 +690,37 @@ body {
 
 /* Clean block positioning resets */
 body {
-    background-color: #080808 !important;
-    background-image: 
-        linear-gradient(rgba(255, 193, 7, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 193, 7, 0.03) 1px, transparent 1px) !important;
-    background-size: 50px 50px !important;
-    background-attachment: fixed !important;
-    position: static !important; /* Forces layout engines to standard block mapping */
+    background-color: #0a0a0a !important;
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* Force all functional content, typography layers, and cards above the canvas canvas layout */
+/* Force all functional content above the canvas */
 nav, header, main, footer, .container, .workspace, .card, .panel, div[class*="grid"] {
-    position: relative !important;
-    z-index: 2 !important; /* Keeps interactive links and assets at highest priority stacking layer */
+    position: relative;
+    z-index: 2;
 }
 
-/* Premium cyber-luxury dark yellow ambient background glow nodes */
+/* Ambient top glow */
 .premium-bg-glow {
     position: fixed;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(circle at 50% -10%, rgba(255, 193, 7, 0.06) 0%, rgba(255, 193, 7, 0) 60%);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255, 193, 7, 0.06) 0%, transparent 55%);
     z-index: 0;
     pointer-events: none;
 }
 
-/* Secure canvas background element layering boundaries */
+/* Canvas layer */
 canvas#global-particle-canvas {
     position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1; /* Sits completely safely behind active grid elements */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
     pointer-events: none;
 }
+
