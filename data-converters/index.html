@@ -9,8 +9,6 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23f59e0b'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='60' font-weight='900' fill='%23000'>A</text></svg>">
 </head>
 <body>
-<div class="premium-bg-glow"></div>
-<canvas id="global-particle-canvas" aria-hidden="true"></canvas>
 
   <!-- Header -->
   <header class="site-header" id="site-header-container">
@@ -112,6 +110,11 @@
       });
     }
   </script>
+
+  <!-- Background and canvas for floating gold dots -->
+  <div class="premium-bg-glow" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 0%, rgba(255, 193, 7, 0.06) 0%, transparent 55%);"></div>
+  <canvas id="global-particle-canvas" aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; display: block;"></canvas>
+
 <script>
 (() => {
   const canvas = document.getElementById('global-particle-canvas');
