@@ -8,6 +8,24 @@
   <meta name="robots" content="index, follow">
   <link rel="stylesheet" href="styles.css?v=1.0.3">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23f59e0b'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='60' font-weight='900' fill='%23000'>A</text></svg>">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI",
+      authDomain: "affilore.firebaseapp.com",
+      projectId: "affilore",
+      storageBucket: "affilore.firebasestorage.app",
+      messagingSenderId: "196193541479",
+      appId: "1:196193541479:web:3cef88a2065b09c755e3c2",
+      measurementId: "G-B6DLGHM5D1"
+    };
+
+    // Initialize Firebase Global Metrics Sandbox Instance
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
 </head>
 <body>
 
@@ -102,6 +120,12 @@
           <h3 class="tool-card-title">CPM Calculator & Campaign ROI Predictor</h3>
           <p class="tool-card-desc">Calculate ad spend metrics instantly and map downstream conversion channels to project total clicks, conversions, and CPA targets locally.</p>
           <a href="/calculators/cpm-calculator/" class="btn-launch">Launch Tool</a>
+        </article>
+        <article class="tool-card">
+          <img src="/assets/thumbnails/open-graph-generator.jpeg" alt="Open Graph Meta Tag Generator & Previewer" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
+          <h3 class="tool-card-title">Open Graph Meta Tag Generator & Previewer</h3>
+          <p class="tool-card-desc">Generate valid social media meta tags and view real-time card previews for Facebook, Twitter, and LinkedIn entirely client-side.</p>
+          <a href="/seo-tools/open-graph-generator/" class="btn-launch">Launch Tool</a>
         </article>
 
         <!-- Placeholder Tool -->

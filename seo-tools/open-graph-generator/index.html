@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Graph Meta Tag Generator & Social Media Previewer | Free OG Tag Tool</title>
+<meta name="description" content="Free open graph generator online. Generate perfect OG meta tags, preview how your links appear on Facebook, Twitter/X & LinkedIn. Technical SEO meta tag tool with live social media preview simulation.">
+<meta name="keywords" content="open graph generator online free, facebook og tag debugger, social media preview generator, technical seo meta tags, twitter card generator tags, rich snippet optimization tool">
+<link rel="canonical" href="https://affilore.com/tools/og-generator">
+<meta property="og:title" content="Open Graph Meta Tag Generator & Social Previewer">
+<meta property="og:description" content="Generate perfect OG meta tags and preview how your links appear on Facebook, Twitter/X & LinkedIn in real-time.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #050505;
+  --glass-bg: rgba(20, 20, 23, 0.7);
+  --glass-border: rgba(39, 39, 42, 0.8);
+  --glass-border-hover: rgba(63, 63, 70, 0.9);
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff; /* Upgraded from #a1a1aa to pure white */
+  --text-muted: #ffffff;     /* Upgraded from #71717a to pure white */
+  --purple: #a855f7;
+  --blue: #3b82f6;
+  --green: #10b981;
+  --yellow: #FFC107;
+  --red: #ef4444;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === CANVAS PARTICLE BACKGROUND === */
+#particle-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* === NAVIGATION === */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(5, 5, 5, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.nav-logo {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #a855f7, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  cursor: default;
+  user-select: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: opacity var(--transition-fast);
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, var(--purple), var(--blue));
+  transition: width var(--transition-smooth);
+  border-radius: 2px;
+}
+
+.nav-links a:hover { opacity: 0.8; }
+.nav-links a:hover::after { width: 100%; }
+
+/* === MAIN CONTENT === */
+.main-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 100px 1.5rem 4rem;
+}
+
+/* === HERO HEADING === */
+.hero-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 2rem 0;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff; /* Converted to white */
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+}
+
+.hero-badge .pulse-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@media(max-width:480px){
+  .hero-badge { display: none; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+
+.hero-title {
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #FFC107 0%, #10b981 30%, #ef4444 60%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gradient-shift 6s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-primary); /* Fixed to pure white */
+  max-width: 620px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+/* === CONFIG STATUS BAR === */
+.config-bar {
+  position: relative;
+  padding: 3px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--green), var(--blue));
+  margin-bottom: 2.5rem;
+}
+
+.config-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.5rem;
+  background: rgba(10, 10, 12, 0.92);
+  border-radius: calc(var(--radius-md) - 2px);
+  backdrop-filter: blur(10px);
+}
+
+.config-status {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--green);
+}
+
+.config-status .status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.config-version {
+  font-size: 0.72rem;
+  color: #ffffff; /* Converted to white */
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* === GLASS CARD === */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.glass-card:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* === WORKSPACE GRID === */
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .workspace-grid { grid-template-columns: 1fr; }
+}
+
+/* === INPUT CARD === */
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.card-header-icon {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.card-header-icon.input-icon {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.card-header-icon.preview-icon {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.card-header h2 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.card-header .card-subtitle {
+  font-size: 0.7rem;
+  color: #ffffff; /* Converted to white */
+  font-weight: 500;
+  margin-left: auto;
+}
+
+.card-body { padding: 1.5rem; }
+
+/* === FORM FIELDS === */
+.field-group {
+  margin-bottom: 1.25rem;
+}
+
+.field-group:last-child { margin-bottom: 0; }
+
+.field-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.field-label label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary); /* Forced to pure white */
+  letter-spacing: 0.02em;
+}
+
+.field-label .char-count {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  color: #ffffff; /* Converted to white */
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.field-label .char-count.warn { color: var(--yellow); }
+.field-label .char-count.danger { color: var(--red); }
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: rgba(10, 10, 12, 0.6);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 400;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+  background: rgba(15, 15, 18, 0.8);
+}
+
+.form-input::placeholder, .form-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5); /* Semi-translucent pure white */
+  font-weight: 400;
+}
+
+.form-select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11.5l-5-5h10l-5 5z'/%3E%3C/svg%3E"); /* Changed arrow icon to white */
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.form-select option {
+  background: #18181b;
+  color: var(--text-primary);
+}
+
+.field-hint {
+  font-size: 0.68rem;
+  color: #ffffff; /* Converted to white */
+  margin-top: 0.35rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+/* === PREVIEW TABS === */
+.preview-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.preview-tab {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  border: none;
+  color: #ffffff; /* Converted to white default state */
+  opacity: 0.6;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.preview-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 20%; right: 20%;
+  height: 2px;
+  border-radius: 2px;
+  background: transparent;
+  transition: all var(--transition-smooth);
+}
+
+.preview-tab:hover { opacity: 0.9; }
+
+.preview-tab.active {
+  color: var(--text-primary);
+  opacity: 1;
+}
+
+.preview-tab.active[data-tab="facebook"]::after { background: #1877F2; left: 10%; right: 10%; }
+.preview-tab.active[data-tab="twitter"]::after { background: #ffffff; left: 10%; right: 10%; } /* Swapped to clean white accent line */
+.preview-tab.active[data-tab="linkedin"]::after { background: #0A66C2; left: 10%; right: 10%; }
+
+.preview-tab-icon {
+  font-size: 0.9rem;
+}
+
+/* === SOCIAL PREVIEW CARDS === */
+.preview-panel { display: none; padding: 1.5rem; }
+.preview-panel.active { display: block; }
+
+/* Facebook Preview */
+.fb-preview {
+  background: #242526;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #3a3b3c;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.fb-preview-image {
+  width: 100%;
+  aspect-ratio: 1.91 / 1;
+  background: #18191a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.fb-preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fb-preview-image .placeholder-icon {
+  color: #ffffff; /* Converted to white */
+  font-size: 2.5rem;
+  opacity: 0.4;
+}
+
+.fb-preview-text {
+  padding: 10px 12px;
+  border-top: 1px solid #3a3b3c;
+}
+
+.fb-preview-domain {
+  font-size: 0.72rem;
+  color: #ffffff; /* Converted to white */
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 400;
+  margin-bottom: 3px;
+}
+
+.fb-preview-title {
+  font-size: 0.93rem;
+  font-weight: 700;
+  color: #e4e6eb;
+  line-height: 1.3;
+  margin-bottom: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fb-preview-desc {
+  font-size: 0.78rem;
+  color: #ffffff; /* Converted to white text description layer */
+  opacity: 0.85;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Twitter/X Preview */
+.tw-preview {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #2f3336;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #000;
+}
+
+.tw-preview-image {
+  width: 100%;
+  aspect-ratio: 1.91 / 1;
+  background: #16181c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tw-preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tw-preview-image .placeholder-icon {
+  color: #ffffff; /* Converted to white */
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+.tw-preview-text {
+  padding: 10px 12px;
+  border-top: 1px solid #2f3336;
+}
+
+.tw-preview-domain {
+  font-size: 0.78rem;
+  color: #ffffff; /* Converted to white */
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 1px;
+}
+
+.tw-preview-title {
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #e7e9ea;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tw-preview-desc {
+  font-size: 0.82rem;
+  color: #ffffff; /* Converted to white text description layer */
+  opacity: 0.75;
+  line-height: 1.35;
+  margin-top: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* LinkedIn Preview */
+.li-preview {
+  background: #1b1f23;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #38434f;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.li-preview-image {
+  width: 100%;
+  aspect-ratio: 1.91 / 1;
+  background: #111318;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.li-preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.li-preview-image .placeholder-icon {
+  color: #ffffff; /* Converted to white */
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+.li-preview-text {
+  padding: 10px 12px;
+}
+
+.li-preview-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.35;
+  margin-bottom: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.li-preview-domain {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.85); /* Boosted opacity configuration to clear white */
+  margin-bottom: 0;
+}
+
+/* === CODE OUTPUT TERMINAL === */
+.terminal-section {
+  margin-top: 1.5rem;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.terminal-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary); /* Forced to pure white */
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.terminal-title .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--radius-sm);
+  color: var(--green);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copy-btn:hover {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: var(--green);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.15);
+}
+
+.copy-btn.copied {
+  background: rgba(16, 185, 129, 0.3);
+  color: #fff;
+}
+
+.terminal-output {
+  width: 100%;
+  min-height: 180px;
+  padding: 1rem 1.15rem;
+  background: rgba(5, 5, 5, 0.85);
+  border: 1px solid rgba(39, 39, 42, 0.6);
+  border-radius: var(--radius-sm);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  line-height: 1.75;
+  resize: vertical;
+  outline: none;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.terminal-output:focus {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.08);
+}
+
+/* === EXPLICIT BRAND HIGH CONTRAST FORMATTING RULES === */
+.seo-content {
+  margin-top: 5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--glass-border);
+  max-width: 850px; 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.seo-section {
+  margin-bottom: 3.5rem;
+}
+
+.seo-section-heading {
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.seo-section-heading.green-gradient {
+  background: linear-gradient(135deg, var(--green), #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.seo-section-heading.yellow-gradient {
+  background: linear-gradient(135deg, var(--yellow), #ff8f00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.seo-section p {
+  font-size: 1.05rem; 
+  color: #ffffff !important; 
+  line-height: 1.8;
+  margin-bottom: 1.3rem;
+  font-weight: 400;
+}
+
+.seo-section ul, .seo-section ol {
+  margin: 1rem 0 1.5rem 1.5rem;
+}
+
+.seo-section li {
+  font-size: 1.02rem;
+  color: #ffffff !important; 
+  line-height: 1.8;
+  margin-bottom: 0.65rem;
+  font-weight: 400;
+}
+
+.seo-content strong {
+  color: var(--yellow) !important;
+  font-weight: 700;
+}
+
+.seo-content code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #ffb300 !important; 
+}
+
+.seo-section pre {
+  background: #141417 !important; 
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  padding: 1.15rem 1.25rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.seo-section pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: var(--green) !important; 
+  font-size: 0.82rem;
+  line-height: 1.75;
+}
+
+/* === FAQ ACCORDION === */
+.faq-section {
+  margin-top: 3.5rem;
+}
+
+.faq-heading {
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--green), #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.faq-item {
+  margin-bottom: 0.75rem;
+}
+
+.faq-item details {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color var(--transition-smooth);
+}
+
+.faq-item details[open] {
+  border-color: rgba(168, 85, 247, 0.35);
+}
+
+.faq-item summary {
+  padding: 1.1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: background var(--transition-fast);
+  user-select: none;
+}
+
+.faq-item summary::-webkit-details-marker { display: none; }
+
+.faq-item summary::after {
+  content: '+';
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--purple);
+  transition: transform var(--transition-smooth);
+  flex-shrink: 0;
+}
+
+.faq-item details[open] summary::after {
+  content: '−';
+  color: var(--green);
+}
+
+.faq-item summary:hover {
+  background: rgba(168, 85, 247, 0.05);
+}
+
+.faq-answer {
+  padding: 0 1.5rem 1.25rem;
+}
+
+.faq-answer p {
+  font-size: 1.02rem;
+  color: #ffffff !important;
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+  font-weight: 400;
+}
+
+.faq-answer p:last-child { margin-bottom: 0; }
+
+/* === FOOTER === */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 4rem;
+}
+
+.footer-logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #a855f7, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: #ffffff; /* Converted footer copy to white */
+  opacity: 0.6;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .nav { padding: 0 1rem; }
+  .nav-links { gap: 1rem; }
+  .main-content { padding: 90px 1rem 3rem; }
+  .card-body { padding: 1rem; }
+  .config-bar-inner { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .nav-links a { font-size: 0.72rem; }
+  .hero-title { font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== PARTICLE CANVAS ===== -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-logo">Affilore.</div>
+  <div class="nav-links">
+    <a href="#generator">Generator</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#blueprint">Blueprint</a>
+    <a href="#faq">FAQ</a>
+  </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content" id="generator">
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-badge">
+      <span class="pulse-dot"></span>
+      Client-Side Engine &mdash; Zero Server Dependencies
+    </div>
+    <h1 class="hero-title">Open Graph Meta Tag Generator &amp; Previewer</h1>
+    <p class="hero-subtitle">Architect pixel-perfect social metadata. Preview how your links render across Facebook, Twitter/X, and LinkedIn in real-time — then export production-ready <code>&lt;meta&gt;</code> tags instantly.</p>
+  </section>
+
+  <!-- Config Status Bar -->
+  <div class="config-bar" role="status" aria-live="polite">
+    <div class="config-bar-inner">
+      <div class="config-status">
+        <span class="status-dot"></span>
+        Live Preview Simulation: Operational
+      </div>
+      <div class="config-version">v2.4.0 · OG Protocol v1.0 · TC v1.0</div>
+    </div>
+  </div>
+
+  <!-- Workspace Grid -->
+  <div class="workspace-grid">
+
+    <!-- LEFT: Input Card -->
+    <div class="glass-card" id="input-card">
+      <div class="glass-card-header card-header">
+        <div class="card-header-icon input-icon">⚙️</div>
+        <h2>Tag Configuration</h2>
+        <span class="card-subtitle">Input Panel</span>
+      </div>
+      <div class="card-body">
+
+        <div class="field-group">
+          <div class="field-label">
+            <label for="og-title">Site Title</label>
+            <span class="char-count" id="title-count">0 / 60</span>
+          </div>
+          <input type="text" class="form-input" id="og-title" placeholder="e.g. The Ultimate Guide to Open Graph Tags" maxlength="95">
+          <p class="field-hint">Maps to og:title — optimal length is under 60 characters for full display.</p>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <label for="og-description">Meta Description</label>
+            <span class="char-count" id="desc-count">0 / 110</span>
+          </div>
+          <textarea class="form-textarea" id="og-description" placeholder="e.g. Learn how to configure Open Graph meta tags to control how your content appears when shared on social media platforms." maxlength="300"></textarea>
+          <p class="field-hint">Maps to og:description — keep under 110 characters for optimal social snippet truncation.</p>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <label for="og-url">Canonical URL</label>
+          </div>
+          <input type="url" class="form-input" id="og-url" placeholder="https://example.com/page">
+          <p class="field-hint">Maps to og:url — the permanent, canonical address for this resource.</p>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <label for="og-sitename">Site Name</label>
+          </div>
+          <input type="text" class="form-input" id="og-sitename" placeholder="e.g. Affilore">
+          <p class="field-hint">Maps to og:site_name — the parent brand or website identity.</p>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <label for="og-type">Content Type</label>
+          </div>
+          <select class="form-select" id="og-type">
+            <option value="website">Website</option>
+            <option value="article">Article</option>
+            <option value="video.other">Video</option>
+            <option value="profile">Profile</option>
+          </select>
+          <p class="field-hint">Maps to og:type — determines how crawlers classify this content object.</p>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">
+            <label for="og-image">Featured Image URL</label>
+          </div>
+          <input type="url" class="form-input" id="og-image" placeholder="https://example.com/images/og-cover.jpg">
+          <p class="field-hint">Maps to og:image — recommended 1200×630px for universal compatibility (1.91:1 ratio).</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: Preview Card -->
+    <div class="glass-card" id="preview-card">
+      <div class="glass-card-header card-header">
+        <div class="card-header-icon preview-icon">👁️</div>
+        <h2>Social Preview</h2>
+        <span class="card-subtitle">Live Render</span>
+      </div>
+
+      <!-- Tabs -->
+      <div class="preview-tabs" role="tablist" aria-label="Social platform previews">
+        <button class="preview-tab active" data-tab="facebook" role="tab" aria-selected="true" id="tab-facebook">
+          <span class="preview-tab-icon">📘</span> Facebook
+        </button>
+        <button class="preview-tab" data-tab="twitter" role="tab" aria-selected="false" id="tab-twitter">
+          <span class="preview-tab-icon">✖️</span> Twitter/X
+        </button>
+        <button class="preview-tab" data-tab="linkedin" role="tab" aria-selected="false" id="tab-linkedin">
+          <span class="preview-tab-icon">💼</span> LinkedIn
+        </button>
+      </div>
+
+      <!-- Facebook Preview Panel -->
+      <div class="preview-panel active" id="panel-facebook" role="tabpanel" aria-labelledby="tab-facebook">
+        <div class="fb-preview">
+          <div class="fb-preview-image" id="fb-img-container">
+            <span class="placeholder-icon">🖼️</span>
+          </div>
+          <div class="fb-preview-text">
+            <div class="fb-preview-domain" id="fb-domain">example.com</div>
+            <div class="fb-preview-title" id="fb-title">Your Page Title Will Appear Here</div>
+            <div class="fb-preview-desc" id="fb-desc">Your meta description will be displayed in this area. Add a compelling summary to increase clicks.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Twitter/X Preview Panel -->
+      <div class="preview-panel" id="panel-twitter" role="tabpanel" aria-labelledby="tab-twitter">
+        <div class="tw-preview">
+          <div class="tw-preview-image" id="tw-img-container">
+            <span class="placeholder-icon">🖼️</span>
+          </div>
+          <div class="tw-preview-text">
+            <div class="tw-preview-domain" id="tw-domain">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
+              example.com
+            </div>
+            <div class="tw-preview-title" id="tw-title">Your Page Title Will Appear Here</div>
+            <div class="tw-preview-desc" id="tw-desc">Your meta description preview for Twitter card rendering.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LinkedIn Preview Panel -->
+      <div class="preview-panel" id="panel-linkedin" role="tabpanel" aria-labelledby="tab-linkedin">
+        <div class="li-preview">
+          <div class="li-preview-image" id="li-img-container">
+            <span class="placeholder-icon">🖼️</span>
+          </div>
+          <div class="li-preview-text">
+            <div class="li-preview-title" id="li-title">Your Page Title Will Appear Here</div>
+            <div class="li-preview-domain" id="li-domain">example.com</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal Code Output -->
+      <div class="card-body">
+        <div class="terminal-section">
+          <div class="terminal-header">
+            <div class="terminal-title">
+              <span class="dot"></span>
+              Generated Meta Tags
+            </div>
+            <button class="copy-btn" id="copy-tags-btn" aria-label="Copy meta tags to clipboard">
+              📋 Copy Tags
+            </button>
+          </div>
+          <textarea class="terminal-output" id="meta-output" readonly aria-label="Generated HTML meta tags"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================================================================ -->
+  <!-- HIGH CONTRAST GOLD HIGHLIGHT REFACTOR COPY -->
+  <!-- ================================================================ -->
+  <div class="seo-content">
+
+    <!-- Section 1 -->
+    <section class="seo-section" id="architecture">
+      <h2 class="seo-section-heading">The Micro-Architecture of Social Metadata and Object Graph Engineering</h2>
+
+      <p>The Open Graph protocol, originally architected by Facebook's engineering team and publicly released at the f8 Developer Conference in April 2010, represents one of the most consequential innovations in modern web metadata architecture. At its conceptual core, Open Graph transforms every URL on the internet into a rich, typed object within a global social graph — a structured representation that social platforms can parse, index, and render as visually compelling preview cards inside user feeds and messaging threads.</p>
+
+      <p>Before Open Graph existed, sharing a URL on Facebook produced an unpredictable result. The Facebook crawler (internally designated <code>facebookexternalhit</code>) would attempt to extract a relevant title, description, and image from the raw HTML document using heuristic scraping methods. These methods were unreliable: crawlers might extract a navigation label instead of the page title, select an irrelevant sidebar advertisement image as the preview thumbnail, or truncate descriptions at arbitrary character boundaries. The result was a fundamentally broken user experience that discouraged content sharing and degraded platform engagement metrics.</p>
+
+      <p>The Open Graph protocol solved this problem by introducing a standardized vocabulary of <code>&lt;meta&gt;</code> elements embedded within the <code>&lt;head&gt;</code> section of HTML documents. These elements follow a consistent namespace pattern using the <code>property</code> attribute with the <code>og:</code> prefix. The four foundational properties that every Open Graph implementation must include are:</p>
+
+      <pre><code>&lt;meta property="og:title" content="Page Title Here"&gt;
+&lt;meta property="og:type" content="website"&gt;
+&lt;meta property="og:image" content="https://example.com/image.jpg"&gt;
+&lt;meta property="og:url" content="https://example.com/page"&gt;</code></pre>
+
+      <p>When a social crawler encounters a URL, it initiates an HTTP GET request to that resource, downloads the HTML response body, and parses it through a specialized DOM extraction pipeline. The crawler does not execute JavaScript — this is a critical architectural constraint that has significant implications for single-page applications (SPAs) built with frameworks like React, Vue, or Angular. If your Open Graph meta tags are rendered client-side through JavaScript execution, they will be invisible to every major social scraper engine.</p>
+
+      <p>Each major platform operates its own independent crawling infrastructure with platform-specific behaviors. Facebook's <code>facebookexternalhit/1.1</code> user agent performs aggressive caching with a Time-To-Live (TTL) that typically ranges from 24 to 72 hours. Once Facebook's scraper has cached a URL's metadata, subsequent shares of that same URL will display the cached version regardless of server-side changes. Twitter's crawler, identified as <code>Twitterbot/1.0</code>, implements its own card specification system with dedicated <code>twitter:</code> meta properties that override corresponding <code>og:</code> values when present. LinkedIn's scraper bot validates content even more strictly, enforcing minimum image dimension requirements (1200×627 pixels recommended) and rejecting images served over insecure HTTP connections in certain configurations.</p>
+
+      <p>The structural mechanics of how these crawlers transform raw, unstructured HTML headers into semantic database objects involves several processing stages. First, the response HTML is tokenized and parsed into a DOM tree. Next, a metadata extraction layer scans all <code>&lt;meta&gt;</code> elements within the <code>&lt;head&gt;</code> node, filtering for recognized property namespaces (<code>og:</code>, <code>twitter:</code>, <code>article:</code>). The extracted key-value pairs are then validated against the platform's internal schema rules — verifying that image URLs resolve to accessible resources, that content strings fall within acceptable length ranges, and that required properties are present. Finally, the validated metadata object is serialized and stored in the platform's content cache array, where it becomes the canonical representation used for all future link preview renders until the cache entry expires or is manually invalidated.</p>
+
+      <p>Understanding this pipeline is essential for any <strong>open graph generator online free</strong> tool because it reveals exactly where configuration errors propagate through the system. A malformed <code>og:image</code> URL, for instance, will not cause the crawler to fall back gracefully — it will typically result in a blank image container in the social preview card, which dramatically reduces click-through rates. Similarly, omitting the <code>og:type</code> property will cause most platforms to default to a generic "website" classification, potentially losing access to enhanced preview layouts available for article or video content types.</p>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="seo-section">
+      <h2 class="seo-section-heading">The Psychology of Rich Snippets: Maximizing Organic Click-Through Rates (CTR)</h2>
+
+      <p>The visual presentation of shared links within social media feeds operates as a critical decision gateway in the user attention economy. When a URL appears on a Facebook timeline, Twitter feed, or LinkedIn post, users make subconscious evaluation decisions in approximately 150 to 300 milliseconds — well before conscious reasoning engages. This rapid evaluation is driven almost entirely by visual cues: the presence and quality of a preview image, the clarity and relevance of the title text, and the credibility signaled by a well-formatted description snippet.</p>
+
+      <p>Data analysis from multiple A/B testing frameworks consistently demonstrates the impact of properly configured social metadata on engagement metrics. Links shared without Open Graph configuration — appearing as raw, unstyled URL strings or with incorrectly extracted metadata — experience click-through rates that are <strong>40% to 60% lower</strong> than identical links shared with properly optimized OG tags. This performance differential is attributable to several interconnected psychological and UX factors that compound multiplicatively.</p>
+
+      <p><strong>Visual Anchoring and Trust Calibration:</strong> A high-quality featured image occupying the full width of a social card creates an immediate visual anchor point that captures user attention during rapid feed scrolling. The image serves as a trust signal — professional, well-composed imagery communicates brand legitimacy and content quality before a single word of text is processed. Conversely, a missing image or a low-resolution placeholder image triggers distrust heuristics that cause users to scroll past the content without engagement.</p>
+
+      <p><strong>Title Engineering and Information Scent:</strong> The <code>og:title</code> property functions as the primary information scent signal that helps users predict the value of clicking through. Titles that are specific, action-oriented, and numerically quantified (e.g., "7 Critical Open Graph Mistakes Killing Your CTR") consistently outperform generic or ambiguous titles. However, the title must also accurately represent the destination content — misleading titles generate initial clicks but produce high bounce rates that are algorithmically penalized by social platform distribution systems.</p>
+
+      <p><strong>Description Optimization and Cognitive Load Reduction:</strong> The <code>og:description</code> serves as a secondary decision layer that reduces the cognitive load required for users to determine content relevance. A well-crafted description of 100 to 155 characters that summarizes the key value proposition of the linked content provides just enough information to convert casual interest into deliberate clicks. Descriptions that are too short appear incomplete and unprofessional, while descriptions that exceed platform truncation limits are cut off mid-sentence, creating a jarring visual artifact that degrades perceived quality.</p>
+
+      <p>The downstream revenue impact of these optimizations is substantial. For e-commerce brands, a <strong>social media preview generator</strong> that ensures consistent, high-quality link previews can increase referral traffic from social channels by 25% to 45%, directly impacting sales pipeline volume. For content publishers monetized through advertising, improved social CTR correlates with higher session volumes, increased pageview depth, and elevated advertising revenue per session. The compound effect of these micro-optimizations across thousands of shared links per month creates significant cumulative value that justifies investment in sophisticated <strong>technical seo meta tags</strong> infrastructure and ongoing Open Graph maintenance workflows.</p>
+
+      <p>Furthermore, platforms like Facebook and LinkedIn use engagement signals from link preview interactions to inform their algorithmic distribution models. Content that consistently generates high click-through rates from preview cards receives preferential treatment in organic distribution, creating a positive feedback loop where well-optimized metadata generates more impressions, which generate more clicks, which generate more algorithmic distribution. This virtuous cycle makes Open Graph optimization one of the highest-leverage activities available to digital marketing teams.</p>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="seo-section" id="blueprint">
+      <h2 class="seo-section-heading yellow-gradient">The Technical Blueprint for Hyper-Optimized Media Attributes</h2>
+
+      <p>Achieving pixel-perfect social preview rendering across every platform requires rigorous adherence to a set of specific design constraints and technical specifications. These constraints are not arbitrary — they are derived from the viewport dimensions, layout algorithms, and image processing pipelines that each platform uses to render link preview cards at various device breakpoints. Understanding and implementing these specifications is what separates amateur metadata configuration from production-grade <strong>rich snippet optimization tool</strong> engineering.</p>
+
+      <p><strong>Image Aspect Ratio — The Universal 1.91:1 Standard:</strong> The Open Graph specification does not mandate a specific aspect ratio, but the de facto global standard has converged on <strong>1.91:1</strong> (width-to-height). This ratio originates from Facebook's link preview card layout, which allocates a fixed rectangular viewport for image display. Twitter's summary_large_image card and LinkedIn's article preview layout use nearly identical proportions. The optimal image dimensions that satisfy all three platforms simultaneously are <strong>1200 × 630 pixels</strong> — providing sufficient resolution for high-DPI (Retina) displays while remaining within reasonable file size constraints.</p>
+
+      <p><strong>Image File Size and Format Constraints:</strong> Facebook enforces a maximum image file size of <strong>8 MB</strong>, but practical optimization targets should be significantly lower. Images exceeding 1 MB introduce latency in the scraper's HTTP download phase, which can cause timeouts on platforms with aggressive crawl budgets. The recommended target is under 300 KB using JPEG compression at 80-85% quality, or WebP format at equivalent perceptual quality. PNG format should be reserved for graphics requiring transparency. Each platform's scraper will reject images below minimum dimension thresholds — Facebook requires at least 200×200 pixels, while Twitter requires 120×120 pixels for standard cards and 300×157 pixels for summary_large_image cards.</p>
+
+      <pre><code>&lt;!-- Optimal Image Meta Tag Configuration --&gt;
+&lt;meta property="og:image" content="https://example.com/img/og-cover.jpg"&gt;
+&lt;meta property="og:image:width" content="1200"&gt;
+&lt;meta property="og:image:height" content="630"&gt;
+&lt;meta property="og:image:type" content="image/jpeg"&gt;
+&lt;meta property="og:image:alt" content="Descriptive alt text for accessibility"&gt;
+
+&lt;!-- Twitter-Specific Card Configuration --&gt;
+&lt;meta name="twitter:card" content="summary_large_image"&gt;
+&lt;meta name="twitter:image" content="https://example.com/img/og-cover.jpg"&gt;
+&lt;meta name="twitter:image:alt" content="Descriptive alt text"&gt;</code></pre>
+
+      <p><strong>Title String Truncation Mechanics:</strong> Social platforms apply character-level truncation to <code>og:title</code> content with platform-specific limits. Facebook truncates titles at approximately <strong>60 characters</strong> when displayed in feed cards, adding an ellipsis (…) at the truncation point. Twitter applies similar truncation at roughly <strong>70 characters</strong>. LinkedIn truncates at approximately <strong>65 characters</strong>. To ensure your title displays completely across all platforms without truncation, keep titles under <strong>60 characters</strong> — this is the universal safe limit for a <strong>twitter card generator tags</strong> and cross-platform OG implementation.</p>
+
+      <p><strong>Description String Truncation Mechanics:</strong> Description truncation varies more significantly between platforms. Facebook typically displays <strong>65 to 110 characters</strong> of description text depending on the card layout context (link post vs. shared article). Twitter shows approximately <strong>125 characters</strong> for summary_large_image cards. LinkedIn displays roughly <strong>100 characters</strong>. The universal safe target that ensures complete display across all three platforms is <strong>110 characters</strong>.</p>
+
+      <p><strong>Secure Fallback and HTTPS Requirements:</strong> All major social crawlers now strongly prefer (and in some cases require) that <code>og:image</code> URLs use the HTTPS protocol. Facebook will still attempt to fetch HTTP images but may display security warnings in certain contexts. Twitter explicitly requires HTTPS for card validator approval. LinkedIn may reject HTTP image URLs entirely for newly indexed content. The canonical best practice is to serve all Open Graph assets — images, videos, and referenced URLs — exclusively over HTTPS with valid TLS certificates. Additionally, implementing fallback tracking through canonical URL normalization ensures that social engagement signals consolidate to a single URL variant rather than splitting across HTTP/HTTPS or www/non-www variations.</p>
+
+      <ul>
+        <li><strong>og:url</strong> — Must be the absolute, canonical URL. Never use relative paths or tracking-parameter-laden variants.</li>
+        <li><strong>og:image</strong> — Must resolve to a publicly accessible, HTTPS-served image file with appropriate Cache-Control headers.</li>
+        <li><strong>og:type</strong> — Use <code>website</code> for homepages, <code>article</code> for blog posts, <code>video.other</code> for media pages, and <code>profile</code> for personal pages.</li>
+        <li><strong>og:locale</strong> — Specify the content language and region (e.g., <code>en_US</code>) for proper internationalization support.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="seo-section">
+      <h2 class="seo-section-heading">Debugging Caching Mechanics: Invalidating Social Scraper Registries</h2>
+
+      <p>One of the most frequently encountered frustrations in social metadata management is the caching behavior of social platform scrapers. After you update your Open Graph tags on the server, sharing the URL on social media continues to display the old, cached metadata — sometimes for hours or even days. Understanding the caching architecture and knowing how to programmatically force cache invalidation is an essential operational skill for any <strong>facebook og tag debugger</strong> workflow.</p>
+
+      <p><strong>Facebook Sharing Debugger (developers.facebook.com/tools/debug/):</strong> Facebook's official debugging tool serves dual purposes — it both diagnoses OG tag configuration issues and forces cache invalidation. To flush Facebook's cached metadata for a specific URL, navigate to the Sharing Debugger, enter the target URL, and click the "Scrape Again" button. This action instructs Facebook's crawler to immediately re-fetch the URL, parse the current HTML, and update its cached metadata object. The tool displays a comprehensive diagnostic output showing exactly which OG properties were detected, any warnings or errors in the configuration, and a preview of how the link will render in feed cards. For programmatic cache invalidation at scale, Facebook provides a Graph API endpoint that accepts POST requests to scrape URLs, enabling automated cache flush operations in CI/CD deployment pipelines.</p>
+
+      <p><strong>Twitter Card Validator (cards-dev.twitter.com/validator):</strong> Twitter's Card Validator operates similarly — paste a URL to see how Twitter will render your card and simultaneously invalidate any cached version. The validator also confirms that your Twitter card meta tags (<code>twitter:card</code>, <code>twitter:title</code>, <code>twitter:description</code>, <code>twitter:image</code>) are properly configured and that your card type is approved for display. Note that Twitter's caching TTL is generally shorter than Facebook's, typically refreshing within 7 days automatically. However, for time-sensitive content updates, manual validation through the Card Validator provides immediate cache invalidation.</p>
+
+      <p><strong>LinkedIn Post Inspector (linkedin.com/post-inspector/):</strong> LinkedIn's Post Inspector provides both preview rendering and cache refresh functionality. Enter the URL you want to inspect, and LinkedIn will re-scrape the page, displaying the updated metadata and preview card. LinkedIn's scraper is particularly strict about image requirements — the inspector will explicitly warn you if your OG image doesn't meet minimum dimension requirements or if the image URL returns an error status code. LinkedIn's cache persistence is the most aggressive of the three platforms, sometimes retaining old metadata for up to 7 days even after re-scraping, so proactive cache management through the Post Inspector is especially important when making time-sensitive metadata updates.</p>
+
+      <p><strong>Step-by-Step Cache Invalidation Workflow:</strong></p>
+      <ol>
+        <li>Deploy your updated HTML with corrected Open Graph meta tags to your production server.</li>
+        <li>Verify that the updated tags are visible in the page source (View Source or DevTools) — remember, crawlers don't execute JavaScript.</li>
+        <li>Open the Facebook Sharing Debugger and click "Scrape Again" for the target URL. Confirm the updated metadata appears in the diagnostic output.</li>
+        <li>Open the Twitter Card Validator and validate the same URL. Confirm the updated card preview renders correctly.</li>
+        <li>Open the LinkedIn Post Inspector and inspect the URL. Confirm the updated preview card displays with the correct image, title, and description.</li>
+        <li>If any platform still shows stale data, wait 60 seconds and repeat the scrape/validation step. Multiple consecutive scrape requests sometimes resolve persistent cache entries.</li>
+        <li>For bulk URL cache invalidation across multiple pages, script the Facebook Graph API scrape endpoint using <code>POST /?id={URL}&amp;scrape=true</code> with a valid access token.</li>
+      </ol>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+      <h2 class="faq-heading">Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <details>
+          <summary>How do misconfigured or mismatched open graph meta tags affect traditional Google Search Engine Results Page (SERP) crawl signals?</summary>
+          <div class="faq-answer">
+            <p>While Google's search engine crawler (Googlebot) does not directly use Open Graph meta tags as ranking signals, there is an indirect but significant relationship between OG tag quality and search performance. Google's SERP snippet generation system primarily relies on the <code>&lt;title&gt;</code> element and the <code>&lt;meta name="description"&gt;</code> tag — not the <code>og:title</code> or <code>og:description</code> properties. However, misconfigured OG tags create cascading problems that affect search rankings through behavioral signals.</p>
+            <p>When users share links on social media and the preview cards display broken images, incorrect titles, or missing descriptions, the resulting low click-through rates from social channels reduce overall referral traffic to the page. Google's RankBrain algorithm interprets reduced traffic signals and high bounce rates as indicators of low content quality, which can negatively impact organic search rankings over time. Furthermore, if the <code>og:url</code> canonical property conflicts with the <code>&lt;link rel="canonical"&gt;</code> element, this creates canonical confusion that can lead to incorrect URL indexing, duplicate content issues, and diluted PageRank consolidation across URL variants.</p>
+            <p>The best practice is to ensure alignment between your traditional SEO meta tags and your Open Graph properties — the title, description, and canonical URL should be consistent (though not necessarily identical) across both metadata systems. This alignment prevents conflicting signals and ensures that both search engines and social platform crawlers receive coherent, authoritative metadata about your content.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-item">
+        <details>
+          <summary>What is the operational security vulnerability associated with using insecure HTTP asset links inside the og:image metadata element wrapper?</summary>
+          <div class="faq-answer">
+            <p>Using insecure HTTP URLs for <code>og:image</code> assets introduces multiple security and operational vulnerabilities that extend beyond simple browser warning displays. The most critical vulnerability is a Man-in-the-Middle (MitM) attack vector: when a social platform's crawler fetches an image over unencrypted HTTP, an attacker positioned on the network path between the crawler and the image server can intercept the request and substitute a different image. This substituted image could contain offensive content, competitor branding, phishing instructions, or malicious visual elements that are then cached by the social platform and displayed to potentially millions of users viewing the shared link preview.</p>
+            <p>Beyond active attack scenarios, HTTP image URLs create passive reliability issues. Many corporate networks, ISPs, and mobile carriers operate transparent HTTP proxies that may modify, compress, or block HTTP image requests — resulting in degraded image quality or complete image loading failures in social preview cards. Additionally, modern browsers are progressively implementing stricter mixed content policies. Pages served over HTTPS that reference HTTP image assets in their meta tags may trigger mixed content warnings in developer tools, and some social platform scrapers may downgrade or reject HTTP image references entirely.</p>
+            <p>The mitigation strategy is straightforward: serve all <code>og:image</code> assets exclusively over HTTPS using a valid, non-expired TLS certificate from a trusted Certificate Authority. Implement HTTP-to-HTTPS redirects (301 permanent redirects) for any legacy HTTP image URLs to ensure backward compatibility with previously shared links. Additionally, set appropriate <code>Cache-Control</code> and <code>Content-Security-Policy</code> headers on your image assets to prevent unwanted caching by intermediary proxies.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="faq-item">
+        <details>
+          <summary>Why do some applications show empty placeholder boxes or broken image states when a brand new page URL is shared on a platform for the very first time?</summary>
+          <div class="faq-answer">
+            <p>This common issue — known as the "cold cache" or "first share" problem — occurs because social platform scrapers operate on a lazy evaluation model rather than a proactive indexing model. Unlike search engine crawlers (such as Googlebot) that continuously discover and index new URLs through sitemap parsing and link following, social platform crawlers only fetch and cache a URL's metadata when that URL is explicitly shared for the first time on their platform. Before this initial share event, the platform has zero knowledge of the URL's existence and no cached metadata to display.</p>
+            <p>When a user shares a completely new URL, the preview rendering system must perform a real-time HTTP request to fetch and parse the page, extract OG metadata, download and process the referenced image, and render the preview card — all before displaying the shared post. If any step in this pipeline encounters latency (slow server response, large image file sizes, redirect chains, DNS resolution delays), the platform may time out and display a fallback state: an empty image placeholder, a generic domain-only preview, or a completely raw URL string.</p>
+            <p>The solution involves two complementary strategies. <strong>Pre-warming the cache:</strong> Before publicly sharing a new URL, use each platform's debugging tool (Facebook Sharing Debugger, Twitter Card Validator, LinkedIn Post Inspector) to trigger an initial scrape. This pre-populates the platform's metadata cache so that when the URL is actually shared, the cached preview card renders instantly. <strong>Optimizing server response:</strong> Ensure your server responds to crawler requests within 2-3 seconds, serve OG images from a CDN with low latency, minimize redirect chains (ideally zero redirects between the shared URL and the final resource), and keep OG image files under 300 KB for rapid download processing. For SPAs, implement server-side rendering (SSR) or pre-rendering specifically for crawler user agents to ensure meta tags are available in the initial HTML response.</p>
+          </div>
+        </details>
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-logo">Affilore.</div>
+  <p class="footer-text">&copy; 2026 Affilore. Open Graph Meta Tag Generator &amp; Social Previewer. Client-side. Zero tracking.</p>
+</footer>
+
+<script>
+/* ================================================================
+   PARTICLE CANVAS ANIMATION
+   High-performance floating glowing yellow micro-particles
+   ================================================================ */
+(function() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animId;
+  let w, h;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() {
+      this.reset(true);
+    }
+    reset(init) {
+      this.x = Math.random() * w;
+      this.y = init ? Math.random() * h : h + 10 + Math.random() * 40;
+      this.size = Math.random() * 1.8 + 0.4;
+      this.speedY = -(Math.random() * 0.4 + 0.15);
+      this.speedX = (Math.random() - 0.5) * 0.2;
+      this.opacity = Math.random() * 0.5 + 0.15;
+      this.pulse = Math.random() * Math.PI * 2;
+      this.pulseSpeed = Math.random() * 0.02 + 0.008;
+    }
+    update() {
+      this.y += this.speedY;
+      this.x += this.speedX;
+      this.pulse += this.pulseSpeed;
+      if (this.y < -20) this.reset(false);
+      if (this.x < -20 || this.x > w + 20) this.reset(false);
+    }
+    draw() {
+      const alpha = this.opacity * (0.6 + 0.4 * Math.sin(this.pulse));
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 193, 7, ${alpha})`;
+      ctx.fill();
+
+      // Glow
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size * 3, 0, Math.PI * 2);
+      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 3);
+      grad.addColorStop(0, `rgba(255, 193, 7, ${alpha * 0.35})`);
+      grad.addColorStop(1, 'rgba(255, 193, 7, 0)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+  }
+
+  function init() {
+    resize();
+    const count = Math.min(Math.floor((w * h) / 12000), 120);
+    particles = [];
+    for (let i = 0; i < count; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of particles) {
+      p.update();
+      p.draw();
+    }
+    animId = requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(animId);
+    init();
+    animate();
+  });
+
+  init();
+  animate();
+})();
+
+
+/* ================================================================
+   LIVE PREVIEW ENGINE
+   Real-time binding from inputs to social preview cards
+   ================================================================ */
+(function() {
+  const titleInput = document.getElementById('og-title');
+  const descInput = document.getElementById('og-description');
+  const urlInput = document.getElementById('og-url');
+  const siteNameInput = document.getElementById('og-sitename');
+  const typeSelect = document.getElementById('og-type');
+  const imageInput = document.getElementById('og-image');
+
+  const titleCount = document.getElementById('title-count');
+  const descCount = document.getElementById('desc-count');
+
+  const fbTitle = document.getElementById('fb-title');
+  const fbDesc = document.getElementById('fb-desc');
+  const fbDomain = document.getElementById('fb-domain');
+  const fbImgContainer = document.getElementById('fb-img-container');
+
+  const twTitle = document.getElementById('tw-title');
+  const twDesc = document.getElementById('tw-desc');
+  const twDomain = document.getElementById('tw-domain');
+  const twImgContainer = document.getElementById('tw-img-container');
+
+  const liTitle = document.getElementById('li-title');
+  const liDomain = document.getElementById('li-domain');
+  const liImgContainer = document.getElementById('li-img-container');
+
+  const metaOutput = document.getElementById('meta-output');
+
+  const defaults = {
+    title: 'Your Page Title Will Appear Here',
+    desc: 'Your meta description will be displayed in this area. Add a compelling summary to increase clicks.',
+    twDesc: 'Your meta description preview for Twitter card rendering.',
+    domain: 'example.com'
+  };
+
+  function extractDomain(url) {
+    if (!url) return defaults.domain;
+    try {
+      const u = new URL(url);
+      return u.hostname;
+    } catch {
+      const match = url.match(/(?:https?:\/\/)?(?:www\.)?([^\/\?#]+)/i);
+      return match ? match[1] : defaults.domain;
+    }
+  }
+
+  function truncate(str, max) {
+    if (!str || str.length <= max) return str;
+    return str.substring(0, max).trimEnd() + '…';
+  }
+
+  function updateCharCount(input, counter, limit) {
+    const len = input.value.length;
+    counter.textContent = `${len} / ${limit}`;
+    counter.classList.remove('warn', 'danger');
+    if (len > limit) counter.classList.add('danger');
+    else if (len > limit * 0.85) counter.classList.add('warn');
+  }
+
+  function setPreviewImage(container, url) {
+    if (url && url.trim()) {
+      const existing = container.querySelector('img');
+      const placeholder = container.querySelector('.placeholder-icon');
+      if (existing) {
+        existing.src = url;
+      } else {
+        if (placeholder) placeholder.style.display = 'none';
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Open Graph preview image';
+        img.onerror = function() {
+          this.style.display = 'none';
+          const ph = container.querySelector('.placeholder-icon');
+          if (ph) ph.style.display = '';
+        };
+        img.onload = function() {
+          this.style.display = '';
+        };
+        container.appendChild(img);
+      }
+    } else {
+      const existing = container.querySelector('img');
+      if (existing) existing.remove();
+      const ph = container.querySelector('.placeholder-icon');
+      if (ph) ph.style.display = '';
+    }
+  }
+
+  function generateMetaTags() {
+    const title = titleInput.value.trim();
+    const desc = descInput.value.trim();
+    const url = urlInput.value.trim();
+    const siteName = siteNameInput.value.trim();
+    const type = typeSelect.value;
+    const image = imageInput.value.trim();
+
+    let tags = '<!-- Open Graph Meta Tags -->\n';
+    tags += `<meta property="og:title" content="${title || 'Your Page Title'}">\n`;
+    tags += `<meta property="og:description" content="${desc || 'Your page description.'}">\n`;
+    tags += `<meta property="og:type" content="${type}">\n`;
+    if (url) tags += `<meta property="og:url" content="${url}">\n`;
+    if (siteName) tags += `<meta property="og:site_name" content="${siteName}">\n`;
+    if (image) {
+      tags += `<meta property="og:image" content="${image}">\n`;
+      tags += `<meta property="og:image:width" content="1200">\n`;
+      tags += `<meta property="og:image:height" content="630">\n`;
+    }
+    tags += `<meta property="og:locale" content="en_US">\n`;
+    tags += '\n<!-- Twitter Card Meta Tags -->\n';
+    tags += `<meta name="twitter:card" content="summary_large_image">\n`;
+    tags += `<meta name="twitter:title" content="${title || 'Your Page Title'}">\n`;
+    tags += `<meta name="twitter:description" content="${desc || 'Your page description.'}">\n`;
+    if (image) tags += `<meta name="twitter:image" content="${image}">\n`;
+
+    return tags;
+  }
+
+  function updatePreview() {
+    const title = titleInput.value.trim();
+    const desc = descInput.value.trim();
+    const url = urlInput.value.trim();
+    const image = imageInput.value.trim();
+    const domain = extractDomain(url);
+
+    updateCharCount(titleInput, titleCount, 60);
+    updateCharCount(descInput, descCount, 110);
+
+    // Facebook
+    fbTitle.textContent = title ? truncate(title, 60) : defaults.title;
+    fbDesc.textContent = desc ? truncate(desc, 110) : defaults.desc;
+    fbDomain.textContent = domain.toUpperCase();
+    setPreviewImage(fbImgContainer, image);
+
+    // Twitter
+    twTitle.textContent = title ? truncate(title, 70) : defaults.title;
+    twDesc.textContent = desc ? truncate(desc, 125) : defaults.twDesc;
+    twDomain.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg> ${domain}`;
+    setPreviewImage(twImgContainer, image);
+
+    // LinkedIn
+    liTitle.textContent = title ? truncate(title, 65) : defaults.title;
+    liDomain.textContent = domain;
+    setPreviewImage(liImgContainer, image);
+
+    metaOutput.value = generateMetaTags();
+  }
+
+  const allInputs = [titleInput, descInput, urlInput, siteNameInput, typeSelect, imageInput];
+  allInputs.forEach(el => {
+    el.addEventListener('input', updatePreview);
+    el.addEventListener('change', updatePreview);
+  });
+
+  updatePreview();
+
+  // Tabs Engine
+  const tabs = document.querySelectorAll('.preview-tab');
+  const panels = document.querySelectorAll('.preview-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      panels.forEach(p => p.classList.remove('active'));
+
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById(`panel-${target}`).classList.add('active');
+    });
+  });
+
+  // Clipboard Pipeline
+  const copyBtn = document.getElementById('copy-tags-btn');
+  copyBtn.addEventListener('click', async () => {
+    const text = metaOutput.value;
+    try {
+      await navigator.clipboard.writeText(text);
+      copyBtn.innerHTML = '✅ Copied!';
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.innerHTML = '📋 Copy Tags';
+        copyBtn.classList.remove('copied');
+      }, 2200);
+    } catch {
+      metaOutput.select();
+      document.execCommand('copy');
+      copyBtn.innerHTML = '✅ Copied!';
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.innerHTML = '📋 Copy Tags';
+        copyBtn.classList.remove('copied');
+      }, 2200);
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
