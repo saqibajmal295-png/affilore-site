@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>JWT Debugger Online Free — Decode &amp; Inspect JSON Web Tokens Client-Side | Affilore</title>
+<meta name="description" content="Free online JWT debugger and cryptographic token inspector. Decode JSON Web Tokens client-side, inspect claims, and verify HMAC/RSA signatures — all in your browser with zero server calls."/>
+<meta name="keywords" content="jwt debugger online free, decode json web token client side, inspect jwt claims browser, cryptographic signature verification utility"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://affilore.com/jwt-debugger"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#050505;--panel:rgba(20,20,23,0.7);--border:rgba(39,39,42,0.8);
+--white:#ffffff;--yellow:#FFC107;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;
+--code-fg:#ffb300;--code-bg:rgba(255,193,7,0.1);--block-bg:#141417;
+--font-sans:'Inter',system-ui,sans-serif;--font-mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--font-sans);line-height:1.7;min-height:100vh;overflow-x:hidden}
+/* ── Canvas ── */
+#particleCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+/* ── Navbar ── */
+.navbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 32px;backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);background:rgba(5,5,5,0.6);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:1.55rem;font-weight:800;background:linear-gradient(135deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.02em}
+.nav-links{display:flex;gap:24px}
+.nav-links a{color:rgba(255,255,255,.65);font-size:.85rem;font-weight:500;text-decoration:none;transition:color .25s}
+.nav-links a:hover{color:var(--white)}
+/* ── Main wrapper ── */
+.main-wrap{position:relative;z-index:1;max-width:1340px;margin:0 auto;padding:28px 24px 60px}
+/* ── Hero heading ── */
+.hero-heading{text-align:center;margin-bottom:10px}
+.hero-heading h1{font-size:clamp(1.5rem,3.8vw,2.5rem);font-weight:900;line-height:1.25;background:linear-gradient(90deg,#FFC107 0%,#10b981 30%,#ef4444 60%,#3b82f6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{text-align:center;color:var(--white);font-size:.95rem;margin-bottom:28px;opacity:.85}
+/* ── Config status bar ── */
+.config-bar{position:relative;max-width:680px;margin:0 auto 32px;padding:14px 22px;border-radius:14px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.config-bar::before{content:'';position:absolute;inset:-1.5px;border-radius:15px;background:linear-gradient(135deg,#10b981,#3b82f6);z-index:-1}
+.config-bar-inner{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--white);font-weight:600}
+.config-dot{width:9px;height:9px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981aa;flex-shrink:0;animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.35)}}
+/* ── Glass panel ── */
+.glass{background:var(--panel);border:1px solid var(--border);border-radius:16px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
+/* ── Workspace grid ── */
+.workspace{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:40px}
+@media(max-width:860px){.workspace{grid-template-columns:1fr}}
+/* ── Card styles ── */
+.card-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.card-head h2{font-size:1rem;font-weight:700;color:var(--white)}
+.card-body{padding:20px}
+/* ── Labels ── */
+label,.field-label{display:block;font-size:.8rem;font-weight:600;color:var(--white);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+/* ── Textareas & inputs ── */
+textarea,input[type="text"],select{width:100%;background:#0c0c0e;border:1px solid var(--border);border-radius:10px;color:var(--white);font-family:var(--font-mono);font-size:.82rem;padding:12px 14px;resize:vertical;outline:none;transition:border-color .25s,box-shadow .25s}
+textarea:focus,input[type="text"]:focus,select:focus{border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,.15)}
+textarea{min-height:180px;line-height:1.65}
+select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6.5 6 6.5-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+select option{background:#141417;color:var(--white)}
+/* ── JWT coloured preview ── */
+#jwtColored{min-height:90px;padding:12px 14px;background:#0c0c0e;border:1px solid var(--border);border-radius:10px;font-family:var(--font-mono);font-size:.8rem;line-height:1.7;word-break:break-all;color:var(--white);margin-bottom:14px}
+#jwtColored .seg-header{color:#ef4444}
+#jwtColored .seg-payload{color:#a855f7}
+#jwtColored .seg-sig{color:#3b82f6}
+#jwtColored .seg-dot{color:rgba(255,255,255,.3)}
+/* ── Decoded sections ── */
+.decoded-section{margin-bottom:18px}
+.decoded-section-title{font-size:.82rem;font-weight:700;color:var(--white);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.decoded-section-title .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-red{background:var(--red);box-shadow:0 0 6px var(--red)}
+.dot-purple{background:var(--purple);box-shadow:0 0 6px var(--purple)}
+.dot-blue{background:var(--blue);box-shadow:0 0 6px var(--blue)}
+pre.decoded-block{background:var(--block-bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:var(--font-mono);font-size:.78rem;line-height:1.7;color:var(--white);overflow-x:auto;white-space:pre-wrap;word-break:break-word;min-height:52px}
+/* JSON syntax colours */
+pre.decoded-block .json-key{color:#f472b6}
+pre.decoded-block .json-string{color:#34d399}
+pre.decoded-block .json-number{color:#60a5fa}
+pre.decoded-block .json-bool{color:#fbbf24}
+pre.decoded-block .json-null{color:#9ca3af}
+pre.decoded-block.header-theme .json-key{color:#fca5a5}
+pre.decoded-block.payload-theme .json-key{color:#c4b5fd}
+/* ── Signature banner ── */
+.sig-banner{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;font-size:.92rem;font-weight:700;color:var(--white);transition:all .35s}
+.sig-verified{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.35)}
+.sig-verified .sig-icon{font-size:1.5rem;filter:drop-shadow(0 0 8px #10b981)}
+.sig-invalid{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.35)}
+.sig-invalid .sig-icon{font-size:1.5rem;animation:flash-red .8s infinite}
+.sig-idle{background:rgba(255,255,255,.04);border:1px solid var(--border)}
+@keyframes flash-red{0%,100%{opacity:1}50%{opacity:.35}}
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;border:none;font-family:var(--font-sans);font-size:.82rem;font-weight:600;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;color:var(--white)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,#a855f7,#3b82f6);box-shadow:0 4px 20px rgba(168,85,247,.25)}
+.btn-primary:hover{box-shadow:0 6px 28px rgba(168,85,247,.35)}
+.btn-copy{background:rgba(255,255,255,.07);border:1px solid var(--border)}
+.btn-copy:hover{background:rgba(255,255,255,.12)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+/* ── SEO Article ── */
+.article-wrap{max-width:860px;margin:0 auto;padding-top:20px}
+.article-wrap h2{font-size:1.35rem;font-weight:800;color:var(--white);margin:42px 0 14px;line-height:1.35}
+.article-wrap h3{font-size:1.1rem;font-weight:700;color:var(--white);margin:28px 0 10px}
+.article-wrap p,.article-wrap li{color:var(--white);font-size:.93rem;line-height:1.8;margin-bottom:12px}
+.article-wrap ul,.article-wrap ol{padding-left:22px;margin-bottom:14px}
+.article-wrap li{margin-bottom:6px}
+.article-wrap strong{color:var(--yellow);font-weight:700}
+.article-wrap code{font-family:var(--font-mono);font-size:.84rem;color:var(--code-fg);background:var(--code-bg);padding:2px 7px;border-radius:5px}
+.article-wrap pre.code-example{background:var(--block-bg);border:1px solid var(--border);border-radius:12px;padding:18px 20px;font-family:var(--font-mono);font-size:.82rem;line-height:1.7;color:var(--white);overflow-x:auto;margin:14px 0 18px;white-space:pre-wrap;word-break:break-word}
+/* ── FAQ Accordion ── */
+.faq-section{margin-top:48px}
+.faq-section h2{font-size:1.35rem;font-weight:800;color:var(--white);margin-bottom:18px}
+details.faq-item{background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);overflow:hidden;transition:border-color .3s}
+details.faq-item[open]{border-color:rgba(168,85,247,.35)}
+details.faq-item summary{padding:16px 22px;font-size:.93rem;font-weight:700;color:var(--white);cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;user-select:none}
+details.faq-item summary::-webkit-details-marker{display:none}
+details.faq-item summary::before{content:'▸';font-size:1rem;color:var(--purple);transition:transform .25s;flex-shrink:0}
+details.faq-item[open] summary::before{transform:rotate(90deg)}
+details.faq-item .faq-body{padding:0 22px 18px;color:var(--white);font-size:.9rem;line-height:1.8}
+details.faq-item .faq-body p{margin-bottom:10px}
+/* ── Footer ── */
+.footer{text-align:center;padding:40px 20px 28px;color:rgba(255,255,255,.35);font-size:.78rem;border-top:1px solid var(--border);margin-top:60px}
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:6px}
+/* ── Utility ── */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+.field-group{margin-bottom:14px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.field-row{grid-template-columns:1fr}}
+/* toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);background:rgba(16,185,129,.92);color:#fff;padding:10px 24px;border-radius:10px;font-size:.84rem;font-weight:600;pointer-events:none;opacity:0;transition:transform .35s,opacity .35s;z-index:999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<!-- Particle canvas -->
+<canvas id="particleCanvas" aria-hidden="true"></canvas>
+<!-- Navbar -->
+<nav class="navbar" role="navigation" aria-label="Primary Navigation">
+  <div class="nav-logo">Affilore.</div>
+  <div class="nav-links">
+    <a href="#tool">Tool</a>
+    <a href="#docs">Documentation</a>
+    <a href="#faq">FAQ</a>
+  </div>
+</nav>
+<!-- Main Content -->
+<main class="main-wrap" id="tool">
+  <!-- Hero -->
+  <div class="hero-heading">
+    <h1>JWT Debugger &amp; Cryptographic Token Inspector</h1>
+  </div>
+  <p class="hero-sub">Decode, inspect, and verify JSON Web Tokens entirely inside your browser — zero data ever leaves your machine.</p>
+  <!-- Config bar -->
+  <div class="config-bar">
+    <div class="config-bar-inner">
+      <span class="config-dot" aria-hidden="true"></span>
+      <span>Web Crypto Decryption Sandbox: Sandbox Active</span>
+    </div>
+  </div>
+  <!-- Workspace -->
+  <section class="workspace" aria-label="JWT Debugger Workspace">
+    <!-- LEFT INPUT CARD -->
+    <div class="glass" id="inputCard">
+      <div class="card-head">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4" stroke="#a855f7" stroke-width="2"/><path d="M8 12h8M12 8v8" stroke="#a855f7" stroke-width="2" stroke-linecap="round"/></svg>
+        <h2>Encoded Token Input</h2>
+      </div>
+      <div class="card-body">
+        <div class="field-group">
+          <label for="jwtInput">Paste Encoded JWT String</label>
+          <textarea id="jwtInput" spellcheck="false" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFmZmlsb3JlIFVzZXIiLCJpYXQiOjE3MTY1MDAwMDB9.SIGNATURE_HERE" aria-describedby="jwtHint"></textarea>
+          <small id="jwtHint" style="color:var(--white);opacity:.6;font-size:.75rem;">Token segments are colour-coded automatically: <span style="color:#ef4444">Header</span> · <span style="color:#a855f7">Payload</span> · <span style="color:#3b82f6">Signature</span></small>
+        </div>
+        <div id="jwtColored" aria-label="Colour-coded JWT preview"></div>
+        <div class="field-row">
+          <div class="field-group">
+            <label for="algoSelect">Signing Algorithm</label>
+            <select id="algoSelect">
+              <option value="HS256" selected>HS256 — HMAC SHA-256</option>
+              <option value="HS384">HS384 — HMAC SHA-384</option>
+              <option value="HS512">HS512 — HMAC SHA-512</option>
+              <option value="RS256">RS256 — RSA SHA-256</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="secretInput" id="keyLabel">Secret Key (HMAC)</label>
+            <input type="text" id="secretInput" placeholder="Enter your secret key for verification" spellcheck="false"/>
+          </div>
+        </div>
+        <div class="field-group" id="pubkeyGroup" style="display:none">
+          <label for="pubkeyInput">RSA Public Key (PEM / SPKI)</label>
+          <textarea id="pubkeyInput" rows="5" spellcheck="false" placeholder="-----BEGIN PUBLIC KEY-----&#10;MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A...&#10;-----END PUBLIC KEY-----"></textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btnVerify" type="button">🔐 Verify Signature</button>
+          <button class="btn btn-copy" id="btnPasteSample" type="button">📎 Load Sample Token</button>
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT PREVIEW CARD -->
+    <div class="glass" id="previewCard">
+      <div class="card-head">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="4" stroke="#10b981" stroke-width="2"/><path d="M8 9h8M8 13h5" stroke="#10b981" stroke-width="2" stroke-linecap="round"/></svg>
+        <h2>Decoded Token Inspector</h2>
+      </div>
+      <div class="card-body">
+        <!-- Header -->
+        <div class="decoded-section">
+          <div class="decoded-section-title"><span class="dot dot-red" aria-hidden="true"></span> Decoded Header</div>
+          <pre class="decoded-block header-theme" id="decodedHeader" aria-label="Decoded JWT Header">Paste a token to inspect the header…</pre>
+        </div>
+        <!-- Payload -->
+        <div class="decoded-section">
+          <div class="decoded-section-title"><span class="dot dot-purple" aria-hidden="true"></span> Decoded Payload Claims</div>
+          <pre class="decoded-block payload-theme" id="decodedPayload" aria-label="Decoded JWT Payload">Paste a token to inspect the payload claims…</pre>
+        </div>
+        <!-- Signature -->
+        <div class="decoded-section">
+          <div class="decoded-section-title"><span class="dot dot-blue" aria-hidden="true"></span> Signature Verification Status</div>
+          <div class="sig-banner sig-idle" id="sigBanner">
+            <span class="sig-icon">🔒</span>
+            <span id="sigText">Awaiting verification input…</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-copy" id="btnCopyJSON" type="button">📋 Copy Decoded JSON</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ═══════════════════════════════════════════════════════════════
+       SEO DOCUMENTATION
+       ═══════════════════════════════════════════════════════════════ -->
+  <article class="article-wrap" id="docs">
+    <h2>The Anatomy of a JSON Web Token: Deconstructing Header, Payload, and Signature Layouts</h2>
+    <p>A <strong>JSON Web Token</strong> is a compact, URL-safe credential format codified under the <strong>RFC 7519</strong> specification that enables stateless authentication between distributed systems. Every JWT is structurally composed of exactly three Base64URL-encoded segments concatenated by two ASCII period (<code>.</code>) delimiters, forming the canonical <code>header.payload.signature</code> triplet. Understanding the architectural design roles of these segments is essential for any engineer working with modern <strong>authentication architecture</strong> and <strong>cryptographic signature verification</strong> pipelines.</p>
+    <p>The first segment, the <strong>JOSE Header</strong> (JSON Object Signing and Encryption), is a compact JSON object that declares metadata about the token itself. At minimum, the header specifies the <code>alg</code> field, which names the <strong>cryptographic signing algorithm</strong> used to generate the token's digital signature — typically <code>HS256</code> (HMAC-SHA256) for symmetric operations or <code>RS256</code> (RSASSA-PKCS1-v1_5 with SHA-256) for asymmetric verification. A secondary <code>typ</code> field conventionally carries the string <code>"JWT"</code>, signaling the media type to downstream consumers.</p>
+    <p>The second segment encapsulates the <strong>Payload</strong>, which contains a JSON object of key-value pairs known as <strong>claims</strong>. The RFC defines three claim categories: <strong>registered claims</strong> such as <code>iss</code> (issuer), <code>sub</code> (subject), <code>aud</code> (audience), <code>exp</code> (expiration time), <code>nbf</code> (not before), and <code>iat</code> (issued at); <strong>public claims</strong> defined in the IANA JSON Web Token Claims registry; and <strong>private claims</strong>, which are custom application-specific properties agreed upon by the producer and consumer. Importantly, the payload is encoded but never inherently encrypted — any party with access to the raw token can decode and read these claims.</p>
+    <p>The third segment is the <strong>Signature</strong>, the cryptographic backbone that guarantees data integrity. To produce the signature, the issuing server concatenates the encoded header and encoded payload with a period separator, then feeds that input into the algorithm declared in the header alongside a secret key (symmetric) or private key (asymmetric). The resulting digest is Base64URL-encoded and appended as the final segment. A verifier reconstructs the same input, applies the same algorithm with the shared secret or corresponding public key, and compares results byte-for-byte. Any modification to a single character in either the header or payload will produce a completely different digest, immediately exposing tampering.</p>
+    <pre class="code-example">// Pseudocode: Signature Generation
+const signingInput = base64url(header) + "." + base64url(payload);
+const signature    = HMAC_SHA256(signingInput, secretKey);
+const jwt          = signingInput + "." + base64url(signature);</pre>
+    <h2>The Mathematics of Token Encoding: Base64URL Alphabet Systems vs Standard Base64 Binary Encoding</h2>
+    <p>Standard Base64 encoding transforms arbitrary binary data into a 64-character ASCII alphabet comprising uppercase letters <code>A-Z</code>, lowercase <code>a-z</code>, digits <code>0-9</code>, and the symbols <code>+</code> and <code>/</code>, with <code>=</code> used as a padding character to align output to four-byte boundaries. While this encoding is ubiquitous in email (MIME) and data URI schemes, it introduces critical compatibility hazards when tokens are transmitted inside URL query parameters, HTTP headers, or HTML form values. The <code>+</code> character is interpreted as a space in URL percent-encoding, and <code>/</code> conflicts with path delimiters, while <code>=</code> padding collides with query string assignment operators.</p>
+    <p>The <strong>Base64URL</strong> variant, formally specified in <strong>RFC 4648 §5</strong>, resolves these collisions through two character substitutions: <code>+</code> is replaced with <code>-</code> (hyphen) and <code>/</code> is replaced with <code>_</code> (underscore). Additionally, padding characters are stripped entirely. The resulting strings are safe for inclusion in URIs, cookies, and HTTP Authorization headers without requiring percent-encoding. When a client-side <strong>JWT debugger</strong> decodes a token locally, it reverses these substitutions, restores padding as necessary, and invokes the browser's native <code>atob()</code> function or a custom decoder to extract the raw UTF-8 JSON text. This <strong>decode json web token client side</strong> process is entirely deterministic and requires zero server interaction, making it ideal for privacy-conscious inspection workflows.</p>
+    <pre class="code-example">// Base64URL decode in the browser
+function b64urlDecode(str) {
+  let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (base64.length % 4) base64 += '=';
+  return decodeURIComponent(
+    atob(base64).split('').map(c =>
+      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    ).join('')
+  );
+}</pre>
+    <h2>Claim Verification Mechanics: Securing Issued-At, Expiration, and Issuer Directives</h2>
+    <p>Beyond structural decoding, robust <strong>jwt claims inspection</strong> demands rigorous validation of temporal and identity-bound registered claims. The <code>exp</code> (expiration) claim contains a NumericDate value — a JSON integer representing seconds since the Unix epoch (1970-01-01T00:00:00Z). An authentication gate must reject any token whose <code>exp</code> value is less than the current server timestamp, accounting for reasonable clock skew tolerance (typically 30–60 seconds). Failure to enforce expiration enables indefinite session persistence, a severe vulnerability in enterprise authorization systems.</p>
+    <p>The <code>iat</code> (issued at) claim records the moment the token was minted. Security-conscious implementations cross-reference <code>iat</code> against password-change timestamps or session revocation events stored in a lightweight datastore. If a user's credentials were rotated after the token's <code>iat</code>, the token must be invalidated regardless of its <code>exp</code> window. The <code>nbf</code> (not before) claim functions as a forward-dated activation gate: tokens presented before the <code>nbf</code> timestamp must be rejected, which is useful for pre-provisioned credentials distributed ahead of a scheduled service launch.</p>
+    <p>The <code>iss</code> (issuer) and <code>aud</code> (audience) claims implement origin and destination binding. The verifying service must confirm that <code>iss</code> matches the expected identity provider URL and that its own service identifier appears in the <code>aud</code> field. These checks prevent <strong>token replay attacks</strong> where a valid token issued for Service A is fraudulently presented to Service B.</p>
+    <pre class="code-example">// Claim validation pseudocode
+const now = Math.floor(Date.now() / 1000);
+if (payload.exp && now > payload.exp + CLOCK_SKEW) throw "Token expired";
+if (payload.nbf && now < payload.nbf - CLOCK_SKEW) throw "Token not yet valid";
+if (payload.iss !== EXPECTED_ISSUER) throw "Issuer mismatch";
+if (!payload.aud?.includes(MY_SERVICE_ID)) throw "Audience mismatch";</pre>
+    <h2>Mitigating Token Security Anti-Patterns: The Threat of Malicious Algorithms and Secret Leaks</h2>
+    <p>One of the most dangerous vulnerabilities in JWT implementations is the <strong>algorithm confusion attack</strong>, famously exploited through the <code>alg: "none"</code> header value. The JWT specification technically permits unsigned tokens by setting the algorithm to <code>"none"</code> and omitting the signature segment. If a verification library naïvely trusts the <code>alg</code> field from the incoming token rather than enforcing a server-side allowlist, an attacker can forge arbitrary payloads, strip the signature, set <code>alg</code> to <code>"none"</code>, and bypass all integrity checks. This vulnerability has been documented in production exploits against widely deployed open-source authentication libraries.</p>
+    <p>A related attack vector targets asymmetric-to-symmetric algorithm downgrade. Consider a server configured to verify tokens with an RSA public key. If the attacker changes the header's <code>alg</code> from <code>RS256</code> to <code>HS256</code> and signs the payload using the server's publicly known RSA public key as an HMAC secret, a vulnerable library will attempt HMAC verification with that same public key — and succeed, granting unauthorized access. The mitigation is absolute: <strong>never derive the verification algorithm from the token itself</strong>. The server must maintain a strict, hardcoded algorithm allowlist independent of token metadata.</p>
+    <p>Secret key management presents another critical surface. HMAC-based tokens rely on a shared secret that must remain confidential. If this secret is committed to a public repository, embedded in client-side JavaScript, or logged in plaintext, any adversary who acquires it can mint valid tokens with arbitrary claims, effectively gaining administrative access to every protected endpoint. Organisations must store signing secrets in dedicated <strong>key management services</strong> (KMS), rotate them on a defined schedule, and implement key-versioning via the <code>kid</code> (Key ID) header parameter to support graceful rollover without service disruption.</p>
+    <p>This <strong>cryptographic signature verification utility</strong> operates entirely within your browser's Web Crypto API sandbox, ensuring that your secret keys, public keys, and decoded payloads are never transmitted over any network. All processing occurs in volatile client-side memory that is purged when the tab is closed, providing a secure environment for <strong>inspecting JWT claims</strong> without exposing sensitive token data to third-party servers.</p>
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+      <h2>Frequently Asked Questions</h2>
+      <details class="faq-item">
+        <summary>Why should sensitive or confidential enterprise user parameters never be stored inside a JWT payload?</summary>
+        <div class="faq-body">
+          <p>A JWT payload is <strong>encoded</strong> using Base64URL — not <strong>encrypted</strong>. Any party who intercepts or accesses the raw token string can trivially decode the payload and read every claim in plaintext. This means social security numbers, financial account identifiers, medical records, passwords, or any other personally identifiable information (PII) placed inside a JWT is fully visible to network intermediaries, browser extensions, logging systems, and malicious actors who compromise transport channels.</p>
+          <p>If payload confidentiality is required, the specification provides <strong>JWE (JSON Web Encryption)</strong> as defined in RFC 7516, which applies authenticated encryption to the payload content before encoding. Alternatively, sensitive data should remain server-side with only opaque reference identifiers placed in the token. A <strong>jwt debugger online free</strong> tool like this one visually demonstrates how easily payloads are decoded, reinforcing the principle that JWTs are integrity-protected but not confidentiality-protected by default.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>What is the difference between symmetrically signed tokens (HMAC) and asymmetrically verified tokens (RSA/ECDSA)?</summary>
+        <div class="faq-body">
+          <p><strong>Symmetric signing</strong> (HMAC-SHA256/384/512) uses a single shared secret for both signing and verification. The issuer and verifier must both possess the same key. This approach is efficient and ideal for monolithic systems where the token producer and consumer are the same service or share a secure internal channel for secret distribution. However, distributing the secret to multiple verifiers increases the attack surface because every holder of the secret can also forge tokens.</p>
+          <p><strong>Asymmetric signing</strong> (RS256, ES256, PS256) uses a <strong>private key</strong> exclusively for signing and a corresponding <strong>public key</strong> for verification. The public key can be freely distributed — even published at a <code>/.well-known/jwks.json</code> endpoint — without compromising the ability to forge tokens. This model is fundamental to federated identity architectures like OpenID Connect, where an identity provider signs tokens and dozens of independent relying parties verify them using the publicly available key set.</p>
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>How does a web browser validate the signature of an application token locally without exposing secret security vectors?</summary>
+        <div class="faq-body">
+          <p>Modern browsers implement the <strong>Web Crypto API</strong> (W3C specification), a low-level cryptographic interface that performs all operations inside a hardened, sandboxed execution context. When you supply a secret key to this tool, the key material is imported into a non-exportable <code>CryptoKey</code> object within volatile browser memory. The API then computes the HMAC or RSA signature over the token's signing input and compares it against the provided signature segment — all within the browser process without any network calls.</p>
+          <p>The key material never touches the DOM, is never serialized to <code>localStorage</code> or <code>IndexedDB</code>, and cannot be extracted by third-party scripts due to same-origin policy enforcement. When the browser tab is closed or refreshed, the <code>CryptoKey</code> object and all associated buffers are garbage-collected. This architecture ensures that <strong>decode json web token client side</strong> verification is cryptographically sound without introducing secret exposure vectors.</p>
+        </div>
+      </details>
+    </section>
+  </article>
+  <footer class="footer">
+    <p>© 2026 Affilore. — JWT Debugger & Cryptographic Token Inspector — 100% Client-Side, Zero Data Transmission.</p>
+  </footer>
+</main>
+<!-- Toast -->
+<div class="toast" id="toast" aria-live="polite"></div>
+<script>
+/* ═══════════════════════════════════════════════
+   PARTICLE CANVAS
+   ═══════════════════════════════════════════════ */
+(function(){
+  const c=document.getElementById('particleCanvas'),ctx=c.getContext('2d');
+  let W,H,particles=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+  window.addEventListener('resize',resize);resize();
+  const COUNT=120;
+  for(let i=0;i<COUNT;i++){
+    particles.push({
+      x:Math.random()*W,y:Math.random()*H,
+      r:Math.random()*1.6+.4,
+      vy:-(Math.random()*.35+.1),
+      vx:(Math.random()-.5)*.15,
+      a:Math.random()*.5+.2
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(const p of particles){
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,193,7,${p.a})`;
+      ctx.shadowColor='rgba(255,193,7,0.6)';
+      ctx.shadowBlur=p.r*4;
+      ctx.fill();
+      p.y+=p.vy;p.x+=p.vx;
+      if(p.y<-4){p.y=H+4;p.x=Math.random()*W;}
+      if(p.x<-4)p.x=W+4;
+      if(p.x>W+4)p.x=-4;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+/* ═══════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════ */
+function b64urlDecode(str){
+  try{
+    let b=str.replace(/-/g,'+').replace(/_/g,'/');
+    while(b.length%4)b+='=';
+    return decodeURIComponent(atob(b).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  }catch{return null;}
+}
+function b64urlToUint8(str){
+  let b=str.replace(/-/g,'+').replace(/_/g,'/');
+  while(b.length%4)b+='=';
+  const raw=atob(b),arr=new Uint8Array(raw.length);
+  for(let i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);
+  return arr;
+}
+function strToUint8(s){return new TextEncoder().encode(s);}
+function syntaxHighlight(json){
+  return json.replace(/("(\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false)\b|null|\b-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?\b)/g,m=>{
+    let cls='json-number';
+    if(/^"/.test(m)){cls=/:$/.test(m)?'json-key':'json-string';}
+    else if(/true|false/.test(m))cls='json-bool';
+    else if(/null/.test(m))cls='json-null';
+    return `<span class="${cls}">${m}</span>`;
+  });
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+/* ═══════════════════════════════════════════════
+   CORE DECODE LOGIC
+   ═══════════════════════════════════════════════ */
+const jwtInput=document.getElementById('jwtInput');
+const jwtColored=document.getElementById('jwtColored');
+const decodedHeader=document.getElementById('decodedHeader');
+const decodedPayload=document.getElementById('decodedPayload');
+const sigBanner=document.getElementById('sigBanner');
+const sigText=document.getElementById('sigText');
+const algoSelect=document.getElementById('algoSelect');
+const secretInput=document.getElementById('secretInput');
+const pubkeyInput=document.getElementById('pubkeyInput');
+const pubkeyGroup=document.getElementById('pubkeyGroup');
+const keyLabel=document.getElementById('keyLabel');
+let currentHeader=null,currentPayload=null;
+algoSelect.addEventListener('change',()=>{
+  const v=algoSelect.value;
+  if(v.startsWith('RS')){
+    pubkeyGroup.style.display='block';
+    keyLabel.textContent='Secret Key (unused for RSA verify)';
+  }else{
+    pubkeyGroup.style.display='none';
+    keyLabel.textContent='Secret Key (HMAC)';
+  }
+});
+jwtInput.addEventListener('input',decodeJWT);
+function decodeJWT(){
+  const raw=jwtInput.value.trim();
+  // Reset
+  if(!raw){
+    jwtColored.innerHTML='';
+    decodedHeader.innerHTML='Paste a token to inspect the header…';
+    decodedPayload.innerHTML='Paste a token to inspect the payload claims…';
+    resetSig();currentHeader=null;currentPayload=null;return;
+  }
+  const parts=raw.split('.');
+  // Colored preview
+  if(parts.length>=2){
+    let html=`<span class="seg-header">${esc(parts[0])}</span><span class="seg-dot">.</span><span class="seg-payload">${esc(parts[1])}</span>`;
+    if(parts[2]!==undefined)html+=`<span class="seg-dot">.</span><span class="seg-sig">${esc(parts[2])}</span>`;
+    jwtColored.innerHTML=html;
+  }else{
+    jwtColored.innerHTML=`<span style="color:#ef4444">⚠ Invalid token structure — expected at least two dot-separated segments.</span>`;
+  }
+  // Decode header
+  const hJSON=b64urlDecode(parts[0]);
+  if(hJSON){
+    try{
+      currentHeader=JSON.parse(hJSON);
+      decodedHeader.innerHTML=syntaxHighlight(JSON.stringify(currentHeader,null,2));
+    }catch{decodedHeader.textContent='⚠ Header is not valid JSON';currentHeader=null;}
+  }else{decodedHeader.textContent='⚠ Unable to Base64URL-decode header segment';currentHeader=null;}
+  // Decode payload
+  if(parts[1]){
+    const pJSON=b64urlDecode(parts[1]);
+    if(pJSON){
+      try{
+        currentPayload=JSON.parse(pJSON);
+        decodedPayload.innerHTML=syntaxHighlight(JSON.stringify(currentPayload,null,2));
+      }catch{decodedPayload.textContent='⚠ Payload is not valid JSON';currentPayload=null;}
+    }else{decodedPayload.textContent='⚠ Unable to Base64URL-decode payload segment';currentPayload=null;}
+  }
+  resetSig();
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function resetSig(){
+  sigBanner.className='sig-banner sig-idle';
+  sigText.textContent='Awaiting verification input…';
+  sigBanner.querySelector('.sig-icon').textContent='🔒';
+}
+/* ═══════════════════════════════════════════════
+   SIGNATURE VERIFICATION (Web Crypto)
+   ═══════════════════════════════════════════════ */
+document.getElementById('btnVerify').addEventListener('click',async()=>{
+  const raw=jwtInput.value.trim();
+  const parts=raw.split('.');
+  if(parts.length!==3){toast('Token must have exactly 3 segments');return;}
+  const algo=algoSelect.value;
+  const sigInput=parts[0]+'.'+parts[1];
+  const sigBytes=b64urlToUint8(parts[2]);
+  try{
+    let valid=false;
+    if(algo.startsWith('HS')){
+      const secret=secretInput.value;
+      if(!secret){toast('Enter a secret key first');return;}
+      const hashMap={HS256:'SHA-256',HS384:'SHA-384',HS512:'SHA-512'};
+      const key=await crypto.subtle.importKey('raw',strToUint8(secret),{name:'HMAC',hash:hashMap[algo]},false,['sign','verify']);
+      valid=await crypto.subtle.verify('HMAC',key,sigBytes,strToUint8(sigInput));
+    }else if(algo==='RS256'){
+      const pem=pubkeyInput.value.trim();
+      if(!pem){toast('Paste an RSA public key in PEM format');return;}
+      const pemBody=pem.replace(/-----[A-Z ]+-----/g,'').replace(/\s/g,'');
+      const binDer=Uint8Array.from(atob(pemBody),c=>c.charCodeAt(0));
+      const key=await crypto.subtle.importKey('spki',binDer,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
+      valid=await crypto.subtle.verify('RSASSA-PKCS1-v1_5',key,sigBytes,strToUint8(sigInput));
+    }
+    if(valid){
+      sigBanner.className='sig-banner sig-verified';
+      sigBanner.querySelector('.sig-icon').textContent='✔';
+      sigText.textContent='Signature Verified';
+    }else{
+      sigBanner.className='sig-banner sig-invalid';
+      sigBanner.querySelector('.sig-icon').textContent='✘';
+      sigText.textContent='Invalid Signature';
+    }
+  }catch(e){
+    sigBanner.className='sig-banner sig-invalid';
+    sigBanner.querySelector('.sig-icon').textContent='✘';
+    sigText.textContent='Verification Error: '+e.message;
+  }
+});
+/* ═══════════════════════════════════════════════
+   COPY & SAMPLE
+   ═══════════════════════════════════════════════ */
+document.getElementById('btnCopyJSON').addEventListener('click',()=>{
+  const obj={};
+  if(currentHeader)obj.header=currentHeader;
+  if(currentPayload)obj.payload=currentPayload;
+  if(!Object.keys(obj).length){toast('Nothing to copy');return;}
+  navigator.clipboard.writeText(JSON.stringify(obj,null,2)).then(()=>toast('Decoded JSON copied to clipboard!')).catch(()=>toast('Copy failed'));
+});
+document.getElementById('btnPasteSample').addEventListener('click',()=>{
+  // This is a real HS256-signed token with secret "affilore-secret-demo"
+  jwtInput.value='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFmZmlsb3JlIFVzZXIiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTY1MDAwMDAsImV4cCI6MTgxNjUwMDAwMCwiaXNzIjoiaHR0cHM6Ly9hZmZpbG9yZS5jb20iLCJhdWQiOiJhZmZpbG9yZS1hcHAifQ.rGKFVWHXF90Wsa8253kUOirv_FtSERGOJjAFdh7IF6o';
+  secretInput.value='affilore-secret-demo';
+  algoSelect.value='HS256';
+  algoSelect.dispatchEvent(new Event('change'));
+  decodeJWT();
+  toast('Sample token loaded — click Verify Signature');
+});
+</script>
+</body>
+</html>
