@@ -1,282 +1,439 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark scroll-smooth" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Affilore — Premium Client-Side Web Tool Directory</title>
-  <meta name="description" content="A curated directory of free, serverless, client-side web utility tools optimized for developers, digital creators, and home operators.">
-  <meta name="robots" content="index, follow">
-  <link rel="stylesheet" href="styles.css?v=1.0.3">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%23f59e0b'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='60' font-weight='900' fill='%23000'>A</text></svg>">
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Affilore | Free Client-Side Web Utilities</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    
+    <!-- Firebase Analytics and Monitoring Config (Preserved) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI",
-      authDomain: "affilore.firebaseapp.com",
-      projectId: "affilore",
-      storageBucket: "affilore.firebasestorage.app",
-      messagingSenderId: "196193541479",
-      appId: "1:196193541479:web:3cef88a2065b09c755e3c2",
-      measurementId: "G-B6DLGHM5D1"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI",
+            authDomain: "affilore.firebaseapp.com",
+            projectId: "affilore",
+            storageBucket: "affilore.firebasestorage.app",
+            messagingSenderId: "196193541479",
+            appId: "1:196193541479:web:3cef88a2065b09c755e3c2",
+            measurementId: "G-B6DLGHM5D1"
+        };
 
-    // Initialize Firebase Global Metrics Sandbox Instance
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
-</head>
-<body>
+        // Initialize Firebase Global Metrics Sandbox Instance
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 
-  <!-- Header -->
-  <header class="site-header" id="site-header-container">
-    <div class="container">
-      <div class="header-inner">
-        <a href="/" class="logo" id="home-logo-link">
-          <div class="logo-icon">A</div>
-          affilore
-        </a>
-        <nav class="nav-links" id="main-navigation">
-          <a href="/" class="active" id="nav-link-home">Home</a>
-          <a href="/developer-utilities/" id="nav-link-dev">Developer</a>
-          <a href="/utility-tools/" id="nav-link-utility">Utility</a>
-          <a href="/data-converters/" id="nav-link-data">Data</a>
-          <a href="/seo-tools/" id="nav-link-seo">SEO</a>
-          <a href="/calculators/" id="nav-link-calc">Calculators</a>
-          <a href="mailto:affilore4@gmail.com?subject=Custom Tool Request" class="nav-btn-request" id="nav-link-request-tool">Request Custom Tool</a>
-        </nav>
-        <button class="nav-toggle" id="mobile-nav-toggle" aria-label="Toggle Navigation">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Empty AdSense Container -->
-  <div class="adsense-header-container" id="adsense-header-placement">
-    <!-- Google AdSense Placeholder -->
-    <span>Advertisement</span>
-  </div>
-
-  <!-- Hero Section -->
-  <section class="hero" id="home-hero-section">
-    <div class="container">
-      <h1 class="hero-title" id="main-heading">
-        Free Client-Side <span class="gradient-text">Web Utilities</span>
-      </h1>
-      <p class="hero-subtitle" id="main-subheading">
-        Lightweight, instant, and privacy-focused calculators and tools running 100% locally in your browser. No signups, no latency.
-      </p>
-    </div>
-  </section>
-
-  <!-- Tools Directory Grid -->
-  <main class="directory-section" id="tools-directory-section">
-    <div class="container">
-      <h2 class="section-title" id="directory-section-title">All Web Utilities</h2>
-      
-      <div class="grid-3col" id="tools-grid-layout">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-on-surface": "#2f3131",
+                        "secondary-fixed": "#e5e2e1",
+                        "tertiary-fixed-dim": "#c6c5cf",
+                        "surface-dim": "#121414",
+                        "on-tertiary-fixed": "#1a1b22",
+                        "surface-container-low": "#1a1c1c",
+                        "on-primary-fixed-variant": "#653e00",
+                        "on-secondary": "#303030",
+                        "surface-tint": "#EAB308",
+                        "error-container": "#93000a",
+                        "primary": "#EAB308",
+                        "tertiary-container": "#b1b0ba",
+                        "surface-container-high": "#282a2a",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#855300",
+                        "on-secondary-fixed": "#1b1b1c",
+                        "on-secondary-container": "#b7b5b4",
+                        "on-secondary-fixed-variant": "#474746",
+                        "surface-container-lowest": "#0d0f0f",
+                        "outline": "#a08e7a",
+                        "outline-variant": "#534434",
+                        "on-tertiary-fixed-variant": "#46464e",
+                        "surface-container-highest": "#333535",
+                        "on-primary-fixed": "#2a1700",
+                        "surface": "#121414",
+                        "secondary": "#c8c6c5",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#e3e1ec",
+                        "inverse-surface": "#e2e2e2",
+                        "on-primary": "#472a00",
+                        "background": "#121414",
+                        "surface-bright": "#383939",
+                        "on-background": "#e2e2e2",
+                        "on-primary-container": "#613b00",
+                        "surface-variant": "#333535",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#EAB308",
+                        "secondary-container": "#474746",
+                        "surface-container": "#1e2020",
+                        "on-surface": "#e2e2e2",
+                        "on-surface-variant": "#d8c3ad",
+                        "primary-fixed": "#ffddb8",
+                        "primary-container": "#F59E0B",
+                        "on-tertiary": "#2f3038",
+                        "on-tertiary-container": "#43434b",
+                        "on-error-container": "#ffdad6",
+                        "tertiary": "#cdcbd6",
+                        "glass-border": "rgba(255, 255, 255, 0.15)",
+                        "glass-fill": "rgba(255, 255, 255, 0.05)"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "base": "8px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "container-max": "1440px",
+                        "sm": "12px",
+                        "lg": "48px",
+                        "xl": "80px",
+                        "margin": "32px",
+                        "margin-desktop": "2.5rem",
+                        "stack-lg": "2rem",
+                        "stack-sm": "0.5rem",
+                        "stack-md": "1rem",
+                        "margin-mobile": "1rem"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Sora"],
+                        "headline-xl": ["Sora"],
+                        "body-md": ["Sora"],
+                        "headline-lg": ["Sora"],
+                        "body-sm": ["Sora"],
+                        "label-caps": ["Sora"],
+                        "label-sm": ["Sora"],
+                        "label-md": ["Sora"],
+                        "body-lg": ["Sora"],
+                        "display-lg-mobile": ["Sora"],
+                        "display-lg": ["Sora"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "display-lg": ["64px", { "lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #121414; overflow-x: hidden; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+        }
+        .glass-panel-hover:hover {
+            border-image: linear-gradient(to right, #EAB308, #F59E0B) 1;
+            box-shadow: 0 0 35px rgba(234, 179, 8, 0.4);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #ffffff, #EAB308);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gradient-bg {
+            background: linear-gradient(to right, #EAB308, #F59E0B);
+            color: #121414 !important;
+        }
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.22;
+            pointer-events: none;
+        }
+        .orb-gold { background: #EAB308; }
         
-        <article class="tool-card">
-          <img src="/assets/thumbnails/json-to-csv.jpeg" alt="JSON to CSV/Excel Flat Schema Converter" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">JSON to CSV/Excel Flat Schema Converter</h3>
-          <p class="tool-card-desc">Parse and flatten complex nested JSON structures into production-ready tabular sheets instantly and securely using 100% client-side compilation.</p>
-          <a href="/data-converters/json-to-csv/" class="btn-launch">Launch Tool</a>
-        </article>
+        /* Particle Animation */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background: #EAB308;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 4px rgba(234, 179, 8, 0.8), 0 0 10px 1px #fff;
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.9; }
+            90% { opacity: 0.9; }
+            100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased min-h-screen flex flex-col relative font-body-md" style="background-color: rgb(0, 0, 0);">
 
-        <article class="tool-card">
-          <img src="/assets/thumbnails/cron-job-generator.jpeg" alt="Cron Job Generator" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">Cron Job Generator</h3>
-          <p class="tool-card-desc">Build, parse, and visually decode complex Linux cron schedule expressions instantly with an intuitive, interactive dual-input dashboard.</p>
-          <a href="/developer-utilities/cron-job-generator/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <article class="tool-card">
-          <div class="tool-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16 18 22 12 16 6"></polyline>
-              <polyline points="8 6 2 12 8 18"></polyline>
-            </svg>
-          </div>
-          <h3 class="tool-card-title">Utility Tools</h3>
-          <p class="tool-card-desc">Access hyper-focused, browser-native client-side automation utilities built to streamline developer workflows and task execution profiles.</p>
-          <a href="/utility-tools/" class="btn-launch">Explore Category</a>
-        </article>
-
-        <article class="tool-card">
-          <img src="/assets/thumbnails/csv-to-json.jpeg" alt="CSV to JSON Structurer" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">CSV to JSON Structurer</h3>
-          <p class="tool-card-desc">Convert flat CSV spreadsheets into deeply nested, complex JSON arrays instantly using intelligent dot-notation header parsing.</p>
-          <a href="/data-converters/csv-to-json/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <article class="tool-card">
-          <img src="/assets/thumbnails/xml-to-json.jpeg" alt="XML to JSON Dynamic Hierarchy Parser" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">XML to JSON Dynamic Hierarchy Parser</h3>
-          <p class="tool-card-desc">Parse complex XML markup documents and recursively compile them into valid, deeply nested hierarchical JSON trees entirely in local memory.</p>
-          <a href="/data-converters/xml-to-json/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <article class="tool-card">
-          <img src="/assets/thumbnails/robots-generator.jpeg" alt="Robots.txt Generator & AI Blocker" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">Robots.txt Generator & AI Blocker</h3>
-          <p class="tool-card-desc">Instantly build technical crawl directives and shield your web data assets by blocking malicious AI scrapers and LLM crawler bots locally.</p>
-          <a href="/seo-tools/robots-generator/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <article class="tool-card">
-          <img src="/assets/thumbnails/cpm-calculator.jpeg" alt="CPM Calculator & Campaign ROI Predictor" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">CPM Calculator & Campaign ROI Predictor</h3>
-          <p class="tool-card-desc">Calculate ad spend metrics instantly and map downstream conversion channels to project total clicks, conversions, and CPA targets locally.</p>
-          <a href="/calculators/cpm-calculator/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <article class="tool-card">
-          <img src="/assets/thumbnails/loan-amortization.jpeg" alt="Loan Amortization Schedule & Debt Paydown Planner" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">Loan Amortization Schedule & Debt Paydown Planner</h3>
-          <p class="tool-card-desc">Calculate complex fixed-rate loan amortization matrices and project compounding lifetime interest savings through extra principal payouts client-side.</p>
-          <a href="/calculators/loan-amortization/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <article class="tool-card">
-          <img src="/assets/thumbnails/open-graph-generator.jpeg" alt="Open Graph Meta Tag Generator & Previewer" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">Open Graph Meta Tag Generator & Previewer</h3>
-          <p class="tool-card-desc">Generate valid social media meta tags and view real-time card previews for Facebook, Twitter, and LinkedIn entirely client-side.</p>
-          <a href="/seo-tools/open-graph-generator/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <article class="tool-card">
-          <img src="/assets/thumbnails/jwt-debugger.jpeg" alt="JWT Debugger & Cryptographic Token Inspector" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">JWT Debugger & Cryptographic Token Inspector</h3>
-          <p class="tool-card-desc">Decode and verify JSON Web Tokens client-side in real time. Audit token claims, inspect cryptographic headers, and validate authentication signatures locally.</p>
-          <a href="/developer-utilities/jwt-debugger/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <article class="tool-card">
-          <img src="/assets/thumbnails/cron-editor.png" alt="Cron Expression Editor & Human-Readable Translator" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px; display: block;">
-          <h3 class="tool-card-title">Cron Expression Editor & Human-Readable Translator</h3>
-          <p class="tool-card-desc">Parse, edit, and translate cron schedules instantly into readable text with next-execution tracking.</p>
-          <a href="/developer-utilities/cron-editor/" class="btn-launch">Launch Tool</a>
-        </article>
-
-        <!-- Placeholder Tool -->
-        <article class="tool-card">
-          <div class="tool-card-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
-          </div>
-          <h3 class="tool-card-title">Coming Soon</h3>
-          <p class="tool-card-desc">We are actively building powerful tools for our new categories. Check back soon!</p>
-          <a href="#" class="btn-launch" style="pointer-events: none; opacity: 0.5;">Stay Tuned</a>
-        </article>
-
-      </div>
+    <div class="particles-container">
+        <div class="particle" style="left: 10%; width: 4px; height: 4px; animation-duration: 15s; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 30%; width: 6px; height: 6px; animation-duration: 20s; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 50%; width: 3px; height: 3px; animation-duration: 18s; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; width: 7px; height: 7px; animation-duration: 22s; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 90%; width: 5px; height: 5px; animation-duration: 16s; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 20%; width: 4.5px; height: 4.5px; animation-duration: 19s; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 40%; width: 6.5px; height: 6.5px; animation-duration: 17s; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 60%; width: 3.5px; height: 3.5px; animation-duration: 21s; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; width: 5.5px; height: 5.5px; animation-duration: 14s; animation-delay: 2s;"></div>
     </div>
-  </main>
 
-  <!-- Footer -->
-  <footer class="site-footer" id="site-footer-container">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-links" id="footer-navigation">
-          <a href="/" id="footer-link-home">Home</a>
-          <a href="/about-us.html" id="footer-link-about">About Us</a>
-          <a href="/terms.html" id="footer-link-terms">Terms of Service</a>
-          <a href="/privacy-policy.html" id="footer-link-privacy">Privacy Policy</a>
-          <a href="mailto:affilore4@gmail.com?subject=Contact Us" id="footer-link-contact">Contact Us</a>
-        </div>
-        <div class="social-links" id="footer-social-links">
-          <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="social-link" id="footer-social-youtube">
-            <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          </a>
-          <a href="https://www.instagram.com/affilore_/?hl=en" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-link" id="footer-social-instagram">
-            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-          </a>
-          <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="social-link" id="footer-social-facebook">
-            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          </a>
-          <a href="https://www.tiktok.com/@affilore4" target="_blank" rel="noopener noreferrer" aria-label="TikTok" class="social-link" id="footer-social-tiktok">
-            <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-          </a>
-        </div>
-        <p class="footer-copyright" id="footer-copyright-text">&copy; 2026 Affilore. All rights reserved. Free client-side tools directory.</p>
-      </div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-[-1]">
+        <div class="ambient-orb orb-gold w-[600px] h-[600px] top-[-200px] left-[-200px]"></div>
+        <div class="ambient-orb orb-gold w-[500px] h-[500px] top-[40%] right-[-150px]"></div>
+        <div class="ambient-orb orb-gold w-[400px] h-[400px] bottom-[-150px] left-[30%] opacity-40 shadow-[0_0_80px_rgba(234,179,8,0.4)]"></div>
     </div>
-  </footer>
 
-  <!-- Simple mobile nav toggle script -->
-  <script>
-    const toggleBtn = document.getElementById('mobile-nav-toggle');
-    const navLinks = document.getElementById('main-navigation');
-    if (toggleBtn && navLinks) {
-      toggleBtn.addEventListener('click', () => {
-        navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-      });
-    }
-  </script>
+    <header class="bg-black sticky top-0 w-full border-b border-glass-border shadow-sm z-50">
+        <div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto transition-all duration-300 ease-in-out">
+            <div class="flex items-center gap-4">
+                <span class="font-headline-lg text-headline-lg font-bold tracking-tighter text-white">Affilore</span>
+            </div>
+            <nav id="main-navigation" class="hidden md:flex gap-6 items-center">
+                <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="#data">Data</a>
+                <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="#calculator">Calculator</a>
+                <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="#utility">Utility</a>
+                <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="#developer">Developer</a>
+                <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="#seo">SEO</a>
+                <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="#productivity">Productivity</a>
+            </nav>
+            <a class="hidden md:inline-flex items-center justify-center px-6 py-2 rounded-full gradient-bg font-label-md text-label-md transition-all shadow-[0_2px_10px_rgba(234,179,8,0.3)] hover:scale-105 hover:shadow-[0_4px_20px_rgba(234,179,8,0.5)]" href="mailto:affilore4@gmail.com">
+                Request a Custom Tool
+            </a>
+            <button id="mobile-nav-toggle" aria-label="Toggle Menu" class="md:hidden text-on-surface p-2">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
 
-  <script src="contact.js"></script>
+    <main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-stack-lg pb-[120px]">
+        
+        <section class="flex flex-col items-center justify-center text-center py-20 md:py-32">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel mb-8 border border-primary/50 shadow-[0_0_15px_rgba(234,179,8,0.3)]">
+                <span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_20px_4px_#EAB308]"></span>
+                <span class="font-label-sm text-label-sm text-primary uppercase tracking-wider drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]">All Systems Operational</span>
+            </div>
+            <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface max-w-5xl mb-6">
+                <span class="gradient-text font-extrabold drop-shadow-[0_0_10px_rgba(234,179,8,0.2)]">Free Client-Side Web Utilities</span>
+            </h1>
+            <p class="font-body-lg text-body-lg max-w-2xl mb-10 text-white">
+                A high-performance suite of modular utilities designed for developers, SEO specialists, and digital entrepreneurs. Built for speed, accuracy, and seamless integration.
+            </p>
+            <div class="flex justify-center w-full">
+                <a class="px-8 py-3 rounded-full gradient-bg font-label-md text-label-md transition-all shadow-[0_0_20px_rgba(234,179,8,0.5)] hover:scale-105 hover:shadow-[0_0_40px_rgba(234,179,8,0.9)]" href="#tools">
+                    Explore Tools
+                </a>
+            </div>
+        </section>
 
-  <!-- Background and canvas for floating gold dots -->
-  <div class="premium-bg-glow" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 0%, rgba(255, 193, 7, 0.06) 0%, transparent 55%);"></div>
-  <canvas id="global-particle-canvas" aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; display: block;"></canvas>
+        <section class="py-16" id="tools">
+            <h2 class="font-headline-xl text-headline-xl text-on-surface mb-12">Core Capabilities</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Data Card -->
+                <div id="data" class="glass-panel glass-panel-hover rounded-xl p-8 flex flex-col group transition-all duration-300 border-blue-500/40 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+                    <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center mb-6 text-blue-500 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(59,130,246,0.5)] group-hover:drop-shadow-[0_0_25px_rgba(59,130,246,0.9)]">
+                        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">database</span>
+                    </div>
+                    <h3 class="font-headline-lg text-headline-lg mb-3 bg-gradient-to-r from-white to-blue-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]">Data</h3>
+                    <p class="font-body-md text-body-md text-white mb-6 flex-grow">Advanced data parsing, formatting, and conversion utilities. Handle JSON, CSV, and XML with zero latency.</p>
+                    <div class="h-px w-full bg-glass-border mb-6"></div>
+                    <div class="flex justify-center">
+                        <a class="px-6 py-2 rounded-full bg-blue-500 text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:scale-105 hover:shadow-[0_0_30px_rgba(59,130,246,0.8)]" href="#">Explore tools</a>
+                    </div>
+                </div>
+                
+                <!-- Calculator Card -->
+                <div id="calculator" class="glass-panel glass-panel-hover rounded-xl p-8 flex flex-col group transition-all duration-300 border-green-500/40 shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                    <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center mb-6 text-green-500 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(34,197,94,0.5)] group-hover:drop-shadow-[0_0_25px_rgba(34,197,94,0.9)]">
+                        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">calculate</span>
+                    </div>
+                    <h3 class="font-headline-lg text-headline-lg mb-3 bg-gradient-to-r from-white to-green-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(34,197,94,0.3)]">Calculator</h3>
+                    <p class="font-body-md text-body-md text-white mb-6 flex-grow">Complex algorithmic calculators for finance, engineering, and statistical analysis.</p>
+                    <div class="h-px w-full bg-glass-border mb-6"></div>
+                    <div class="flex justify-center">
+                        <a class="px-6 py-2 rounded-full bg-green-500 text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105 hover:shadow-[0_0_30px_rgba(34,197,94,0.8)]" href="#">Explore tools</a>
+                    </div>
+                </div>
+                
+                <!-- Utility Card -->
+                <div id="utility" class="glass-panel glass-panel-hover rounded-xl p-8 flex flex-col group transition-all duration-300 border-red-500/40 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                    <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center mb-6 text-red-500 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(239,68,68,0.5)] group-hover:drop-shadow-[0_0_25px_rgba(239,68,68,0.9)]">
+                        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">build</span>
+                    </div>
+                    <h3 class="font-headline-lg text-headline-lg mb-3 bg-gradient-to-r from-white to-red-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(239,68,68,0.3)]">Utility</h3>
+                    <p class="font-body-md text-body-md text-white mb-6 flex-grow">Everyday micro-tools. Text manipulation, image compression, and secure password generation.</p>
+                    <div class="h-px w-full bg-glass-border mb-6"></div>
+                    <div class="flex justify-center">
+                        <a class="px-6 py-2 rounded-full bg-red-500 text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:scale-105 hover:shadow-[0_0_30px_rgba(239,68,68,0.8)]" href="#">Explore tools</a>
+                    </div>
+                </div>
+                
+                <!-- Developer Card -->
+                <div id="developer" class="glass-panel glass-panel-hover rounded-xl p-8 flex flex-col group transition-all duration-300 md:col-span-2 lg:col-span-1 border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                    <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center mb-6 text-purple-500 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(168,85,247,0.5)] group-hover:drop-shadow-[0_0_25px_rgba(168,85,247,0.9)]">
+                        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">code</span>
+                    </div>
+                    <h3 class="font-headline-lg text-headline-lg mb-3 bg-gradient-to-r from-white to-purple-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]">Developer</h3>
+                    <p class="font-body-md text-body-md text-white mb-6 flex-grow">Regex testers, API payload formatters, and secure environment variable generators for modern stacks.</p>
+                    <div class="h-px w-full bg-glass-border mb-6"></div>
+                    <div class="flex justify-center">
+                        <a class="px-6 py-2 rounded-full bg-purple-500 text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(168,85,247,0.5)] hover:scale-105 hover:shadow-[0_0_30px_rgba(168,85,247,0.8)]" href="#">Explore tools</a>
+                    </div>
+                </div>
+                
+                <!-- SEO Card -->
+                <div id="seo" class="glass-panel glass-panel-hover rounded-xl p-8 flex flex-col group transition-all duration-300 border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+                    <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center mb-6 text-cyan-500 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(6,182,212,0.5)] group-hover:drop-shadow-[0_0_25px_rgba(6,182,212,0.9)]">
+                        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">troubleshoot</span>
+                    </div>
+                    <h3 class="font-headline-lg text-headline-lg mb-3 bg-gradient-to-r from-white to-cyan-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(6,182,212,0.3)]">SEO</h3>
+                    <p class="font-body-md text-body-md text-white mb-6 flex-grow">Meta tag generators, keyword density analyzers, and SERP preview simulators.</p>
+                    <div class="h-px w-full bg-glass-border mb-6"></div>
+                    <div class="flex justify-center">
+                        <a class="px-6 py-2 rounded-full bg-cyan-500 text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:scale-105 hover:shadow-[0_0_30px_rgba(6,182,212,0.8)]" href="#">Explore tools</a>
+                    </div>
+                </div>
+                
+                <!-- Productivity Card -->
+                <div id="productivity" class="glass-panel glass-panel-hover rounded-xl p-8 flex flex-col group transition-all duration-300 border-pink-500/40 shadow-[0_0_15px_rgba(236,72,153,0.1)]">
+                    <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center mb-6 text-pink-500 group-hover:scale-110 transition-transform drop-shadow-[0_0_8px_rgba(236,72,153,0.5)] group-hover:drop-shadow-[0_0_25px_rgba(236,72,153,0.9)]">
+                        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">timer</span>
+                    </div>
+                    <h3 class="font-headline-lg text-headline-lg mb-3 bg-gradient-to-r from-white to-pink-500 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(236,72,153,0.3)]">Productivity</h3>
+                    <p class="font-body-md text-body-md text-white mb-6 flex-grow">Focus timers, minimal markdown editors, and workflow automation script generators.</p>
+                    <div class="h-px w-full bg-glass-border mb-6"></div>
+                    <div class="flex justify-center">
+                        <a class="px-6 py-2 rounded-full bg-pink-500 text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(236,72,153,0.5)] hover:scale-105 hover:shadow-[0_0_30px_rgba(236,72,153,0.8)]" href="#">Explore tools</a>
+                    </div>
+                </div>
 
-<script>
-(() => {
-  const canvas = document.getElementById('global-particle-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-  let w, h;
-  const PARTICLE_COUNT = 55;
+            </div>
+        </section>
 
-  function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resize);
-  resize();
+        <section class="py-20 relative overflow-hidden rounded-2xl glass-panel mt-16 px-8 text-center border border-[rgba(234,179,8,0.4)] shadow-[0_0_30px_rgba(234,179,8,0.15)]" id="contact">
+            <div class="absolute inset-0 bg-gradient-to-r from-[rgba(234,179,8,0.08)] to-[rgba(245,158,11,0.08)] pointer-events-none"></div>
+            <div class="relative z-10 max-w-2xl mx-auto">
+                <h2 class="font-headline-xl text-headline-xl text-on-surface mb-4">Need a Custom Utility?</h2>
+                <p class="font-body-lg text-body-lg text-on-surface-variant mb-8">
+                    We architect bespoke Micro SaaS solutions tailored to your specific workflow bottlenecks.
+                </p>
+                <a class="inline-flex items-center gap-2 px-8 py-4 rounded-full gradient-bg font-label-md text-label-md transition-all shadow-[0_0_20px_rgba(234,179,8,0.5)] hover:scale-105 hover:shadow-[0_0_50px_rgba(234,179,8,0.9)]" href="mailto:affilore4@gmail.com">
+                    <span class="material-symbols-outlined text-[20px]">mail</span>
+                    Request Custom Tool
+                </a>
+            </div>
+        </section>
+    </main>
 
-  class Particle {
-    constructor() { this.reset(true); }
-    reset(init) {
-      this.x = Math.random() * w;
-      this.y = init ? Math.random() * h : h + 10;
-      this.vx = (Math.random() - 0.5) * 0.2;
-      this.vy = Math.random() * -0.3 - 0.08;
-      this.radius = Math.random() * 2.5 + 1.5;
-      this.alpha = Math.random() * 0.6 + 0.2;
-    }
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      if (this.y < -10 || this.x < -10 || this.x > w + 10) {
-        this.reset(false);
-      }
-    }
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(245, 166, 35, ${this.alpha})`;
-      ctx.fill();
-    }
-  }
+    <footer class="w-full py-6 border-t border-glass-border bg-black">
+        <div class="max-w-container-max mx-auto px-margin-desktop flex flex-col items-center justify-center text-center gap-4">
+            
+            <div class="flex flex-wrap justify-center gap-8 items-center">
+                <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors text-white" href="/privacy-policy.html">Privacy</a>
+                <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors text-white" href="/terms.html">Terms</a>
+                <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors text-white" href="#">Disclaimer</a>
+                <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors text-white" href="/about-us.html">About</a>
+                <a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors text-white" href="mailto:affilore4@gmail.com?subject=Contact Us">Contact</a>
+            </div>
 
-  for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+            <!-- Footer Social Links (Preserved URLs) -->
+            <div class="flex items-center gap-6 text-gray-400 mt-1">
+                <a href="https://www.tiktok.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors" aria-label="TikTok">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.03 1.6 4.17 1.12 1.25 2.7 1.94 4.38 2.1v3.82c-1.63-.03-3.21-.52-4.57-1.43l-.01 6.94c.05 1.76-.46 3.56-1.5 4.93-1.45 1.94-3.95 2.98-6.35 2.65-2.85-.35-5.26-2.58-5.74-5.39-.62-3.4 1.43-6.84 4.81-7.53.48-.1 1-.14 1.49-.14v3.83c-.92.08-1.85.54-2.38 1.3-.64.9-.66 2.19-.04 3.08.66.98 1.9 1.48 3.08 1.25 1.05-.18 1.91-1.07 2.05-2.14.07-1.37.03-12.83.03-12.83z"/>
+                    </svg>
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors" aria-label="Facebook">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/>
+                    </svg>
+                </a>
+                <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors" aria-label="YouTube">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 .502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                </a>
+                <a href="https://www.instagram.com/affilore_/?hl=en" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors" aria-label="Instagram">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                    </svg>
+                </a>
+            </div>
 
-  function animate() {
-    ctx.clearRect(0, 0, w, h);
-    particles.forEach(p => { p.update(); p.draw(); });
-    requestAnimationFrame(animate);
-  }
-  animate();
-})();
-</script>
+            <p class="font-body-sm text-body-sm text-on-surface-variant opacity-80 mt-1">
+                &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Cookie Banner -->
+    <div class="fixed bottom-6 left-6 right-6 md:left-auto md:right-6 md:w-96 glass-panel rounded-xl p-6 z-[100] shadow-2xl flex flex-col gap-4 transform transition-transform duration-500 translate-y-0 border border-[rgba(234,179,8,0.5)]" id="cookie-banner">
+        <div class="flex items-start gap-3">
+            <span class="material-symbols-outlined text-primary mt-1 drop-shadow-[0_0_5px_rgba(234,179,8,0.4)]">cookie</span>
+            <div>
+                <h4 class="font-label-md text-label-md text-on-surface mb-1">Telemetry &amp; Cookies</h4>
+                <p class="font-body-md text-body-md text-[14px] text-white">We use performance telemetry to optimize our tools. Essential cookies only.</p>
+            </div>
+        </div>
+        <div class="flex gap-3 justify-end mt-2">
+            <button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-primary hover:bg-glass-border transition-colors" onclick="document.getElementById('cookie-banner').style.display='none'">
+                Decline
+            </button>
+            <button class="px-4 py-2 rounded-lg gradient-bg font-label-md text-label-md transition-colors hover:bg-opacity-90 shadow-[0_2px_10px_rgba(234,179,8,0.3)]" onclick="document.getElementById('cookie-banner').style.display='none'">
+                Accept
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Nav Toggle script -->
+    <script>
+        const toggleBtn = document.getElementById('mobile-nav-toggle');
+        const navLinks = document.getElementById('main-navigation');
+        if (toggleBtn && navLinks) {
+            toggleBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('hidden');
+                navLinks.classList.toggle('flex');
+                navLinks.classList.toggle('flex-col');
+                navLinks.classList.toggle('absolute');
+                navLinks.classList.toggle('top-16');
+                navLinks.classList.toggle('left-0');
+                navLinks.classList.toggle('w-full');
+                navLinks.classList.toggle('bg-black');
+                navLinks.classList.toggle('p-4');
+                navLinks.classList.toggle('border-b');
+                navLinks.classList.toggle('border-glass-border');
+            });
+        }
+    </script>
 </body>
 </html>
