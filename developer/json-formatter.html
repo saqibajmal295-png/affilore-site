@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON Forge — Premium JSON Formatter & Validator</title>
+  <meta name="description" content="A luxury, high-performance JSON Formatter, Validator, Minifier, and Auto-Fixer. Paste, edit, and perfect your JSON in real time." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forge: {
+              bg: '#0A0A0B',
+              panel: '#111113',
+              border: '#1E1E22',
+              'border-hover': '#2A2A30',
+              surface: '#161618',
+              muted: '#71717A',
+              lime: '#D9F99D',
+              'lime-dim': '#A3E635',
+              'lime-glow': 'rgba(217, 249, 157, 0.15)',
+              crimson: '#EF4444',
+              'crimson-dim': '#DC2626',
+              'crimson-glow': 'rgba(239, 68, 68, 0.12)',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+          },
+          boxShadow: {
+            'glow-lime': '0 0 20px rgba(217, 249, 157, 0.10), 0 0 60px rgba(217, 249, 157, 0.05)',
+            'glow-lime-sm': '0 0 8px rgba(217, 249, 157, 0.15)',
+            'glow-crimson': '0 0 20px rgba(239, 68, 68, 0.10), 0 0 60px rgba(239, 68, 68, 0.05)',
+            'glass': '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.03)',
+            'glass-lg': '0 16px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
+          }
+        },
+      },
+    };
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; min-height: 100%; background-color: #0A0A0B; }
+    
+    /* ─── DENSE & FLUID AMBIENT PARTICLE ENGINE MULTI-LAYER BACKDROP ─── */
+    body {
+      background-color: #0A0A0B;
+      color: #E4E4E7;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      min-height: 100%;
+      position: relative;
+      /* CSS-Generated Multi-layered Ambient Particles looping over the whole body layout */
+      background-image: 
+        radial-gradient(4px 4px at 12% 15%, rgba(245, 166, 35, 0.65) 100%, transparent),
+        radial-gradient(5px 5px at 35% 28%, rgba(245, 166, 35, 0.60) 100%, transparent),
+        radial-gradient(4px 4px at 68% 8%, rgba(245, 166, 35, 0.70) 100%, transparent),
+        radial-gradient(6px 6px at 88% 22%, rgba(245, 166, 35, 0.55) 100%, transparent),
+        radial-gradient(5px 5px at 15% 48%, rgba(245, 166, 35, 0.60) 100%, transparent),
+        radial-gradient(4px 4px at 52% 61%, rgba(245, 166, 35, 0.65) 100%, transparent),
+        radial-gradient(5px 5px at 76% 42%, rgba(245, 166, 35, 0.55) 100%, transparent),
+        radial-gradient(4px 4px at 92% 56%, rgba(245, 166, 35, 0.70) 100%, transparent),
+        radial-gradient(6px 6px at 22% 78%, rgba(245, 166, 35, 0.50) 100%, transparent),
+        radial-gradient(4px 4px at 65% 88%, rgba(245, 166, 35, 0.65) 100%, transparent),
+        radial-gradient(5px 5px at 82% 71%, rgba(245, 166, 35, 0.60) 100%, transparent),
+        radial-gradient(4px 4px at 40% 93%, rgba(245, 166, 35, 0.70) 100%, transparent);
+      background-size: 100% 1200px;
+      animation: ambientFlow 45s linear infinite;
+    }
+
+    @keyframes ambientFlow {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 -1200px; }
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2A2A30; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3A3A42; }
+
+    /* Glassmorphism panels setup to allow backing particles visibility */
+    .glass-panel {
+      background: rgba(17, 17, 20, 0.75);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .editor-wrap {
+      position: relative;
+      display: flex;
+      overflow: hidden;
+      border-radius: 0.75rem;
+      background: rgba(9, 9, 11, 0.85);
+      border: 1px solid #1c1c1f;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .editor-wrap:focus-within {
+      border-color: rgba(168, 85, 247, 0.4);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.05);
+    }
+    .editor-wrap.has-error:focus-within {
+      border-color: rgba(239, 68, 68, 0.4);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.05);
+    }
+    .line-numbers {
+      width: 54px;
+      min-width: 54px;
+      padding: 16px 10px 16px 0;
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: #3F3F46;
+      background: rgba(9, 9, 11, 0.5);
+      border-right: 1px solid #1c1c1f;
+      user-select: none;
+      overflow: hidden;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .code-textarea {
+      flex: 1;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #E4E4E7;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      tab-size: 2;
+      -moz-tab-size: 2;
+      white-space: pre;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+    .code-textarea::placeholder { color: #3F3F46; }
+    
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .btn-convert {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      color: #000000;
+    }
+    .btn-convert:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
+    }
+    
+    .btn-utility {
+      background: rgba(24, 24, 27, 0.8);
+      color: #e4e4e7;
+      border: 1px solid #27272a;
+    }
+    .btn-utility:hover {
+      background: #202024;
+      border-color: #3f3f46;
+    }
+    
+    .btn-danger-custom {
+      background: rgba(24, 24, 27, 0.8);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.15);
+    }
+    .btn-danger-custom:hover {
+      background: rgba(239, 68, 68, 0.05);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-copy-custom {
+      background: rgba(6, 78, 59, 0.8);
+      color: #34d399;
+      border: 1px solid #047857;
+    }
+    .btn-copy-custom:hover {
+      background: #047857;
+    }
+
+    .indent-selector {
+      display: inline-flex;
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      padding: 3px;
+    }
+    .indent-selector button {
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: #a1a1aa;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+    }
+    .indent-selector button.active {
+      background: #27272a;
+      color: #ffffff;
+    }
+
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body class="min-h-screen relative">
+
+  <div class="noise-overlay"></div>
+
+  <header class="w-full bg-[#0A0A0B]/90 backdrop-blur-md border-b border-zinc-900/50 relative z-50">
+    <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-12">
+        <a href="/" class="text-2xl font-black text-white tracking-tight hover:text-[#F5A623] transition">Affilore<span class="text-blue-500">.</span></a>
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-400">
+          <a href="/" class="hover:text-white transition">Home</a>
+          <a href="/data" class="hover:text-white transition">Data</a>
+          <a href="/calculator" class="hover:text-white transition">Calculator</a>
+          <a href="/utility" class="hover:text-white transition">Utility</a>
+          <a href="/developer" class="text-white transition">Developer</a>
+          <a href="/seo" class="hover:text-white transition">SEO</a>
+          <a href="/productivity" class="hover:text-white transition">Productivity</a>
+        </nav>
+      </div>
+      <div>
+        <a href="mailto:affilore4@gmail.com" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-black bg-[#F5A623] hover:bg-[#E0961B] rounded-full transition shadow-[0_0_20px_rgba(245,166,35,0.2)]">
+          Request a Custom Tool
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    
+    <div class="text-center mb-10">
+      <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-white inline-flex flex-wrap justify-center gap-x-3">
+        <span class="text-emerald-400">JSON</span> to JSON <span class="bg-gradient-to-r from-red-400 via-pink-500 to-purple-500 -webkit-background-clip: text -webkit-text-fill-color: transparent bg-clip-text text-transparent">Formatter & Validator</span>
+      </h1>
+      <p class="text-zinc-400 text-sm sm:text-base max-w-3xl mx-auto mt-3 font-medium leading-relaxed">
+        Enterprise-grade data parsing and smart auto-fixing architecture — processed entirely in your browser.
+      </p>
+    </div>
+
+    <div class="w-full bg-[#111622]/40 border border-blue-500/10 backdrop-blur-md rounded-xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 relative z-10">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-xs font-bold tracking-wide text-zinc-300 font-mono">JSON Parsing Engine: Operational</span>
+      </div>
+      <div class="text-xs font-medium text-zinc-500 font-mono flex gap-4">
+        <span>Zero-network execution</span>
+        <span>•</span>
+        <span>AES-grade local sandbox</span>
+        <span>•</span>
+        <span>Unlimited depth recursion</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 relative z-10">
+      <div class="bg-[#121214]/90 border border-[#1c1c1f] rounded-xl p-5 text-center shadow-inner">
+        <div id="statChars" class="text-3xl font-black text-[#F5A623] font-mono tracking-tight">0</div>
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Total Characters</div>
+      </div>
+      <div class="bg-[#121214]/90 border border-[#1c1c1f] rounded-xl p-5 text-center shadow-inner">
+        <div id="statLines" class="text-3xl font-black text-[#F5A623] font-mono tracking-tight">0</div>
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Total Lines</div>
+      </div>
+      <div class="bg-[#121214]/90 border border-[#1c1c1f] rounded-xl p-5 text-center shadow-inner">
+        <div id="statSize" class="text-3xl font-black text-[#F5A623] font-mono tracking-tight">0 B</div>
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Payload Size</div>
+      </div>
+      <div class="bg-[#121214]/90 border border-[#1c1c1f] rounded-xl p-5 text-center shadow-inner">
+        <div id="statTime" class="text-3xl font-black text-[#F5A623] font-mono tracking-tight">0ms</div>
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Parse Time</div>
+      </div>
+    </div>
+
+    <div class="glass-panel rounded-2xl p-5 lg:p-6 shadow-2xl mb-16 relative z-10">
+      
+      <div class="flex flex-wrap items-center gap-3 mb-5">
+        <button id="btnFormat" class="btn-action btn-convert font-bold text-xs uppercase tracking-wider">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10H7"/><path d="M21 6H3"/><path d="M21 14H3"/><path d="M21 18H7"/></svg>
+          Format Data
+        </button>
+        <div class="indent-selector">
+          <button id="indent2" class="active" data-indent="2">2 SPACES</button>
+          <button id="indent4" data-indent="4">4 SPACES</button>
+        </div>
+        <button id="btnMinify" class="btn-action btn-utility text-xs uppercase font-bold tracking-wider">Minify Payload</button>
+        <button id="btnAutoFix" class="btn-action btn-utility text-xs uppercase font-bold tracking-wider">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+          Smart Auto-Fix
+        </button>
+        <div class="flex-1"></div>
+        <div id="statusBadge" class="status-badge status-empty border border-zinc-800 bg-[#111113]">
+          <span id="statusDot" class="header-dot bg-zinc-500"></span>
+          <span id="statusText" class="text-zinc-400 font-mono text-[11px] font-bold uppercase tracking-wider">Awaiting Input</span>
+        </div>
+        <button id="btnCopy" class="btn-action btn-copy-custom text-xs uppercase font-bold tracking-wider">
+          <span id="copyLabel">Copy Flat Schema Data</span>
+        </button>
+        <button id="btnClear" class="btn-action btn-danger-custom text-xs uppercase font-bold tracking-wider">Clear Window</button>
+      </div>
+
+      <div id="errorBanner" class="error-banner mb-5 hidden"></div>
+
+      <div class="editor-grid grid grid-cols-1 lg:grid-cols-2 gap-5">
+        
+        <div class="flex flex-col">
+          <div class="flex items-center justify-between mb-2.5 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-blue-500 shadow-md"></span>
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Raw JSON Input</span>
+            </div>
+            <span id="inputCharIndicator" class="text-[11px] font-bold font-mono text-zinc-500">0 chars</span>
+          </div>
+          <div id="inputWrap" class="editor-wrap h-[500px]">
+            <div id="inputLineNumbers" class="line-numbers">1</div>
+            <textarea id="inputEditor" class="code-textarea text-zinc-100 font-mono placeholder-zinc-700" placeholder="Paste your raw JSON content here..." spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+          </div>
+        </div>
+
+        <div class="flex flex-col">
+          <div class="flex items-center justify-between mb-2.5 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-md"></span>
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Processed Forge Output</span>
+            </div>
+            <span id="outputCharIndicator" class="text-[11px] font-bold font-mono text-zinc-500">Awaiting input...</span>
+          </div>
+          <div id="outputWrap" class="editor-wrap h-[500px]">
+            <div id="outputLineNumbers" class="line-numbers">1</div>
+            <textarea id="outputEditor" class="code-textarea text-zinc-300 font-mono placeholder-zinc-700" placeholder="Formatted, clean valid object rendering tree will display here..." readonly spellcheck="false"></textarea>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 py-10 rounded-2xl bg-[#0A0A0B] border border-zinc-900/40 shadow-inner leading-relaxed relative z-10">
+
+      <h1 style="background: linear-gradient(90deg, #4169E1, #2ECC71); -webkit-background-clip: text; color: transparent; font-size: 42px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 24px;">The Premium JSON Formatter & Validator: Debug, Beautify, and Clean Data Instantly</h1>
+      
+      <h2 style="color: #9B59B6; font-size: 28px; border-bottom: 2px solid #2ECC71; padding-bottom: 10px; margin-top: 32px; margin-bottom: 16px;">Introduction</h2>
+      
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">JSON, or JavaScript Object Notation, has quietly evolved to become the absolute backbone of modern software development. Today, virtually all web APIs return it, critical configuration files rely heavily on it, and system logs often hide crucial debugging details deep inside its nested structures. Because of its ubiquity, encountering invalid or broken JSON data is an everyday nightmare for software engineers. A single syntax mistake, such as an errant comma or a missing bracket, is enough to break an API response entirely and cause catastrophic runtime errors in production. That is exactly why utilizing a premium, zero-latency formatting tool is absolutely critical for modern software developers. Reading raw, minified JSON without an intelligent formatter is simply a massive waste of valuable time. Our high-performance platform makes identifying issues effortless, instantly turning unreadable machine-generated strings into beautifully structured, easy-to-read code.</p>
+      
+      <h2 style="color: #1ABC9C; font-size: 28px; border-bottom: 2px solid #9B59B6; padding-bottom: 10px; margin-top: 48px; margin-bottom: 16px;">Deep-Dive Technical Breakdown</h2>
+      
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Under the official <span style="color: #E67E22; font-weight: bold; background-color: rgba(230, 126, 34, 0.1); padding: 2px 6px; border-radius: 4px;">RFC 8259</span> specification, valid JSON is exceptionally strict. Due to this rigidity, developers routinely stumble into frustrating JSON syntax validation pitfalls that halt deployments. One of the most notorious and common offenders is the <span style="color: #9B59B6; font-weight: bold; background-color: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px;">trailing comma</span>. While programming languages like standard JavaScript might easily forgive a lingering comma after the very last element in an array or object, strict JSON parsers absolutely forbid it, immediately throwing fatal exceptions.</p>
+      
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Another extremely frequent pitfall involves <span style="color: #1ABC9C; font-weight: bold; background-color: rgba(26, 188, 156, 0.1); padding: 2px 6px; border-radius: 4px;">unquoted strings</span> or the use of single-quoted strings. JSON syntax dictates that all text strings and all object keys must be wrapped tightly in double quotes. Passing a payload like <span style="color: #4169E1; font-weight: bold; font-family: monospace;">{'key':'val'}</span> instead of the required <span style="color: #4169E1; font-weight: bold; font-family: monospace;">{"key":"val"}</span> triggers instant parsing failures. Furthermore, improper nesting, missing structural brackets, and the inclusion of developer comments—which are explicitly not supported by the JSON standard—routinely corrupt otherwise healthy data structures.</p>
+      
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">When you are dealing with sensitive, proprietary configuration files or private API data, data security is paramount. That is why our premium formatting tool utilizes a highly specialized <span style="color: #2ECC71; font-weight: bold; background-color: rgba(46, 204, 113, 0.1); padding: 2px 6px; border-radius: 4px;">client-side parsing mechanism</span>. Unlike many older utilities that transmit your sensitive client payloads to external backend servers—introducing severe data privacy risks and potential compliance violations—our formatter processes every single byte entirely within your local browser environment. Your data never leaves your device.</p>
+      
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">This localized architecture not only guarantees military-grade data privacy but also enables blazing-fast, zero-latency performance. Even when you are tasked with validating massive, multi-megabyte payloads, our client-side engine parses the text tree instantly. It precisely identifies structural anomalies down to the exact line number without ever freezing your browser, ensuring a seamless, highly secure development experience. You can trust that your highly confidential user tokens, database credentials, and internal architectures remain completely invisible to the outside world, setting a new standard for safe debugging.</p>
+      
+      <h2 style="color: #4169E1; font-size: 28px; border-bottom: 2px solid #E67E22; padding-bottom: 10px; margin-top: 48px; margin-bottom: 16px;">Step-by-Step Practical Tutorial</h2>
+      
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Getting started with the Affilore JSON Formatter is incredibly intuitive. Follow these detailed steps to seamlessly transform your unreadable, broken data into beautifully clean code.</p>
+      
+      <h3 style="color: #FF8C00; font-size: 24px; margin-top: 24px; margin-bottom: 12px;">Step 1: Paste Your Raw Text</h3>
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Begin by copying your raw, minified JSON data directly from your broken API response, application log file, or database export. Paste this unformatted text string directly into our main editor interface. Because all computational processing happens exclusively in your browser via our specialized parsing algorithms, you will experience zero network lag. The system handles massive, heavily nested data payloads instantaneously without any performance degradation.</p>
+      
+      <h3 style="color: #FF8C00; font-size: 24px; margin-top: 24px; margin-bottom: 12px;">Step 2: Apply the Smart Auto-Fix Engine</h3>
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">If your pasted JSON contains critical errors, our intelligent interface will instantly highlight the exact line and position of every single syntax violation. Instead of hunting for bugs manually, simply click our powerful <span style="color: #9B59B6; font-weight: bold; background-color: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px;">Smart Auto-Fix</span> engine button. This feature automatically repairs the most common mistakes on your behalf. It instantly removes forbidden <span style="color: #1ABC9C; font-weight: bold;">trailing commas</span>, converts invalid single quotes into double quotes, wraps unquoted keys properly, and strips out illegal comments, saving you immense time.</p>
+      
+      <h3 style="color: #FF8C00; font-size: 24px; margin-top: 24px; margin-bottom: 12px;">Step 3: Instantly Render Formatted Strings</h3>
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Once validated, watch as your chaotic data is instantly rendered into a beautiful, human-readable format. The tool applies pristine indentation, sorts object keys, and generates an interactive, collapsible tree view perfectly suited for navigating deeply nested objects. You can easily copy the formatted output to your clipboard or download it directly to your machine.</p>
+      
+      <h2 style="color: #E67E22; font-size: 28px; border-bottom: 2px solid #4169E1; padding-bottom: 10px; margin-top: 48px; margin-bottom: 16px;">The Affilore Advantage vs. Traditional Linters</h2>
+      
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">For many years, developers have begrudgingly relied on older, traditional linters like JSONLint or CodeBeautify to format their code. While these legacy websites laid the initial groundwork for data validation, they fall desperately short of modern software development demands. Traditional linters are frequently painfully slow when handling large files, their interfaces are cluttered, and they are notoriously plastered with intrusive, distracting advertisements. More concerningly, many of these ad-heavy platforms silently transmit your sensitive data to remote backend servers for processing, which poses an unacceptable security risk for proprietary code.</p>
+      
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">The Affilore JSON Formatter completely redefines the developer experience. We provide a strictly <span style="color: #2ECC71; font-weight: bold; background-color: rgba(46, 204, 113, 0.1); padding: 2px 6px; border-radius: 4px;">ad-free</span>, deeply secure, and instant responsive web workbench. By running one hundred percent locally on your machine, our tool guarantees absolute privacy. There are no server uploads, zero data retention policies to worry about, and no frustrating bandwidth bottlenecks. You are equipped with an ultra-fast, premium dark-themed environment featuring advanced syntax highlighting and an interactive tree view. This is an elite utility built explicitly for professionals. Stop settling for sluggish, insecure legacy tools and elevate your workflow with a workbench designed for ultimate reliability and speed.</p>
+      
+      <h2 style="color: #2ECC71; font-size: 28px; border-bottom: 2px solid #FF8C00; padding-bottom: 10px; margin-top: 48px; margin-bottom: 16px;">Comprehensive FAQ: Mastering JSON Validation</h2>
+      
+      <h3 style="background: linear-gradient(90deg, #9B59B6, #4169E1); -webkit-background-clip: text; color: transparent; font-size: 22px; margin-top: 24px; margin-bottom: 12px;">Is my data stored or sent to a server?</h3>
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">No, absolutely not. Our tool is engineered from the ground up with a strict privacy-first architecture. All data parsing, error validation, and text formatting execute entirely client-side, running directly within your active web browser. Your proprietary JSON configurations, sensitive API responses, and database logs never leave your device. Because there are no backend uploads, there are absolutely zero server logs and zero risk of your sensitive data being intercepted or compromised.</p>
+      
+      <h3 style="background: linear-gradient(90deg, #9B59B6, #4169E1); -webkit-background-clip: text; color: transparent; font-size: 22px;">What causes a JSON parsing error?</h3>
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Parsing errors typically occur whenever the data payload violates the incredibly strict <span style="color: #E67E22; font-weight: bold;">RFC 8259</span> syntax regulations. The most frequent culprits developers encounter include leaving a <span style="color: #9B59B6; font-weight: bold;">trailing comma</span> after the final element inside an array or an object. Other common triggers include utilizing single quotes instead of the mandatory double quotes for string values, leaving object keys unquoted, missing essential brackets, or improperly including JavaScript-style comments within the file.</p>
+      
+      <h3 style="background: linear-gradient(90deg, #9B59B6, #4169E1); -webkit-background-clip: text; color: transparent; font-size: 22px;">Can this tool fix invalid API payloads automatically?</h3>
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Yes! While standard, strict validators will only point out where your errors are located, our premium platform features a highly advanced <span style="color: #1ABC9C; font-weight: bold; background-color: rgba(26, 188, 156, 0.1); padding: 2px 6px; border-radius: 4px;">Smart Auto-Fix</span> engine. It can automatically and intelligently correct the most common syntax violations on your behalf. This includes seamlessly removing trailing commas, fixing improper quote types, and escaping special characters, instantly transforming a thoroughly invalid API payload into a perfectly compliant, beautifully formatted JSON string.</p>
+  
+    </div>
+
+  </main>
+
+  <footer class="w-full bg-[#050507] border-t border-zinc-950 mt-20 py-12 relative z-50">
+    <div class="max-w-[1440px] mx-auto px-6 flex flex-col items-center justify-center gap-6">
+      <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-semibold text-zinc-400">
+        <a href="/privacy" class="hover:text-white transition">Privacy</a>
+        <a href="/terms" class="hover:text-white transition">Terms</a>
+        <a href="/disclaimer" class="hover:text-white transition">Disclaimer</a>
+        <a href="/about" class="hover:text-white transition">About</a>
+        <a href="mailto:affilore4@gmail.com" class="hover:text-white transition">Contact</a>
+      </div>
+      
+      <div class="flex items-center gap-6 text-zinc-500">
+        <a href="#" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.63 4.14.93.98 2.22 1.58 3.55 1.78v3.83c-1.42-.02-2.82-.47-4-1.28a7.12 7.12 0 0 1-2.42-2.84v7.7c.04 1.8-.44 3.61-1.42 5.12a7.88 7.88 0 0 1-4.14 3.29c-1.78.53-3.7.46-5.43-.22a8.03 8.03 0 0 1-4.11-4.73 8.32 8.32 0 0 1 .15-5.69c.77-1.89 2.22-3.48 4.04-4.4a8.21 8.21 0 0 1 6.51-.43v4.06a4.15 4.15 0 0 0-2.48.97c-.94.81-1.46 2.05-1.39 3.28.06 1.14.65 2.21 1.58 2.85.95.6 2.11.72 3.14.3a4.02 4.02 0 0 0 2.45-3.3c.09-1.01.03-2.03.04-3.05V0h1.42z"/></svg></a>
+        <a href="#" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="#" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        <a href="#" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+      </div>
+
+      <div class="text-xs font-medium text-zinc-600 tracking-wide mt-2">
+        &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+      </div>
+    </div>
+  </footer>
+
+  <div id="copyToast" class="copy-toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    Copied string to local clipboard!
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const $ = (id) => document.getElementById(id);
+      const inputEditor     = $('inputEditor');
+      const outputEditor    = $('outputEditor');
+      const inputLineNums   = $('inputLineNumbers');
+      const outputLineNums  = $('outputLineNumbers');
+      const inputWrap       = $('inputWrap');
+      const statusBadge     = $('statusBadge');
+      const statusDot       = $('statusDot');
+      const statusText      = $('statusText');
+      const errorBanner     = $('errorBanner');
+      
+      const statChars       = $('statChars');
+      const statLines       = $('statLines');
+      const statSize        = $('statSize');
+      const statTime        = $('statTime');
+      
+      const inputCharInd    = $('inputCharIndicator');
+      const outputCharInd   = $('outputCharIndicator');
+      const copyLabel       = $('copyLabel');
+      const copyToast       = $('copyToast');
+
+      const btnFormat   = $('btnFormat');
+      const btnMinify   = $('btnMinify');
+      const btnAutoFix  = $('btnAutoFix');
+      const btnCopy     = $('btnCopy');
+      const btnClear    = $('btnClear');
+      const indent2Btn  = $('indent2');
+      const indent4Btn  = $('indent4');
+
+      let indentSize = 2;
+      let debounceTimer = null;
+
+      function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        const units = ['B', 'KB', 'MB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+        return parseFloat((bytes / Math.pow(1024, i)).toFixed(1)) + ' ' + units[i];
+      }
+
+      function getLineNumbers(text) {
+        const count = text ? text.split('\n').length : 1;
+        let result = '';
+        for (let i = 1; i <= count; i++) result += i + '\n';
+        return result;
+      }
+
+      function syncScroll(textarea, lineNumEl) {
+        lineNumEl.scrollTop = textarea.scrollTop;
+      }
+
+      function updateLineNumbers(textarea, lineNumEl) {
+        lineNumEl.textContent = getLineNumbers(textarea.value);
+      }
+
+      function updateStats(executionTime = 0) {
+        const val = inputEditor.value;
+        const chars = val.length;
+        const lines = val ? val.split('\n').length : 0;
+        const bytes = new Blob([val]).size;
+
+        statChars.textContent = chars.toLocaleString();
+        statLines.textContent = lines.toLocaleString();
+        statSize.textContent = formatBytes(bytes);
+        statTime.textContent = executionTime + 'ms';
+
+        inputCharInd.textContent = chars + ' chars';
+        
+        const outVal = outputEditor.value;
+        outputCharInd.textContent = outVal.length > 0 ? outVal.length.toLocaleString() + ' formatted chars' : 'Awaiting output...';
+      }
+
+      function setStatus(type) {
+        statusBadge.className = 'status-badge py-1 px-3 rounded-full flex items-center gap-2 border border-zinc-800 bg-[#111113]';
+        inputWrap.classList.remove('has-error');
+        errorBanner.classList.add('hidden');
+        errorBanner.textContent = '';
+
+        switch (type) {
+          case 'valid':
+            statusDot.className = 'header-dot bg-emerald-400';
+            statusText.textContent = 'Valid JSON';
+            statusText.className = "text-emerald-400 font-mono text-[11px] font-bold uppercase tracking-wider";
+            break;
+          case 'invalid':
+            statusDot.className = 'header-dot bg-red-500';
+            statusText.textContent = 'Invalid Schema';
+            statusText.className = "text-red-500 font-mono text-[11px] font-bold uppercase tracking-wider";
+            inputWrap.classList.add('has-error');
+            break;
+          case 'empty':
+          default:
+            statusDot.className = 'header-dot bg-zinc-600';
+            statusText.textContent = 'Awaiting Input';
+            statusText.className = "text-zinc-500 font-mono text-[11px] font-bold uppercase tracking-wider";
+            break;
+        }
+      }
+
+      function showError(message) {
+        setStatus('invalid');
+        errorBanner.classList.remove('hidden');
+        errorBanner.innerHTML = message;
+      }
+
+      function parseJSONError(input) {
+        try {
+          JSON.parse(input);
+          return null;
+        } catch (e) {
+          const msg = e.message;
+          let line = null, col = null, position = null;
+
+          const posMatch = msg.match(/position\s+(\d+)/i);
+          const lineColMatch = msg.match(/line\s+(\d+)\s+column\s+(\d+)/i);
+
+          if (lineColMatch) {
+            line = parseInt(lineColMatch[1], 10);
+            col = parseInt(lineColMatch[2], 10);
+          } else if (posMatch) {
+            position = parseInt(posMatch[1], 10);
+            const upToPos = input.substring(0, position);
+            line = (upToPos.match(/\n/g) || []).length + 1;
+            const lastNewline = upToPos.lastIndexOf('\n');
+            col = position - lastNewline;
+          }
+
+          let detail = msg.replace(/^JSON\.parse:\s*/i, '').replace(/^Unexpected/i, 'Unexpected');
+
+          if (detail.includes('Unexpected token')) {
+            const tokenMatch = detail.match(/Unexpected token\s+(.)/);
+            if (tokenMatch) {
+              const tok = tokenMatch[1];
+              if (tok === ',') detail = 'Unexpected trailing comma — remove extra comma before structural close properties.';
+              else if (tok === '}' || tok === ']') detail = `Unexpected closing "${tok}" — evaluate balance of brackets or missing property assignments.`;
+              else if (tok === "'") detail = "Single quotes are invalid inside standard JSON schemas — apply strict double quotes formatting structures.";
+            }
+          }
+
+          let location = '';
+          if (line !== null) {
+            location = `<span style="color:#F87171; font-weight:700;">Parse Failure on Line ${line}` + (col !== null ? `, Col ${col}` : '') + `</span>: `;
+          }
+          return { message: location + `<span>${detail}</span>` };
+        }
+      }
+
+      function validate() {
+        const t0 = performance.now();
+        const input = inputEditor.value.trim();
+
+        if (!input) {
+          setStatus('empty');
+          outputEditor.value = '';
+          updateLineNumbers(outputEditor, outputLineNums);
+          updateStats(0);
+          return;
+        }
+
+        const error = parseJSONError(input);
+        const t1 = performance.now();
+        const elapsed = Math.round(t1 - t0);
+
+        if (error) {
+          showError(error.message);
+        } else {
+          setStatus('valid');
+        }
+        updateStats(elapsed);
+      }
+
+      function formatJSON() {
+        const t0 = performance.now();
+        const input = inputEditor.value.trim();
+        if (!input) return;
+
+        try {
+          const parsed = JSON.parse(input);
+          outputEditor.value = JSON.stringify(parsed, null, indentSize);
+          updateLineNumbers(outputEditor, outputLineNums);
+          setStatus('valid');
+          const t1 = performance.now();
+          updateStats(Math.round(t1 - t0));
+        } catch (e) {
+          const error = parseJSONError(input);
+          if (error) showError(error.message);
+          updateStats(0);
+        }
+      }
+
+      function minifyJSON() {
+        const t0 = performance.now();
+        const input = inputEditor.value.trim();
+        if (!input) return;
+
+        try {
+          const parsed = JSON.parse(input);
+          outputEditor.value = JSON.stringify(parsed);
+          updateLineNumbers(outputEditor, outputLineNums);
+          setStatus('valid');
+          const t1 = performance.now();
+          updateStats(Math.round(t1 - t0));
+        } catch (e) {
+          const error = parseJSONError(input);
+          if (error) showError(error.message);
+          updateStats(0);
+        }
+      }
+
+      function autoFixJSON() {
+        const t0 = performance.now();
+        let input = inputEditor.value.trim();
+        if (!input) return;
+
+        let fixed = input;
+        let fixes = [];
+
+        const singleQuotePattern = /(?<=[{,\[:\s])(\s*)'((?:[^'\\]|\\.)*)'(\s*)(?=[}\],:\s]|$)/g;
+        const singleQuoteReplaced = fixed.replace(singleQuotePattern, (match, pre, content, post) => {
+          const escaped = content.replace(/(?<!\\)"/g, '\\"');
+          return `${pre}"${escaped}"${post}`;
+        });
+        if (singleQuoteReplaced !== fixed) {
+          fixes.push('Replaced single quotes');
+          fixed = singleQuoteReplaced;
+        }
+
+        const unquotedKeyPattern = /(?<=[{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g;
+        const quotedKeys = fixed.replace(unquotedKeyPattern, '"$1":');
+        if (quotedKeys !== fixed) {
+          fixes.push('Quoted unquoted structural keys');
+          fixed = quotedKeys;
+        }
+
+        const trailingCommaPattern = /,(\s*[}\]])/g;
+        const noTrailingCommas = fixed.replace(trailingCommaPattern, '$1');
+        if (noTrailingCommas !== fixed) {
+          fixes.push('Stripped trailing commas');
+          fixed = noTrailingCommas;
+        }
+
+        const commentPattern = /\/\/.*$/gm;
+        const blockCommentPattern = /\/\*[\s\S]*?\*\//g;
+        let noComments = fixed.replace(commentPattern, '').replace(blockCommentPattern, '');
+        if (noComments !== fixed) {
+          fixes.push('Removed structural notes/comments');
+          fixed = noComments;
+        }
+
+        inputEditor.value = fixed;
+        updateLineNumbers(inputEditor, inputLineNums);
+
+        try {
+          const parsed = JSON.parse(fixed);
+          outputEditor.value = JSON.stringify(parsed, null, indentSize);
+          updateLineNumbers(outputEditor, outputLineNums);
+          setStatus('valid');
+
+          const t1 = performance.now();
+          updateStats(Math.round(t1 - t0));
+
+          if (fixes.length > 0) {
+            errorBanner.classList.remove('hidden');
+            errorBanner.innerHTML =
+              `<span style="color:#D9F99D;">✦ Auto-fix system completed modifications:</span> ` +
+              `<span style="color:#A1A1AA;">${fixes.join(' · ')}</span>`;
+          }
+        } catch (e) {
+          const error = parseJSONError(fixed);
+          if (error) {
+            showError(`<span>Auto-fix partial correction error profile. Schema adjustments required manually.</span><br>${error.message}`);
+          }
+          updateStats(0);
+        }
+      }
+
+      async function copyOutput() {
+        const text = outputEditor.value || inputEditor.value;
+        if (!text) return;
+        try {
+          await navigator.clipboard.writeText(text);
+          copyLabel.textContent = 'Copied Data!';
+          copyToast.classList.add('show');
+          setTimeout(() => {
+            copyLabel.textContent = 'Copy Flat Schema Data';
+            copyToast.classList.remove('show');
+          }, 1800);
+        } catch (e) {
+          copyLabel.textContent = 'Failed';
+        }
+      }
+
+      function clearAll() {
+        inputEditor.value = '';
+        outputEditor.value = '';
+        updateLineNumbers(inputEditor, inputLineNums);
+        updateLineNumbers(outputEditor, outputLineNums);
+        setStatus('empty');
+        updateStats(0);
+        inputEditor.focus();
+      }
+
+      function handleTab(e) {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          const textarea = e.target;
+          const start = textarea.selectionStart;
+          const end = textarea.selectionEnd;
+          const spaces = ' '.repeat(indentSize);
+
+          textarea.value = textarea.value.substring(0, start) + spaces + textarea.value.substring(end);
+          textarea.selectionStart = textarea.selectionEnd = start + indentSize;
+          textarea.dispatchEvent(new Event('input'));
+        }
+      }
+
+      inputEditor.addEventListener('input', () => {
+        updateLineNumbers(inputEditor, inputLineNums);
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(validate, 250);
+        updateStats(0);
+      });
+
+      inputEditor.addEventListener('scroll', () => syncScroll(inputEditor, inputLineNums));
+      outputEditor.addEventListener('scroll', () => syncScroll(outputEditor, outputLineNums));
+      inputEditor.addEventListener('keydown', handleTab);
+
+      btnFormat.addEventListener('click', formatJSON);
+      btnMinify.addEventListener('click', minifyJSON);
+      btnAutoFix.addEventListener('click', autoFixJSON);
+      btnCopy.addEventListener('click', copyOutput);
+      btnClear.addEventListener('click', clearAll);
+
+      indent2Btn.addEventListener('click', () => {
+        indentSize = 2;
+        indent2Btn.classList.add('active');
+        indent4Btn.classList.remove('active');
+        if(outputEditor.value) formatJSON();
+      });
+      indent4Btn.addEventListener('click', () => {
+        indentSize = 4;
+        indent4Btn.classList.add('active');
+        indent2Btn.classList.remove('active');
+        if(outputEditor.value) formatJSON();
+      });
+
+      updateStats(0);
+      updateLineNumbers(inputEditor, inputLineNums);
+      updateLineNumbers(outputEditor, outputLineNums);
+    })();
+  </script>
+</body>
+</html>

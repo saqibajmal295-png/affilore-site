@@ -236,22 +236,34 @@
         </div>
     </header>
 
-    <main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-stack-lg pb-[120px] flex items-center justify-center min-h-[60vh]">
-        <div class="text-center glass-panel rounded-2xl p-12 border border-[rgba(234,179,8,0.4)] shadow-[0_0_30px_rgba(234,179,8,0.15)] relative overflow-hidden w-full max-w-3xl">
-            <div class="absolute inset-0 bg-gradient-to-r from-[rgba(234,179,8,0.08)] to-[rgba(245,158,11,0.08)] pointer-events-none"></div>
-            <div class="relative z-10 flex flex-col items-center">
-                <span class="material-symbols-outlined text-[80px] text-primary mb-6 drop-shadow-[0_0_15px_rgba(234,179,8,0.6)]">hourglass_empty</span>
-                <h1 class="font-headline-xl text-headline-xl text-on-surface mb-6">Coming Soon</h1>
-                <p class="font-body-lg text-body-lg text-white max-w-lg mx-auto">
-                    We're currently building high-performance utilities for this category. Check back later for powerful new tools!
+    <main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-stack-lg pb-[120px]">
+        <section class="py-12">
+            <div class="mb-12">
+                <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-4">
+                    <span class="gradient-text font-extrabold drop-shadow-[0_0_10px_rgba(234,179,8,0.2)]">Developer Tools</span>
+                </h1>
+                <p class="font-body-lg text-body-lg text-white max-w-2xl">
+                    High-performance utilities built for modern development workflows.
                 </p>
-                <div class="mt-10">
-                    <a class="px-8 py-3 rounded-full gradient-bg text-black font-label-md text-label-md transition-all shadow-[0_0_20px_rgba(234,179,8,0.5)] hover:scale-105 hover:shadow-[0_0_40px_rgba(234,179,8,0.9)]" href="/">
-                        Back to Home
-                    </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Tool Card -->
+                <div class="glass-panel glass-panel-hover rounded-xl p-0 flex flex-col group transition-all duration-300 border-[rgba(234,179,8,0.2)] overflow-hidden shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+                    <img src="/assets/thumbnails/json-formatter-validator.jpeg" alt="JSON Formatter & Validator" class="w-full h-48 object-cover border-b border-glass-border">
+                    <div class="p-8 flex flex-col flex-grow">
+                        <div class="mb-4">
+                            <span class="inline-flex px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-[#1e2020] text-[#e2e2e2] border border-[#333535]">Developer Tools</span>
+                        </div>
+                        <h3 class="font-headline-lg text-[24px] font-bold mb-3 text-white drop-shadow-[0_0_8px_rgba(234,179,8,0.2)]">JSON Formatter & Validator</h3>
+                        <p class="font-body-md text-body-md text-white mb-8 flex-grow">Enterprise-grade data parsing, real-time validation, and smart auto-fixing architecture inside a secure local sandbox.</p>
+                        <a href="/developer/json-formatter.html" class="inline-flex justify-center w-full px-6 py-3 rounded-full gradient-bg text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(234,179,8,0.6)]">
+                            Launch Tool
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
     <footer class="w-full py-6 border-t border-glass-border bg-black">
