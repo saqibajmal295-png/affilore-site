@@ -8,7 +8,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -16,6 +17,10 @@
       theme: {
         extend: {
           colors: {
+            'glass-border': "rgba(255, 255, 255, 0.15)",
+            'glass-fill': "rgba(255, 255, 255, 0.05)",
+            'primary': "#EAB308",
+            'on-surface': "#e2e2e2",
             forge: {
               bg: '#0A0A0B',
               panel: '#111113',
@@ -34,6 +39,15 @@
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif'],
             mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+            'label-md': ["Sora"],
+            'body-md': ["Sora"],
+          },
+          fontSize: {
+            'label-md': ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+          },
+          spacing: {
+            'margin-desktop': "2.5rem",
+            'container-max': "1440px",
           },
           boxShadow: {
             'glow-lime': '0 0 20px rgba(217, 249, 157, 0.10), 0 0 60px rgba(217, 249, 157, 0.05)',
@@ -227,37 +241,70 @@
       opacity: 0.025;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
+
+    .copy-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #34d399;
+      background: rgba(9, 9, 11, 0.9);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(52, 211, 153, 0.05);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(to right, #EAB308, #F59E0B);
+      color: #121414 !important;
+    }
   </style>
 </head>
 <body class="min-h-screen relative">
 
   <div class="noise-overlay"></div>
 
-  <header class="w-full bg-[#0A0A0B]/90 backdrop-blur-md border-b border-zinc-900/50 relative z-50">
-    <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
-      <div class="flex items-center gap-12">
-        <a href="/" class="text-2xl font-black text-white tracking-tight hover:text-[#F5A623] transition">Affilore<span class="text-blue-500">.</span></a>
-        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-400">
-          <a href="/" class="hover:text-white transition">Home</a>
-          <a href="/data" class="hover:text-white transition">Data</a>
-          <a href="/calculator" class="hover:text-white transition">Calculator</a>
-          <a href="/utility" class="hover:text-white transition">Utility</a>
-          <a href="/developer" class="text-white transition">Developer</a>
-          <a href="/seo" class="hover:text-white transition">SEO</a>
-          <a href="/productivity" class="hover:text-white transition">Productivity</a>
-        </nav>
+  <header class="bg-black sticky top-0 w-full border-b border-glass-border shadow-sm z-50">
+    <div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto transition-all duration-300 ease-in-out">
+      <div class="flex items-center gap-4">
+        <a href="mailto:affilore4@gmail.com" class="font-headline-lg text-headline-lg font-bold tracking-tighter text-white hover:text-primary transition-colors">Affilore</a>
       </div>
-      <div>
-        <a href="mailto:affilore4@gmail.com" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-black bg-[#F5A623] hover:bg-[#E0961B] rounded-full transition shadow-[0_0_20px_rgba(245,166,35,0.2)]">
-          Request a Custom Tool
-        </a>
-      </div>
+      <nav id="main-navigation" class="hidden md:flex gap-6 items-center">
+        <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="/">Home</a>
+        <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="/data.html">Data</a>
+        <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="/calculator.html">Calculator</a>
+        <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="/utility.html">Utility</a>
+        <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="/developer.html">Developer</a>
+        <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="/seo.html">SEO</a>
+        <a class="font-label-md text-label-md hover:text-on-surface transition-colors hover:bg-glass-border rounded-lg px-3 py-2 text-white" href="/productivity.html">Productivity</a>
+      </nav>
+      <a class="hidden md:inline-flex items-center justify-center px-6 py-2 rounded-full gradient-bg font-label-md text-label-md transition-all shadow-[0_2px_10px_rgba(234,179,8,0.3)] hover:scale-105 hover:shadow-[0_4px_20px_rgba(234,179,8,0.5)]" href="mailto:affilore4@gmail.com">
+        Request a Custom Tool
+      </a>
+      <button id="mobile-nav-toggle" aria-label="Toggle Menu" class="md:hidden text-on-surface p-2">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
     </div>
   </header>
 
-  <main class="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <main class="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-10">
     
-    <div class="text-center mb-10">
+    <div class="text-center mb-6">
       <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-white inline-flex flex-wrap justify-center gap-x-3">
         <span class="text-emerald-400">JSON</span> to JSON <span class="bg-gradient-to-r from-red-400 via-pink-500 to-purple-500 -webkit-background-clip: text -webkit-text-fill-color: transparent bg-clip-text text-transparent">Formatter & Validator</span>
       </h1>
@@ -362,7 +409,7 @@
 
     </div>
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 py-10 rounded-2xl bg-[#0A0A0B] border border-zinc-900/40 shadow-inner leading-relaxed relative z-10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 py-6 rounded-2xl bg-[#0A0A0B] border border-zinc-900/40 shadow-inner leading-relaxed relative z-10">
 
       <h1 style="background: linear-gradient(90deg, #4169E1, #2ECC71); -webkit-background-clip: text; color: transparent; font-size: 42px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 24px;">The Premium JSON Formatter & Validator: Debug, Beautify, and Clean Data Instantly</h1>
       
@@ -388,7 +435,7 @@
       <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Begin by copying your raw, minified JSON data directly from your broken API response, application log file, or database export. Paste this unformatted text string directly into our main editor interface. Because all computational processing happens exclusively in your browser via our specialized parsing algorithms, you will experience zero network lag. The system handles massive, heavily nested data payloads instantaneously without any performance degradation.</p>
       
       <h3 style="color: #FF8C00; font-size: 24px; margin-top: 24px; margin-bottom: 12px;">Step 2: Apply the Smart Auto-Fix Engine</h3>
-      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">If your pasted JSON contains critical errors, our intelligent interface will instantly highlight the exact line and position of every single syntax violation. Instead of hunting for bugs manually, simply click our powerful <span style="color: #9B59B6; font-weight: bold; background-color: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px;">Smart Auto-Fix</span> engine button. This feature automatically repairs the most common mistakes on your behalf. It instantly removes forbidden <span style="color: #1ABC9C; font-weight: bold;">trailing commas</span>, converts invalid single quotes into double quotes, wraps unquoted keys properly, and strips out illegal comments, saving you immense time.</p>
+      <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">If your pasted JSON contains critical errors, our intelligent interface will instantly highlight the exact line and position of every single syntax violation. Instead of hunting for bugs manually, simply click our powerful <span style="color: #9B59B6; font-weight: bold; background-color: rgba(155, 89, 182, 0.1); padding: 2px 6px; border-radius: 4px;">Smart Auto-Fix</span> linter engine button. This feature automatically repairs the most common mistakes on your behalf. It instantly removes forbidden <span style="color: #1ABC9C; font-weight: bold;">trailing commas</span>, converts invalid single quotes into double quotes, wraps unquoted keys properly, and strips out illegal comments, saving you immense time.</p>
       
       <h3 style="color: #FF8C00; font-size: 24px; margin-top: 24px; margin-bottom: 12px;">Step 3: Instantly Render Formatted Strings</h3>
       <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Once validated, watch as your chaotic data is instantly rendered into a beautiful, human-readable format. The tool applies pristine indentation, sorts object keys, and generates an interactive, collapsible tree view perfectly suited for navigating deeply nested objects. You can easily copy the formatted output to your clipboard or download it directly to your machine.</p>
@@ -414,23 +461,23 @@
 
   </main>
 
-  <footer class="w-full bg-[#050507] border-t border-zinc-950 mt-20 py-12 relative z-50">
+  <footer class="w-full bg-[#050507] border-t border-zinc-950 mt-10 py-12 relative z-50">
     <div class="max-w-[1440px] mx-auto px-6 flex flex-col items-center justify-center gap-6">
       <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-semibold text-zinc-400">
-        <a href="/privacy" class="hover:text-white transition">Privacy</a>
-        <a href="/terms" class="hover:text-white transition">Terms</a>
-        <a href="/disclaimer" class="hover:text-white transition">Disclaimer</a>
-        <a href="/about" class="hover:text-white transition">About</a>
-        <a href="mailto:affilore4@gmail.com" class="hover:text-white transition">Contact</a>
+        <a href="/privacy-policy.html" class="hover:text-white transition">Privacy</a>
+        <a href="/terms.html" class="hover:text-white transition">Terms</a>
+        <a href="#" class="hover:text-white transition">Disclaimer</a>
+        <a href="/about-us.html" class="hover:text-white transition">About</a>
+        <a href="mailto:affilore4@gmail.com?subject=Contact Us" class="hover:text-white transition">Contact</a>
       </div>
       
       <div class="flex items-center gap-6 text-zinc-500">
-        <a href="#" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.63 4.14.93.98 2.22 1.58 3.55 1.78v3.83c-1.42-.02-2.82-.47-4-1.28a7.12 7.12 0 0 1-2.42-2.84v7.7c.04 1.8-.44 3.61-1.42 5.12a7.88 7.88 0 0 1-4.14 3.29c-1.78.53-3.7.46-5.43-.22a8.03 8.03 0 0 1-4.11-4.73 8.32 8.32 0 0 1 .15-5.69c.77-1.89 2.22-3.48 4.04-4.4a8.21 8.21 0 0 1 6.51-.43v4.06a4.15 4.15 0 0 0-2.48.97c-.94.81-1.46 2.05-1.39 3.28.06 1.14.65 2.21 1.58 2.85.95.6 2.11.72 3.14.3a4.02 4.02 0 0 0 2.45-3.3c.09-1.01.03-2.03.04-3.05V0h1.42z"/></svg></a>
-        <a href="#" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-        <a href="#" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-        <a href="#" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+        <a href="https://www.tiktok.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.63 4.14.93.98 2.22 1.58 3.55 1.78v3.83c-1.42-.02-2.82-.47-4-1.28a7.12 7.12 0 0 1-2.42-2.84v7.7c.04 1.8-.44 3.61-1.42 5.12a7.88 7.88 0 0 1-4.14 3.29c-1.78.53-3.7.46-5.43-.22a8.03 8.03 0 0 1-4.11-4.73 8.32 8.32 0 0 1 .15-5.69c.77-1.89 2.22-3.48 4.04-4.4a8.21 8.21 0 0 1 6.51-.43v4.06a4.15 4.15 0 0 0-2.48.97c-.94.81-1.46 2.05-1.39 3.28.06 1.14.65 2.21 1.58 2.85.95.6 2.11.72 3.14.3a4.02 4.02 0 0 0 2.45-3.3c.09-1.01.03-2.03.04-3.05V0h1.42z"/></svg></a>
+        <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        <a href="https://www.instagram.com/affilore_/?hl=en" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
       </div>
-
+ 
       <div class="text-xs font-medium text-zinc-600 tracking-wide mt-2">
         &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
       </div>
@@ -795,6 +842,27 @@
       updateLineNumbers(inputEditor, inputLineNums);
       updateLineNumbers(outputEditor, outputLineNums);
     })();
+  </script>
+
+  <!-- Mobile Nav Toggle script -->
+  <script>
+      const toggleBtn = document.getElementById('mobile-nav-toggle');
+      const navLinks = document.getElementById('main-navigation');
+      if (toggleBtn && navLinks) {
+          toggleBtn.addEventListener('click', () => {
+              navLinks.classList.toggle('hidden');
+              navLinks.classList.toggle('flex');
+              navLinks.classList.toggle('flex-col');
+              navLinks.classList.toggle('absolute');
+              navLinks.classList.toggle('top-16');
+              navLinks.classList.toggle('left-0');
+              navLinks.classList.toggle('w-full');
+              navLinks.classList.toggle('bg-black');
+              navLinks.classList.toggle('p-4');
+              navLinks.classList.toggle('border-b');
+              navLinks.classList.toggle('border-glass-border');
+          });
+      }
   </script>
 </body>
 </html>
