@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JWT Decoder & Debugger — Affilore Platform</title>
+    <meta name="description" content="Premium serverless JWT Decoder & Debugger. Decode, inspect, and validate JSON Web Tokens in real-time with zero network latency." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: '#0A0A0B',
+                        panel: '#111113',
+                        border: '#1E1E22',
+                        'border-hover': '#2A2A30',
+                        forge: {
+                            lime: '#D9F99D',
+                            'lime-dim': '#A3E635'
+                        }
+                    },
+                    boxShadow: {
+                        'glow-lime-sm': '0 0 8px rgba(217, 249, 157, 0.15)',
+                        'glass': '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.03)',
+                        'glass-lg': '0 16px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-family: 'Inter', system-ui, sans-serif; height: 100%; background-color: #0A0A0B; }
+        
+        /* ─── DENSE & FLUID AMBIENT PARTICLE ENGINE MULTI-LAYER BACKDROP ─── */
+        body {
+            background-color: #0A0A0B;
+            color: #E4E4E7;
+            min-height: 100%;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(4px 4px at 12% 15%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 35% 28%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 68% 8%, rgba(245, 166, 35, 0.70) 100%, transparent),
+                radial-gradient(6px 6px at 88% 22%, rgba(245, 166, 35, 0.55) 100%, transparent),
+                radial-gradient(5px 5px at 15% 48%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 52% 61%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 76% 42%, rgba(245, 166, 35, 0.55) 100%, transparent),
+                radial-gradient(4px 4px at 92% 56%, rgba(245, 166, 35, 0.70) 100%, transparent),
+                radial-gradient(6px 6px at 22% 78%, rgba(245, 166, 35, 0.50) 100%, transparent),
+                radial-gradient(4px 4px at 65% 88%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 82% 71%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 40% 93%, rgba(245, 166, 35, 0.70) 100%, transparent);
+            background-size: 100% 1200px;
+            animation: ambientFlow 45s linear infinite;
+        }
+
+        @keyframes ambientFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 -1200px; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2A2A30; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3A3A42; }
+
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ── Text Color Treatments ── */
+        .gradient-text {
+            background: linear-gradient(135deg, #f87171, #ec4899, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gradient-text-cyan {
+            background: linear-gradient(135deg, #22d3ee, #818cf8, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── Glassmorphism Panels ── */
+        .glass-panel {
+            background: rgba(17, 17, 20, 0.75);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.03);
+        }
+
+        /* ── Editor UI ── */
+        .editor-wrap {
+            position: relative;
+            display: flex;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            background: rgba(9, 9, 11, 0.85);
+            border: 1px solid #1c1c1f;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .editor-wrap:focus-within {
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.05);
+        }
+        .editor-wrap.has-error:focus-within {
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.05);
+        }
+
+        #jwtInput {
+            background: transparent;
+            border: none;
+            color: #e4e4e7;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            resize: none;
+            outline: none;
+        }
+        #jwtInput::placeholder { color: #3F3F46; }
+
+        .jwt-preview {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            line-height: 1.7;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
+        .jwt-header-seg  { color: #fb7185; text-shadow: 0 0 20px rgba(251, 113, 133, 0.15); }
+        .jwt-dot         { color: #52525b; }
+        .jwt-payload-seg { color: #67e8f9; text-shadow: 0 0 20px rgba(103, 232, 249, 0.15); }
+        .jwt-sig-seg     { color: #fbbf24; text-shadow: 0 0 20px rgba(251, 191, 36, 0.15); }
+
+        /* ── Custom Action Controls buttons ── */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-convert {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: #000000;
+        }
+        .btn-convert:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
+        }
+        .btn-utility {
+            background: rgba(24, 24, 27, 0.8);
+            color: #e4e4e7;
+            border: 1px solid #27272a;
+        }
+        .btn-utility:hover {
+            background: #202024;
+            border-color: #3f3f46;
+        }
+        .btn-danger-custom {
+            background: rgba(24, 24, 27, 0.8);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+        }
+        .btn-danger-custom:hover {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        .btn-copy-custom {
+            background: rgba(6, 78, 59, 0.8);
+            color: #34d399;
+            border: 1px solid #047857;
+        }
+        .btn-copy-custom:hover {
+            background: #047857;
+        }
+
+        /* ── Status badges ── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .status-valid {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .status-invalid {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .status-idle {
+            background: rgba(113, 113, 122, 0.1);
+            color: #a1a1aa;
+            border: 1px solid rgba(113, 113, 122, 0.2);
+        }
+        .pulse-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ── Content highlights ── */
+        .json-key    { color: #f472b6; }
+        .json-string { color: #67e8f9; }
+        .json-number { color: #fbbf24; }
+        .json-bool   { color: #a78bfa; }
+        .json-null   { color: #6b7280; }
+        .json-time   { color: #34d399; font-style: italic; font-size: 11px; opacity: 0.85; }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            background: rgba(245, 166, 35, 0.12);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 166, 35, 0.2);
+            color: #F5A623;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            pointer-events: none;
+            z-index: 1000;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ── Article layout elements overrides ── */
+        .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 5px; vertical-align: middle; line-height: 1.6; }
+        .badge-rfc   { background: rgba(16,185,129,0.14); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+        .badge-b64   { background: rgba(245,158,11,0.14); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+        .badge-algo  { background: rgba(239,68,68,0.14); color: #fca5a5; border: 1px solid rgba(239,68,68,0.28); }
+        .badge-claim { background: rgba(99,102,241,0.16); color: #c7d2fe; border: 1px solid rgba(99,102,241,0.3); }
+        .badge-sec   { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3) 30%, rgba(99,102,241,0.3) 70%, transparent); margin: 3.5rem 0; }
+        .section-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #818cf8; margin-bottom: 0.6rem; }
+        .jwt-anatomy { display: flex; align-items: stretch; border-radius: 12px; overflow: hidden; margin: 2rem 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+        .jwt-part { flex: 1; padding: 1.25rem 1rem; display: flex; flex-direction: column; gap: 6px; }
+        .jwt-header-part  { background: rgba(99,102,241,0.18); border-top: 2px solid #818cf8; }
+        .jwt-payload-part { background: rgba(16,185,129,0.13); border-top: 2px solid #34d399; }
+        .jwt-sig-part     { background: rgba(245,158,11,0.13); border-top: 2px solid #fbbf24; }
+        .jwt-part-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 2px; }
+        .jwt-header-part  .jwt-part-label { color: #a5b4fc; }
+        .jwt-payload-part .jwt-part-label { color: #6ee7b7; }
+        .jwt-sig-part     .jwt-part-label { color: #fcd34d; }
+        .jwt-part-value { color: rgba(255,255,255,0.55); word-break: break-all; font-size: 11.5px; line-height: 1.5; }
+        .jwt-dot { display: flex; align-items: center; padding: 0 4px; color: rgba(255,255,255,0.3); font-size: 20px; background: rgba(255,255,255,0.04); font-weight: 700; }
+        .code-block { background: #0d1117; border: 1px solid rgba(99,102,241,0.2); border-radius: 10px; padding: 1.25rem 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; margin: 1.25rem 0; color: #e2e8f0; }
+        .code-block .key   { color: #a5b4fc; }
+        .code-block .str   { color: #86efac; }
+        .code-block .num   { color: #fcd34d; }
+        .code-block .punct { color: rgba(255,255,255,0.35); }
+        .steps-grid { display: flex; flex-direction: column; gap: 1.25rem; margin: 1.75rem 0; }
+        .step-card { display: flex; gap: 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 1.25rem 1.5rem; align-items: flex-start; }
+        .step-num { flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #6366f1, #4f46e5); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600; color: #fff; }
+        .step-body h3 { margin-bottom: 0.4rem; }
+        .step-body p  { color: rgba(255,255,255,0.75); margin-bottom: 0; font-size: 15px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.75rem 0; }
+        .feature-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 1.25rem; }
+        .feature-card .icon-wrap { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.8rem; font-size: 18px; }
+        .icon-indigo { background: rgba(99,102,241,0.18); }
+        .icon-green  { background: rgba(16,185,129,0.16); }
+        .icon-amber  { background: rgba(245,158,11,0.16); }
+        .icon-cyan   { background: rgba(6,182,212,0.15); }
+        .feature-card h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+        .feature-card p  { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.65; margin-bottom: 0; }
+        .callout { border-radius: 12px; padding: 1.5rem 1.75rem; margin: 2rem 0; display: flex; gap: 1rem; align-items: flex-start; }
+        .callout-danger { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.22); }
+        .callout-success { background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.22); }
+        .callout-info { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.22); }
+        .callout-icon { flex-shrink: 0; font-size: 22px; margin-top: 1px; }
+        .callout-title { font-weight: 600; font-size: 15px; color: #fff; margin-bottom: 0.35rem; }
+        .callout-body { font-size: 14.5px; color: rgba(255,255,255,0.72); line-height: 1.7; }
+        .faq-list { display: flex; flex-direction: column; gap: 0; margin: 1.75rem 0; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; }
+        .faq-item { border-bottom: 1px solid rgba(255,255,255,0.07); }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-q { padding: 1.1rem 1.5rem; font-size: 15px; font-weight: 500; color: #e0e7ff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; user-select: none; transition: background 0.15s; }
+        .faq-q:hover { background: rgba(255,255,255,0.03); }
+        .faq-q .arrow { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; background: rgba(99,102,241,0.18); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #a5b4fc; transition: transform 0.2s; }
+        .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+        .faq-a { display: none; padding: 0 1.5rem 1.25rem; font-size: 14.5px; color: rgba(255,255,255,0.72); line-height: 1.75; }
+        .faq-item.open .faq-a { display: block; }
+        .epoch-demo { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.25rem 0; }
+        .epoch-card { flex: 1; min-width: 160px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; padding: 1rem 1.25rem; }
+        .epoch-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+        .epoch-value { font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 500; color: #fcd34d; }
+        .epoch-human { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+    </style>
+</head>
+<body class="min-h-screen relative bg-[#0A0A0B]">
+
+    <div class="noise-overlay"></div>
+
+    <header class="w-full bg-[#0A0A0B]/90 backdrop-blur-md border-b border-zinc-900/50 relative z-50">
+        <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-12">
+                <a href="/" class="text-2xl font-black text-white tracking-tight">Affilore<span class="text-blue-500">.</span></a>
+                <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-400">
+                    <a href="/" class="text-white transition">Home</a>
+                    <a href="/data" class="hover:text-white transition">Data</a>
+                    <a href="/calculator" class="hover:text-white transition">Calculator</a>
+                    <a href="/utility" class="hover:text-white transition">Utility</a>
+                    <a href="/developer" class="hover:text-white transition">Developer</a>
+                    <a href="/seo" class="hover:text-white transition">SEO</a>
+                    <a href="/productivity" class="hover:text-white transition">Productivity</a>
+                </nav>
+            </div>
+            <div>
+                <a href="mailto:affilore4@gmail.com" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-black bg-[#F5A623] hover:bg-[#E0961B] rounded-full transition shadow-[0_0_20px_rgba(245,166,35,0.2)]">
+                    Request a Custom Tool
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <div class="text-center mb-10">
+            <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-white inline-flex flex-wrap justify-center gap-x-3">
+                <span class="text-purple-400">JWT Decoder</span> <span class="text-zinc-500 font-medium">&</span> <span class="gradient-text-cyan">Debugger</span>
+            </h1>
+            <p class="text-zinc-400 text-sm sm:text-base max-w-3xl mx-auto mt-3 font-medium leading-relaxed">
+                Decode, inspect, and validate JSON Web Tokens entirely client-side. Zero network latency. No data ever leaves your browser.
+            </p>
+        </div>
+
+        <div class="w-full bg-[#111622]/40 border border-blue-500/10 backdrop-blur-md rounded-xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 relative z-10">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-zinc-500" id="globalStatusDot"></span>
+                <span class="text-xs font-bold tracking-wide text-zinc-300 font-mono" id="globalStatusText">AWAITING TOKEN</span>
+            </div>
+            <div class="text-xs font-medium text-zinc-500 font-mono flex gap-4">
+                <span>Zero-network execution</span>
+                <span>•</span>
+                <span>AES-grade local sandbox</span>
+                <span>•</span>
+                <span>Unlimited depth recursion</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 relative z-10">
+            <div class="bg-[#121214]/90 border border-[#1c1c1f] rounded-xl p-5 text-center shadow-inner">
+                <div id="valLength" class="text-3xl font-black text-[#F5A623] font-mono tracking-tight">0</div>
+                <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Token Length</div>
+            </div>
+            <div class="bg-[#121214]/90 border border-[#1c1c1f] rounded-xl p-5 text-center shadow-inner">
+                <div id="valSegments" class="text-3xl font-black text-[#F5A623] font-mono tracking-tight">0</div>
+                <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Segments Parsed</div>
+            </div>
+            <div class="bg-[#121214]/90 border border-[#1c1c1f] rounded-xl p-5 text-center shadow-inner">
+                <div id="valClaims" class="text-3xl font-black text-[#F5A623] font-mono tracking-tight">0</div>
+                <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Claim Fields</div>
+            </div>
+            <div class="bg-[#121214]/90 border border-[#1c1c1f] rounded-xl p-5 text-center shadow-inner">
+                <div id="valTime" class="text-3xl font-black text-[#F5A623] font-mono tracking-tight">0.00</div>
+                <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Parse Time (ms)</div>
+            </div>
+        </div>
+
+        <div class="glass-panel p-5 lg:p-6 shadow-2xl mb-16 relative z-10">
+            
+            <div class="flex flex-wrap items-center gap-3 mb-5">
+                <button id="btnDecode" class="btn-action btn-convert font-bold text-xs uppercase tracking-wider" onclick="window.decodeToken()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    Decode Token
+                </button>
+                <button id="btnCopy" class="btn-action btn-copy-custom text-xs uppercase font-bold tracking-wider" onclick="window.copyClaims()">
+                    Copy Claims Data
+                </button>
+                <div class="flex-1"></div>
+                <div id="sigStatusBadge" class="status-badge status-idle border border-zinc-800 bg-[#111113]">
+                    <span id="sigStatusDot" class="pulse-dot bg-zinc-500"></span>
+                    <span id="sigStatusText" class="text-zinc-400 font-mono text-[11px] font-bold uppercase tracking-wider">NOT VERIFIED</span>
+                </div>
+                <button id="btnClear" class="btn-action btn-danger-custom text-xs uppercase font-bold tracking-wider" onclick="window.clearAll()">Clear Window</button>
+            </div>
+
+            <div class="editor-grid grid grid-cols-1 lg:grid-cols-2 gap-5">
+                
+                <div class="flex flex-col gap-5">
+                    <div>
+                        <div class="flex items-center justify-between mb-2.5 px-1">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 shadow-md"></span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Encoded Input String</span>
+                            </div>
+                            <span id="charCount" class="text-[11px] font-bold font-mono text-zinc-500">0 chars</span>
+                        </div>
+                        <div id="inputWrap" class="editor-wrap h-[260px]">
+                            <textarea id="jwtInput" class="code-textarea w-full text-zinc-100 font-mono placeholder-zinc-700 p-4" placeholder="Paste your raw JWT token string here..." spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center gap-2 mb-2.5 px-1">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 shadow-md"></span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Segment Highlight View</span>
+                        </div>
+                        <div id="jwtPreview" class="jwt-preview p-5 rounded-xl min-h-[160px] bg-[#09090b] border border-[#1c1c1f]">
+                            <span class="text-zinc-600 text-xs">Token segments will be color-coded here…</span>
+                        </div>
+                        <div class="flex items-center gap-6 mt-3 px-1">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-1.5 rounded-full bg-pink-400"></span>
+                                <span class="text-[11px] font-medium text-zinc-500 uppercase font-mono">Header</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-1.5 rounded-full bg-cyan-400"></span>
+                                <span class="text-[11px] font-medium text-zinc-500 uppercase font-mono">Payload</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-1.5 rounded-full bg-amber-400"></span>
+                                <span class="text-[11px] font-medium text-zinc-500 uppercase font-mono">Signature</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-5">
+                    <div class="glass-panel p-5 border border-white/5 bg-[#09090b]/40">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-zinc-400 font-sans">Decoded JOSE Header</span>
+                            <span class="text-[10px] font-bold font-mono text-zinc-600 uppercase">Algorithm metadata</span>
+                        </div>
+                        <div id="headerOutput" class="font-mono text-sm p-4 rounded-xl min-h-[60px] bg-[#09090b] border border-[#1c1c1f]">
+                            <span class="text-zinc-600 text-xs">Awaiting token…</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-5 border border-white/5 bg-[#09090b]/40">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-zinc-400 font-sans">Decoded Claims Payload</span>
+                            <span id="payloadClaimCount" class="text-[10px] font-bold font-mono text-zinc-500 uppercase">0 claims</span>
+                        </div>
+                        <div id="payloadOutput" class="font-mono text-sm p-4 rounded-xl min-h-[140px] max-h-[220px] overflow-y-auto bg-[#09090b] border border-[#1c1c1f]">
+                            <span class="text-zinc-600 text-xs">Awaiting token…</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-5 border border-white/5 bg-[#09090b]/40">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-zinc-400 font-sans">Signature Composition</span>
+                            <span class="text-[10px] font-bold font-mono text-zinc-600 uppercase">Structural Check</span>
+                        </div>
+                        <div id="signatureOutput" class="font-mono text-sm p-4 rounded-xl min-h-[60px] bg-[#09090b] border border-[#1c1c1f]">
+                            <span class="text-zinc-600 text-xs">Awaiting token…</span>
+                        </div>
+                        <div class="mt-3 p-3 rounded-xl bg-zinc-950/40 border border-zinc-900/60 flex items-start gap-2">
+                            <svg class="w-4 h-4 text-zinc-500 mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            <p class="text-[11px] text-zinc-500 leading-relaxed">
+                                Signature verification requires cryptographic secret keys. This free client linter checks and visualizes structures safely entirely client-side.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 py-12 rounded-2xl bg-[#0A0A0B] border border-zinc-900/40 shadow-inner leading-relaxed relative z-10">
+            
+            <div class="section-label">Technical Reference Architecture</div>
+            <h1 style="background: linear-gradient(90deg, #4169E1, #2ECC71); -webkit-background-clip: text; color: transparent; font-size: 42px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 20px; -webkit-text-fill-color: transparent; background-clip: text;">The Architecture of JSON Web Tokens: Securely Inspecting Header and Payload Data</h1>
+
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+                A JSON Web Token is a compact, URL-safe credential format defined under <span class="badge badge-rfc">RFC 7519</span> that enables stateless session architecture across distributed systems. Instead of storing session state in a database, a server encodes identity and permission claims directly into a signed token, which is then issued to the client and presented on every subsequent request. The server validates the token's cryptographic signature in memory, eliminating costly round-trips to a session store entirely.
+            </p>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+                The problem for any engineer reading or debugging raw tokens is immediately apparent: a JWT looks like meaningless noise at a glance. A real production token resembles something like <span class="badge badge-b64">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span> — a three-segment string encoded in <span class="badge badge-b64">Base64URL</span>. Manually reversing that encoding, stripping padding characters, then parsing the resulting JSON and converting Unix epoch timestamps is neither fast nor reliable under pressure. A purpose-built JWT decoder removes every step of that friction, surfacing structured claim data, algorithm metadata, and expiry windows in a single interface, directly in your browser, with no data ever leaving your machine.
+            </p>
+
+            <div class="section-divider"></div>
+
+            <div class="section-label">Technical Anatomy Mapping</div>
+            <h2 style="background: linear-gradient(120deg, #e0e7ff 0%, #a5b4fc 100%); -webkit-background-clip: text; color: transparent; font-size: 28px; border-bottom: 2px solid #2ECC71; padding-bottom: 10px; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px;">Anatomy of a JWT: Three Distinct Components</h2>
+
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+                Every token conforming to <span class="badge badge-rfc">RFC 7519</span> is composed of exactly three <span class="badge badge-b64">Base64URL</span>-encoded segments, separated by a literal period (<code>.</code>) character. Understanding each segment's responsibility is foundational to secure token handling.
+            </p>
+
+            <div class="jwt-anatomy" aria-label="JWT structure: Header . Payload . Signature">
+                <div class="jwt-part jwt-header-part">
+                    <div class="jwt-part-label">Header</div>
+                    <div class="jwt-part-value">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</div>
+                </div>
+                <div class="jwt-dot">·</div>
+                <div class="jwt-part jwt-payload-part">
+                    <div class="jwt-part-label">Payload</div>
+                    <div class="jwt-part-value">eyJzdWIiOiJ1c3JfODgzNiIsImlhdCI6MTcxNjk0MDgwMH0</div>
+                </div>
+                <div class="jwt-dot">·</div>
+                <div class="jwt-part jwt-sig-part">
+                    <div class="jwt-part-label">Signature</div>
+                    <div class="jwt-part-value">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+                </div>
+            </div>
+
+            <h3 style="color: #e0e7ff; font-size: 1.125rem; font-weight: 600; margin-bottom: 12px;">1. The JOSE Header</h3>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+                The JSON Object Signing and Encryption (JOSE) Header is a small JSON object describing the token's cryptographic machinery. At minimum it declares <span class="badge badge-claim">alg</span> — the signing algorithm — and <span class="badge badge-claim">typ</span>, typically the literal string <code>JWT</code>. The algorithm field is the single most security-critical value in the entire token. Common values are <span class="badge badge-algo">HS256</span> (HMAC-SHA-256, symmetric), <span class="badge badge-algo">RS256</span> (RSA-SHA-256, asymmetric), and <span class="badge badge-algo">ES256</span> (ECDSA P-256). A well-documented and historically exploited vulnerability involves an attacker changing this field to <span class="badge badge-algo">none</span> in a forged token: any server that blindly trusts the token's own declared algorithm rather than enforcing an allowlist will accept the unsigned payload as valid. A decoder that surfaces this field prominently gives developers the first line of defence.
+            </p>
+
+            <h3 style="color: #e0e7ff; font-size: 1.125rem; font-weight: 600; margin-bottom: 12px;">2. The Payload and Registered Claims</h3>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+                The Payload carries the JWT's actual information — a JSON object of claims. <span class="badge badge-rfc">RFC 7519</span> defines a set of registered claim names with specific semantic meaning:
+            </p>
+
+            <div class="code-block" role="region" aria-label="JWT payload example">
+                <span class="punct">{</span><br>
+                &nbsp;&nbsp;<span class="key">"sub"</span><span class="punct">:</span> <span class="str">"usr_8836"</span><span class="punct">,</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:rgba(255,255,255,0.28)">// Subject — who this token is about</span><br>
+                &nbsp;&nbsp;<span class="key">"iss"</span><span class="punct">:</span> <span class="str">"auth.affilore.com"</span><span class="punct">,</span>&nbsp;<span style="color:rgba(255,255,255,0.28)">// Issuer — which system minted it</span><br>
+                &nbsp;&nbsp;<span class="key">"aud"</span><span class="punct">:</span> <span class="str">"api.affilore.com"</span><span class="punct">,</span>&nbsp;&nbsp;<span style="color:rgba(255,255,255,0.28)">// Audience — intended recipient</span><br>
+                &nbsp;&nbsp;<span class="key">"iat"</span><span class="punct">:</span> <span class="num">1716940800</span><span class="punct">,</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:rgba(255,255,255,0.28)">// Issued At (Unix epoch)</span><br>
+                &nbsp;&nbsp;<span class="key">"exp"</span><span class="punct">:</span> <span class="num">1716944400</span><span class="punct">,</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:rgba(255,255,255,0.28)">// Expiry (Unix epoch)</span><br>
+                &nbsp;&nbsp;<span class="key">"nbf"</span><span class="punct">:</span> <span class="num">1716940800</span><span class="punct">,</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:rgba(255,255,255,0.28)">// Not Before — earliest valid time</span><br>
+                &nbsp;&nbsp;<span class="key">"roles"</span><span class="punct">:</span> <span class="punct">[</span><span class="str">"editor"</span><span class="punct">, "billing"</span><span class="punct">]</span><br>
+                <span class="punct">}</span>
+            </div>
+
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+                The <span class="badge badge-claim">exp</span> claim is arguably the most important for security posture. An expired token must be rejected regardless of a valid signature — yet numerous real-world vulnerabilities stem from applications that check the signature but skip expiry validation. A decoder that highlights expired tokens with a visible warning, and shows the remaining validity window or time-since-expiry, catches these bugs during development before they reach production.
+            </p>
+
+            <h3 style="color: #e0e7ff; font-size: 1.125rem; font-weight: 600; margin-bottom: 12px;">3. The Signature and Base64URL Padding</h3>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+                The Signature is computed as <code>HMAC-SHA256(base64url(header) + "." + base64url(payload), secret)</code> for symmetric algorithms, or via an asymmetric private key for <span class="badge badge-algo">RS256</span> / <span class="badge badge-algo">ES256</span>. Its sole purpose is to prove the token was issued by a trusted party and has not been tampered with since. Critically, <span class="badge badge-b64">Base64URL</span> differs from standard <span class="badge badge-b64">Base64</span> in two important ways: it replaces <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code>, and it omits trailing <code>=</code> padding characters that would otherwise break URL query string parsing. Decoders must implement this specific variant; using a standard Base64 library without modification will silently misparse tokens and produce incorrect output.
+            </p>
+
+            <div class="callout callout-danger">
+                <div class="callout-icon">⚠️</div>
+                <div>
+                    <div class="callout-title">Algorithm Confusion Attack — Critical Risk</div>
+                    <div class="callout-body">If a server accepts both <span class="badge badge-algo">RS256</span> and <span class="badge badge-algo">HS256</span> dynamically, an attacker can forge a token signed with the <em>public key</em> as an HMAC secret, switching the algorithm header to <span class="badge badge-algo">HS256</span>. Always enforce a strict algorithm allowlist server-side and verify it during debugging with a JWT decoder.</div>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="section-label">Practical Step Integration</div>
+            <h2 style="background: linear-gradient(120deg, #e0e7ff 0%, #a5b4fc 100%); -webkit-background-clip: text; color: transparent; font-size: 28px; border-bottom: 2px solid #9B59B6; padding-bottom: 10px; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px;">Decoding a Token Step by Step</h2>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Follow this workflow whenever you need to inspect a JWT from an API response, browser cookie, or Authorization header during development or incident response.</p>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <div class="step-body">
+                        <h3 style="color:#e0e7ff; font-weight:600;">Locate and Copy the Token String</h3>
+                        <p>Extract the raw token from your source — typically the <code>Authorization: Bearer &lt;token&gt;</code> header in network inspector, a <code>Set-Cookie</code> response, or a <code>localStorage</code> entry. Copy the full three-segment string including both period delimiters. Do not truncate; even one missing character will invalidate the <span class="badge badge-b64">Base64URL</span> decoding.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <div class="step-body">
+                        <h3 style="color:#e0e7ff; font-weight:600;">Paste Into the Affilore Decoder Input</h3>
+                        <p>Paste the token string into the decoder's input field. The tool immediately segments the three parts and decodes each concurrently in the browser's JavaScript runtime. No network request is made. The decoder will visually separate the Header, Payload, and Signature into colour-coded panels, and will flag a malformed token if the segment count or <span class="badge badge-b64">Base64URL</span> encoding is invalid.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <div class="step-body">
+                        <h3 style="color:#e0e7ff; font-weight:600;">Inspect the Registered Claim Structure</h3>
+                        <p>In the Payload panel, verify the critical registered claims: confirm <span class="badge badge-claim">iss</span> matches your expected issuer domain, verify <span class="badge badge-claim">aud</span> is scoped to the correct API endpoint, and check that <span class="badge badge-claim">sub</span> maps to the expected user or service identity. A mismatch in any of these constitutes a validation failure that must be rejected at runtime.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num">04</div>
+                    <div class="step-body">
+                        <h3 style="color:#e0e7ff; font-weight:600;">Read Epoch Timestamps as Human Dates</h3>
+                        <p>JWT timestamps use Unix epoch seconds — the number of seconds elapsed since January 1, 1970 UTC. Affilore's decoder automatically converts <span class="badge badge-claim">exp</span>, <span class="badge badge-claim">iat</span>, and <span class="badge badge-claim">nbf</span> values into locale-aware datetime strings, and calculates the remaining validity window or how long ago the token expired. This eliminates the need for external epoch-to-date converters.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num">05</div>
+                    <div class="step-body">
+                        <h3 style="color:#e0e7ff; font-weight:600;">Audit the Algorithm and Custom Claims</h3>
+                        <p>Verify the Header's <span class="badge badge-claim">alg</span> field matches your system's expected algorithm. Flag any token declaring <span class="badge badge-algo">none</span> as an immediate security concern. Then review any application-specific custom claims — roles, scopes, tenant IDs — to confirm they carry the expected values for your current test scenario before submitting a bug report or opening a security ticket.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="epoch-demo">
+                <div class="epoch-card">
+                    <div class="epoch-label">iat — Issued At</div>
+                    <div class="epoch-value">1716940800</div>
+                    <div class="epoch-human">Wed, 29 May 2024 00:00:00 UTC</div>
+                </div>
+                <div class="epoch-card">
+                    <div class="epoch-label">exp — Expiry</div>
+                    <div class="epoch-value">1716944400</div>
+                    <div class="epoch-human">Wed, 29 May 2024 01:00:00 UTC</div>
+                </div>
+                <div class="epoch-card">
+                    <div class="epoch-label">Validity Window</div>
+                    <div class="epoch-value" style="color:#6ee7b7;">60 minutes</div>
+                    <div class="epoch-human">Standard access lifecycle schema</div>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="section-label">Trust Boundaries and Sandboxing</div>
+            <h2 style="background: linear-gradient(120deg, #e0e7ff 0%, #a5b4fc 100%); -webkit-background-clip: text; color: transparent; font-size: 28px; border-bottom: 2px solid #E67E22; padding-bottom: 10px; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 20px;">Why Local Client-Side Execution Is Non-Negotiable</h2>
+
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+                Many JWT debugging tools available online operate as server-side processing services: you submit your token, it travels to a remote backend, gets decoded in a server runtime, and the result is returned to your browser. This architecture has a fundamental and irreconcilable security flaw. Production JWTs frequently contain high-sensitivity data — user identifiers, role assignments, tenant information, OAuth scopes, and in some deployments, partial PII. Transmitting these over the network, even to an ostensibly trustworthy third-party tool, violates the principle of least privilege and creates an external logging footprint you cannot control.
+            </p>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">
+nd server. This architecture guarantees that sensitive security tokens, authorization roles, user identifiers, and other embedded payload details never leave the safety of your local machine. You are completely protected from external server logs, network interception, and data breaches. Because we enforce zero tracking and run completely client-side, the tool remains completely free of external dependencies, offering zero-latency, high-performance execution for all of your developer debugging workflows.</p>
+            <h2 style="color: #2ECC71; font-size: 28px; border-bottom: 2px solid #FF8C00; padding-bottom: 10px; margin-top: 48px; margin-bottom: 16px;">Comprehensive FAQ: Mastering JWT Debugging</h2>
+            
+            <h3 style="background: linear-gradient(90deg, #9B59B6, #4169E1); -webkit-background-clip: text; color: transparent; font-size: 22px; margin-top: 24px; margin-bottom: 12px;">Does this tool send my token to a remote server?</h3>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">No. All parsing, validation, and layout highlight transformations execute 100% locally within your active browser instance. Your raw JSON Web Token strings are never transmitted over the internet. This zero-network approach ensures that sensitive API keys, user databases, and authorization claims are protected from external tracking, logging, or interception.</p>
+            
+            <h3 style="background: linear-gradient(90deg, #9B59B6, #4169E1); -webkit-background-clip: text; color: transparent; font-size: 22px;">Why do some claims display formatted dates in green?</h3>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Standard JWT claims like <code>exp</code> (Expiration Time), <code>iat</code> (Issued At), and <code>nbf</code> (Not Before) represent time values as raw Unix epoch seconds. This decoder parses these specific claims and converts them into localized, human-readable date-time strings, appended directly in the visual viewer. This helps developers immediately diagnose expired tokens or verify lifecycles without using manual converters.</p>
+            
+            <h3 style="background: linear-gradient(90deg, #9B59B6, #4169E1); -webkit-background-clip: text; color: transparent; font-size: 22px;">What does the "NOT VERIFIED" status mean for the signature?</h3>
+            <p style="color: #FFFFFF; font-size: 17.5px; margin-bottom: 24px;">Since this is a client-side debugger running inside a secure sandbox, it does not prompt you to enter a private cryptographic secret or RSA public certificate key. Consequently, it validates the structure of the signature segment but does not cryptographically verify the signature's authenticity. This layout is designed to help you inspect and check structure safely without uploading sensitive private certificates to a web interface.</p>
+        </div>
+    </main>
+
+    <footer class="w-full bg-[#050507] border-t border-zinc-950 mt-10 py-12 relative z-50">
+        <div class="max-w-[1440px] mx-auto px-6 flex flex-col items-center justify-center gap-6">
+            <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-semibold text-zinc-400">
+                <a href="/privacy-policy.html" class="hover:text-white transition">Privacy</a>
+                <a href="/terms.html" class="hover:text-white transition">Terms</a>
+                <a href="#" class="hover:text-white transition">Disclaimer</a>
+                <a href="/about-us.html" class="hover:text-white transition">About</a>
+                <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=affilore4@gmail.com&amp;su=Contact+Us" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Contact</a>
+            </div>
+            
+            <div class="flex items-center gap-6 text-zinc-500">
+                <a href="https://www.tiktok.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.63 4.14.93.98 2.22 1.58 3.55 1.78v3.83c-1.42-.02-2.82-.47-4-1.28a7.12 7.12 0 0 1-2.42-2.84v7.7c.04 1.8-.44 3.61-1.42 5.12a7.88 7.88 0 0 1-4.14 3.29c-1.78.53-3.7.46-5.43-.22a8.03 8.03 0 0 1-4.11-4.73 8.32 8.32 0 0 1 .15-5.69c.77-1.89 2.22-3.48 4.04-4.4a8.21 8.21 0 0 1 6.51-.43v4.06a4.15 4.15 0 0 0-2.48.97c-.94.81-1.46 2.05-1.39 3.28.06 1.14.65 2.21 1.58 2.85.95.6 2.11.72 3.14.3a4.02 4.02 0 0 0 2.45-3.3c.09-1.01.03-2.03.04-3.05V0h1.42z"/></svg></a>
+                <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="https://www.instagram.com/affilore_/?hl=en" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+            </div>
+            
+            <div class="text-xs font-medium text-zinc-600 tracking-wide mt-2">
+                &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+            </div>
+        </div>
+    </footer>
+
+    <div id="copyToast" class="copy-toast">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        Copied string to local clipboard!
+    </div>
+
+    <script>
+    (() => {
+      'use strict';
+      
+      const jwtInput = document.getElementById('jwtInput');
+      const charCount = document.getElementById('charCount');
+      const jwtPreview = document.getElementById('jwtPreview');
+      const headerOutput = document.getElementById('headerOutput');
+      const payloadOutput = document.getElementById('payloadOutput');
+      const signatureOutput = document.getElementById('signatureOutput');
+      
+      const valLength = document.getElementById('valLength');
+      const valSegments = document.getElementById('valSegments');
+      const valClaims = document.getElementById('valClaims');
+      const valTime = document.getElementById('valTime');
+      
+      const payloadClaimCount = document.getElementById('payloadClaimCount');
+      const sigStatusBadge = document.getElementById('sigStatusBadge');
+      const sigStatusDot = document.getElementById('sigStatusDot');
+      const sigStatusText = document.getElementById('sigStatusText');
+      
+      const globalStatusDot = document.getElementById('globalStatusDot');
+      const globalStatusText = document.getElementById('globalStatusText');
+      
+      const copyToast = document.getElementById('copyToast');
+
+      function escapeHtml(str) {
+          return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      function base64UrlDecode(str) {
+          try {
+              let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+              while (base64.length % 4) {
+                  base64 += '=';
+              }
+              return decodeURIComponent(escape(atob(base64)));
+          } catch (e) {
+              return atob(str.replace(/-/g, '+').replace(/_/g, '/'));
+          }
+      }
+
+      function formatJSON(val, key) {
+          if (val === null) {
+              return '<span class="json-null">null</span>';
+          }
+          if (typeof val === 'boolean') {
+              return `<span class="json-bool">${val}</span>`;
+          }
+          if (typeof val === 'number') {
+              let html = `<span class="json-number">${val}</span>`;
+              if (['exp', 'iat', 'nbf'].includes(key) && val > 0) {
+                  try {
+                      const date = new Date(val * 1000);
+                      if (!isNaN(date.getTime())) {
+                          html += ` <span class="json-time">(${date.toLocaleString()})</span>`;
+                      }
+                  } catch(e) {}
+              }
+              return html;
+          }
+          if (typeof val === 'string') {
+              return `<span class="json-string">"${escapeHtml(val)}"</span>`;
+          }
+          if (Array.isArray(val)) {
+              if (val.length === 0) return '[]';
+              let items = val.map(item => formatJSON(item, key));
+              return '[<br>' + items.map(item => '    ' + item).join(',<br>') + '<br>]';
+          }
+          if (typeof val === 'object') {
+              let keys = Object.keys(val);
+              if (keys.length === 0) return '{}';
+              let entries = keys.map(k => {
+                  let formattedVal = formatJSON(val[k], k);
+                  return `    <span class="json-key">"${escapeHtml(k)}"</span>: ${formattedVal}`;
+              });
+              return '{<br>' + entries.join(',<br>') + '<br>}';
+          }
+          return escapeHtml(String(val));
+      }
+
+      window.decodeToken = function() {
+          const startTime = performance.now();
+          const token = jwtInput.value.trim();
+          
+          charCount.textContent = `${token.length} chars`;
+          valLength.textContent = token.length;
+
+          if (!token) {
+              window.clearAll();
+              return;
+          }
+
+          const parts = token.split('.');
+          valSegments.textContent = parts.length;
+
+          let previewHTML = '';
+          if (parts[0]) {
+              previewHTML += `<span class="jwt-header-seg">${escapeHtml(parts[0])}</span>`;
+          }
+          if (parts.length > 1) {
+              previewHTML += `<span class="jwt-dot">.</span>`;
+              if (parts[1]) {
+                  previewHTML += `<span class="jwt-payload-seg">${escapeHtml(parts[1])}</span>`;
+              }
+          }
+          if (parts.length > 2) {
+              previewHTML += `<span class="jwt-dot">.</span>`;
+              if (parts[2]) {
+                  previewHTML += `<span class="jwt-sig-seg">${escapeHtml(parts[2])}</span>`;
+              }
+          }
+          jwtPreview.innerHTML = previewHTML;
+
+          if (parts.length !== 3) {
+              headerOutput.innerHTML = '<span class="text-red-500 font-sans">Error: JWT must contain exactly 3 segments separated by dots.</span>';
+              payloadOutput.innerHTML = '<span class="text-red-500 font-sans">Awaiting valid token...</span>';
+              signatureOutput.innerHTML = '<span class="text-red-500 font-sans">Awaiting valid token...</span>';
+              
+              valClaims.textContent = '0';
+              payloadClaimCount.textContent = '0 claims';
+              
+              globalStatusDot.className = 'w-2 h-2 rounded-full bg-red-500 shadow-md';
+              globalStatusText.textContent = 'INVALID STRUCTURE';
+              
+              sigStatusBadge.className = 'status-badge status-invalid border border-red-500/20';
+              sigStatusDot.className = 'pulse-dot bg-red-500';
+              sigStatusText.textContent = 'MALFORMED';
+              
+              valTime.textContent = (performance.now() - startTime).toFixed(2);
+              return;
+          }
+
+          try {
+              const headerStr = base64UrlDecode(parts[0]);
+              const headerObj = JSON.parse(headerStr);
+              headerOutput.innerHTML = formatJSON(headerObj);
+              
+              const payloadStr = base64UrlDecode(parts[1]);
+              const payloadObj = JSON.parse(payloadStr);
+              payloadOutput.innerHTML = formatJSON(payloadObj);
+              
+              const claimsNum = Object.keys(payloadObj).length;
+              valClaims.textContent = claimsNum;
+              payloadClaimCount.textContent = `${claimsNum} claims`;
+
+              const sigAlg = headerObj.alg || 'HS256';
+              signatureOutput.innerHTML = `<span class="text-zinc-400 font-mono">HMACSHA256(<br>    base64UrlEncode(header) + "." +<br>    base64UrlEncode(payload),<br>    <span class="text-[#F5A623]">"YOUR_SECRET_KEY"</span><br>)</span>`;
+
+              let isExpired = false;
+              if (payloadObj.exp) {
+                  const currentEpoch = Math.floor(Date.now() / 1000);
+                  if (currentEpoch > payloadObj.exp) {
+                      isExpired = true;
+                  }
+              }
+
+              if (isExpired) {
+                  globalStatusDot.className = 'w-2 h-2 rounded-full bg-amber-500 shadow-md';
+                  globalStatusText.textContent = 'EXPIRED TOKEN';
+                  
+                  sigStatusBadge.className = 'status-badge status-invalid border border-amber-500/20';
+                  sigStatusDot.className = 'pulse-dot bg-amber-500';
+                  sigStatusText.textContent = 'EXPIRED';
+              } else {
+                  globalStatusDot.className = 'w-2 h-2 rounded-full bg-emerald-500 shadow-md';
+                  globalStatusText.textContent = 'VALID FORMAT';
+                  
+                  sigStatusBadge.className = 'status-badge status-valid border border-emerald-500/20';
+                  sigStatusDot.className = 'pulse-dot bg-emerald-500';
+                  sigStatusText.textContent = 'VERIFIED STRUCTURE';
+              }
+
+          } catch (err) {
+              headerOutput.innerHTML = `<span class="text-red-500 font-sans">Error decoding Base64URL or parsing JSON:<br>${escapeHtml(err.message)}</span>`;
+              payloadOutput.innerHTML = '<span class="text-red-500 font-sans">Parsing failed.</span>';
+              
+              valClaims.textContent = '0';
+              payloadClaimCount.textContent = '0 claims';
+              
+              globalStatusDot.className = 'w-2 h-2 rounded-full bg-red-500 shadow-md';
+              globalStatusText.textContent = 'DECODE ERROR';
+              
+              sigStatusBadge.className = 'status-badge status-invalid border border-red-500/20';
+              sigStatusDot.className = 'pulse-dot bg-red-500';
+              sigStatusText.textContent = 'DECODE ERROR';
+          }
+
+          valTime.textContent = (performance.now() - startTime).toFixed(2);
+      };
+
+      window.copyClaims = function() {
+          const payloadText = payloadOutput.innerText;
+          if (!payloadText || payloadText.includes('Awaiting token…') || payloadText.includes('Parsing failed')) {
+              return;
+          }
+          
+          try {
+              const token = jwtInput.value.trim();
+              const parts = token.split('.');
+              if (parts.length >= 2) {
+                  const payloadStr = base64UrlDecode(parts[1]);
+                  const payloadObj = JSON.parse(payloadStr);
+                  const formattedJson = JSON.stringify(payloadObj, null, 4);
+                  navigator.clipboard.writeText(formattedJson).then(() => {
+                      showToast();
+                  });
+                  return;
+              }
+          } catch(e) {}
+          
+          navigator.clipboard.writeText(payloadText).then(() => {
+              showToast();
+          });
+      };
+
+      function showToast() {
+          copyToast.classList.add('show');
+          setTimeout(() => {
+              copyToast.classList.remove('show');
+          }, 2500);
+      }
+
+      window.clearAll = function() {
+          jwtInput.value = '';
+          charCount.textContent = '0 chars';
+          jwtPreview.innerHTML = '<span class="text-zinc-600 text-xs">Token segments will be color-coded here…</span>';
+          
+          headerOutput.innerHTML = '<span class="text-zinc-600 text-xs">Awaiting token…</span>';
+          payloadOutput.innerHTML = '<span class="text-zinc-600 text-xs">Awaiting token…</span>';
+          signatureOutput.innerHTML = '<span class="text-zinc-600 text-xs">Awaiting token…</span>';
+          
+          valLength.textContent = '0';
+          valSegments.textContent = '0';
+          valClaims.textContent = '0';
+          valTime.textContent = '0.00';
+          
+          payloadClaimCount.textContent = '0 claims';
+          
+          globalStatusDot.className = 'w-2 h-2 rounded-full bg-zinc-500';
+          globalStatusText.textContent = 'AWAITING TOKEN';
+          
+          sigStatusBadge.className = 'status-badge status-idle border border-zinc-800 bg-[#111113]';
+          sigStatusDot.className = 'pulse-dot bg-zinc-500';
+          sigStatusText.textContent = 'NOT VERIFIED';
+      };
+
+      jwtInput.addEventListener('input', () => {
+          window.decodeToken();
+      });
+
+    })();
+    </script>
+</body>
+</html>
