@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compound Interest Calculator — Affilore Investment Workbench</title>
+  <meta name="description" content="High-precision compound interest calculator with real-time projections, multiple compounding frequencies, and exportable investment reports." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian:  '#0A0A0B',
+            panel:     '#111113',
+            border:    '#1E1E22',
+            amber:     '#F5A623',
+            amberDark: '#C4841A',
+            amberGlow: '#FFD580',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Base Reset ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-family: 'Inter', system-ui, sans-serif; }
+    body { background: #0A0A0B; color: #E4E4E7; overflow-x: hidden; }
+    /* ── Scrollbar ────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0A0B; }
+    ::-webkit-scrollbar-thumb { background: #2A2A2E; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F5A623; }
+    /* ── Gradient Text Headings ───────────────────────────────────── */
+    .gradient-text {
+      background: linear-gradient(135deg, #f87171, #ec4899, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gradient-text-amber {
+      background: linear-gradient(135deg, #F5A623, #FFD580, #F5A623);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    /* ── Animated Particle Backdrop ───────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(1.5px 1.5px at 10% 15%, rgba(245,166,35,0.25) 50%, transparent 100%),
+        radial-gradient(1px 1px at 25% 45%, rgba(245,166,35,0.15) 50%, transparent 100%),
+        radial-gradient(2px 2px at 40% 70%, rgba(245,166,35,0.20) 50%, transparent 100%),
+        radial-gradient(1px 1px at 55% 20%, rgba(245,166,35,0.18) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 70% 55%, rgba(245,166,35,0.22) 50%, transparent 100%),
+        radial-gradient(1px 1px at 85% 80%, rgba(245,166,35,0.12) 50%, transparent 100%),
+        radial-gradient(2px 2px at 15% 90%, rgba(245,166,35,0.16) 50%, transparent 100%),
+        radial-gradient(1px 1px at 60% 95%, rgba(245,166,35,0.14) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 90% 35%, rgba(245,166,35,0.19) 50%, transparent 100%),
+        radial-gradient(1px 1px at 35% 10%, rgba(245,166,35,0.10) 50%, transparent 100%),
+        radial-gradient(2px 2px at 75% 5%,  rgba(245,166,35,0.13) 50%, transparent 100%),
+        radial-gradient(1px 1px at 50% 60%, rgba(245,166,35,0.17) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 20% 75%, rgba(245,166,35,0.11) 50%, transparent 100%),
+        radial-gradient(1px 1px at 80% 40%, rgba(245,166,35,0.15) 50%, transparent 100%),
+        radial-gradient(2px 2px at 45% 85%, rgba(245,166,35,0.20) 50%, transparent 100%);
+      background-size: 100% 1200px;
+      animation: ambientFlow 45s linear infinite;
+    }
+    @keyframes ambientFlow {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 -1200px; }
+    }
+    /* ── Ambient Glow Orbs ────────────────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(600px circle at 15% 25%, rgba(245,166,35,0.04), transparent 60%),
+        radial-gradient(500px circle at 85% 75%, rgba(168,85,247,0.03), transparent 60%),
+        radial-gradient(400px circle at 50% 50%, rgba(236,72,153,0.02), transparent 60%);
+    }
+    /* ── Panel Styling ────────────────────────────────────────────── */
+    .panel {
+      background: #111113;
+      border: 1px solid #1E1E22;
+      border-radius: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .panel-glow {
+      box-shadow: 0 0 40px -12px rgba(245,166,35,0.08), inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    /* ── Metric Card ──────────────────────────────────────────────── */
+    .metric-card {
+      background: linear-gradient(145deg, #111113 0%, #0E0E10 100%);
+      border: 1px solid #1E1E22;
+      border-radius: 10px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .metric-card:hover {
+      border-color: rgba(245,166,35,0.3);
+      box-shadow: 0 0 24px -6px rgba(245,166,35,0.12);
+      transform: translateY(-2px);
+    }
+    /* ── Custom Range Slider ──────────────────────────────────────── */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #1E1E22;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #F5A623, #FFD580);
+      border: 2px solid #0A0A0B;
+      box-shadow: 0 0 12px rgba(245,166,35,0.4);
+      cursor: grab;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 20px rgba(245,166,35,0.6);
+    }
+    input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #F5A623, #FFD580);
+      border: 2px solid #0A0A0B;
+      box-shadow: 0 0 12px rgba(245,166,35,0.4);
+      cursor: grab;
+    }
+    /* ── Range Track Fill (Webkit) ─────────────────────────────────── */
+    input[type="range"].range-filled {
+      background: linear-gradient(to right, #F5A623 var(--fill), #1E1E22 var(--fill));
+    }
+    /* ── Number Input Styling ──────────────────────────────────────── */
+    .input-sync {
+      background: #0A0A0B;
+      border: 1px solid #1E1E22;
+      border-radius: 8px;
+      color: #F5A623;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      text-align: right;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .input-sync:focus {
+      outline: none;
+      border-color: #F5A623;
+      box-shadow: 0 0 0 3px rgba(245,166,35,0.15);
+    }
+    /* Hide spinner arrows */
+    .input-sync::-webkit-outer-spin-button,
+    .input-sync::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .input-sync[type=number] { -moz-appearance: textfield; }
+    /* ── Frequency Selector ───────────────────────────────────────── */
+    .freq-btn {
+      background: #0A0A0B;
+      border: 1px solid #1E1E22;
+      border-radius: 8px;
+      color: #71717A;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 8px 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .freq-btn:hover { border-color: rgba(245,166,35,0.3); color: #A1A1AA; }
+    .freq-btn.active {
+      background: linear-gradient(135deg, rgba(245,166,35,0.12), rgba(245,166,35,0.06));
+      border-color: #F5A623;
+      color: #F5A623;
+      box-shadow: 0 0 16px -4px rgba(245,166,35,0.2);
+    }
+    /* ── Action Buttons ───────────────────────────────────────────── */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #F5A623, #C4841A);
+      color: #0A0A0B;
+      font-weight: 700;
+      border-radius: 10px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 16px -4px rgba(245,166,35,0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px -4px rgba(245,166,35,0.5);
+      filter: brightness(1.1);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      background: #111113;
+      border: 1px solid #1E1E22;
+      color: #A1A1AA;
+      font-weight: 500;
+      border-radius: 10px;
+      transition: all 0.25s ease;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(245,166,35,0.3);
+      color: #E4E4E7;
+      background: #161618;
+    }
+    /* ── Summary Value Display ─────────────────────────────────────── */
+    .value-display {
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .value-row {
+      border-bottom: 1px solid #1E1E22;
+      transition: background 0.2s ease;
+    }
+    .value-row:last-child { border-bottom: none; }
+    .value-row:hover { background: rgba(245,166,35,0.02); }
+    /* ── Pulse Animation ──────────────────────────────────────────── */
+    @keyframes pulse-amber {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245,166,35,0.3); }
+      50%      { box-shadow: 0 0 0 8px rgba(245,166,35,0); }
+    }
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #F5A623;
+      animation: pulse-amber 2s infinite;
+    }
+    /* ── Toast Notification ────────────────────────────────────────── */
+    .copy-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      background: rgba(245, 166, 35, 0.12);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(245, 166, 35, 0.2);
+      color: #F5A623;
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      pointer-events: none;
+      z-index: 9999;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    /* ── Fade-In ──────────────────────────────────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    /* ── Counter Animate ──────────────────────────────────────────── */
+    .counter-value { transition: opacity 0.15s ease; }
+    .counter-value.updating { opacity: 0.4; }
+
+    /* ── Article Specific Enhancements ── */
+    .noise-overlay {
+      position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+  </style>
+</head>
+<body class="min-h-screen relative">
+  <div class="noise-overlay"></div>
+
+  <header class="w-full bg-[#0A0A0B]/90 backdrop-blur-md border-b border-zinc-900/50 relative z-50">
+    <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-12">
+        <a href="/" class="text-2xl font-black text-white tracking-tight">Affilore<span class="text-blue-500">.</span></a>
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-400">
+          <a href="/" class="text-white transition">Home</a>
+          <a href="/data" class="hover:text-white transition">Data</a>
+          <a href="/calculator" class="hover:text-white transition">Calculator</a>
+          <a href="/utility" class="hover:text-white transition">Utility</a>
+          <a href="/developer" class="hover:text-white transition">Developer</a>
+          <a href="/seo" class="hover:text-white transition">SEO</a>
+          <a href="/productivity" class="hover:text-white transition">Productivity</a>
+        </nav>
+      </div>
+      <div>
+        <a href="mailto:affilore4@gmail.com" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-black bg-[#F5A623] hover:bg-[#E0961B] rounded-full transition shadow-[0_0_20px_rgba(245,166,35,0.2)]">
+          Request a Custom Tool
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="mb-8 animate-in text-center lg:text-left">
+      <div class="flex items-center justify-center lg:justify-start gap-3 mb-3">
+        <div class="pulse-dot"></div>
+        <span class="text-xs font-semibold uppercase tracking-[0.2em] text-amber font-mono">FINANCIAL FORECASTING PLATFORM</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-black tracking-tight mb-3">
+        <span class="gradient-text">Compound Interest</span> <span class="text-white">Calculator</span>
+      </h1>
+      <p class="text-zinc-500 text-sm sm:text-base max-w-2xl leading-relaxed mx-auto lg:mx-0">
+        High-precision yield engine with real-time projections across multiple compounding frequencies. Configure parameters, analyze returns, and export structural metrics reports locally.
+      </p>
+    </div>
+
+    <div class="w-full bg-[#111622]/40 border border-blue-500/10 backdrop-blur-md rounded-xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 relative z-10">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+        <span class="text-xs font-bold tracking-wide text-zinc-300 font-mono">Mathematical Yield Sandbox: Operational</span>
+      </div>
+      <div class="text-xs font-medium text-zinc-500 font-mono flex gap-4">
+        <span>IEEE 754 Floating-Point Precision</span>
+        <span>•</span>
+        <span>Offline Sandbox Isolation</span>
+        <span>•</span>
+        <span>Zero Server Telemetry</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-in delay-1 relative z-10">
+      <div class="metric-card p-5">
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-2">Future Investment Value</div>
+        <div class="value-display text-2xl font-bold text-white counter-value" id="counter-future-value">$0.00</div>
+      </div>
+      <div class="metric-card p-5">
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-2">Total Principal Deposited</div>
+        <div class="value-display text-2xl font-bold text-white counter-value" id="counter-total-principal">$0.00</div>
+      </div>
+      <div class="metric-card p-5">
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-2">Total Interest Earned</div>
+        <div class="value-display text-2xl font-bold gradient-text-amber counter-value" id="counter-total-interest">$0.00</div>
+      </div>
+      <div class="metric-card p-5">
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-2">Computation Time</div>
+        <div class="value-display text-2xl font-bold text-green-400 counter-value" id="counter-calc-speed">0.00 ms</div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-in delay-2 relative z-10 mb-16">
+      
+      <div class="lg:col-span-5">
+        <div class="panel panel-glow p-6 sm:p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <svg class="w-4.5 h-4.5 text-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75"/></svg>
+            <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Granular Projections Inputs</span>
+          </div>
+
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-medium text-zinc-400">Initial Principal Base</label>
+              <div class="flex items-center gap-1">
+                <span class="text-zinc-600 text-xs font-mono">$</span>
+                <input type="number" id="input-principal" class="input-sync w-28 px-2.5 py-1 text-xs" value="10000" min="0" max="1000000" step="100">
+              </div>
+            </div>
+            <input type="range" id="slider-principal" class="range-filled" min="0" max="1000000" value="10000" step="100">
+          </div>
+
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-medium text-zinc-400">Monthly Contribution Addition</label>
+              <div class="flex items-center gap-1">
+                <span class="text-zinc-600 text-xs font-mono">$</span>
+                <input type="number" id="input-contribution" class="input-sync w-28 px-2.5 py-1 text-xs" value="500" min="0" max="50000" step="50">
+              </div>
+            </div>
+            <input type="range" id="slider-contribution" class="range-filled" min="0" max="50000" value="500" step="50">
+          </div>
+
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-medium text-zinc-400">Expected Growth Rate (Nominal)</label>
+              <div class="flex items-center gap-1">
+                <input type="number" id="input-rate" class="input-sync w-20 px-2.5 py-1 text-xs" value="7" min="1" max="30" step="0.1">
+                <span class="text-zinc-600 text-xs font-mono">%</span>
+              </div>
+            </div>
+            <input type="range" id="slider-rate" class="range-filled" min="1" max="30" value="7" step="0.1">
+          </div>
+
+          <div class="mb-6">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-medium text-zinc-400">Horizon Timeline Duration</label>
+              <div class="flex items-center gap-1">
+                <input type="number" id="input-years" class="input-sync w-16 px-2.5 py-1 text-xs" value="20" min="1" max="50" step="1">
+                <span class="text-zinc-600 text-xs font-mono">yrs</span>
+              </div>
+            </div>
+            <input type="range" id="slider-years" class="range-filled" min="1" max="50" value="20" step="1">
+          </div>
+
+          <div class="mb-6">
+            <label class="text-xs font-bold tracking-wider uppercase text-zinc-500 block mb-2">Compounding Frequency Intervals</label>
+            <div class="grid grid-cols-5 gap-1.5" id="freq-selector">
+              <button class="freq-btn" data-freq="1">Annual</button>
+              <button class="freq-btn" data-freq="2">Semi</button>
+              <button class="freq-btn" data-freq="4">Quarter</button>
+              <button class="freq-btn active" data-freq="12">Monthly</button>
+              <button class="freq-btn" data-freq="365">Daily</button>
+            </div>
+          </div>
+
+          <div class="border-t border-border my-5"></div>
+
+          <div class="flex flex-col gap-2">
+            <button class="btn-primary w-full py-3 text-xs uppercase tracking-wider font-bold" id="btn-calculate">
+              Calculate Projections Matrix
+            </button>
+            <div class="grid grid-cols-2 gap-2">
+              <button class="btn-secondary py-2.5 text-xs font-bold uppercase tracking-wider" id="btn-copy-json">Copy JSON Output</button>
+              <button class="btn-secondary py-2.5 text-xs font-bold uppercase tracking-wider" id="btn-download-csv">Download CSV</button>
+            </div>
+            <button class="btn-secondary py-2 text-xs font-bold uppercase tracking-wider text-red-400 border-red-900/20 hover:bg-red-500/5 mt-1" id="btn-clear">Clear Window</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7">
+        <div class="panel panel-glow p-6 sm:p-8 h-full flex flex-col justify-between bg-panel/30 border-white/5">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold uppercase tracking-wider text-zinc-400 font-sans">Accumulated Forecast Metrics</span>
+              <span id="result-compound-label" class="text-[10px] font-bold font-mono text-zinc-600 uppercase">Monthly Compounding Schedule</span>
+            </div>
+            
+            <div class="mb-6 p-5 rounded-xl border border-amber/10 bg-zinc-950/40">
+              <span class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mb-1 block">Projected Capital Future Value</span>
+              <div class="value-display text-4xl sm:text-5xl font-black gradient-text-amber" id="result-future-value">$0.00</div>
+            </div>
+
+            <div class="rounded-xl border border-border overflow-hidden bg-obsidian/40">
+              <div class="value-row px-5 py-3.5 flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Initial Floor Principal</span>
+                <span class="value-display text-base font-bold text-white" id="result-initial">$0.00</span>
+              </div>
+              <div class="value-row px-5 py-3.5 flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Total Regular Deposits Contributions</span>
+                <span class="value-display text-base font-bold text-white" id="result-contributions">$0.00</span>
+              </div>
+              <div class="value-row px-5 py-3.5 flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Total Net Capital Deposited</span>
+                <span class="value-display text-base font-bold text-purple-400" id="result-total-principal">$0.00</span>
+              </div>
+              <div class="value-row px-5 py-3.5 flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Total Accrued Compounded Growth Interest</span>
+                <span class="value-display text-base font-bold text-amber" id="result-total-interest">$0.00</span>
+              </div>
+              <div class="value-row px-5 py-3.5 flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Effective Annual Yield Rate (APY / EAR)</span>
+                <span class="value-display text-base font-bold text-pink-400" id="result-ear">0.00%</span>
+              </div>
+              <div class="value-row px-5 py-3.5 flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Interest-to-Principal Leverage Ratio</span>
+                <span class="value-display text-base font-bold text-cyan-400" id="result-ratio">0.00x</span>
+              </div>
+              <div class="value-row px-5 py-3.5 flex items-center justify-between">
+                <span class="text-xs font-medium text-zinc-400">Total Wealth Compound Multiple Base</span>
+                <span class="value-display text-base font-bold text-emerald-400" id="result-multiple">0.00x</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 text-[11px] text-zinc-600 font-mono text-center">
+            Precise modeling calculation architecture powered entirely in local engine modules.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-12 py-10 rounded-2xl bg-[#0A0A0B] border border-zinc-900/40 shadow-inner leading-relaxed relative z-10 mt-12">
+      <section class="max-w-4xl mx-auto px-4 sm:px-6 py-14">
+        <div class="mb-10">
+          <p class="text-[#FFFFFF] uppercase tracking-[0.28em] text-sm font-semibold mb-4">
+            Affilore Compound Interest Calculator
+          </p>
+          <h1 class="text-4xl sm:text-5xl font-black leading-tight bg-gradient-to-r from-yellow-300 via-emerald-300 to-cyan-300 bg-clip-text text-transparent">
+            The Calculus of Exponential Wealth: How Compound Interest Turns Time Into Capital Velocity
+          </h1>
+          <p class="text-[#FFFFFF] mt-6 text-lg leading-8">
+            Compound interest is the financial engine that allows money to earn money, then allows those earnings to generate their own earnings. Unlike simple interest, where growth is calculated only on the original amount, compound interest continuously expands the capital base. Your starting balance becomes a foundation. Your interest becomes an additional layer. Your next interest calculation is then applied to both. Over long time horizons, this creates a dramatic divergence between linear growth and exponential growth. A savings plan that looks modest in year one can become powerful in year fifteen, twenty, or thirty because the curve begins to steepen. This is why a precise compound interest calculator is not just a math tool. It is a forecasting instrument for investors, savers, entrepreneurs, and anyone trying to understand how principal, rate, time, contribution discipline, and compounding frequency interact to shape future wealth.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3 mb-12">
+          <span class="px-4 py-2 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold text-xs">compounding frequency</span>
+          <span class="px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-lime-400 text-black font-bold text-xs">nominal rate</span>
+          <span class="px-4 py-2 rounded-full bg-gradient-to-r from-yellow-300 to-orange-400 text-black font-bold text-xs">geometric sequence</span>
+          <span class="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-xs">principal base</span>
+        </div>
+      </section>
+
+      <section class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+        <h2 class="text-3xl font-black mb-6 bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent">
+          Deep-Dive Technical Breakdown: The Mathematics Behind Compound Growth
+        </h2>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          The core compound interest formula is built around one central idea: the future value of money depends on the current principal, the rate of return, the number of compounding periods, and the total duration of the investment. The classic formula is:
+        </p>
+        <div class="rounded-2xl p-6 mb-6 bg-gradient-to-br from-slate-900 via-slate-800 to-black border border-cyan-400/40 shadow-xl">
+          <p class="text-[#FFFFFF] text-xl font-bold font-mono text-center">
+            FV = P × (1 + r / n)<sup>n × t</sup>
+          </p>
+          <p class="text-[#FFFFFF] mt-4 leading-7 text-sm text-zinc-400">
+            FV equals future value. P equals the starting principal. r equals the annual nominal interest rate expressed as a decimal. n equals the number of times interest compounds per year. t equals the total number of years.
+          </p>
+        </div>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          This formula describes a geometric sequence because each new period multiplies the previous balance by a growth factor. If your principal base is $10,000 and your annual nominal rate is 8%, annual compounding applies one full 8% increase each year. The first year produces $800 in interest. The second year does not calculate 8% only on $10,000. It calculates 8% on $10,800. That small difference is the beginning of exponential expansion.
+        </p>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          When regular contributions are added, the equation becomes more practical for real investors. Most people do not invest once and wait. They contribute monthly, quarterly, or annually. These recurring deposits are commonly represented as PMT. A simplified future value model with regular payments is:
+        </p>
+        <div class="rounded-2xl p-6 mb-6 bg-gradient-to-r from-purple-950 via-slate-900 to-cyan-950 border border-yellow-300/40">
+          <p class="text-[#FFFFFF] text-lg font-bold font-mono text-center">
+            FV = P × (1 + i)<sup>N</sup> + PMT × [((1 + i)<sup>N</sup> - 1) / i]
+          </p>
+          <p class="text-[#FFFFFF] mt-4 leading-7 text-sm text-zinc-400">
+            In this expanded model, i represents the periodic interest rate, N represents the total number of periods, and PMT represents the recurring contribution made during each period. The first part compounds the initial capital floor. The second part compounds the stream of contributions.
+          </p>
+        </div>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          This is where the calculator becomes strategically useful. A person investing $5,000 once may see meaningful growth, but a person investing $5,000 plus $300 every month builds two engines at the same time. The original balance compounds, and every contribution becomes a new mini-principal. Over decades, the contribution stream can become more important than the original deposit because each deposit joins the compounding matrix.
+        </p>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          Nominal and effective interest rates are also critical. The nominal rate is the stated annual rate before compounding effects are fully translated into annualized yield. The effective annual rate, often called EAR or APY, shows the real annual return after compounding frequency is included. A 10% nominal rate compounded annually produces a 10% effective annual rate. But the same 10% nominal rate compounded monthly produces a slightly higher effective return because interest is credited twelve times instead of once.
+        </p>
+        
+        <div class="rounded-2xl overflow-hidden border border-emerald-300/40 mb-7">
+          <div class="grid grid-cols-3 bg-gradient-to-r from-emerald-400 to-cyan-400 text-black font-black text-xs sm:text-sm">
+            <div class="p-4">Frequency</div>
+            <div class="p-4">Calculation Pattern</div>
+            <div class="p-4">Growth Effect</div>
+          </div>
+          <div class="grid grid-cols-3 bg-slate-950 border-t border-white/10 text-xs sm:text-sm">
+            <div class="p-4 text-[#FFFFFF] font-semibold">Annual</div>
+            <div class="p-4 text-[#FFFFFF]">1 compounding period per year</div>
+            <div class="p-4 text-[#FFFFFF]">Slowest standard compounding curve</div>
+          </div>
+          <div class="grid grid-cols-3 bg-slate-900 border-t border-white/10 text-xs sm:text-sm">
+            <div class="p-4 text-[#FFFFFF] font-semibold">Monthly</div>
+            <div class="p-4 text-[#FFFFFF]">12 compounding periods per year</div>
+            <div class="p-4 text-[#FFFFFF]">Higher yield through frequent reinvestment</div>
+          </div>
+          <div class="grid grid-cols-3 bg-slate-950 border-t border-white/10 text-xs sm:text-sm">
+            <div class="p-4 text-[#FFFFFF] font-semibold">Daily</div>
+            <div class="p-4 text-[#FFFFFF]">365 compounding periods per year</div>
+            <div class="p-4 text-[#FFFFFF]">Maximum practical frequency for many accounts</div>
+          </div>
+        </div>
+
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          The difference between daily and annual compounding can appear small in a single year, but the variance becomes more visible as time expands. That is the hidden power of long-term capital velocity. Small mathematical advantages repeat thousands of times. A daily compounding schedule increases the number of growth events, allowing interest to be added to the principal base more frequently. The investor is not simply earning more interest. The investor is increasing the number of moments when interest becomes new capital.
+        </p>
+        
+        <div class="rounded-2xl p-6 bg-gradient-to-br from-yellow-400/20 via-slate-900 to-cyan-400/20 border border-yellow-300/40">
+          <p class="text-[#FFFFFF] font-black text-xl mb-3">Annual Forecast Ledger Fields</p>
+          <p class="text-zinc-300 text-sm font-mono leading-relaxed bg-black/40 p-3 rounded-lg">
+            Year → Opening Balance → Annual Contributions → Interest Earned → Ending Balance → Cumulative Contributions → Cumulative Interest → Interest Share of Total Growth.
+          </p>
+          <p class="text-[#FFFFFF] leading-8 mt-4">
+            This structure helps users separate money they personally contributed from money produced by the compounding engine. That distinction matters because two accounts can end with the same balance but very different wealth quality. One may be contribution-heavy. The other may be interest-heavy. The second account has greater capital efficiency.
+          </p>
+        </div>
+      </section>
+
+      <section class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+        <h2 class="text-3xl font-black mb-6 bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300 bg-clip-text text-transparent">
+          Step-by-Step Tutorial: How to Use the Affilore Compound Interest Calculator
+        </h2>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          Start by entering your initial capital floor. This is the principal base from which the forecast begins. It can be your current savings account balance, brokerage account value, emergency fund, retirement account, or any lump sum you plan to invest. A higher starting principal accelerates growth because the first interest calculation has a larger base to work from.
+        </p>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          Next, adjust your expected annual return. This should be treated as an assumption, not a guarantee. Conservative users may test lower rates to see what happens under restrained conditions. Growth-focused users may model stronger scenarios, but every projection should be understood as educational forecasting rather than personalized investment advice.
+        </p>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          Then define your contribution schedule. Enter your monthly or periodic contribution amount to see how consistent deposits change the final outcome. This step is powerful because it shows how behavior interacts with mathematics. A person who cannot control market returns can still control savings rate, contribution discipline, and time in the market.
+        </p>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          Use the real-time sliders to test different compounding assumptions. Increase the investment period from five years to twenty years and watch the curve change. Shift from annual to monthly or daily compounding and compare the final value. Adjust contributions upward or downward to see how much of the ending balance comes from personal deposits versus accumulated interest.
+        </p>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          Finally, review the forecast table. The most important fields are ending balance, total contributions, total interest earned, and year-by-year growth. Downloading the forecast allows you to keep a planning record, compare scenarios, or build a savings roadmap. For better planning, run at least three cases: conservative, expected, and aggressive. This gives you a range instead of a single fragile prediction.
+        </p>
+      </section>
+
+      <section class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+        <h2 class="text-3xl font-black mb-6 bg-gradient-to-r from-emerald-300 via-cyan-300 to-blue-300 bg-clip-text text-transparent">
+          The Affilore Edge: Private, Serverless Financial Forecasting
+        </h2>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          Affilore’s Compound Interest Calculator is designed for fast, private, and frictionless financial forecasting. Users often enter sensitive information into calculators: current balances, savings targets, monthly investment capacity, retirement goals, and private net-worth assumptions. On a premium finance platform, that information deserves protection by design.
+        </p>
+        <p class="text-[#FFFFFF] leading-8 mb-5">
+          Because the tool is built as a 100% serverless forecasting experience, calculations can run locally in-memory without requiring users to submit personal balance sheets to a backend database. This creates a cleaner privacy posture. No account creation is required. No private investment goal needs to be stored. No server-side profile has to be built around a user’s financial ambition.
+        </p>
+        <p class="text-[#FFFFFF] leading-8">
+          For users who care about compliance, discretion, and data minimization, this matters. A compound interest calculator should help people model the future, not quietly collect their financial identity. Affilore keeps the experience simple: enter assumptions, view projections, compare outcomes, and keep your private financial planning sandboxed on your own device.
+        </p>
+      </section>
+
+      <section class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+        <h2 class="text-3xl font-black mb-8 bg-gradient-to-r from-purple-300 via-pink-300 to-yellow-300 bg-clip-text text-transparent">
+          Compound Interest Calculator FAQ
+        </h2>
+        <div class="space-y-6">
+          <div class="rounded-2xl p-6 bg-slate-950 border border-purple-400/40">
+            <h3 class="text-xl font-black text-yellow-300 mb-3">
+              What is the Rule of 72 and how does it relate to compound interest?
+            </h3>
+            <p class="text-[#FFFFFF] leading-8">
+              The Rule of 72 is a quick mental shortcut for estimating how long it may take money to double. Divide 72 by the annual rate of return. At 8%, money roughly doubles in about nine years. It is not exact, but it helps users quickly understand the relationship between interest rate and compounding time.
+            </p>
+          </div>
+          <div class="rounded-2xl p-6 bg-slate-950 border border-cyan-400/40">
+            <h3 class="text-xl font-black text-cyan-300 mb-3">
+              How does inflation affect my future nominal compound totals?
+            </h3>
+            <p class="text-[#FFFFFF] leading-8">
+              Inflation reduces purchasing power. A future balance may look large in nominal dollars, but the real value depends on what those dollars can buy later. For stronger planning, compare your expected investment return against expected inflation. The difference between the two is your approximate real return.
+            </p>
+          </div>
+          <div class="rounded-2xl p-6 bg-slate-950 border border-emerald-400/40">
+            <h3 class="text-xl font-black text-emerald-300 mb-3">
+              Why does compounding frequency create variance in final investment returns?
+            </h3>
+            <p class="text-[#FFFFFF] leading-8">
+              Compounding frequency changes how often earned interest is added back into the principal base. Annual compounding adds interest once per year. Monthly compounding adds it twelve times. Daily compounding adds it hundreds of times. More frequent compounding creates more opportunities for interest to become new interest-producing capital.
+            </p>
+          </div>
+        </div>
+        <p class="text-[#FFFFFF] leading-8 mt-8 text-sm opacity-40">
+          Educational note: This calculator is designed for forecasting and financial education. It does not provide individualized investment, tax, or legal advice.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="w-full bg-[#050507] border-t border-zinc-950 py-12 relative z-50">
+    <div class="max-w-[1440px] mx-auto px-6 flex flex-col items-center justify-center gap-6">
+      <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-semibold text-zinc-400">
+        <a href="/privacy" class="hover:text-white transition">Privacy</a>
+        <a href="/terms" class="hover:text-white transition">Terms</a>
+        <a href="/disclaimer" class="hover:text-white transition">Disclaimer</a>
+        <a href="/about" class="hover:text-white transition">About</a>
+        <a href="mailto:affilore4@gmail.com" class="hover:text-white transition">Contact</a>
+      </div>
+      <div class="text-xs font-medium text-zinc-600 tracking-wide mt-2">
+        &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+      </div>
+    </div>
+  </footer>
+
+  <div id="copyToast" class="copy-toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    Copied projections string data to local clipboard!
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+      /* ─── DOM References ─── */
+      const DOM = {
+        sliderPrincipal:     document.getElementById('slider-principal'),
+        inputPrincipal:      document.getElementById('input-principal'),
+        sliderContribution:  document.getElementById('slider-contribution'),
+        inputContribution:   document.getElementById('input-contribution'),
+        sliderRate:          document.getElementById('slider-rate'),
+        inputRate:           document.getElementById('input-rate'),
+        sliderYears:         document.getElementById('slider-years'),
+        inputYears:          document.getElementById('input-years'),
+        freqSelector:        document.getElementById('freq-selector'),
+        btnCalculate:        document.getElementById('btn-calculate'),
+        btnCopyJson:         document.getElementById('btn-copy-json'),
+        btnDownloadCsv:      document.getElementById('btn-download-csv'),
+        btnClear:            document.getElementById('btn-clear'),
+        counterFutureValue:  document.getElementById('counter-future-value'),
+        counterTotalPrincipal: document.getElementById('counter-total-principal'),
+        counterTotalInterest:  document.getElementById('counter-total-interest'),
+        counterCalcSpeed:    document.getElementById('counter-calc-speed'),
+        resultFutureValue:   document.getElementById('result-future-value'),
+        resultCompoundLabel: document.getElementById('result-compound-label'),
+        resultInitial:       document.getElementById('result-initial'),
+        resultContributions: document.getElementById('result-contributions'),
+        resultTotalPrincipal:document.getElementById('result-total-principal'),
+        resultTotalInterest: document.getElementById('result-total-interest'),
+        resultEar:           document.getElementById('result-ear'),
+        resultRatio:         document.getElementById('result-ratio'),
+        resultMultiple:      document.getElementById('result-multiple'),
+        toast:               document.getElementById('copyToast'),
+      };
+
+      /* ─── Initial State ─── */
+      let state = { principal: 10000, contribution: 500, rate: 7, years: 20, frequency: 12 };
+      let lastResult = null;
+
+      const FREQ_LABELS = {
+        1: 'Annual compounding schedule',
+        2: 'Semi-annual compounding schedule',
+        4: 'Quarterly compounding schedule',
+        12: 'Monthly compounding schedule',
+        365: 'Daily compounding schedule'
+      };
+
+      function formatCurrency(value) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+      }
+
+      function showToast() {
+        DOM.toast.classList.add('show');
+        setTimeout(() => DOM.toast.classList.remove('show'), 1800);
+      }
+
+      function updateRangeFill(slider) {
+        const min = parseFloat(slider.min), max = parseFloat(slider.max), val = parseFloat(slider.value);
+        slider.style.setProperty('--fill', ((val - min) / (max - min)) * 100 + '%');
+      }
+
+      function syncPair(slider, input, key, isFloat) {
+        const parse = isFloat ? parseFloat : (v) => parseInt(v, 10);
+        
+        const update = (val) => {
+          state[key] = val;
+          slider.value = val;
+          input.value = val;
+          updateRangeFill(slider);
+          calculate();
+        };
+
+        slider.addEventListener('input', () => {
+          update(parse(slider.value));
+        });
+
+        input.addEventListener('change', () => {
+          let val = parse(input.value);
+          if (isNaN(val)) val = parse(slider.min);
+          if (val < parse(slider.min)) val = parse(slider.min);
+          if (val > parse(slider.max)) val = parse(slider.max);
+          update(val);
+        });
+
+        updateRangeFill(slider);
+      }
+
+      syncPair(DOM.sliderPrincipal, DOM.inputPrincipal, 'principal', false);
+      syncPair(DOM.sliderContribution, DOM.inputContribution, 'contribution', false);
+      syncPair(DOM.sliderRate, DOM.inputRate, 'rate', true);
+      syncPair(DOM.sliderYears, DOM.inputYears, 'years', false);
+
+      DOM.freqSelector.addEventListener('click', (e) => {
+        const btn = e.target.closest('.freq-btn');
+        if (!btn) return;
+        
+        DOM.freqSelector.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        state.frequency = parseInt(btn.getAttribute('data-freq'), 10);
+        DOM.resultCompoundLabel.textContent = FREQ_LABELS[state.frequency];
+        calculate();
+      });
+
+      function calculate() {
+        const startTime = performance.now();
+        
+        const P = state.principal;
+        const PMT = state.contribution;
+        const r = state.rate / 100;
+        const t = state.years;
+        const n = state.frequency;
+
+        let balance = P;
+        let totalPrincipal = P;
+        let totalInterest = 0;
+        
+        const yearlyData = [];
+        
+        for (let y = 1; y <= t; y++) {
+          let yearInterest = 0;
+          
+          for (let month = 1; month <= 12; month++) {
+            // Add monthly contribution at the start of the month
+            balance += PMT;
+            totalPrincipal += PMT;
+
+            // Compound interest based on selected frequency
+            if (n === 12) { // Monthly compounding
+              let interest = balance * (r / 12);
+              balance += interest;
+              yearInterest += interest;
+            } else if (n === 365) { // Daily compounding (approximate days in month as 30.4167)
+              let interest = balance * (Math.pow(1 + r / 365, 30.4167) - 1);
+              balance += interest;
+              yearInterest += interest;
+            } else if (n === 4) { // Quarterly compounding (compounds on months 3, 6, 9, 12)
+              if (month % 3 === 0) {
+                let interest = balance * (r / 4);
+                balance += interest;
+                yearInterest += interest;
+              }
+            } else if (n === 2) { // Semi-annual compounding (compounds on months 6, 12)
+              if (month % 6 === 0) {
+                let interest = balance * (r / 2);
+                balance += interest;
+                yearInterest += interest;
+              }
+            } else if (n === 1) { // Annual compounding (compounds on month 12)
+              if (month === 12) {
+                let interest = balance * r;
+                balance += interest;
+                yearInterest += interest;
+              }
+            }
+          }
+          
+          totalInterest += yearInterest;
+          yearlyData.push({
+            year: y,
+            endingBalance: balance,
+            totalPrincipal: totalPrincipal,
+            totalInterest: totalInterest
+          });
+        }
+
+        lastResult = {
+          futureValue: balance,
+          totalPrincipal: totalPrincipal,
+          totalInterest: totalInterest,
+          yearlyData: yearlyData
+        };
+
+        // APY / EAR Calculation: APY = (1 + r/n)^n - 1
+        const ear = Math.pow(1 + r / n, n) - 1;
+        const leverageRatio = totalInterest / totalPrincipal;
+        const compoundMultiple = balance / (P || 1);
+
+        // Update displays
+        DOM.counterFutureValue.textContent = formatCurrency(balance);
+        DOM.counterTotalPrincipal.textContent = formatCurrency(totalPrincipal);
+        DOM.counterTotalInterest.textContent = formatCurrency(totalInterest);
+        
+        DOM.resultFutureValue.textContent = formatCurrency(balance);
+        DOM.resultInitial.textContent = formatCurrency(P);
+        DOM.resultContributions.textContent = formatCurrency(totalPrincipal - P);
+        DOM.resultTotalPrincipal.textContent = formatCurrency(totalPrincipal);
+        DOM.resultTotalInterest.textContent = formatCurrency(totalInterest);
+        DOM.resultEar.textContent = (ear * 100).toFixed(2) + '%';
+        DOM.resultRatio.textContent = leverageRatio.toFixed(2) + 'x';
+        DOM.resultMultiple.textContent = compoundMultiple.toFixed(2) + 'x';
+
+        const endTime = performance.now();
+        DOM.counterCalcSpeed.textContent = (endTime - startTime).toFixed(2) + ' ms';
+      }
+
+      // Copy JSON Projections Output
+      DOM.btnCopyJson.addEventListener('click', () => {
+        if (!lastResult) return;
+        const jsonStr = JSON.stringify({
+          parameters: state,
+          summary: {
+            futureValue: lastResult.futureValue,
+            totalPrincipal: lastResult.totalPrincipal,
+            totalInterest: lastResult.totalInterest
+          },
+          schedule: lastResult.yearlyData
+        }, null, 4);
+
+        navigator.clipboard.writeText(jsonStr).then(() => {
+          showToast();
+        });
+      });
+
+      // Download CSV Schedule Projections
+      DOM.btnDownloadCsv.addEventListener('click', () => {
+        if (!lastResult) return;
+        let csv = 'Year,Ending Balance,Total Principal Deposited,Total Interest Earned\n';
+        lastResult.yearlyData.forEach(row => {
+          csv += `${row.year},${row.endingBalance.toFixed(2)},${row.totalPrincipal.toFixed(2)},${row.totalInterest.toFixed(2)}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'compound-interest-schedule.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+
+      // Reset / Clear
+      DOM.btnClear.addEventListener('click', () => {
+        state = { principal: 10000, contribution: 500, rate: 7, years: 20, frequency: 12 };
+        
+        DOM.sliderPrincipal.value = 10000;
+        DOM.inputPrincipal.value = 10000;
+        DOM.sliderContribution.value = 500;
+        DOM.inputContribution.value = 500;
+        DOM.sliderRate.value = 7;
+        DOM.inputRate.value = 7;
+        DOM.sliderYears.value = 20;
+        DOM.inputYears.value = 20;
+
+        DOM.freqSelector.querySelectorAll('.freq-btn').forEach(b => b.classList.remove('active'));
+        DOM.freqSelector.querySelector('[data-freq="12"]').classList.add('active');
+        DOM.resultCompoundLabel.textContent = FREQ_LABELS[12];
+
+        updateRangeFill(DOM.sliderPrincipal);
+        updateRangeFill(DOM.sliderContribution);
+        updateRangeFill(DOM.sliderRate);
+        updateRangeFill(DOM.sliderYears);
+        
+        calculate();
+      });
+
+      // Initial execution
+      calculate();
+
+    })();
+  </script>
+</body>
+</html>
