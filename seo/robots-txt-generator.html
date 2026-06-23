@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robots.txt Generator & AI Blocker — Affilore Tools</title>
+    <meta name="description" content="Premium serverless Robots.txt generator with AI scraper blocking. Configure crawler rules, block GPTBot, ClaudeBot, and more. Generate, copy, and download your robots.txt instantly.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#0A0A0B',
+                        panel: '#111113',
+                        panelBorder: '#1E1E22',
+                        amber: '#F5A623',
+                        amberDark: '#D4901E',
+                        amberGlow: '#F5A62333',
+                        surfaceHover: '#1A1A1E',
+                        textMuted: '#6B6B76',
+                        textDim: '#9B9BA6',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    },
+                    boxShadow: {
+                        'glass-lg': '0 16px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; height: 100%; background-color: #0A0A0B; }
+        
+        /* ─── DENSE & FLUID AMBIENT PARTICLE ENGINE MULTI-LAYER BACKDROP ─── */
+        body {
+            background-color: #0A0A0B;
+            color: #E4E4E7;
+            min-height: 100%;
+            overflow-x: hidden;
+            position: relative;
+            background-image:
+                radial-gradient(4px 4px at 12% 15%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 35% 28%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 68% 8%, rgba(245, 166, 35, 0.70) 100%, transparent),
+                radial-gradient(6px 6px at 88% 22%, rgba(245, 166, 35, 0.55) 100%, transparent),
+                radial-gradient(5px 5px at 15% 48%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 52% 61%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 76% 42%, rgba(245, 166, 35, 0.55) 100%, transparent),
+                radial-gradient(4px 4px at 92% 56%, rgba(245, 166, 35, 0.70) 100%, transparent),
+                radial-gradient(6px 6px at 22% 78%, rgba(245, 166, 35, 0.50) 100%, transparent),
+                radial-gradient(4px 4px at 65% 88%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 82% 71%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 40% 93%, rgba(245, 166, 35, 0.70) 100%, transparent);
+            background-size: 100% 1200px;
+            animation: ambientFlow 45s linear infinite;
+        }
+
+        @keyframes ambientFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 -1200px; }
+        }
+
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ── Rich Custom Text Color & Heading Treatments ── */
+        .gradient-heading {
+            background: linear-gradient(135deg, #f87171, #ec4899, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .gradient-heading-amber {
+            background: linear-gradient(135deg, #F5A623, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-panel {
+            background: rgba(17, 17, 20, 0.75);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.03);
+        }
+
+        /* ── Toggle Switch Design ── */
+        .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; inset: 0; background-color: #2A2A30; border-radius: 24px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toggle-slider::before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: #6B6B76; border-radius: 50%; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toggle-switch input:checked + .toggle-slider { background-color: #F5A623; box-shadow: 0 0 12px rgba(245,166,35,0.3); }
+        .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); background-color: #0A0A0B; }
+        .toggle-switch.ai-block input:checked + .toggle-slider { background-color: #ef4444; box-shadow: 0 0 12px rgba(239,68,68,0.3); }
+
+        @keyframes badgePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .badge-pulse { animation: badgePulse 2s ease-in-out infinite; }
+        @keyframes copySuccess { 0% { transform: scale(0.8); opacity: 0; } 20% { transform: scale(1.1); opacity: 1; } 80% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.9); opacity: 0; } }
+        .copy-anim { animation: copySuccess 1.6s ease forwards; }
+        
+        .counter-card { transition: all 0.3s ease; }
+        .counter-card:hover { border-color: #F5A623; box-shadow: 0 0 20px rgba(245,166,35,0.08); transform: translateY(-2px); }
+
+        /* ── Interface Control buttons ── */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-amber-custom {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: #000000;
+        }
+        .btn-amber-custom:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
+        }
+        .btn-outline-custom {
+            background: rgba(24, 24, 27, 0.8);
+            color: #8A8A95;
+            border: 1px solid #1E1E22;
+        }
+        .btn-outline-custom:hover {
+            border-color: rgba(245, 166, 35, 0.35);
+            color: #E4E4E7;
+            background: rgba(245, 166, 35, 0.06);
+        }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 700; padding: 5px 14px; border-radius: 20px; letter-spacing: 0.04em; transition: all 0.3s ease; font-family: 'JetBrains Mono', monospace; }
+        .status-idle { background: rgba(107, 114, 128, 0.15); color: #9B9BA6; border: 1px solid rgba(107, 114, 128, 0.2); }
+        .status-success { background: rgba(34, 197, 94, 0.1); color: #34d399; border: 1px solid rgba(34, 197, 94, 0.2); }
+        
+        select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B76' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: linear-gradient(90deg, #F5A623, #f59e0b); transition: width 0.3s ease; }
+        .nav-link:hover::after { width: 100%; }
+        
+        .copy-toast {
+            position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0;
+            background: rgba(245, 166, 35, 0.12); backdrop-filter: blur(16px); border: 1px solid rgba(245, 166, 35, 0.2);
+            color: #F5A623; padding: 10px 24px; border-radius: 12px; font-size: 13px; font-weight: 600;
+            pointer-events: none; z-index: 1000; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+
+    <header class="relative z-50 border-b border-panelBorder bg-obsidian/90 backdrop-blur-xl sticky top-0">
+        <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-12">
+                <a href="/" class="text-2xl font-black text-white tracking-tight">Affilore<span class="text-blue-500">.</span></a>
+                <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-400">
+                    <a href="/" class="text-white transition">Home</a>
+                    <a href="/data" class="hover:text-white transition">Data</a>
+                    <a href="/calculator" class="hover:text-white transition">Calculator</a>
+                    <a href="/utility" class="hover:text-white transition">Utility</a>
+                    <a href="/developer" class="hover:text-white transition">Developer</a>
+                    <a href="/seo" class="hover:text-white transition">SEO</a>
+                    <a href="/productivity" class="hover:text-white transition">Productivity</a>
+                </nav>
+            </div>
+            <div>
+                <a href="mailto:affilore4@gmail.com" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-black bg-[#F5A623] hover:bg-[#E0961B] rounded-full transition shadow-[0_0_20px_rgba(245,166,35,0.2)]">
+                    Request a Custom Tool
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center gap-2 bg-panel border border-panelBorder rounded-full px-4 py-1.5 mb-5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 badge-pulse"></span>
+                <span class="text-xs font-semibold text-textDim tracking-wide uppercase font-mono">V4.5 — AI Shield Dynamic Engine</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+                <span class="gradient-heading">Robots.txt Generator</span>
+                <span class="text-white"> & </span>
+                <span class="gradient-heading">AI Blocker</span>
+            </h1>
+            <p class="text-textDim text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                Configure granular crawler rules and shield your content from AI scrapers.
+                Generate production-ready <code class="text-amber font-mono text-sm bg-amber/10 px-1.5 py-0.5 rounded">robots.txt</code> files instantly.
+            </p>
+        </div>
+
+        <div class="w-full bg-[#111622]/40 border border-blue-500/10 backdrop-blur-md rounded-xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 relative z-10">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 badge-pulse"></span>
+                <span class="text-xs font-bold tracking-wide text-zinc-300 font-mono">Directives Compilation: Operational</span>
+            </div>
+            <div class="text-xs font-medium text-zinc-500 font-mono flex gap-4">
+                <span>RFC 4180 Rules Mapping</span>
+                <span>•</span>
+                <span>Translucent Glassmorphism Sandbox</span>
+                <span>•</span>
+                <span>Zero-Network Leakage</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 relative z-10">
+            <div class="counter-card bg-panel border border-panelBorder rounded-xl p-4 sm:p-5">
+                <div class="text-2xl sm:text-3xl font-black text-[#F5A623] font-mono tracking-tight" id="counterDirectives">0</div>
+                <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Total Directives</div>
+            </div>
+            <div class="counter-card bg-panel border border-panelBorder rounded-xl p-4 sm:p-5">
+                <div class="text-2xl sm:text-3xl font-black text-[#F5A623] font-mono tracking-tight" id="counterCrawlers">0</div>
+                <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Crawlers Configured</div>
+            </div>
+            <div class="counter-card bg-panel border border-panelBorder rounded-xl p-4 sm:p-5">
+                <div class="text-2xl sm:text-3xl font-black text-[#F5A623] font-mono tracking-tight" id="counterAIBlocked">0</div>
+                <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">AI Scrapers Blocked</div>
+            </div>
+            <div class="counter-card bg-panel border border-panelBorder rounded-xl p-4 sm:p-5">
+                <div class="text-2xl sm:text-3xl font-black text-[#F5A623] font-mono tracking-tight"><span id="counterSpeed">0</span>ms</div>
+                <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-1.5">Generation Speed</div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 mb-6 bg-panel border border-panelBorder rounded-xl p-3 sm:p-4 relative z-10">
+            <button id="btnGenerate" class="btn-action btn-amber-custom font-bold text-xs uppercase tracking-wider shadow-md">
+                Generate Rules
+            </button>
+            <button id="btnCopy" class="btn-action btn-outline-custom text-xs uppercase font-bold tracking-wider relative">
+                <span id="copyText">Copy Output Data</span>
+                <span id="copySuccess" class="hidden absolute inset-0 flex items-center justify-center bg-emerald-600 text-white rounded-lg text-xs font-semibold">✓ Copied!</span>
+            </button>
+            <button id="btnDownload" class="btn-action btn-outline-custom text-xs uppercase font-bold tracking-wider">
+                Download robots.txt
+            </button>
+            <div class="flex-1"></div>
+            <div id="statusBadge" class="status-badge status-idle border border-zinc-800 bg-[#111113]">
+                <span class="status-dot"></span>
+                <span id="statusText" class="text-zinc-400 font-mono text-[11px] font-bold uppercase tracking-wider">Awaiting Input</span>
+            </div>
+            <button id="btnReset" class="btn-action btn-danger-custom text-xs uppercase font-bold tracking-wider">
+                Reset Workspace
+            </button>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6 mb-16 relative z-10">
+            
+            <div class="space-y-6">
+                <section class="bg-panel border border-panelBorder rounded-xl p-5 sm:p-6 panel-interactive transition-colors">
+                    <div class="flex items-center gap-2 mb-3 px-1">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 shadow-md"></span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Sitemap Declaration Mapping</span>
+                    </div>
+                    <div class="relative mt-2">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-textMuted text-xs font-bold font-mono uppercase">Sitemap:</span>
+                        <input type="url" id="sitemapUrl" placeholder="https://yourdomain.com/sitemap.xml" class="w-full bg-obsidian border border-panelBorder rounded-lg pl-24 pr-4 py-3 text-sm text-white placeholder-textMuted/50 font-mono focus:outline-none focus:border-amber/50 transition-all">
+                    </div>
+                </section>
+
+                <section class="bg-panel border border-panelBorder rounded-xl p-5 sm:p-6 panel-interactive transition-colors">
+                    <div class="flex items-center gap-2 mb-4 px-1">
+                        <span class="w-2 h-2 rounded-full bg-purple-500 shadow-md"></span>
+                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Standard Search Crawlers Parameters</span>
+                    </div>
+                    <div class="space-y-3 mt-2" id="standardCrawlers">
+                        <div class="flex items-center justify-between bg-obsidian rounded-lg px-4 py-3 border border-panelBorder/50">
+                            <span class="text-sm font-medium text-zinc-200">Googlebot <span class="text-[11px] text-textMuted font-mono ml-1">(google.com)</span></span>
+                            <select data-crawler="Googlebot" class="crawler-select bg-obsidian border border-panelBorder text-xs text-textDim rounded-lg px-3 py-1.5 focus:outline-none focus:border-amber/50 transition-colors cursor-pointer font-bold uppercase tracking-wider">
+                                <option value="none">No Explicit Rule</option>
+                                <option value="allow">Allow All Directory Routes</option>
+                                <option value="disallow">Disallow Entire Host</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center justify-between bg-obsidian rounded-lg px-4 py-3 border border-panelBorder/50">
+                            <span class="text-sm font-medium text-zinc-200">Bingbot <span class="text-[11px] text-textMuted font-mono ml-1">(bing.com)</span></span>
+                            <select data-crawler="Bingbot" class="crawler-select bg-obsidian border border-panelBorder text-xs text-textDim rounded-lg px-3 py-1.5 focus:outline-none focus:border-amber/50 transition-colors cursor-pointer font-bold uppercase tracking-wider">
+                                <option value="none">No Explicit Rule</option>
+                                <option value="allow">Allow All Directory Routes</option>
+                                <option value="disallow">Disallow Entire Host</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center justify-between bg-obsidian rounded-lg px-4 py-3 border border-panelBorder/50">
+                            <span class="text-sm font-medium text-zinc-200">YandexBot <span class="text-[11px] text-textMuted font-mono ml-1">(yandex.com)</span></span>
+                            <select data-crawler="YandexBot" class="crawler-select bg-obsidian border border-panelBorder text-xs text-textDim rounded-lg px-3 py-1.5 focus:outline-none focus:border-amber/50 transition-colors cursor-pointer font-bold uppercase tracking-wider">
+                                <option value="none">No Explicit Rule</option>
+                                <option value="allow">Allow All Directory Routes</option>
+                                <option value="disallow">Disallow Entire Host</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center justify-between bg-obsidian rounded-lg px-4 py-3 border border-panelBorder/50">
+                            <span class="text-sm font-medium text-zinc-200">Baiduspider <span class="text-[11px] text-textMuted font-mono ml-1">(baidu.com)</span></span>
+                            <select data-crawler="Baiduspider" class="crawler-select bg-obsidian border border-panelBorder text-xs text-textDim rounded-lg px-3 py-1.5 focus:outline-none focus:border-amber/50 transition-colors cursor-pointer font-bold uppercase tracking-wider">
+                                <option value="none">No Explicit Rule</option>
+                                <option value="allow">Allow All Directory Routes</option>
+                                <option value="disallow">Disallow Entire Host</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-panel border border-panelBorder rounded-xl p-5 sm:p-6 panel-interactive transition-colors">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2 px-1">
+                            <span class="w-2 h-2 rounded-full bg-amber shadow-md"></span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Custom Disallow Directives Matrix</span>
+                        </div>
+                        <button id="btnAddPath" class="inline-flex items-center gap-1.5 bg-amber/10 hover:bg-amber/20 text-amber text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all border border-amber/20">
+                            + Add Path
+                        </button>
+                    </div>
+                    <div id="pathsList" class="space-y-2 mt-2"></div>
+                    <div id="pathsEmpty" class="text-center py-6">
+                        <p class="text-xs font-mono text-textMuted uppercase tracking-wide">No directory bounds isolated yet.</p>
+                    </div>
+                </section>
+
+                <section class="bg-panel border border-panelBorder rounded-xl p-5 sm:p-6 panel-interactive transition-colors glow-ring">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-red-500 shadow-md animate-pulse"></span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-red-400 font-sans">AI Scraper Data Mining Shield Matrix</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 mt-2" id="aiCrawlers">
+                        <div class="flex items-center justify-between bg-obsidian rounded-lg px-4 py-3 border border-panelBorder/50">
+                            <div>
+                                <span class="text-sm font-semibold text-zinc-100">OpenAI Token Vault</span>
+                                <div class="text-[11px] font-mono text-textMuted mt-0.5">GPTBot · ChatGPT-User</div>
+                            </div>
+                            <label class="toggle-switch ai-block">
+                                <input type="checkbox" data-ai="openai" data-agents="GPTBot,ChatGPT-User">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between bg-obsidian rounded-lg px-4 py-3 border border-panelBorder/50">
+                            <div>
+                                <span class="text-sm font-semibold text-zinc-100">Google AI Framework Extended</span>
+                                <div class="text-[11px] font-mono text-textMuted mt-0.5">Google-Extended · AdsBot-Google-AI</div>
+                            </div>
+                            <label class="toggle-switch ai-block">
+                                <input type="checkbox" data-ai="google-ai" data-agents="Google-Extended,AdsBot-Google-AI">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between bg-obsidian rounded-lg px-4 py-3 border border-panelBorder/50">
+                            <div>
+                                <span class="text-sm font-semibold text-zinc-100">Anthropic Model Clusters</span>
+                                <div class="text-[11px] font-mono text-textMuted mt-0.5">ClaudeBot · Claude-Web</div>
+                            </div>
+                            <label class="toggle-switch ai-block">
+                                <input type="checkbox" data-ai="anthropic" data-agents="ClaudeBot,Claude-Web">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between bg-obsidian rounded-lg px-4 py-3 border border-panelBorder/50">
+                            <div>
+                                <span class="text-sm font-semibold text-zinc-100">General Aggressive LLM Crawlers</span>
+                                <div class="text-[11px] font-mono text-textMuted mt-0.5">PerplexityBot · CCBot · Omgilibot · Diffbot</div>
+                            </div>
+                            <label class="toggle-switch ai-block">
+                                <input type="checkbox" data-ai="general-llm" data-agents="PerplexityBot,CCBot,Omgilibot,Diffbot">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-panelBorder flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-zinc-400">Enforce Total Ingestion Shielding Block</span>
+                        <label class="toggle-switch ai-block">
+                            <input type="checkbox" id="blockAllAI">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </section>
+            </div>
+
+            <div class="lg:sticky lg:top-24 lg:self-start">
+                <section class="bg-panel border border-panelBorder rounded-xl overflow-hidden">
+                    <div class="flex items-center justify-between px-5 py-3.5 border-b border-panelBorder bg-obsidian/50">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-md"></span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-zinc-300 font-sans">Compiled output.txt</span>
+                        </div>
+                        <span id="liveIndicator" class="inline-flex items-center gap-1.5 text-[10px] font-bold tracking-wider uppercase text-emerald-400">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 badge-pulse"></span>
+                            In-Memory Script View
+                        </span>
+                    </div>
+                    <div class="p-5 sm:p-6 bg-zinc-950/70">
+                        <pre id="robotsOutput" class="font-mono text-[13px] leading-relaxed text-emerald-300/90 whitespace-pre-wrap break-words min-h-[420px] max-h-[640px] overflow-y-auto select-all"># Robots.txt compilation workspace loading...</pre>
+                    </div>
+                    <div class="flex items-center justify-between px-5 py-3 border-t border-panelBorder bg-obsidian/30">
+                        <span class="text-[11px] text-textMuted font-mono" id="charCount">0 chars · 0 lines</span>
+                        <span class="text-[11px] text-textMuted font-mono" id="lastGen">Not yet generated</span>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+
+        <div class="max-w-4xl mx-auto rounded-2xl relative z-10 mt-12">
+            <div class="art-root">
+              <div class="art-container">
+                <section class="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+                  <article class="space-y-12">
+                    <header class="text-center space-y-6">
+                      <div class="inline-flex flex-wrap justify-center gap-3">
+                        <span class="rounded-full bg-cyan-500/15 px-4 py-2 text-sm font-semibold text-cyan-300 border border-cyan-400/30">User-agent</span>
+                        <span class="rounded-full bg-purple-500/15 px-4 py-2 text-sm font-semibold text-purple-300 border border-purple-400/30">Crawl-delay</span>
+                        <span class="rounded-full bg-rose-500/15 px-4 py-2 text-sm font-semibold text-rose-300 border border-rose-400/30">Disallow Boundaries</span>
+                        <span class="rounded-full bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-300 border border-emerald-400/30">LLM Ingestion Tokens</span>
+                      </div>
+                      <h1 class="text-4xl sm:text-5xl font-black tracking-tight bg-gradient-to-r from-cyan-300 via-purple-300 to-emerald-300 bg-clip-text text-transparent">
+                        Controlling Search Crawlers and Guarding IP: The Modern Guide to Robots.txt Optimization and AI Scraper Shielding
+                      </h1>
+                      <p class="text-[#FFFFFF] text-lg leading-8">
+                        A robots.txt file is one of the smallest technical SEO files on a website, yet it can control how search engines, commercial crawlers, archive bots, and artificial intelligence systems approach your content. Placed at the root of a domain, it acts as a public routing map for automated agents before they request deeper URLs. Search engines use it to understand which paths can be crawled, which folders should be avoided, and where sitemap files live. For years, this file was mostly treated as a crawl-budget and indexation hygiene layer. Today, the stakes are higher. Large language model crawlers, AI search products, synthetic-answer engines, and training-data pipelines have created a new access-control problem for publishers. A modern robots.txt file is no longer just about search visibility. It is also about content governance, attribution protection, infrastructure load, and deciding whether your intellectual property should be available to machine-learning ingestion loops.
+                      </p>
+                    </header>
+                    <section class="space-y-6">
+                      <h2 class="text-3xl font-extrabold bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">
+                        What Robots.txt Actually Controls
+                      </h2>
+                      <p class="text-[#FFFFFF] leading-8">
+                        The robots exclusion protocol is a voluntary instruction system for crawlers. It does not lock a page, encrypt a document, hide private data, or create legal security by itself. Instead, it publishes machine-readable preferences. A compliant crawler requests the robots.txt file first, parses the matching directive group, and then decides whether a target URL is allowed or disallowed for crawling. This makes robots.txt useful for controlling crawl paths, reducing wasted crawl budget, preventing crawler traps, keeping staging-style folders out of routine discovery, and separating search-oriented access from AI-oriented access.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        The file must be placed at the top-level directory of the host it controls. A robots.txt file for one subdomain does not automatically control another subdomain, and an HTTPS version does not necessarily govern an HTTP version. This host-level boundary matters for SaaS products, affiliate sites, documentation hubs, and multi-region publishing setups. If your website has <span class="text-cyan-300 font-semibold">www</span>, <span class="text-purple-300 font-semibold">app</span>, <span class="text-emerald-300 font-semibold">blog</span>, and <span class="text-yellow-300 font-semibold">cdn</span> subdomains, each crawler-facing host may need its own clean routing file.
+                      </p>
+                      <div class="rounded-3xl border border-cyan-400/30 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40 p-6 shadow-2xl shadow-cyan-950/30">
+                        <h3 class="text-xl font-bold text-cyan-200 mb-4">Crawler Directive Map</h3>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                          <div class="rounded-2xl bg-black/40 p-4 border border-cyan-400/20">
+                            <p class="text-cyan-300 font-bold">User-agent:</p>
+                            <p class="text-[#FFFFFF] leading-7">Selects the crawler or crawler family the following rules apply to.</p>
+                          </div>
+                          <div class="rounded-2xl bg-black/40 p-4 border border-rose-400/20">
+                            <p class="text-rose-300 font-bold">Disallow:</p>
+                            <p class="text-[#FFFFFF] leading-7">Defines URL path boundaries that the selected crawler should not fetch.</p>
+                          </div>
+                          <div class="rounded-2xl bg-black/40 p-4 border border-emerald-400/20">
+                            <p class="text-emerald-300 font-bold">Allow:</p>
+                            <p class="text-[#FFFFFF] leading-7">Creates a permitted exception inside a broader blocked path.</p>
+                          </div>
+                          <div class="rounded-2xl bg-black/40 p-4 border border-yellow-400/20">
+                            <p class="text-yellow-300 font-bold">Sitemap:</p>
+                            <p class="text-[#FFFFFF] leading-7">Points crawlers to the canonical XML sitemap or sitemap index.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                    <section class="space-y-6">
+                      <h2 class="text-3xl font-extrabold bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                        Deep-Dive Technical Breakdown: Grammar, Wildcards, and AI Data Mining
+                      </h2>
+                      <p class="text-[#FFFFFF] leading-8">
+                        A robots.txt file is made of directive groups. Each group begins with one or more <span class="rounded-md bg-cyan-500/20 px-2 py-1 text-cyan-200 font-semibold">User-agent</span> lines, followed by rules such as <span class="rounded-md bg-rose-500/20 px-2 py-1 text-rose-200 font-semibold">Disallow</span> and <span class="rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 font-semibold">Allow</span>. Field names are case-insensitive, but path values are case-sensitive. That means <span class="text-yellow-300 font-semibold">/Private/</span> and <span class="text-yellow-300 font-semibold">/private/</span> may be treated as different crawl paths. This is one of the most common technical SEO mistakes in hand-written robots files.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        The wildcard <span class="text-cyan-300 font-bold">*</span> means zero or more characters, while <span class="text-purple-300 font-bold">$</span> marks the end of a URL pattern. A rule such as <span class="text-rose-300 font-semibold">Disallow: /*?sort=</span> can help block crawl-heavy parameter combinations, while <span class="text-emerald-300 font-semibold">Allow: /blog/</span> can reopen an important directory inside a larger restricted area. In rule conflicts, crawlers generally use the most specific matching directive. A broad <span class="text-rose-300 font-semibold">Disallow: /</span> blocks everything for that crawler unless a more specific allow rule is recognized.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        Traditional search crawlers usually crawl to discover, render, rank, and refresh documents for search experiences. Their activity is tied to indexation, snippets, canonical signals, structured data, and inbound traffic. AI crawlers may behave differently. Some gather content for foundation-model training, some retrieve pages for AI search answers, some fetch content at a user’s direction, and some support grounding systems that use indexed documents to improve generated answers. These differences matter because allowing a search crawler does not automatically mean you want your content used in training datasets.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        The economic problem for publishers is attribution loss. When a search engine crawls a page and ranks it, the publisher may receive impressions, clicks, and referral traffic. When content is absorbed into a large language model’s training or answer-generation pipeline, the output may summarize the substance without producing a measurable visit. The user gets the answer, but the original publisher may receive no session, no ad impression, no affiliate click, no lead capture, and no clear analytics trail. This is why modern robots.txt management now includes <span class="rounded-md bg-emerald-500/20 px-2 py-1 text-emerald-200 font-semibold">LLM ingestion tokens</span> alongside classic SEO directives.
+                      </p>
+                      <div class="rounded-3xl overflow-hidden border border-purple-400/30 shadow-2xl shadow-purple-950/40">
+                        <div class="bg-gradient-to-r from-purple-700 via-cyan-700 to-emerald-700 px-5 py-3">
+                          <p class="text-[#FFFFFF] font-bold">Strict AI Scraper Block Rule Template</p>
+                        </div>
+                        <pre class="bg-slate-950 p-6 overflow-x-auto text-sm leading-7">
+<code>
+<span class="text-slate-400"># Block common AI training and AI answer crawlers</span>{"\n"}
+<span class="text-cyan-300">User-agent:</span> <span class="text-yellow-200">GPTBot</span>{"\n"}
+<span class="text-rose-300">Disallow:</span> <span class="text-[#FFFFFF]">/</span>{"\n\n"}
+<span class="text-cyan-300">User-agent:</span> <span class="text-yellow-200">Google-Extended</span>{"\n"} <span class="text-rose-300">Disallow:</span> <span class="text-[#FFFFFF]">/</span>{"\n\n"}
+<span class="text-cyan-300">User-agent:</span> <span class="text-yellow-200">ClaudeBot</span>{"\n"} <span class="text-rose-300">Disallow:</span> <span class="text-[#FFFFFF]">/</span>{"\n\n"}
+<span class="text-cyan-300">User-agent:</span> <span class="text-yellow-200">CCBot</span>{"\n"} <span class="text-rose-300">Disallow:</span> <span class="text-[#FFFFFF]">/</span>{"\n\n"}
+<span class="text-cyan-300">User-agent:</span> <span class="text-yellow-200">*</span>{"\n"} <span class="text-emerald-300">Allow:</span> <span class="text-[#FFFFFF]">/</span>{"\n\n"}
+<span class="text-yellow-300">Sitemap:</span> <span class="text-[#FFFFFF]">https://example.com/sitemap.xml</span> </code> </pre> </div>
+                      <p class="text-[#FFFFFF] leading-8">
+                        Be careful with <span class="rounded-md bg-purple-500/20 px-2 py-1 text-purple-200 font-semibold">Crawl-delay</span>. Some crawlers respect it, but it is not universally supported. For Google crawling, crawl-rate management is handled through Google’s systems rather than a standard Crawl-delay directive. For other crawlers, especially certain AI and commercial bots, adding Crawl-delay may reduce request bursts, but it should not be treated as a guaranteed throttle.
+                      </p>
+                    </section>
+                    <section class="space-y-6">
+                      <h2 class="text-3xl font-extrabold bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
+                        Step-by-Step Tutorial: Generate a Clean Robots.txt File
+                      </h2>
+                      <p class="text-[#FFFFFF] leading-8">
+                        Start with your sitemap. Add the full canonical sitemap URL, including protocol and host, such as <span class="text-cyan-300 font-semibold">https://yourdomain.com/sitemap.xml</span>. This helps major crawlers find your URL inventory even when internal linking is still maturing.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        Next, define your default crawler policy. Most public websites should allow normal search crawling with <span class="text-emerald-300 font-semibold">User-agent: *</span> and <span class="text-emerald-300 font-semibold">Allow: /</span>, then block only specific low-value paths. Common exclusions include <span class="text-rose-300 font-semibold">/admin/</span>, <span class="text-rose-300 font-semibold">/cart/</span>, <span class="text-rose-300 font-semibold">/checkout/</span>, <span class="text-rose-300 font-semibold">/search?</span>, duplicated filters, internal dashboards, and temporary preview routes.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        Then decide your AI protection posture. If your goal is maximum search visibility with minimum training-data exposure, allow search crawlers such as Googlebot while blocking AI-specific tokens such as Google-Extended, GPTBot, and ClaudeBot. If your goal is maximum restriction, block broader AI crawler families and pair robots.txt with server-level bot detection, rate limiting, CDN firewall rules, and log monitoring.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        Before publishing, audit syntax. Use one directive per line. Keep spacing consistent. Make sure every path begins with a forward slash. Avoid blocking CSS, JavaScript, and image assets required for rendering unless you understand the impact. Test uppercase and lowercase paths separately. Finally, upload the file to the root directory and confirm it loads at <span class="text-yellow-300 font-semibold">/robots.txt</span> with a plain-text response.
+                      </p>
+                    </section>
+                    <section class="space-y-6">
+                      <h2 class="text-3xl font-extrabold bg-gradient-to-r from-fuchsia-300 to-yellow-300 bg-clip-text text-transparent">
+                        The Affilore Edge: Local Client-Side Generation Without Domain Leakage
+                      </h2>
+                      <p class="text-[#FFFFFF] leading-8">
+                        Affilore’s Robots.txt Generator & AI Blocker is designed for publishers who care about both SEO precision and operational privacy. Many legacy robots generators send your domain, sitemap URL, selected crawler rules, and blocked path structure to a remote backend parser. That creates an unnecessary exposure point. Even if the tool provider is trustworthy, server-side processing can create logs that reveal your website architecture, private route names, staging folders, monetization paths, affiliate directories, or experimental content sections.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        Affilore avoids that problem by formatting the file locally in your browser. Your selected directives are assembled client-side, meaning the tool can generate a clean robots.txt output without turning your domain structure into a remote data packet. This matters for technical founders, affiliate marketers, niche site operators, agencies, and publishers working with unreleased projects. Robots.txt is already public once deployed, but the generation workflow should not create extra tracking risk before publication.
+                      </p>
+                      <p class="text-[#FFFFFF] leading-8">
+                        The advantage is simple: faster generation, cleaner formatting, fewer privacy concerns, and a safer workflow for modern crawler governance. You can build search-friendly rules, add sitemap declarations, block AI ingestion tokens, and copy the final file without handing sensitive crawl architecture to a third-party backend.
+                      </p>
+                    </section>
+                    <section class="space-y-6">
+                      <h2 class="text-3xl font-extrabold bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent">
+                        Robots.txt Optimization Checklist
+                      </h2>
+                      <div class="rounded-3xl bg-gradient-to-br from-slate-950 to-slate-900 border border-white/10 p-6">
+                        <ul class="space-y-4">
+                          <li class="text-[#FFFFFF] leading-7"><span class="text-emerald-300 font-bold">01.</span> Place the file at the root host path: <span class="text-yellow-300">/robots.txt</span>.</li>
+                          <li class="text-[#FFFFFF] leading-7"><span class="text-emerald-300 font-bold">02.</span> Add a valid sitemap URL using the complete absolute address.</li>
+                          <li class="text-[#FFFFFF] leading-7"><span class="text-emerald-300 font-bold">03.</span> Keep public SEO pages crawlable unless there is a specific reason to restrict them.</li>
+                          <li class="text-[#FFFFFF] leading-7"><span class="text-emerald-300 font-bold">04.</span> Block duplicate parameters, internal utilities, and low-value crawl traps.</li>
+                          <li class="text-[#FFFFFF] leading-7"><span class="text-emerald-300 font-bold">05.</span> Add AI crawler tokens based on your content licensing and visibility strategy.</li>
+                          <li class="text-[#FFFFFF] leading-7"><span class="text-emerald-300 font-bold">06.</span> Do not place passwords, private paths, or sensitive credentials in your robots.txt. The file is completely public and accessible to anyone. Use proper host authentication for true security.</li>
+                        </ul>
+                      </div>
+                    </section>
+                  </article>
+                </section>
+              </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full bg-[#050507] border-t border-zinc-950 mt-10 py-12 relative z-50">
+        <div class="max-w-[1440px] mx-auto px-6 flex flex-col items-center justify-center gap-6">
+            <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-semibold text-zinc-400">
+                <a href="/privacy-policy.html" class="hover:text-white transition">Privacy</a>
+                <a href="/terms.html" class="hover:text-white transition">Terms</a>
+                <a href="#" class="hover:text-white transition">Disclaimer</a>
+                <a href="/about-us.html" class="hover:text-white transition">About</a>
+                <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=affilore4@gmail.com&amp;su=Contact+Us" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Contact</a>
+            </div>
+            
+            <div class="flex items-center gap-6 text-zinc-500">
+                <a href="https://www.tiktok.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.63 4.14.93.98 2.22 1.58 3.55 1.78v3.83c-1.42-.02-2.82-.47-4-1.28a7.12 7.12 0 0 1-2.42-2.84v7.7c.04 1.8-.44 3.61-1.42 5.12a7.88 7.88 0 0 1-4.14 3.29c-1.78.53-3.7.46-5.43-.22a8.03 8.03 0 0 1-4.11-4.73 8.32 8.32 0 0 1 .15-5.69c.77-1.89 2.22-3.48 4.04-4.4a8.21 8.21 0 0 1 6.51-.43v4.06a4.15 4.15 0 0 0-2.48.97c-.94.81-1.46 2.05-1.39 3.28.06 1.14.65 2.21 1.58 2.85.95.6 2.11.72 3.14.3a4.02 4.02 0 0 0 2.45-3.3c.09-1.01.03-2.03.04-3.05V0h1.42z"/></svg></a>
+                <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="https://www.instagram.com/affilore_/?hl=en" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.096 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+            </div>
+            
+            <div class="text-xs font-medium text-zinc-600 tracking-wide mt-2">
+                &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+            </div>
+        </div>
+    </footer>
+
+    <div id="copyToast" class="copy-toast">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span>Copied robots.txt to local clipboard!</span>
+    </div>
+
+    <script>
+    (() => {
+        'use strict';
+
+        const sitemapUrl = document.getElementById('sitemapUrl');
+        const standardCrawlers = document.getElementById('standardCrawlers');
+        const pathsList = document.getElementById('pathsList');
+        const pathsEmpty = document.getElementById('pathsEmpty');
+        const aiCrawlers = document.getElementById('aiCrawlers');
+        
+        const counterDirectives = document.getElementById('counterDirectives');
+        const counterCrawlers = document.getElementById('counterCrawlers');
+        const counterAIBlocked = document.getElementById('counterAIBlocked');
+        const counterSpeed = document.getElementById('counterSpeed');
+        
+        const robotsOutput = document.getElementById('robotsOutput');
+        const charCount = document.getElementById('charCount');
+        const lastGen = document.getElementById('lastGen');
+        
+        const btnGenerate = document.getElementById('btnGenerate');
+        const btnCopy = document.getElementById('btnCopy');
+        const copyText = document.getElementById('copyText');
+        const copySuccess = document.getElementById('copySuccess');
+        const btnDownload = document.getElementById('btnDownload');
+        const btnReset = document.getElementById('btnReset');
+        const btnAddPath = document.getElementById('btnAddPath');
+        const blockAllAI = document.getElementById('blockAllAI');
+        const copyToast = document.getElementById('copyToast');
+        
+        const statusBadge = document.getElementById('statusBadge');
+        const statusText = document.getElementById('statusText');
+
+        let generatedContent = '';
+
+        function setStatus(type, msg) {
+            statusBadge.className = 'status-badge ' + (type === 'success' ? 'status-success' : 'status-idle');
+            statusText.textContent = msg;
+        }
+
+        // Initialize template output
+        generateRobotsTxt();
+
+        // Add Path click
+        btnAddPath.addEventListener('click', () => {
+            pathsEmpty.style.display = 'none';
+            
+            const row = document.createElement('div');
+            row.className = 'flex items-center gap-2 mt-2';
+            row.innerHTML = `
+                <input type="text" class="path-input bg-obsidian border border-panelBorder rounded-lg px-3 py-2 text-sm text-white placeholder-textMuted/40 font-mono focus:outline-none focus:border-amber/50 transition-all flex-1" placeholder="/admin/">
+                <button class="btn-remove p-2 bg-red-900/20 hover:bg-red-900/40 border border-red-500/20 rounded-lg text-red-400 transition-colors">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            `;
+            
+            pathsList.appendChild(row);
+            
+            // Re-generate on input changes
+            row.querySelector('.path-input').addEventListener('input', generateRobotsTxt);
+            
+            // Remove button handler
+            row.querySelector('.btn-remove').addEventListener('click', () => {
+                row.remove();
+                if (pathsList.children.length === 0) {
+                    pathsEmpty.style.display = 'block';
+                }
+                generateRobotsTxt();
+            });
+            
+            generateRobotsTxt();
+        });
+
+        function generateRobotsTxt() {
+            const startTime = performance.now();
+            let rules = [];
+            
+            rules.push('# ===================================================');
+            rules.push('# Robots.txt Exclusion Directives Compilation');
+            rules.push('# Created locally by Affilore Robots.txt Generator & AI Shield');
+            rules.push('# ===================================================\n');
+
+            let activeGroupsCount = 0;
+            let blockedAICount = 0;
+            let linesCount = 0;
+
+            // Sitemap Url
+            const sitemap = sitemapUrl.value.trim();
+            if (sitemap) {
+                rules.push(`Sitemap: ${sitemap}`);
+                rules.push('');
+            }
+
+            // Standard Crawlers
+            const selects = standardCrawlers.querySelectorAll('.crawler-select');
+            selects.forEach(select => {
+                const crawlerName = select.getAttribute('data-crawler');
+                const val = select.value;
+                if (val !== 'none') {
+                    rules.push(`User-agent: ${crawlerName}`);
+                    activeGroupsCount++;
+                    if (val === 'allow') {
+                        rules.push('Allow: /');
+                    } else if (val === 'disallow') {
+                        rules.push('Disallow: /');
+                    }
+                    rules.push('');
+                }
+            });
+
+            // Block All AI Scrapers Matrix OR Individual Toggles
+            const aiCheckboxes = aiCrawlers.querySelectorAll('input[type="checkbox"]');
+            aiCheckboxes.forEach(cb => {
+                if (blockAllAI.checked) {
+                    cb.checked = true;
+                    cb.disabled = true;
+                } else {
+                    cb.disabled = false;
+                }
+
+                if (cb.checked) {
+                    const agents = cb.getAttribute('data-agents').split(',');
+                    agents.forEach(agent => {
+                        rules.push(`User-agent: ${agent.trim()}`);
+                        rules.push('Disallow: /');
+                        rules.push('');
+                        blockedAICount++;
+                        activeGroupsCount++;
+                    });
+                }
+            });
+
+            // Custom Disallow directories paths
+            const pathInputs = pathsList.querySelectorAll('.path-input');
+            let customPaths = [];
+            pathInputs.forEach(input => {
+                const val = input.value.trim();
+                if (val) {
+                    customPaths.push(val);
+                }
+            });
+
+            if (customPaths.length > 0) {
+                rules.push('User-agent: *');
+                activeGroupsCount++;
+                customPaths.forEach(path => {
+                    rules.push(`Disallow: ${path}`);
+                });
+                rules.push('Allow: /');
+                rules.push('');
+            } else {
+                // Wildcard fallback if no explicit rules are defined but sitemaps or AI tags are compiled
+                rules.push('User-agent: *');
+                rules.push('Allow: /');
+                rules.push('');
+                activeGroupsCount++;
+            }
+
+            generatedContent = rules.join('\n').trim() + '\n';
+            robotsOutput.textContent = generatedContent;
+
+            // Update stats
+            const endTime = performance.now();
+            const duration = (endTime - startTime).toFixed(2);
+            
+            // Directives (count non-empty lines excluding comments)
+            const lines = generatedContent.split('\n');
+            let directiveLines = 0;
+            lines.forEach(l => {
+                if (l.trim() && !l.trim().startsWith('#')) {
+                    directiveLines++;
+                }
+            });
+
+            counterDirectives.textContent = directiveLines;
+            counterCrawlers.textContent = activeGroupsCount;
+            counterAIBlocked.textContent = blockedAICount;
+            counterSpeed.textContent = duration;
+            
+            charCount.textContent = `${generatedContent.length} chars · ${lines.length - 1} lines`;
+            
+            const timeNow = new Date().toLocaleTimeString();
+            lastGen.textContent = `Generated at ${timeNow}`;
+            setStatus('success', 'Directives Live');
+        }
+
+        // Add listeners to static inputs
+        sitemapUrl.addEventListener('input', generateRobotsTxt);
+        blockAllAI.addEventListener('change', generateRobotsTxt);
+        
+        standardCrawlers.querySelectorAll('.crawler-select').forEach(sel => {
+            sel.addEventListener('change', generateRobotsTxt);
+        });
+        
+        aiCrawlers.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', generateRobotsTxt);
+        });
+
+        // Trigger manual compilation
+        btnGenerate.addEventListener('click', () => {
+            generateRobotsTxt();
+        });
+
+        // Copy button
+        btnCopy.addEventListener('click', () => {
+            navigator.clipboard.writeText(generatedContent).then(() => {
+                copyToast.classList.add('show');
+                copySuccess.classList.remove('hidden');
+                setTimeout(() => {
+                    copyToast.classList.remove('show');
+                    copySuccess.classList.add('hidden');
+                }, 2000);
+            });
+        });
+
+        // Download button
+        btnDownload.addEventListener('click', () => {
+            const blob = new Blob([generatedContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'robots.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Reset button
+        btnReset.addEventListener('click', () => {
+            sitemapUrl.value = '';
+            blockAllAI.checked = false;
+            
+            standardCrawlers.querySelectorAll('.crawler-select').forEach(sel => {
+                sel.value = 'none';
+            });
+            
+            aiCrawlers.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+                cb.disabled = false;
+            });
+            
+            pathsList.innerHTML = '';
+            pathsEmpty.style.display = 'block';
+            
+            generateRobotsTxt();
+            setStatus('idle', 'Awaiting Input');
+        });
+
+    })();
+    </script>
+</body>
+</html>
