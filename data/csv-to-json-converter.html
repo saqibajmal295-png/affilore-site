@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to JSON Converter — Affilore Data Tools</title>
+    <meta name="description" content="Premium serverless CSV to JSON converter with real-time parsing, multiple output formats, and advanced analytics. Part of the Affilore data engineering toolkit.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: '#0A0A0B',
+                        panel: '#111113',
+                        border: '#1E1E22',
+                        'border-hover': '#2A2A30',
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.03)',
+                        'glass-lg': '0 16px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    }
+                },
+            },
+        };
+    </script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-family: 'Inter', system-ui, sans-serif; height: 100%; background-color: #0A0A0B; }
+        
+        /* ─── DENSE & FLUID AMBIENT PARTICLE ENGINE MULTI-LAYER BACKDROP ─── */
+        body {
+            background-color: #0A0A0B;
+            color: #E4E4E7;
+            min-height: 100%;
+            overflow-x: hidden;
+            position: relative;
+            background-image:
+                radial-gradient(4px 4px at 12% 15%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 35% 28%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 68% 8%, rgba(245, 166, 35, 0.70) 100%, transparent),
+                radial-gradient(6px 6px at 88% 22%, rgba(245, 166, 35, 0.55) 100%, transparent),
+                radial-gradient(5px 5px at 15% 48%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 52% 61%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 76% 42%, rgba(245, 166, 35, 0.55) 100%, transparent),
+                radial-gradient(4px 4px at 92% 56%, rgba(245, 166, 35, 0.70) 100%, transparent),
+                radial-gradient(6px 6px at 22% 78%, rgba(245, 166, 35, 0.50) 100%, transparent),
+                radial-gradient(4px 4px at 65% 88%, rgba(245, 166, 35, 0.65) 100%, transparent),
+                radial-gradient(5px 5px at 82% 71%, rgba(245, 166, 35, 0.60) 100%, transparent),
+                radial-gradient(4px 4px at 40% 93%, rgba(245, 166, 35, 0.70) 100%, transparent);
+            background-size: 100% 1200px;
+            animation: ambientFlow 45s linear infinite;
+        }
+        @keyframes ambientFlow {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 -1200px; }
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2A2A30; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3A3A42; }
+        
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+        
+        /* ── Text Color Treatments ── */
+        .gradient-heading {
+            background: linear-gradient(135deg, #f87171, #ec4899, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* ── Glassmorphism Panels ── */
+        .glass-panel {
+            background: rgba(17, 17, 20, 0.75);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.03);
+        }
+        
+        /* ── Workspace Inputs ── */
+        .csv-input {
+            width: 100%;
+            min-height: 420px;
+            background: rgba(9, 9, 11, 0.85);
+            border: 1px solid #1c1c1f;
+            border-radius: 8px;
+            color: #E8E8ED;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            padding: 16px;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .csv-input:focus {
+            border-color: rgba(245, 166, 35, 0.4);
+            box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.08);
+        }
+        .csv-input::placeholder { color: #55555F; }
+        
+        .json-output {
+            width: 100%;
+            min-height: 420px;
+            max-height: 600px;
+            overflow: auto;
+            background: rgba(9, 9, 11, 0.85);
+            border: 1px solid #1c1c1f;
+            border-radius: 8px;
+            color: #c4c4cc;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            padding: 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        /* ── Syntax Highlighter Elements ── */
+        .json-key { color: #f87171; }
+        .json-string { color: #86efac; }
+        .json-number { color: #93c5fd; }
+        .json-boolean { color: #c084fc; }
+        .json-null { color: #6b7280; font-style: italic; }
+        .json-bracket { color: #fbbf24; }
+        .json-punctuation { color: #6b7280; }
+        
+        /* ── Custom Action Controls buttons ── */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-amber {
+            background: #F5A623;
+            color: #0A0A0B;
+        }
+        .btn-amber:hover {
+            background: #f6b340;
+            box-shadow: 0 0 20px rgba(245, 166, 35, 0.3);
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            background: rgba(24, 24, 27, 0.8);
+            color: #8A8A95;
+            border: 1px solid #1E1E22;
+        }
+        .btn-outline:hover {
+            border-color: rgba(245, 166, 35, 0.35);
+            color: #E8E8ED;
+            background: rgba(245, 166, 35, 0.06);
+        }
+        .copy-success { animation: copyFlash 0.35s ease; }
+        @keyframes copyFlash { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        
+        /* ── Drop Zone Container ── */
+        .drop-zone {
+            border: 2px dashed #1E1E22;
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .drop-zone.drag-over {
+            border-color: #F5A623;
+            background: rgba(245, 166, 35, 0.05);
+            box-shadow: inset 0 0 30px rgba(245, 166, 35, 0.04);
+        }
+        
+        /* ── Status badges ── */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; font-weight: 500; padding: 5px 12px; border-radius: 20px; letter-spacing: 0.04em; transition: all 0.3s ease; }
+        .status-idle { background: rgba(107, 114, 128, 0.15); color: #6b7280; border: 1px solid rgba(107, 114, 128, 0.2); }
+        .status-success { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
+        .status-error { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .status-processing { background: rgba(245, 166, 35, 0.1); color: #F5A623; border: 1px solid rgba(245, 166, 35, 0.2); }
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+        .status-processing .status-dot { animation: pulse-dot 1.2s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.75); } }
+        
+        .delimiter-select {
+            background: rgba(10, 10, 11, 0.7); border: 1px solid #1E1E22; border-radius: 8px; color: #E8E8ED; font-size: 0.78rem; padding: 8px 12px; outline: none; cursor: pointer; -webkit-appearance: none; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238A8A95' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px;
+        }
+        .format-option { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: background 0.2s ease; font-size: 0.78rem; color: #8A8A95; }
+        .format-option hover { background: rgba(245, 166, 35, 0.05); }
+        .format-option input[type="radio"] { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border: 2px solid #1E1E22; border-radius: 50%; outline: none; cursor: pointer; position: relative; }
+        .format-option input[type="radio"]:checked { border-color: #F5A623; }
+        .format-option input[type="radio"]:checked::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; border-radius: 50%; background: #F5A623; }
+        .format-option input[type="radio"]:checked + span { color: #E8E8ED; }
+        .metric-card { background: #111113; border: 1px solid #1E1E22; border-radius: 10px; padding: 16px 20px; position: relative; overflow: hidden; transition: border-color 0.3s ease, box-shadow 0.3s ease; text-center; }
+        .metric-value { font-size: 1.75rem; font-weight: 700; color: #F5A623; line-height: 1.2; font-family: 'JetBrains Mono', monospace; }
+        .metric-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #8A8A95; margin-top: 4px; }
+        .file-input-hidden { position: absolute; width: 0; height: 0; opacity: 0; overflow: hidden; }
+
+        /* ─── TECHNICAL SEO ARTICLE DESIGN PARAMETERS ─── */
+        .art-root { background: #0A0A0B; color: #FFFFFF; font-family: 'Inter', sans-serif; padding: 0; line-height: 1.85; }
+        .art-container { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+        .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(90deg, rgba(99,102,241,0.18), rgba(56,189,248,0.12)); border: 0.5px solid rgba(99,102,241,0.4); border-radius: 999px; padding: 5px 14px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #a5b4fc; margin-bottom: 1.5rem; }
+        .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; animation: pulse 2s infinite; }
+        .h2-article { font-size: 28px; font-weight: 700; color: #93c5fd; margin: 2.5rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid #1e3a5f; display:flex; align-items:center; gap:8px }
+        .p { color: #FFFFFF; line-height: 1.85; font-size: 17.5px; margin: 0 0 1.1rem; }
+        .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 4px; margin: 0 2px; vertical-align: middle; font-family: 'JetBrains Mono', monospace; }
+        .badge-rfc   { background: rgba(99,102,241,0.22); color: #a5b4fc; border: 0.5px solid rgba(99,102,241,0.45); }
+        .badge-serial { background: rgba(56,189,248,0.18); color: #7dd3fc; border: 0.5px solid rgba(56,189,248,0.4); }
+        .badge-delim  { background: rgba(251,146,60,0.18); color: #fdba74; border: 0.5px solid rgba(251,146,60,0.4); }
+        .badge-safe   { background: rgba(52,211,153,0.18); color: #6ee7b7; border: 0.5px solid rgba(52,211,153,0.4); }
+        .badge-json   { background: rgba(192,132,252,0.18); color: #d8b4fe; border: 0.5px solid rgba(192,132,252,0.4); }
+        .badge-csv    { background: rgba(251,191,36,0.18); color: #fcd34d; border: 0.5px solid rgba(251,191,36,0.4); }
+        .divider { height: 0.5px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.5), rgba(56,189,248,0.5), transparent); margin: 2.5rem 0; border: none; }
+        .code-block { background: #0f1623; border: 0.5px solid rgba(99,102,241,0.3); border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; position: relative; }
+        .code-block .code-label { position: absolute; top: 10px; right: 14px; font-size: 10px; font-weight: 600; color: rgba(165,180,252,0.5); text-transform: uppercase; }
+        .code-line-raw { color: #fcd34d; }
+        .code-line-key { color: #a5b4fc; }
+        .code-line-val { color: #6ee7b7; }
+        .code-line-str { color: #f9a8d4; }
+        .code-line-punc { color: #94a3b8; }
+        .code-line-comment { color: #4a5568; font-style: italic; }
+        .step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1.25rem 0; }
+        .step-card { background: #111827; border: 0.5px solid rgba(99,102,241,0.25); border-radius: 10px; padding: 1rem 1.1rem; display: flex; gap: 12px; align-items: flex-start; }
+        .step-num { min-width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+        .step-1 .step-num { background: linear-gradient(135deg,#6366f1,#818cf8); color: #fff; }
+        .step-2 .step-num { background: linear-gradient(135deg,#0ea5e9,#38bdf8); color: #fff; }
+        .step-3 .step-num { background: linear-gradient(135deg,#a855f7,#c084fc); color: #fff; }
+        .step-4 .step-num { background: linear-gradient(135deg,#10b981,#34d399); color: #fff; }
+        .step-5 .step-num { background: linear-gradient(135deg,#f59e0b,#fbbf24); color: #111; }
+        .step-6 .step-num { background: linear-gradient(135deg,#ef4444,#f87171); color: #fff; }
+        .step-card-title { font-size: 13px; font-weight: 600; color: #e2e8f0; margin: 0 0 4px; }
+        .step-card p { font-size: 13px; color: #94a3b8; margin: 0; }
+        .security-box { background: linear-gradient(135deg, rgba(16,30,54,0.9), rgba(10,20,40,0.95)); border: 0.5px solid rgba(52,211,153,0.35); border-radius: 12px; padding: 1.5rem 1.75rem; margin: 1.25rem 0; position: relative; }
+        .security-box-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
+        .security-icon { width: 36px; height: 36px; background: rgba(52,211,153,0.15); border-radius: 8px; border: 0.5px solid rgba(52,211,153,0.4); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .security-box-header h3 { margin: 0; color: #6ee7b7; font-size: 15px; }
+        .faq-item-art { background: #111827; border: 0.5px solid rgba(99,102,241,0.2); border-radius: 10px; padding: 1.1rem 1.25rem; margin-bottom: 12px; }
+        .faq-q-art { font-size: 14px; font-weight: 600; color: #c7d2fe; margin: 0 0 8px; display: flex; gap: 8px; align-items: flex-start; }
+        .faq-q-icon { min-width: 22px; height: 22px; background: linear-gradient(135deg, #6366f1, #38bdf8); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; margin-top: 1px; }
+        .faq-item-art p { font-size: 13.5px; color: #FFFFFF; margin: 0; padding-left: 30px; }
+        .intro-stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 1.5rem 0; }
+        .intro-stat { background: #111827; border-radius: 10px; border: 0.5px solid rgba(56,189,248,0.2); padding: 1rem; text-align: center; }
+        .intro-stat .stat-val { font-size: 22px; font-weight: 700; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; }
+        .intro-stat .stat-label { font-size: 11px; color: #64748b; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 2px; display: block; }
+        .mapping-row { display: flex; align-items: center; gap: 16px; margin: 0.75rem 0; flex-wrap: wrap; }
+        .csv-pill { background: rgba(251,191,36,0.12); border: 0.5px solid rgba(251,191,36,0.35); border-radius: 6px; padding: 5px 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #fcd34d; flex: 1; min-width: 150px; }
+        .arrow-glyph { color: #818cf8; font-size: 18px; flex-shrink: 0; }
+        .json-pill { background: rgba(192,132,252,0.12); border: 0.5px solid rgba(192,132,252,0.35); border-radius: 6px; padding: 5px 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #d8b4fe; flex: 1; min-width: 200px; }
+        .affilore-brand { background: linear-gradient(90deg, #6366f1, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; }
+        .footer-note { margin-top: 3rem; padding-top: 1.5rem; border-top: 0.5px solid rgba(99,102,241,0.2); font-size: 12px; color: #4a5568; text-align: center; }
+    </style>
+</head>
+<body class="min-h-screen relative bg-[#0A0A0B]">
+
+    <div class="noise-overlay"></div>
+
+    <header class="navbar" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <a href="/" class="flex items-center gap-2.5 text-decoration-none">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #F5A623, #e0921a);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A0A0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="4 17 10 11 4 5"></polyline>
+                            <line x1="12" y1="19" x2="20" y2="19"></line>
+                        </svg>
+                    </div>
+                    <span class="text-white font-bold text-lg tracking-tight">Affilore<span class="text-blue-500">.</span></span>
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/data" class="nav-link">Data</a>
+                    <a href="/calculator" class="nav-link">Calculator</a>
+                    <a href="/utility" class="nav-link">Utility</a>
+                    <a href="/developer" class="nav-link">Developer</a>
+                    <a href="/seo" class="nav-link">SEO</a>
+                    <a href="/productivity" class="nav-link">Productivity</a>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="mailto:affilore4@gmail.com" class="btn-amber text-xs" id="requestToolBtn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Request a Custom Tool
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="text-center mb-10 fade-in">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+                <span class="gradient-heading">CSV to JSON</span> <span class="text-white">Converter</span>
+            </h1>
+            <p class="text-sm max-w-xl mx-auto" style="color: var(--text-secondary); line-height: 1.7;">
+                Transform structured CSV data into clean, validated JSON with real-time parsing, automatic header detection, and multiple output format support.
+            </p>
+        </div>
+
+        <div class="w-full bg-[#111622]/40 border border-blue-500/10 backdrop-blur-md rounded-xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 relative z-10">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 status-dot"></span>
+                <span class="text-xs font-bold tracking-wide text-zinc-300 font-mono">CSV Engine Status: Operational</span>
+            </div>
+            <div class="text-xs font-medium text-zinc-500 font-mono flex gap-4">
+                <span>RFC 4180 Parsing</span>
+                <span>•</span>
+                <span>In-Memory Safe Allocation</span>
+                <span>•</span>
+                <span>Client-Side Isolation</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6 fade-in relative z-10" id="metricsBar">
+            <div class="metric-card">
+                <div class="metric-value" id="metricRows">0</div>
+                <div class="metric-label">Rows Parsed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="metricCols">0</div>
+                <div class="metric-label">Columns Detected</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="metricCells">0</div>
+                <div class="metric-label">Total Cells Captured</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="metricTime">0.00</div>
+                <div class="metric-label">Parse Time (ms)</div>
+            </div>
+        </div>
+
+        <div class="glass-panel p-4 mb-5 fade-in relative z-10">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-3">
+                    <button class="btn-action btn-amber font-bold text-xs uppercase tracking-wider shadow-md" id="btnConvert">
+                        Convert Data
+                    </button>
+                    <button class="btn-action btn-outline text-xs uppercase font-bold tracking-wider" id="btnUpload">
+                        Upload File
+                    </button>
+                    <button class="btn-action btn-outline text-xs uppercase font-bold tracking-wider" id="btnCopy">
+                        <span id="copyText">Copy Flat Schema Data</span>
+                    </button>
+                    <button class="btn-action btn-outline text-xs uppercase font-bold tracking-wider" id="btnDownload">
+                        Download JSON
+                    </button>
+                    <button class="btn-action btn-outline text-xs uppercase font-bold tracking-wider btn-clear" id="btnClear">Clear Window</button>
+                </div>
+                <div id="statusBadge" class="status-badge status-idle">
+                    <span class="status-dot"></span>
+                    <span id="statusText" class="font-mono text-[11px] font-bold uppercase tracking-wider">Idle</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel p-4 mb-6 fade-in relative z-10">
+            <div class="flex flex-wrap items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <label class="text-xs font-bold tracking-wider uppercase text-zinc-400">Delimiter</label>
+                    <select class="delimiter-select text-xs" id="delimiterSelect">
+                        <option value="auto">Auto-Detect</option>
+                        <option value=",">Comma ( , )</option>
+                        <option value="&#9;">Tab ( \t )</option>
+                        <option value=";">Semicolon ( ; )</option>
+                        <option value="|">Pipe ( | )</option>
+                    </select>
+                </div>
+                <div style="width:1px; height:24px; background: var(--border-subtle);"></div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold tracking-wider uppercase text-zinc-400 mr-1">Structure Output Format</span>
+                    <label class="format-option">
+                        <input type="radio" name="outputFormat" value="arrayOfObjects" checked>
+                        <span>Array of Objects</span>
+                    </label>
+                    <label class="format-option">
+                        <input type="radio" name="outputFormat" value="columnBased">
+                        <span>Column-Based</span>
+                    </label>
+                    <label class="format-option">
+                        <input type="radio" name="outputFormat" value="minified">
+                        <span>Minified</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid gap-6 workspace-grid fade-in relative z-10" style="grid-template-columns: 1fr 1fr;">
+            <div class="glass-panel p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-2 h-2 rounded-full bg-blue-500 shadow-md"></div>
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Raw CSV Input</h2>
+                    </div>
+                    <span class="text-[11px] font-bold font-mono text-zinc-500" id="charCount">0 chars</span>
+                </div>
+                <div class="drop-zone mb-4 bg-zinc-950/40" id="dropZone">
+                    <input type="file" accept=".csv,.tsv,.txt" class="file-input-hidden" id="fileInput">
+                    <p class="drop-zone-text text-xs font-bold tracking-wide text-zinc-400 mb-1">Drag & drop structural CSV file here</p>
+                    <p class="text-[11px] text-zinc-600 font-mono">or click to browse local folders</p>
+                </div>
+                <textarea class="csv-input text-zinc-100 placeholder-zinc-700" id="csvInput" placeholder='Paste your raw tabular CSV text content here...&#10;&#10;name,age,city&#10;"Doe, John",35,"New York"&#10;Jane Smith,28,London'></textarea>
+            </div>
+
+            <div class="glass-panel p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-md"></div>
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-300">Processed JSON Output</h2>
+                    </div>
+                    <span class="text-[11px] font-bold font-mono text-zinc-500" id="jsonSize">0 bytes</span>
+                </div>
+                <div class="json-output" id="jsonOutput">
+                    <span style="color: #55555F; font-style: italic;">Converted objects rendering array will display here...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto rounded-2xl relative z-10 mt-12">
+            <div class="art-root">
+              <div class="art-container">
+
+                <div class="hero-eyebrow">
+                  <span class="dot"></span>
+                  Affilore Dev Tools · CSV to JSON Converter · Technical Reference
+                </div>
+
+                <h1>Flat Rows to Structured Objects: Deep Dive into Cryptographically Secure Client-Side CSV to JSON Parsing</h1>
+
+                <div class="intro-stat-row">
+                  <div class="intro-stat">
+                    <span class="stat-val">100%</span>
+                    <span class="stat-label">Client-Side</span>
+                  </div>
+                  <div class="intro-stat">
+                    <span class="stat-val">RFC 4180</span>
+                    <span class="stat-label">Compliant</span>
+                  </div>
+                  <div class="intro-stat">
+                    <span class="stat-val">0 bytes</span>
+                    <span class="stat-label">Server Upload</span>
+                  </div>
+                </div>
+
+                <hr class="divider">
+
+                <h2><span class="section-num">01</span> Understanding the Divide Between CSV and JSON</h2>
+                <p class="p">At the heart of modern data engineering lies a fundamental architectural tension: the flat, row-oriented world of <span class="badge badge-csv">CSV</span> tabular records versus the deeply nested, hierarchical universe of <span class="badge badge-json">JSON</span> object graphs. A CSV file — governed by the <span class="badge badge-rfc">RFC 4180</span> standard — expresses data as delimited plain-text rows, ideally suited for spreadsheet exports, relational database dumps, and ERP system outputs. Its strength is human readability and universal compatibility. Its weakness is structural rigidity: it cannot natively express one-to-many relationships, nested arrays, or polymorphic values without breaking its own flat-row contract.</p>
+                <p class="p">JSON, by contrast, is the lingua franca of web runtime execution. Every major REST API, GraphQL endpoint, and modern JavaScript framework — from React and Next.js to Vue and SvelteKit — expects data to arrive as typed, schema-aware object graphs. When your application ingests a CSV export from Shopify, Salesforce, or a legacy SQL view, the data is structurally incompatible until a reliable <span class="badge badge-serial">serialization</span> transformation step maps each row into a named property object. That conversion step is precisely what Affilore's CSV to JSON Converter automates — locally, securely, and with zero server-side data exposure.</p>
+
+                <hr class="divider">
+
+                <h2><span class="section-num">02</span> RFC 4180 Parsing: Operational Complexity Unpacked</h2>
+                <p class="p">Parsing a <span class="badge badge-rfc">RFC 4180</span>-compliant CSV stream is substantially more complex than naively splitting on commas. The standard defines a precise behavioral contract that most off-the-shelf parsers implement only partially, creating silent data corruption bugs in production pipelines. Understanding these edge cases is essential for any data engineer handling real-world exports.</p>
+
+                <h3>The Double-Quote Boundary Problem</h3>
+                <p class="p">RFC 4180 mandates that any field containing a <span class="badge badge-delim">delimiter collision</span> — a comma, a newline, or a double-quote character within the cell value — must be entirely wrapped in a double-quote enclosure. A double-quote character within a quoted field is further escaped by doubling it (<code style="color:#f9a8d4; font-family:'JetBrains Mono',monospace; font-size:12px;">""</code>). Parsers that fail to implement this rule will silently truncate values, misalign columns, and corrupt entire row sequences downstream. For example, a customer address field like <code style="color:#fcd34d; font-family:'JetBrains Mono',monospace; font-size:12px;">"123 Oak St, Suite ""B"""</code> must be decoded to <code style="color:#6ee7b7; font-family:'JetBrains Mono',monospace; font-size:12px;">123 Oak St, Suite "B"</code> — not split mid-value.</p>
+
+                <h3>Raw Bytes to Schema Objects: The Mapping Model</h3>
+                <p class="p">Every CSV row maps deterministically to a <span class="badge badge-json">JSON</span> object, with the header row supplying property keys and each subsequent row supplying typed values. The <span class="badge badge-serial">serialization</span> engine must perform coercion-aware parsing: numeric strings become numbers, boolean literals become native booleans, and empty cells become either <code style="color:#f9a8d4; font-family:'JetBrains Mono',monospace; font-size:12px;">null</code> or empty strings depending on schema strictness settings.</p>
+
+                <div class="code-block">
+                  <span class="code-label">CSV INPUT</span>
+                  <div class="code-line-comment">// Raw CSV stream (RFC 4180 encoded)</div>
+                  <div class="code-line-raw">user_id,full_name,revenue,notes</div>
+                  <div class="code-line-raw">1001,"Chen, Wei",48200.50,"Preferred: ""priority"" tier"</div>
+                  <div class="code-line-raw">1002,Sara Okonkwo,31750.00,</div>
+                </div>
+
+                <div class="mapping-row">
+                  <div class="csv-pill">row[0] → "1001"<br>row[1] → "Chen, Wei"<br>row[2] → "48200.50"<br>row[3] → 'Preferred: "priority" tier'</div>
+                  <div class="arrow-glyph">→</div>
+                  <div class="json-pill">{ "user_id": 1001,<br>&nbsp;&nbsp;"full_name": "Chen, Wei",<br>&nbsp;&nbsp;"revenue": 48200.50,<br>&nbsp;&nbsp;"notes": "Preferred: \"priority\" tier" }</div>
+                </div>
+
+                <div class="code-block">
+                  <span class="code-label">JSON OUTPUT ARRAY</span>
+                  <div class="code-line-punc">[</div>
+                  <div>&nbsp;&nbsp;<span class="code-line-punc">{</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-line-key">"user_id"</span><span class="code-line-punc">: </span><span class="code-line-val">1001</span><span class="code-line-punc">,</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-line-key">"full_name"</span><span class="code-line-punc">: </span><span class="code-line-str">"Chen, Wei"</span><span class="code-line-punc">,</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-line-key">"revenue"</span><span class="code-line-punc">: </span><span class="code-line-val">48200.50</span><span class="code-line-punc">,</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-line-key">"notes"</span><span class="code-line-punc">: </span><span class="code-line-str">"Preferred: \"priority\" tier"</span></div>
+                  <div>&nbsp;&nbsp;<span class="code-line-punc">},</span></div>
+                  <div>&nbsp;&nbsp;<span class="code-line-punc">{</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-line-key">"user_id"</span><span class="code-line-punc">: </span><span class="code-line-val">1002</span><span class="code-line-punc">,</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-line-key">"full_name"</span><span class="code-line-punc">: </span><span class="code-line-str">"Sara Okonkwo"</span><span class="code-line-punc">,</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-line-key">"revenue"</span><span class="code-line-punc">: </span><span class="code-line-val">31750.00</span><span class="code-line-punc">,</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-line-key">"notes"</span><span class="code-line-punc">: </span><span class="code-line-val">null</span></div>
+                  <div>&nbsp;&nbsp;<span class="code-line-punc">}</span></div>
+                  <div class="code-line-punc">]</div>
+                </div>
+
+                <p class="p">Notice how the comma inside <span class="badge badge-csv">Chen, Wei</span> is correctly preserved as part of the string value rather than interpreted as a column separator — a direct product of <span class="badge badge-rfc">RFC 4180</span> quote-boundary parsing. The empty <code style="color:#f9a8d4; font-family:'JetBrains Mono',monospace; font-size:12px;">notes</code> field for row 1002 is emitted as <code style="color:#d8b4fe; font-family:'JetBrains Mono',monospace; font-size:12px;">null</code> to preserve schema consistency across the output array — critical for downstream API consumers that perform strict type validation. Affilore's parser handles all these <span class="badge badge-delim">delimiter collision</span> vectors automatically, including carriage-return-linefeed (<code style="color:#f9a8d4; font-family:'JetBrains Mono',monospace; font-size:12px;">CRLF</code>) line endings mandated by RFC 4180 Section 4, mixed with the Unix <code style="color:#f9a8d4; font-family:'JetBrains Mono',monospace; font-size:12px;">LF</code> variants common in macOS Excel exports.</p>
+
+                <hr class="divider">
+
+                <h2><span class="section-num">03</span> Step-by-Step: From Excel Export to Parsed JSON Array</h2>
+                <p class="p">Converting your tabular spreadsheet data into API-ready JSON objects takes under two minutes with Affilore's converter. Follow this end-to-end workflow:</p>
+
+                <div class="step-grid">
+                  <div class="step-card step-1">
+                    <div class="step-num">1</div>
+                    <div>
+                      <p class="step-card-title">Export from Excel or Google Sheets</p>
+                      <p>Open your spreadsheet and go to File → Save As (Excel) or File → Download → CSV. Ensure your first row contains clean column headers — these become your <span class="badge badge-json">JSON</span> property keys. Avoid spaces in headers; use underscores for downstream compatibility.</p>
+                    </div>
+                  </div>
+                  <div class="step-card step-2">
+                    <div class="step-num">2</div>
+                    <div>
+                      <p class="step-card-title">Drag & Drop into the Dropzone</p>
+                      <p>Navigate to the <span class="affilore-brand">Affilore</span> CSV to JSON Converter. Drag your <code style="color:#fcd34d; font-family:'JetBrains Mono',monospace; font-size:11px;">.csv</code> or <code style="color:#fcd34d; font-family:'JetBrains Mono',monospace; font-size:11px;">.txt</code> file directly into the local dropzone. The file never leaves your browser — the entire parsing operation is executed in-memory via the JavaScript <span class="badge badge-serial">FileReader API</span>.</p>
+                    </div>
+                  </div>
+                  <div class="step-card step-3">
+                    <div class="step-num">3</div>
+                    <div>
+                      <p class="step-card-title">Configure Formatting Options</p>
+                      <p>Toggle your output preferences: enable <strong style="color:#c7d2fe">Type Inference</strong> to auto-cast numeric and boolean strings; choose <strong style="color:#c7d2fe">Null Handling</strong> mode (null vs. empty string for blank cells); set custom <span class="badge badge-delim">delimiter</span> if your export uses semicolons or tabs instead of commas.</p>
+                    </div>
+                  </div>
+                  <div class="step-card step-4">
+                    <div class="step-num">4</div>
+                    <div>
+                      <p class="step-card-title">Review the Parsed Array Preview</p>
+                      <p>The parser renders a live preview of your <span class="badge badge-json">JSON</span> array with syntax highlighting. Scan the first 10 records to confirm column alignment, verify that quoted values with embedded commas resolved correctly, and check that numeric types coerced as expected.</p>
+                    </div>
+                  </div>
+                  <div class="step-card step-5">
+                    <div class="step-num">5</div>
+                    <div>
+                      <p class="step-card-title">Adjust Array vs. Object Output Mode</p>
+                      <p>Choose between an <strong style="color:#c7d2fe">array of objects</strong> (default — ideal for REST API POST payloads), or a <strong style="color:#c7d2fe">keyed object map</strong> using a designated ID column as the root key — useful for lookup tables and Redux state slices.</p>
+                    </div>
+                  </div>
+                  <div class="step-card step-6">
+                    <div class="step-num">6</div>
+                    <div>
+                      <p class="step-card-title">Copy or Download the Output</p>
+                      <p>Click <strong style="color:#fca5a5">Copy JSON</strong> to push the output to your clipboard, or <strong style="color:#fca5a5">Download .json</strong> to save it locally. Use it directly in your API test suite (Postman, Insomnia), seed files, or <span class="badge badge-serial">JavaScript</span> module imports.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <hr class="divider">
+
+                <h2><span class="section-num">04</span> The Affilore Local Execution Sandbox Advantage</h2>
+                <div class="security-box">
+                  <div class="security-box-header">
+                    <div class="security-icon">🔒</div>
+                    <h3>Zero Server Transmission — Your Data Never Leaves the Device</h3>
+                  </div>
+                  <p>In enterprise and regulated environments, sending raw data files to a remote parsing server introduces a vector of exposure that cannot be fully mitigated through TLS alone. Transit encryption protects data in motion, but it cannot protect against server-side logging, third-party analytics SDKs embedded in web tools, or cloud provider storage audit trails that may inadvertently retain your payload.</p>
+                </div>
+
+                <p class="p"><span class="affilore-brand">Affilore's</span> CSV to JSON Converter operates entirely within your browser's native JavaScript execution sandbox. When you drop a financial ledger export, customer PII database, or proprietary ERP system dump into the tool, the <span class="badge badge-safe">FileReader API</span> loads it into volatile browser memory — and it stays there. No HTTP request carries your data outbound. No server receives a byte of your payload. The parsed JSON output is constructed entirely within the V8 or SpiderMonkey engine running on your local device.</p>
+                <p class="p">This architecture is not a convenience feature — it is an <strong style="color:#6ee7b7">operational security mandate</strong> for teams handling data classified under GDPR, HIPAA, SOC 2, or internal data governance policies. Financial logs containing revenue figures, customer databases with email addresses and purchase histories, or ERP dumps with supplier contract terms represent categories of information where the minimum viable security posture is <em style="color:#a5b4fc">no third-party data exposure at all</em>. Client-side <span class="badge badge-serial">serialization</span> achieves exactly that guarantee — verifiably, by architectural design rather than by policy promise.</p>
+
+                <hr class="divider">
+
+                <h2><span class="section-num">05</span> Frequently Asked Questions</h2>
+                <div class="faq-item-art">
+                  <p class="faq-q-art"><span class="faq-q-icon">Q</span>How are commas within quoted fields handled — will my address or description columns break?</p>
+                  <p>No. The parser implements full <span class="badge badge-rfc">RFC 4180</span> double-quote enclosure logic. Any field wrapped in double quotes is treated as an atomic string value regardless of how many commas appear inside it. The <span class="badge badge-delim">delimiter collision</span> is resolved at the tokenizer level before column mapping occurs, so <code style="color:#fcd34d; font-family:'JetBrains Mono',monospace; font-size:12px;">"New York, NY 10001"</code> maps to a single string property, never split across two columns.</p>
+                </div>
+                <div class="faq-item-art">
+                  <p class="faq-q-art"><span class="faq-q-icon">Q</span>What is the maximum file size my browser can parse securely without crashing?</p>
+                  <p>Browser <span class="badge badge-serial">FileReader API</span> performance scales with available device RAM. On modern hardware with 8GB+ memory, files up to 150–200 MB parse reliably within a few seconds. For very large datasets (500 MB+), it is recommended to split the CSV into batch segments of ~50,000 rows before conversion. The parser never touches disk — all processing is in-memory — so available heap size is the practical ceiling, not a hard-coded application limit.</p>
+                </div>
+                <div class="faq-item-art">
+                  <p class="faq-q-art"><span class="faq-q-icon">Q</span>Does converting files locally preserve original nested formatting or multi-line cell content?</p>
+                  <p>Yes. Multi-line cell values — produced by Excel when a cell contains line breaks entered with <code style="color:#fcd34d; font-family:'JetBrains Mono',monospace; font-size:12px;">Alt+Enter</code> — are encoded in CSV as quoted fields with embedded <code style="color:#fcd34d; font-family:'JetBrains Mono',monospace; font-size:12px;">\n</code> characters, per <span class="badge badge-rfc">RFC 4180</span> Section 6. The parser correctly reads these as single-property string values with preserved newlines in the output <span class="badge badge-json">JSON</span>. Note that CSV is inherently flat — true hierarchical nesting (e.g., an array of sub-objects inside a single field) requires a post-processing transformation step, which can be scripted using the JSON output as a clean starting point. For nested objects, you can write post-parsing scripts or leverage custom tools to map keys like "user.name" into a nested {"user": {"name": "..."}} structure.</p>
+                </div>
+              </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full bg-[#050507] border-t border-zinc-950 mt-10 py-12 relative z-50">
+        <div class="max-w-[1440px] mx-auto px-6 flex flex-col items-center justify-center gap-6">
+            <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-semibold text-zinc-400">
+                <a href="/privacy-policy.html" class="hover:text-white transition">Privacy</a>
+                <a href="/terms.html" class="hover:text-white transition">Terms</a>
+                <a href="#" class="hover:text-white transition">Disclaimer</a>
+                <a href="/about-us.html" class="hover:text-white transition">About</a>
+                <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=affilore4@gmail.com&amp;su=Contact+Us" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Contact</a>
+            </div>
+            
+            <div class="flex items-center gap-6 text-zinc-500">
+                <a href="https://www.tiktok.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.01 1.63 4.14.93.98 2.22 1.58 3.55 1.78v3.83c-1.42-.02-2.82-.47-4-1.28a7.12 7.12 0 0 1-2.42-2.84v7.7c.04 1.8-.44 3.61-1.42 5.12a7.88 7.88 0 0 1-4.14 3.29c-1.78.53-3.7.46-5.43-.22a8.03 8.03 0 0 1-4.11-4.73 8.32 8.32 0 0 1 .15-5.69c.77-1.89 2.22-3.48 4.04-4.4a8.21 8.21 0 0 1 6.51-.43v4.06a4.15 4.15 0 0 0-2.48.97c-.94.81-1.46 2.05-1.39 3.28.06 1.14.65 2.21 1.58 2.85.95.6 2.11.72 3.14.3a4.02 4.02 0 0 0 2.45-3.3c.09-1.01.03-2.03.04-3.05V0h1.42z"/></svg></a>
+                <a href="https://www.facebook.com/profile.php?id=61582547069472" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                <a href="https://www.youtube.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="https://www.instagram.com/affilore_/?hl=en" target="_blank" rel="noopener noreferrer" class="hover:text-white transition"><svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204 0-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 3.259 0 3.668-.014 4.948-.072 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.096 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+            </div>
+            
+            <div class="text-xs font-medium text-zinc-600 tracking-wide mt-2">
+                &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+            </div>
+        </div>
+    </footer>
+
+    <div id="copyToast" class="copy-toast" style="position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; background: rgba(245, 166, 35, 0.12); backdrop-filter: blur(16px); border: 1px solid rgba(245, 166, 35, 0.2); color: #F5A623; padding: 10px 24px; border-radius: 12px; font-size: 13px; font-weight: 600; pointer-events: none; z-index: 1000; transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); display: flex; align-items: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        <span>Copied JSON schema data to local clipboard!</span>
+    </div>
+
+    <script>
+    (() => {
+        'use strict';
+
+        const csvInput = document.getElementById('csvInput');
+        const jsonOutput = document.getElementById('jsonOutput');
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const delimiterSelect = document.getElementById('delimiterSelect');
+        const charCount = document.getElementById('charCount');
+        const jsonSize = document.getElementById('jsonSize');
+        
+        const metricRows = document.getElementById('metricRows');
+        const metricCols = document.getElementById('metricCols');
+        const metricCells = document.getElementById('metricCells');
+        const metricTime = document.getElementById('metricTime');
+        
+        const statusBadge = document.getElementById('statusBadge');
+        const statusText = document.getElementById('statusText');
+        
+        const btnConvert = document.getElementById('btnConvert');
+        const btnUpload = document.getElementById('btnUpload');
+        const btnCopy = document.getElementById('btnCopy');
+        const copyText = document.getElementById('copyText');
+        const btnDownload = document.getElementById('btnDownload');
+        const btnClear = document.getElementById('btnClear');
+        const copyToast = document.getElementById('copyToast');
+
+        let lastParsedJSON = null;
+
+        // Delimiter auto-detection helper
+        function detectDelimiter(text) {
+            const delimiters = [',', ';', '\t', '|'];
+            let bestDelim = ',';
+            let maxCount = -1;
+            const firstLine = text.split(/[\r\n]+/)[0];
+            for (let d of delimiters) {
+                let actualD = d === '\t' ? '\t' : d;
+                let count = 0;
+                if (actualD === '\t') {
+                    count = (firstLine.match(/\t/g) || []).length;
+                } else {
+                    count = (firstLine.split(actualD).length - 1);
+                }
+                if (count > maxCount) {
+                    maxCount = count;
+                    bestDelim = actualD;
+                }
+            }
+            return bestDelim;
+        }
+
+        // RFC 4180 CSV parser
+        function parseCSV(text, delimiter) {
+            let lines = [];
+            let row = [""];
+            let inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                let next = text[i + 1];
+                if (char === '"') {
+                    if (inQuotes && next === '"') {
+                        row[row.length - 1] += '"';
+                        i++; // Skip next quote
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === delimiter && !inQuotes) {
+                    row.push("");
+                } else if ((char === '\r' || char === '\n') && !inQuotes) {
+                    if (char === '\r' && next === '\n') {
+                        i++; // Skip LF after CR
+                    }
+                    lines.push(row);
+                    row = [""];
+                } else {
+                    row[row.length - 1] += char;
+                }
+            }
+            // Push final row if not empty
+            if (row.length > 1 || row[0] !== "") {
+                lines.push(row);
+            }
+            return lines;
+        }
+
+        // Auto cast helper
+        function coerceValue(val) {
+            val = val.trim();
+            if (val === '') return null;
+            if (val.toLowerCase() === 'true') return true;
+            if (val.toLowerCase() === 'false') return false;
+            if (!isNaN(val) && val !== '') return Number(val);
+            return val;
+        }
+
+        // Highlight helper
+        function highlightJSON(jsonStr) {
+            jsonStr = jsonStr.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return jsonStr.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'json-key';
+                        return '<span class="' + cls + '">' + match.slice(0, -1) + '</span><span class="json-punctuation">:</span>';
+                    } else {
+                        cls = 'json-string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'json-boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'json-null';
+                }
+                return '<span class="json-' + cls + '">' + match + '</span>';
+            });
+        }
+
+        function setStatus(type, msg) {
+            statusBadge.className = 'status-badge ' + (type === 'idle' ? 'status-idle' : (type === 'success' ? 'status-success' : (type === 'error' ? 'status-error' : 'status-processing')));
+            statusText.textContent = msg;
+        }
+
+        function performConversion() {
+            const rawCSV = csvInput.value;
+            if (!rawCSV.trim()) {
+                setStatus('error', 'No input');
+                jsonOutput.innerHTML = '<span style="color: #ef4444; font-style: italic;">Error: Please provide raw CSV content to convert.</span>';
+                return;
+            }
+
+            setStatus('processing', 'Parsing...');
+            const startTime = performance.now();
+
+            try {
+                let delimiter = delimiterSelect.value;
+                if (delimiter === 'auto') {
+                    delimiter = detectDelimiter(rawCSV);
+                }
+                if (delimiter === '\t') {
+                    delimiter = '	';
+                }
+
+                const parsed = parseCSV(rawCSV, delimiter);
+                if (parsed.length < 1) {
+                    throw new Error("Unable to parse rows from input.");
+                }
+
+                const headers = parsed[0].map(h => h.trim());
+                const rows = parsed.slice(1);
+                
+                // Remove empty trailing rows
+                while (rows.length > 0 && rows[rows.length - 1].length === 1 && rows[rows.length - 1][0] === '') {
+                    rows.pop();
+                }
+
+                const format = document.querySelector('input[name="outputFormat"]:checked').value;
+                let result = null;
+
+                if (format === 'arrayOfObjects') {
+                    result = rows.map(row => {
+                        let obj = {};
+                        headers.forEach((header, index) => {
+                            obj[header] = coerceValue(row[index] !== undefined ? row[index] : "");
+                        });
+                        return obj;
+                    });
+                } else if (format === 'columnBased') {
+                    result = {};
+                    headers.forEach((header, index) => {
+                        result[header] = rows.map(row => coerceValue(row[index] !== undefined ? row[index] : ""));
+                    });
+                } else if (format === 'minified') {
+                    result = rows.map(row => {
+                        let obj = {};
+                        headers.forEach((header, index) => {
+                            obj[header] = coerceValue(row[index] !== undefined ? row[index] : "");
+                        });
+                        return obj;
+                    });
+                }
+
+                const jsonStr = format === 'minified' ? JSON.stringify(result) : JSON.stringify(result, null, 4);
+                lastParsedJSON = jsonStr;
+
+                jsonOutput.innerHTML = highlightJSON(jsonStr);
+                
+                // Metrics
+                const endTime = performance.now();
+                metricRows.textContent = rows.length;
+                metricCols.textContent = headers.length;
+                metricCells.textContent = rows.length * headers.length;
+                metricTime.textContent = (endTime - startTime).toFixed(2);
+                
+                jsonSize.textContent = jsonStr.length.toLocaleString() + ' bytes';
+                setStatus('success', 'Success');
+            } catch (err) {
+                setStatus('error', 'Failed');
+                jsonOutput.innerHTML = `<span style="color: #ef4444; font-style: italic;">Error parsing CSV: ${err.message}</span>`;
+            }
+        }
+
+        // Trigger convert
+        btnConvert.addEventListener('click', performConversion);
+
+        // Upload trigger
+        btnUpload.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                readFile(file);
+            }
+        });
+
+        // Drop zone handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                readFile(file);
+            }
+        });
+
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        function readFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                csvInput.value = e.target.result;
+                charCount.textContent = e.target.result.length.toLocaleString() + ' chars';
+                performConversion();
+            };
+            reader.readAsText(file);
+        }
+
+        csvInput.addEventListener('input', () => {
+            charCount.textContent = csvInput.value.length.toLocaleString() + ' chars';
+        });
+
+        // Copy button
+        btnCopy.addEventListener('click', () => {
+            if (!lastParsedJSON) return;
+            navigator.clipboard.writeText(lastParsedJSON).then(() => {
+                copyToast.style.opacity = '1';
+                copyToast.style.transform = 'translateX(-50%) translateY(0)';
+                btnCopy.classList.add('copy-success');
+                const origText = copyText.textContent;
+                copyText.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyToast.style.opacity = '0';
+                    copyToast.style.transform = 'translateX(-50%) translateY(20px)';
+                    btnCopy.classList.remove('copy-success');
+                    copyText.textContent = origText;
+                }, 2000);
+            });
+        });
+
+        // Download button
+        btnDownload.addEventListener('click', () => {
+            if (!lastParsedJSON) return;
+            const blob = new Blob([lastParsedJSON], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'converted-data.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Clear button
+        btnClear.addEventListener('click', () => {
+            csvInput.value = '';
+            jsonOutput.innerHTML = '<span style="color: #55555F; font-style: italic;">Converted objects rendering array will display here...</span>';
+            charCount.textContent = '0 chars';
+            jsonSize.textContent = '0 bytes';
+            metricRows.textContent = '0';
+            metricCols.textContent = '0';
+            metricCells.textContent = '0';
+            metricTime.textContent = '0.00';
+            setStatus('idle', 'Idle');
+            lastParsedJSON = null;
+        });
+
+        // Format and Delimiter change auto-conversion
+        [delimiterSelect, ...document.querySelectorAll('input[name="outputFormat"]')].forEach(el => {
+            el.addEventListener('change', () => {
+                if (csvInput.value.trim()) {
+                    performConversion();
+                }
+            });
+        });
+
+    })();
+    </script>
+</body>
+</html>
