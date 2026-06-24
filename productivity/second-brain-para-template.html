@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+  <script src="/auth.js" defer></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Second Brain PARA Workspace — Free Digital Cortex Dashboard | Affilore</title>
@@ -355,14 +356,62 @@
 
       // ─── AUTHENTICATION FLOW STATE CONTROL ───
       function checkAuth() {
+        const userEmail = localStorage.getItem('affilore_user_email') || "user@affilore.com";
         if (localStorage.getItem('affilore_session_state') === 'true') {
           isAuthenticated = true;
-          document.getElementById('navSignInBtn').innerHTML = `<div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[10px] font-black text-amber">SA</div>`;
+          // Inject the dynamic email into the dropdown/UI
+          document.getElementById('navSignInBtn').innerHTML = `
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.toggleDropdown(event)">
+              <div class="w-8 h-8 rounded-full bg-amber text-black flex items-center justify-center text-[10px] font-black">${userEmail.charAt(0).toUpperCase()}</div>
+              <span class="text-xs font-mono text-white hidden md:block">${userEmail}</span>
+            </div>
+          `;
         } else {
           isAuthenticated = false;
           document.getElementById('navSignInBtn').textContent = 'Sign In';
         }
       }
+
+      window.toggleDropdown = (event) => {
+        if (event) event.stopPropagation();
+        let dropdown = document.getElementById('authDropdown');
+        if (!dropdown) {
+          dropdown = document.createElement('div');
+          dropdown.id = 'authDropdown';
+          dropdown.className = 'absolute right-0 mt-2 w-48 rounded-xl bg-zinc-950 border border-zinc-800 py-2 shadow-xl z-[1000] text-left';
+          dropdown.innerHTML = `
+            <div class="px-4 py-2 border-b border-zinc-900">
+              <p class="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">Account</p>
+              <p class="text-xs font-bold text-white truncate" id="dropdownEmail"></p>
+            </div>
+            <button onclick="window.handleSignOut()" class="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:text-red-300 hover:bg-zinc-900 transition flex items-center gap-2 cursor-pointer focus:outline-none">
+              Sign Out
+            </button>
+          `;
+          
+          const btn = document.getElementById('navSignInBtn');
+          btn.style.position = 'relative';
+          btn.appendChild(dropdown);
+        } else {
+          dropdown.classList.toggle('hidden');
+        }
+        
+        const email = localStorage.getItem('affilore_user_email') || 'user@affilore.com';
+        const dropdownEmail = document.getElementById('dropdownEmail');
+        if (dropdownEmail) dropdownEmail.textContent = email;
+      };
+
+      // Close dropdown if clicking outside
+      document.addEventListener('click', () => {
+        const dropdown = document.getElementById('authDropdown');
+        if (dropdown) dropdown.classList.add('hidden');
+      });
+
+      window.handleSignOut = () => {
+        localStorage.removeItem('affilore_session_state');
+        localStorage.removeItem('affilore_user_email');
+        window.location.reload();
+      };
 
       window.openAuthModal = () => {
         const modal = document.getElementById('authModal');
@@ -373,8 +422,12 @@
         modal.classList.add('hidden'); modal.classList.remove('flex');
       };
       window.simulateLogin = (provider) => {
+        const emailInput = document.getElementById('authEmail').value || "user@affilore.com";
         localStorage.setItem('affilore_session_state', 'true');
-        checkAuth(); window.closeAuthModal(); render();
+        localStorage.setItem('affilore_user_email', emailInput); // Store the email
+        checkAuth(); 
+        window.closeAuthModal(); 
+        render();
       };
 
       function enforceAuthGate() {

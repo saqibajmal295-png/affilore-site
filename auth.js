@@ -346,8 +346,10 @@
                 </div>
             `;
 
+            const emailValue = identifier.includes('@') ? identifier : `${identifier.toLowerCase()}user@gmail.com`;
             localStorage.setItem('affilore_session_state', 'true');
-            localStorage.setItem('affilore_session_user', identifier.includes('@') ? identifier : `${identifier.toLowerCase()}user@gmail.com`);
+            localStorage.setItem('affilore_session_user', emailValue);
+            localStorage.setItem('affilore_user_email', emailValue);
 
             setTimeout(() => {
                 hideAuthModal();
@@ -368,7 +370,7 @@
         if (!authBtn) return;
 
         if (localStorage.getItem('affilore_session_state') === 'true') {
-            const email = localStorage.getItem('affilore_session_user') || 'user@affilore.com';
+            const email = localStorage.getItem('affilore_user_email') || localStorage.getItem('affilore_session_user') || 'user@affilore.com';
             const wrapper = document.createElement('div');
             wrapper.id = 'auth-nav-btn-wrapper';
             wrapper.className = 'relative group inline-flex items-center mr-4';
@@ -393,6 +395,7 @@
             document.getElementById('auth-signout-btn').addEventListener('click', () => {
                 localStorage.removeItem('affilore_session_state');
                 localStorage.removeItem('affilore_session_user');
+                localStorage.removeItem('affilore_user_email');
                 window.location.reload();
             });
         } else {
