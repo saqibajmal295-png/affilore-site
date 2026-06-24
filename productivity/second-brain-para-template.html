@@ -150,7 +150,20 @@
         </div>
       </div>
       <div class="flex items-center gap-5">
-        <button id="navSignInBtn" onclick="window.openAuthModal()" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition">Sign In</button>
+        <div class="relative">
+          <button id="navSignInBtn" onclick="window.openAuthModal()" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition">Sign In</button>
+          
+          <!-- Navbar Dropdown Menu -->
+          <div id="authDropdown" class="absolute right-0 mt-2 w-48 rounded-xl bg-zinc-950 border border-zinc-800 py-2 shadow-xl z-[1000] text-left hidden">
+            <div class="px-4 py-2 border-b border-zinc-900">
+              <p class="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">Account</p>
+              <div class="account-email-display font-mono text-sm text-white truncate">googleuser@gmail.com</div>
+            </div>
+            <button onclick="window.handleSignOut()" class="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:text-red-300 hover:bg-zinc-900 transition flex items-center gap-2 cursor-pointer focus:outline-none">
+              Sign Out
+            </button>
+          </div>
+        </div>
         <a href="mailto:affilore4@gmail.com" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-black bg-[#F5A623] hover:bg-[#E0961B] rounded-full transition shadow-lg">Request a Custom Tool</a>
       </div>
     </div>
@@ -356,49 +369,38 @@
 
       // ─── AUTHENTICATION FLOW STATE CONTROL ───
       function checkAuth() {
-        const userEmail = localStorage.getItem('affilore_user_email') || "user@affilore.com";
-        if (localStorage.getItem('affilore_session_state') === 'true') {
-          isAuthenticated = true;
-          // Inject the dynamic email into the dropdown/UI
-          document.getElementById('navSignInBtn').innerHTML = `
-            <div class="flex items-center gap-2 cursor-pointer" onclick="window.toggleDropdown(event)">
-              <div class="w-8 h-8 rounded-full bg-amber text-black flex items-center justify-center text-[10px] font-black">${userEmail.charAt(0).toUpperCase()}</div>
-              <span class="text-xs font-mono text-white hidden md:block">${userEmail}</span>
-            </div>
-          `;
+        const userEmail = localStorage.getItem('affilore_user_email');
+        const authBtn = document.getElementById('navSignInBtn');
+        
+        // Target the specific dropdown container seen in your screenshot
+        const dropdownEmail = document.querySelector('.account-email-display'); 
+        
+        if (localStorage.getItem('affilore_session_state') === 'true' && userEmail) {
+            isAuthenticated = true;
+            
+            // 1. Update the dropdown text dynamically
+            if (dropdownEmail) {
+                dropdownEmail.textContent = userEmail;
+            }
+            
+            // 2. Update the navbar button/avatar
+            authBtn.innerHTML = `<div class="w-8 h-8 rounded-full bg-amber text-black flex items-center justify-center font-black">
+                ${userEmail.charAt(0).toUpperCase()}
+            </div>`;
+            authBtn.setAttribute('onclick', 'window.toggleDropdown(event)');
         } else {
-          isAuthenticated = false;
-          document.getElementById('navSignInBtn').textContent = 'Sign In';
+            isAuthenticated = false;
+            authBtn.textContent = 'Sign In';
+            authBtn.setAttribute('onclick', 'window.openAuthModal()');
         }
       }
 
       window.toggleDropdown = (event) => {
         if (event) event.stopPropagation();
-        let dropdown = document.getElementById('authDropdown');
-        if (!dropdown) {
-          dropdown = document.createElement('div');
-          dropdown.id = 'authDropdown';
-          dropdown.className = 'absolute right-0 mt-2 w-48 rounded-xl bg-zinc-950 border border-zinc-800 py-2 shadow-xl z-[1000] text-left';
-          dropdown.innerHTML = `
-            <div class="px-4 py-2 border-b border-zinc-900">
-              <p class="text-[10px] text-zinc-500 font-semibold uppercase tracking-wider">Account</p>
-              <p class="text-xs font-bold text-white truncate" id="dropdownEmail"></p>
-            </div>
-            <button onclick="window.handleSignOut()" class="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:text-red-300 hover:bg-zinc-900 transition flex items-center gap-2 cursor-pointer focus:outline-none">
-              Sign Out
-            </button>
-          `;
-          
-          const btn = document.getElementById('navSignInBtn');
-          btn.style.position = 'relative';
-          btn.appendChild(dropdown);
-        } else {
+        const dropdown = document.getElementById('authDropdown');
+        if (dropdown) {
           dropdown.classList.toggle('hidden');
         }
-        
-        const email = localStorage.getItem('affilore_user_email') || 'user@affilore.com';
-        const dropdownEmail = document.getElementById('dropdownEmail');
-        if (dropdownEmail) dropdownEmail.textContent = email;
       };
 
       // Close dropdown if clicking outside
