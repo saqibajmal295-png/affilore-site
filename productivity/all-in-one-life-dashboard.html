@@ -1,7 +1,602 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <script src="/auth.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="All-in-One Life Dashboard — a centralized operating system for behavioral tracking, financial telemetry, project serialization, and cognitive journaling. 100% serverless, private, and free forever.">
+  <meta name="keywords" content="life dashboard, habit tracker, financial tracker, project management, journal, productivity, serverless, privacy-first">
+  <meta name="author" content="Affilore Systems">
+  <title>Affilore Life Dashboard — Behavioral & Financial Telemetry OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian:  '#0A0A0B',
+            panel:     '#111113',
+            border:    '#1E1E22',
+            amber:     '#F5A623',
+            amberDark: '#C4841A',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-family: 'Inter', system-ui, sans-serif; background-color: #0A0A0B; }
+    body { background: #0A0A0B; color: #E4E4E7; overflow-x: hidden; }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0A0B; }
+    ::-webkit-scrollbar-thumb { background: #2A2A2E; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F5A623; }
+
+    /* ─── UPGRADED EXTRA DENSE & LARGER AMBIENT MOVING YELLOW GRADIENT DOTS ─── */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(8px 8px at 8% 12%, rgba(245,166,35,0.5) 50%, transparent 100%),
+        radial-gradient(10px 10px at 28% 38%, rgba(245,166,35,0.4) 50%, transparent 100%),
+        radial-gradient(7px 7px at 62% 68%, rgba(245,166,35,0.45) 50%, transparent 100%),
+        radial-gradient(11px 11px at 84% 22%, rgba(245,166,35,0.35) 50%, transparent 100%),
+        radial-gradient(8px 8px at 18% 78%, rgba(245,166,35,0.5) 50%, transparent 100%),
+        radial-gradient(9px 9px at 48% 88%, rgba(245,166,35,0.45) 50%, transparent 100%),
+        radial-gradient(10px 10px at 72% 48%, rgba(245,166,35,0.4) 50%, transparent 100%),
+        radial-gradient(8px 8px at 92% 82%, rgba(245,166,35,0.45) 50%, transparent 100%),
+        radial-gradient(7px 7px at 35% 18%, rgba(245,166,35,0.4) 50%, transparent 100%),
+        radial-gradient(9px 9px at 52% 58%, rgba(245,166,35,0.45) 50%, transparent 100%),
+        radial-gradient(6px 6px at 15% 45%, rgba(245,166,35,0.5) 50%, transparent 100%),
+        radial-gradient(8px 8px at 85% 65%, rgba(245,166,35,0.4) 50%, transparent 100%),
+        radial-gradient(12px 12px at 45% 25%, rgba(245,166,35,0.35) 50%, transparent 100%);
+      background-size: 100% 1200px; animation: particleDrift 22s linear infinite;
+    }
+    @keyframes particleDrift { 0% { background-position: 0 0; } 100% { background-position: 0 -1200px; } }
+
+    /* ─── SIGNATURE 3D NEON METRIC PANELS ─── */
+    .metric-card-3d {
+      background: #111113; border: 1px solid #1E1E22; border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
+      box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.03) inset, 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .metric-card-3d:hover {
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.7);
+      transform: translateY(-2px);
+    }
+    .value-3d { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 3rem; line-height: 1.1; }
+
+    /* ─── FLAT CUSTOM INTERACTIVE CONTROLS ─── */
+    .btn-flat-custom {
+      background: rgba(24, 24, 27, 0.8); color: #8A8A95; border: 1px solid #1E1E22;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 12px 24px; border-radius: 8px; transition: all 0.2s ease; cursor: pointer;
+    }
+    .btn-flat-custom:hover { border-color: rgba(255,255,255,0.1); color: #E4E4E7; background: #161618; }
+    .btn-danger-flat:hover { border-color: rgba(239,68,68,0.3); color: #f87171; }
+
+    /* ─── CHROME FOCUS COMPATIBILITY TAGS ─── */
+    .text-glow-red { color: #f87171; }
+    .text-glow-cyan { color: #22d3ee; }
+    .text-glow-purple { color: #a78bfa; }
+    .text-glow-amber { color: #F5A623; }
+    .text-glow-emerald { color: #34D399; }
+
+    /* ─── GRID SPECIFIC TRACKING MODULE COLOR INTERFACES ─── */
+    .grid-card { background: #111113; border: 1px solid #1E1E22; border-radius: 20px; overflow: hidden; position: relative; transition: all 0.4s ease; }
+    .grid-card:hover { border-color: #2A2A30; }
+    .grid-card .card-accent-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .grid-card.emerald .card-accent-bg { background: radial-gradient(ellipse 80% 50% at 10% 10%, rgba(52, 211, 153, 0.06), transparent); }
+    .grid-card.amber   .card-accent-bg { background: radial-gradient(ellipse 80% 50% at 90% 10%, rgba(245, 158, 11, 0.06), transparent); }
+    .grid-card.rose    .card-accent-bg { background: radial-gradient(ellipse 80% 50% at 10% 90%, rgba(244, 63, 94, 0.06), transparent); }
+    .grid-card.cyan    .card-accent-bg { background: radial-gradient(ellipse 80% 50% at 90% 90%, rgba(34, 211, 238, 0.06), transparent); }
+
+    .habit-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 12px; transition: all 0.2s ease; cursor: pointer; }
+    .habit-row:hover { background: rgba(52, 211, 153, 0.04); border-color: rgba(52, 211, 153, 0.1); }
+    .habit-checkbox { width: 22px; height: 22px; border-radius: 6px; border: 2px solid #2A2A30; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; appearance: none; -webkit-appearance: none; }
+    .habit-checkbox:checked { background: #34D399; border-color: #34D399; }
+    .habit-checkbox:checked::after { content: '✓'; color: #000; font-size: 13px; font-weight: 800; }
+    .habit-row.completed .habit-name { text-decoration: line-through; color: #55556A; }
+
+    .ledger-input { width: 100%; background: transparent; border: none; outline: none; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+    .ledger-input.income { color: #34D399; }
+    .ledger-input.expense { color: #F43F5E; }
+    .ledger-add-row { margin-top: 8px; width: 100%; padding: 10px; font-size: 12px; font-weight: 600; color: #F59E0B; background: rgba(245, 158, 11, 0.08); border: 1px dashed rgba(245, 158, 11, 0.2); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .ledger-add-row:hover { background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.35); }
+
+    .project-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 12px; transition: all 0.2s; }
+    .project-row:hover { background: rgba(244, 63, 94, 0.04); border-color: rgba(244, 63, 94, 0.1); }
+    .project-input { flex: 1; background: transparent; border: none; outline: none; color: #FFFFFF; font-size: 13px; font-weight: 500; }
+    .status-select { font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; border: none; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-todo { background: rgba(245, 158, 11, 0.12); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.2); }
+    .status-progress { background: rgba(34, 211, 238, 0.12); color: #22D3EE; border: 1px solid rgba(34, 211, 238, 0.2); }
+    .status-done { background: rgba(52, 211, 153, 0.12); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.2); }
+
+    .journal-area { width: 100%; min-height: 140px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 12px; padding: 16px; color: #FFFFFF; font-size: 13px; line-height: 1.7; resize: vertical; outline: none; transition: all 0.2s; }
+    .journal-area:focus { border-color: rgba(34, 211, 238, 0.2); }
+
+    /* ─── ORIGINAL SPECIFIC ARTICLE PIECES DELIVERED BY USER (UNCHANGED) ─── */
+    .article-wrap { max-width: 56rem; margin: 0 auto; padding: 2rem 1rem; font-size: 16px; line-height: 1.7; color: #FFFFFF; }
+    .h1-gradient { font-size: 22px; font-weight: 500; background: linear-gradient(135deg, #AFA9EC 0%, #5DCAA5 50%, #FAC775 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0 0 0.5rem; line-height: 1.35; }
+    .kicker { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; color: #AFA9EC; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .section-title { font-size: 18px; font-weight: 500; background: linear-gradient(90deg, #AFA9EC, #5DCAA5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 2rem 0 0.75rem; }
+    .section-title-amber { font-size: 18px; font-weight: 500; background: linear-gradient(90deg, #EF9F27, #F0997B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 2rem 0 0.75rem; }
+    .section-title-green { font-size: 18px; font-weight: 500; background: linear-gradient(90deg, #5DCAA5, #97C459); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 2rem 0 0.75rem; }
+    .section-title-blue { font-size: 18px; font-weight: 500; background: linear-gradient(90deg, #85B7EB, #AFA9EC); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 2rem 0 0.75rem; }
+    .prose { color: #FFFFFF; margin-bottom: 1rem; font-size: 16px; line-height: 1.75; }
+    .divider { border: none; border-top: 0.5px solid rgba(175,169,236,0.25); margin: 1.75rem 0; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 1rem 0; }
+    .badge { font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 99px; display: inline-flex; align-items: center; gap: 5px; }
+    .badge-purple { background: #26215C; color: #CECBF6; }
+    .badge-teal { background: #04342C; color: #9FE1CB; }
+    .badge-amber { background: #412402; color: #FAC775; }
+    .badge-coral { background: #4A1B0C; color: #F5C4B3; }
+    .badge-green { background: #173404; color: #C0DD97; }
+    .badge-blue { background: #042C53; color: #B5D4F4; }
+    .para-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 1.25rem 0; }
+    .para-card { border-radius: 12px; padding: 1rem; border: 0.5px solid rgba(255,255,255,0.12); }
+    .para-p { background: #26215C; border-color: #534AB7; }
+    .para-a { background: #04342C; border-color: #0F6E56; }
+    .para-r { background: #412402; border-color: #854F0B; }
+    .para-arc { background: #2C2C2A; border-color: #5F5E5A; }
+    .para-label { font-size: 22px; font-weight: 500; margin: 0 0 4px; }
+    .para-label-p { color: #AFA9EC; }
+    .para-label-a { color: #5DCAA5; }
+    .para-label-r { color: #FAC775; }
+    .para-label-arc { color: #B4B2A9; }
+    .para-title { font-size: 13px; font-weight: 500; margin: 0 0 6px; }
+    .para-title-p { color: #CECBF6; }
+    .para-title-a { color: #9FE1CB; }
+    .para-title-r { color: #FAC775; }
+    .para-title-arc { color: #D3D1C7; }
+    .para-desc { font-size: 12px; line-height: 1.55; margin: 0; color: rgba(255,255,255,0.7); }
+    .step-list { list-style: none; padding: 0; margin: 1rem 0; }
+    .step-item { display: flex; gap: 14px; margin-bottom: 1.1rem; align-items: flex-start; }
+    .step-num { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; margin-top: 2px; }
+    .step-num-p { background: #3C3489; color: #CECBF6; }
+    .step-num-t { background: #085041; color: #9FE1CB; }
+    .step-num-a { background: #633806; color: #FAC775; }
+    .step-num-g { background: #27500A; color: #C0DD97; }
+    .step-num-b { background: #0C447C; color: #B5D4F4; }
+    .step-text { font-size: 15px; color: #FFFFFF; line-height: 1.65; }
+    .step-strong { font-weight: 500; color: #AFA9EC; }
+    .free-card { border-radius: 16px; border: 0.5px solid rgba(93,202,165,0.35); background: rgba(4,52,44,0.55); padding: 1.5rem; margin: 1.5rem 0; }
+    .free-headline { font-size: 18px; font-weight: 500; color: #9FE1CB; margin: 0 0 0.5rem; }
+    .free-pill { display: inline-flex; align-items: center; gap: 6px; background: #085041; color: #9FE1CB; border-radius: 99px; font-size: 13px; font-weight: 500; padding: 4px 14px; margin-bottom: 1rem; }
+    .privacy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 1rem 0; }
+    .privacy-item { background: rgba(255,255,255,0.05); border: 0.5px solid rgba(93,202,165,0.2); border-radius: 10px; padding: 0.75rem; }
+    .privacy-icon { font-size: 18px; color: #5DCAA5; margin-bottom: 4px; }
+    .privacy-label { font-size: 12px; font-weight: 500; color: #9FE1CB; margin: 0 0 2px; }
+    .privacy-desc { font-size: 11px; color: rgba(255,255,255,0.6); margin: 0; line-height: 1.5; }
+    .faq-item { border-left: 2px solid #534AB7; padding-left: 1rem; margin-bottom: 1.25rem; border-radius: 0; }
+    .faq-q { font-size: 15px; font-weight: 500; color: #CECBF6; margin: 0 0 0.4rem; }
+    .faq-a { font-size: 14px; color: rgba(255,255,255,0.82); margin: 0; line-height: 1.65; }
+    .contrast-callout { background: rgba(83,74,183,0.18); border: 0.5px solid rgba(175,169,236,0.3); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+    .contrast-text { font-size: 14px; color: rgba(255,255,255,0.85); margin: 0; }
+    .flow-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 1rem 0; }
+    .flow-node { padding: 5px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; }
+    .flow-arrow { color: rgba(255,255,255,0.4); font-size: 14px; }
+    .tag-p { background: #26215C; color: #AFA9EC; }
+    .tag-a { background: #04342C; color: #5DCAA5; }
+    .tag-r { background: #412402; color: #EF9F27; }
+    .tag-arc { background: #2C2C2A; color: #B4B2A9; }
+  
+    /* ─── TOAST NOTIFICATION ─── */
+    .toast-container {
+      position: fixed; bottom: 24px; right: 24px; z-index: 100000;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .toast {
+      padding: 14px 20px; background: #111113; border: 1px solid #1E1E22;
+      border-radius: 8px; color: #E4E4E7; font-size: 13px; font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      animation: toastSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toast.success { border-left: 3px solid #34D399; }
+    .toast.warning { border-left: 3px solid #F5A623; }
+    .toast.error { border-left: 3px solid #f87171; }
+    .toast.info { border-left: 3px solid #22d3ee; }
+    @keyframes toastSlide {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+  </style>
+</head>
+<body class="min-h-screen relative select-none">
+
+  <!-- ══════════════════════ AUTH GATING ACCESS OVERLAY ══════════════════════ -->
+  <div id="authModal" class="fixed inset-0 z-[20000] hidden items-center justify-center bg-black/70 backdrop-blur-md">
+    <div class="w-full max-w-md p-8 rounded-2xl bg-[#111113] border border-zinc-800 text-center relative mx-4 shadow-2xl">
+      <button class="absolute top-4 right-4 text-zinc-500 hover:text-white transition text-xl" onclick="window.closeAuthModal()">×</button>
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber to-amberDark flex items-center justify-center mx-auto mb-4">
+        <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+      </div>
+      <h3 class="text-xl font-black text-white mb-1">Access Protected Workspace</h3>
+      <p class="text-zinc-500 text-xs max-w-xs mx-auto mb-6">Authorize your localized serverless session cache profile to save Notion setups, habit logs, and macro matrices.</p>
+      <div class="space-y-3 mb-6">
+        <button onclick="window.simulateLogin('Google')" class="w-full py-3 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-sm font-semibold text-white flex items-center justify-center gap-3 transition">Continue with Google</button>
+        <button onclick="window.simulateLogin('GitHub')" class="w-full py-3 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-sm font-semibold text-white flex items-center justify-center gap-3 transition">Continue with GitHub</button>
+      </div>
+      <div class="flex items-center gap-2 text-zinc-700 text-[10px] uppercase font-mono justify-center mb-4">
+        <span class="w-6 h-px bg-zinc-800"></span><span>or link email</span><span class="w-6 h-px bg-zinc-800"></span>
+      </div>
+      <input type="email" id="authEmail" placeholder="name@domain.com" class="w-full p-3 text-sm rounded-xl bg-zinc-950 border border-zinc-800 focus:border-zinc-700 text-white outline-none font-mono text-center mb-4">
+      <button onclick="window.simulateLogin('Email')" class="w-full py-3 bg-amber hover:bg-amberDark text-black text-xs uppercase font-bold tracking-wider rounded-xl transition">Initialize Profile</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ PLATFORM CONFIGURATION NAVBAR ══════════════════════ -->
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-zinc-900/80 bg-[#0A0A0B]/90 backdrop-blur-xl h-20">
+    <div class="max-w-[1440px] mx-auto px-6 h-full flex items-center justify-between">
+      <div class="flex items-center gap-12">
+        <a href="/" class="text-2xl font-black text-white tracking-tight">Affilore<span class="text-blue-500">.</span></a>
+        <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-400">
+          <a href="/" class="hover:text-white transition">Home</a>
+          <a href="/data" class="hover:text-white transition">Data</a>
+          <a href="/calculator" class="hover:text-white transition">Calculator</a>
+          <a href="/utility" class="hover:text-white transition">Utility</a>
+          <a href="/developer" class="hover:text-white transition">Developer</a>
+          <a href="/seo" class="hover:text-white transition">SEO</a>
+          <a href="/productivity" class="text-white font-bold tracking-wide">Productivity</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-5">
+        <button id="navSignInBtn" onclick="window.openAuthModal()" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition">Sign In</button>
+        <a href="mailto:affilore4@gmail.com" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-black bg-[#F5A623] hover:bg-[#E0961B] rounded-full transition shadow-lg">Request a Custom Tool</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════ DASHBOARD CONTROL WORKBENCH ══════════════════════ -->
+  <main class="relative z-10 max-w-[1440px] mx-auto px-6 pt-32 pb-12">
+    
+    <!-- Hero Block Header Layout -->
+    <section class="text-center mb-10">
+      <div class="inline-flex items-center gap-2 bg-[#111113] border border-[#1E1E22] rounded-full px-4 py-1.5 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[10px] font-bold tracking-widest uppercase text-zinc-400 font-mono">Free Forever Asset Tier</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-black tracking-tight inline-flex flex-wrap justify-center gap-x-3">
+        <span class="bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">All-in-One Life</span> <span class="text-white">Dashboard</span>
+      </h1>
+      <p class="text-zinc-500 text-sm sm:text-base max-w-2xl mx-auto mt-3 leading-relaxed">
+        A centralized operating system for behavioral tracking, financial telemetry, project serialization, and cognitive journaling. Private, serverless, and independent by design.
+      </p>
+    </section>
+
+    <!-- Quick Capture Inline Input Component Bar -->
+    <section class="max-w-3xl mx-auto mb-12">
+      <div class="flex gap-2">
+        <div class="relative flex-1">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 text-amber text-sm">⚡</span>
+          <input type="text" id="inboxInput" class="w-full pl-10 pr-4 py-3.5 rounded-xl bg-zinc-950/80 border border-[#1E1E22] focus:border-zinc-800 text-sm font-medium text-white placeholder-zinc-700 outline-none transition" placeholder="Quick capture context, task, or data asset index string...">
+        </div>
+        <button onclick="window.addInboxItem()" class="w-12 h-12 rounded-xl bg-[#F5A623] hover:bg-[#C4841A] flex items-center justify-center font-black text-xl text-black flex-shrink-0 active:scale-95 transition-all shadow-lg">+</button>
+      </div>
+    </section>
+
+    <!-- ─── SIGNATURE 3D METRICS BAR ─── -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div class="metric-card-3d p-6 text-center">
+        <div id="statHabits" class="value-3d text-glow-emerald">0</div>
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-2 font-mono">Habits Completed</div>
+      </div>
+      <div class="metric-card-3d p-6 text-center">
+        <div id="statCapital" class="value-3d text-glow-amber">$0.00</div>
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-2 font-mono">Net Capital Velocity</div>
+      </div>
+      <div class="metric-card-3d p-6 text-center">
+        <div id="statTasks" class="value-3d text-glow-red">0</div>
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-2 font-mono">Pending Tasks</div>
+      </div>
+      <div class="metric-card-3d p-6 text-center">
+        <div id="statEntropy" class="value-3d text-glow-cyan">0.00</div>
+        <div class="text-[10px] font-bold tracking-widest uppercase text-zinc-500 mt-2 font-mono">System Entropy Index</div>
+      </div>
+    </section>
+
+    <!-- Toolbar Command Controllers -->
+    <section class="flex flex-wrap items-center justify-center gap-2.5 mb-12 bg-[#111113]/30 border border-zinc-900 rounded-xl p-3 max-w-4xl mx-auto">
+      <button onclick="window.calculateRules()" class="btn-flat-custom">Calculate Rules</button>
+      <button onclick="window.exportDashboard()" class="btn-flat-custom">Export Dashboard JSON</button>
+      <button onclick="window.clearWindow()" class="btn-flat-custom btn-danger-flat">Clear Workspace</button>
+      <button onclick="window.copySystemSetup()" class="btn-flat-custom" id="btnCopy">Copy System Setup</button>
+    </section>
+
+    <!-- ─── 4-GRID OPERATIONAL WORKSPACE (WITH AESTHETIC IMAGE HEADERS INJECTED) ─── -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-20">
+
+      <!-- BLOCK 1: Habit Tracker (Emerald) -->
+      <div class="grid-card emerald">
+        <div class="card-accent-bg"></div>
+        <!-- Aesthetic Image Header Banner -->
+        <div class="w-full h-32 bg-cover bg-center border-b border-zinc-900/80 relative" style="background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=800&q=80');">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#111113] to-transparent"></div>
+        </div>
+        <div class="p-6 pt-2">
+          <div class="flex items-center justify-between border-b border-zinc-900/60 pb-3 mb-4 relative z-10">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono flex items-center gap-2">🎯 Habit Tracker Matrix</span>
+            <span id="habitBadge" class="text-xs font-bold font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-md">0 / 6</span>
+          </div>
+          <div class="card-content relative z-10 space-y-2">
+            <div class="habit-row" onclick="window.toggleHabit(this, 0)"><input type="checkbox" class="habit-checkbox"><span class="habit-name text-sm font-semibold">Morning Fitness — 30 min session</span><span class="habit-streak text-xs text-zinc-600 font-mono">🔥 0d</span></div>
+            <div class="habit-row" onclick="window.toggleHabit(this, 1)"><input type="checkbox" class="habit-checkbox"><span class="habit-name text-sm font-semibold">Deep Reading — 20 pages timeline</span><span class="habit-streak text-xs text-zinc-600 font-mono">🔥 0d</span></div>
+            <div class="habit-row" onclick="window.toggleHabit(this, 2)"><input type="checkbox" class="habit-checkbox"><span class="habit-name text-sm font-semibold">Meditation Protocol — 15 min focus</span><span class="habit-streak text-xs text-zinc-600 font-mono">🔥 0d</span></div>
+            <div class="habit-row" onclick="window.toggleHabit(this, 3)"><input type="checkbox" class="habit-checkbox"><span class="habit-name text-sm font-semibold">Hydration Mapping — 8 glasses</span><span class="habit-streak text-xs text-zinc-600 font-mono">🔥 0d</span></div>
+            <div class="habit-row" onclick="window.toggleHabit(this, 4)"><input type="checkbox" class="habit-checkbox"><span class="habit-name text-sm font-semibold">Code Practice — 1 hour terminal</span><span class="habit-streak text-xs text-zinc-600 font-mono">🔥 0d</span></div>
+            <div class="habit-row" onclick="window.toggleHabit(this, 5)"><input type="checkbox" class="habit-checkbox"><span class="habit-name text-sm font-semibold">Evening Journal — Reflect & plan</span><span class="habit-streak text-xs text-zinc-600 font-mono">🔥 0d</span></div>
+            
+            <div class="mt-4 p-4 rounded-xl bg-emerald-950/20 border border-emerald-900/30">
+              <div class="flex justify-between items-center mb-2"><span class="text-[10px] font-bold text-zinc-500 uppercase">Daily Consistency Index</span><span class="text-sm font-bold text-emerald-400 font-mono" id="habitPct">0%</span></div>
+              <div class="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden"><div class="h-full bg-emerald-400 transition-all duration-500" id="habitFill" style="width: 0%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 2: Financial Telemetry (Amber) -->
+      <div class="grid-card amber">
+        <div class="card-accent-bg"></div>
+        <!-- Aesthetic Image Header Banner -->
+        <div class="w-full h-32 bg-cover bg-center border-b border-zinc-900/80 relative" style="background-image: url('https://images.unsplash.com/photo-1618044733300-9472054094ee?auto=format&fit=crop&w=800&q=80');">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#111113] to-transparent"></div>
+        </div>
+        <div class="p-6 pt-2">
+          <div class="flex items-center justify-between border-b border-zinc-900/60 pb-3 mb-4 relative z-10">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber font-mono flex items-center gap-2">💰 Financial Telemetry Ledger</span>
+            <span id="financeBadge" class="text-xs font-bold font-mono text-amber bg-amber/10 px-2 py-0.5 rounded-md">2 entries</span>
+          </div>
+          <div class="card-content relative z-10 space-y-3">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead><tr class="text-zinc-600 uppercase tracking-wider font-mono text-[10px]"><th class="pb-2">Source Label</th><th class="pb-2">Income</th><th class="pb-2">Expense</th></tr></thead>
+              <tbody id="ledgerBody">
+                <tr class="border-b border-zinc-900/40">
+                  <td class="py-2"><input type="text" class="ledger-input" value="Freelance Retainer"></td>
+                  <td class="py-2"><input type="number" class="ledger-input income" value="2500" oninput="window.computeFinancials()"></td>
+                  <td class="py-2"><input type="number" class="ledger-input expense" value="0" oninput="window.computeFinancials()"></td>
+                </tr>
+                <tr class="border-b border-zinc-900/40">
+                  <td class="py-2"><input type="text" class="ledger-input" value="Workspace Rent"></td>
+                  <td class="py-2"><input type="number" class="ledger-input income" value="0" oninput="window.computeFinancials()"></td>
+                  <td class="py-2"><input type="number" class="ledger-input expense" value="1200" oninput="window.computeFinancials()"></td>
+                </tr>
+              </tbody>
+            </table>
+            <button onclick="window.addLedgerRow()" class="ledger-add-row">+ Add Financial Ledger Row</button>
+            <div class="net-capital-row bg-amber/5 border border-amber/10 p-3 rounded-xl flex justify-between items-center mt-3">
+              <span class="text-[10px] font-bold text-zinc-500 uppercase">Computed Balance Flow</span>
+              <span class="font-mono text-base font-bold text-amber" id="netCapital">$1,300.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 3: Projects Serialization (Rose) -->
+      <div class="grid-card rose">
+        <div class="card-accent-bg"></div>
+        <!-- Aesthetic Image Header Banner -->
+        <div class="w-full h-32 bg-cover bg-center border-b border-zinc-900/80 relative" style="background-image: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=800&q=80');">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#111113] to-transparent"></div>
+        </div>
+        <div class="p-6 pt-2">
+          <div class="flex items-center justify-between border-b border-zinc-900/60 pb-3 mb-4 relative z-10">
+            <span class="text-xs font-bold uppercase tracking-wider text-red-400 font-mono flex items-center gap-2">🚀 Project Serialization Matrix</span>
+            <span id="projectBadge" class="text-xs font-bold font-mono text-red-400 bg-red-400/10 px-2 py-0.5 rounded-md">0 active</span>
+          </div>
+          <div class="card-content relative z-10 space-y-2">
+            <div id="projectList" class="space-y-2 max-h-[220px] overflow-y-auto"></div>
+            <button onclick="window.addProjectRow()" class="ledger-add-row" style="color: #F43F5E; background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.2);">+ Append Project Node Row</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCK 4: Mind Vault (Cyan) -->
+      <div class="grid-card cyan">
+        <div class="card-accent-bg"></div>
+        <!-- Aesthetic Image Header Banner -->
+        <div class="w-full h-32 bg-cover bg-center border-b border-zinc-900/80 relative" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80');">
+          <div class="absolute inset-0 bg-gradient-to-t from-[#111113] to-transparent"></div>
+        </div>
+        <div class="p-6 pt-2">
+          <div class="flex items-center justify-between border-b border-zinc-900/60 pb-3 mb-4 relative z-10">
+            <span class="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono flex items-center gap-2">🧠 Cognitive Mind Vault Journal</span>
+            <span id="journalBadge" class="text-xs font-bold font-mono text-cyan-400 bg-cyan-400/10 px-2 py-0.5 rounded-md">0 entries</span>
+          </div>
+          <div class="card-content relative z-10 space-y-3">
+            <textarea id="journalArea" class="journal-area" placeholder="Log strategic insights or cognitive nodes strings to memory file..."></textarea>
+            <div class="flex justify-between items-center">
+              <span class="text-[9px] text-zinc-600 font-mono" id="journalTimestamp">Sync active</span>
+              <button onclick="window.saveJournalEntry()" class="px-4 py-2 bg-cyan-500/10 border border-cyan-400/20 hover:border-cyan-400/40 text-cyan-400 text-xs font-bold rounded-lg transition">Commit Entry</button>
+            </div>
+            <div id="journalEntries" class="space-y-2 max-h-[110px] overflow-y-auto"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── CENTERING UNCHANGED ORIGINAL EDUCATION BLOCK ARRAYS ─── -->
+    <div class="max-w-4xl mx-auto rounded-xl bg-[#111113]/40 border border-zinc-900/80 shadow-inner relative z-10 mt-6">
+      <div class="article-wrap">
+        
+        <div class="kicker"><i class="ti ti-brain" aria-hidden="true"></i> &nbsp; Knowledge systems &nbsp;·&nbsp; Productivity architecture &nbsp;·&nbsp; Affilore workspace</div>
+        <h1 class="h1-gradient">The Cybernetics of Knowledge Management: Implementing Tiago Forte's PARA Method for Maximum Cognitive Throughput</h1>
+
+        <div class="badge-row">
+          <span class="badge badge-purple"><i class="ti ti-bolt" aria-hidden="true"></i> Actionability vectors</span>
+          <span class="badge badge-teal"><i class="ti ti-brain" aria-hidden="true"></i> Cognitive load reduction</span>
+          <span class="badge badge-amber"><i class="ti ti-database" aria-hidden="true"></i> Database relations</span>
+          <span class="badge badge-coral"><i class="ti ti-refresh" aria-hidden="true"></i> System hygiene review</span>
+          <span class="badge badge-green"><i class="ti ti-lock" aria-hidden="true"></i> Local-first privacy</span>
+          <span class="badge badge-blue"><i class="ti ti-infinity" aria-hidden="true"></i> Free forever</span>
+        </div>
+
+        <hr class="divider" />
+
+        <h2 class="section-title">Introduction: the collapse of linear filing in the age of information entropy</h2>
+        <p class="prose">We live inside a torrent of digital input. Slack threads, research PDFs, browser tabs, voice memos, newsletter extracts, and half-written drafts accumulate faster than any alphabetical folder tree or subject-based taxonomy was ever designed to absorb. Classical information architectures — hierarchical directories, subject tags, even date-sorted inboxes — were engineered for retrieval in a low-volume environment. They assume the act of filing and the act of using are separated by weeks. Modern knowledge work collapses that gap to minutes.</p>
+        <p class="prose">Tiago Forte's Second Brain framework reframes personal information management not as a filing exercise, but as an extension of biological cognition — an externalized digital cortex that offloads active memory pressure from the prefrontal cortex onto a structured, queryable external system. The critical insight is elegantly cybernetic: a system organized around actionability will always outperform one organized around subject matter, because your brain does not retrieve information by topic — it retrieves it by urgency, context, and goal proximity. The PARA Method is the structural engine that makes this possible, and the Affilore Second Brain PARA Method Workspace is the zero-cost sandbox where you can deploy it today.</p>
+
+        <hr class="divider" />
+
+        <h2 class="section-title-amber">Deep-dive: P.A.R.A as an actionability-vector taxonomy</h2>
+        <p class="prose">PARA is not a folder system. It is a four-layer actionability gradient — a continuous spectrum from the most time-constrained, outcome-specific units of work down to the passive, long-horizon storage layer. Understanding each layer as a distinct actionability vector, rather than a category label, transforms how you make filing decisions.</p>
+
+        <div class="para-grid">
+          <div class="para-card para-p">
+            <div class="para-label para-label-p">P</div>
+            <div class="para-title para-title-p">Projects</div>
+            <p class="para-desc">Finite outcome + hard deadline. High-actionability. Requires weekly active processing.</p>
+          </div>
+          <div class="para-card para-a">
+            <div class="para-label para-label-a">A</div>
+            <div class="para-title para-title-a">Areas</div>
+            <p class="para-desc">Ongoing standard to maintain. No deadline. Demands periodic review cadence.</p>
+          </div>
+          <div class="para-card para-r">
+            <div class="para-label para-label-r">R</div>
+            <div class="para-title para-title-r">Resources</div>
+            <p class="para-desc">Reference material & interest libraries. Passive. Feeds back into P and A on demand.</p>
+          </div>
+          <div class="para-card para-arc">
+            <div class="para-label para-label-arc">Arc</div>
+            <div class="para-title para-title-arc">Archives</div>
+            <p class="para-desc">Completed, paused, or irrelevant items. Minimizes active workspace entropy.</p>
+          </div>
+        </div>
+
+        <p class="prose">Projects are the most misunderstood layer. A project is definitionally finite — it has an outcome you can declare complete, and it has a deadline that creates a time boundary. "Redesign the company homepage" is a project. "Maintain brand consistency" is not — that is an Area. Conflating these two destroys your system: an infinite task inside a Projects folder produces permanent open loops, which are the primary driver of cognitive anxiety and system abandonment.</p>
+
+        <div class="contrast-callout">
+          <p class="contrast-text"><i class="ti ti-arrows-diff" aria-hidden="true"></i> &nbsp; <strong style="color:#CECBF6">Project vs. Area distinction:</strong> A project closes. An area continues. "Launch Q3 marketing campaign" closes on a date. "Marketing" as a domain of responsibility never closes — it simply demands your ongoing attention to a defined standard of performance.</p>
+        </div>
+
+        <p class="prose">Areas of Responsibility are your life's operating system — the domains whose standard you are permanently accountable for maintaining: health, finances, client relationships, team management, personal development. Areas do not have deadlines because they represent ongoing identity commitments, not tasks. They create the motivational context from which projects are born: a health Area generates the project "complete 30-day strength program."</p>
+        <p class="prose">Resources function as the semantic fuel for active work. A curated library of design inspiration, a growing compilation of market research notes, a personal reading list with annotations — these feed into Projects and Areas on demand. The architectural mistake most knowledge workers make is treating Resources as the primary layer, building vast taxonomic libraries that are never queried under deadline pressure. Resources are passive by definition; they should be structured for rapid extraction, not comprehensive coverage.</p>
+        <p class="prose">Archives are the entropy-management mechanism of the entire system. Every completed project cycle, every superseded resource collection, every Area that no longer applies to your current life phase gets migrated here. The Archive does not delete — it preserves provenance. A properly maintained Archive layer means your active workspace stays lean, high-signal, and cognitively navigable, while the full historical record remains queryable on demand.</p>
+
+        <div class="flow-row">
+          <span class="flow-node tag-r">Resources feed</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node tag-a">Areas generate</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node tag-p">Projects produce outputs</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-node tag-arc">Archives on completion</span>
+        </div>
+
+        <hr class="divider" />
+
+        <h2 class="section-title-green">Step-by-step: deploying your PARA workspace from zero</h2>
+        <ul class="step-list">
+          <li class="step-item">
+            <div class="step-num step-num-p">1</div>
+            <div class="step-text"><span class="step-strong">Clear the cognitive tracking inbox.</span> Before categorizing anything, perform a complete capture dump. Export browser bookmarks, pull outstanding tasks from memory, list every project you believe is currently active. Do not organize — only capture. This clears your working memory and surfaces the true volume of open loops your brain was silently tracking.</div>
+          </li>
+          <li class="step-item">
+            <div class="step-num step-num-t">2</div>
+            <div class="step-text"><span class="step-strong">Map active goals with explicit due dates.</span> For each item in your capture list, ask: does this have a concrete deliverable and a deadline within the next 12 months? If yes, it is a Project. Name it with an outcome noun, not a verb: "Launched podcast series" rather than "start podcast." Assign it a target completion date inside the workspace.</div>
+          </li>
+          <li class="step-item">
+            <div class="step-num step-num-a">3</div>
+            <div class="step-text"><span class="step-strong">Define your Areas of Responsibility.</span> Identify 5–12 domains that describe your ongoing accountabilities. These become persistent containers. Under each Area, create a "standards note" — a brief document specifying what "maintaining this Area well" actually looks like, so future-you has an objective benchmark during reviews.</div>
+          </li>
+          <li class="step-item">
+            <div class="step-num step-num-g">4</div>
+            <div class="step-text"><span class="step-strong">Populate resource libraries with retrieval intent.</span> For every reference item, add a one-line "retrieval tag" describing which Project or Area type would most likely need this material. This transforms passive storage into an active retrieval index, dramatically reducing the time cost of locating relevant context under deadline conditions.</div>
+          </li>
+          <li class="step-item">
+            <div class="step-num step-num-b">5</div>
+            <div class="step-text"><span class="step-strong">Establish structured review intervals.</span> Configure a weekly Project review (are all open loops advancing?), a monthly Area audit (is the standard being maintained?), and a quarterly Resource and Archive sweep. Consistent review cadence is the hygiene mechanism that prevents the system from decaying back into entropy over time.</div>
+          </li>
+          <li class="step-item">
+            <div class="step-num step-num-p">6</div>
+            <div class="step-text"><span class="step-strong">Archive completed cycles immediately on closure.</span> The moment a project delivers its outcome, migrate the entire folder to Archives before beginning anything new. This ritual creates a clean cognitive transition, reinforces a sense of completion, and keeps your active Projects list free of stale entries that erode trust in the system.</div>
+          </li>
+        </ul>
+
+        <hr class="divider" />
+
+        <div class="free-card">
+          <div class="free-pill"><i class="ti ti-sparkles" aria-hidden="true"></i> Completely free. Forever.</div>
+          <h2 class="free-headline">The Affilore free-forever local sandbox advantage</h2>
+          <p class="prose" style="margin-bottom:0.75rem;">The Affilore Second Brain PARA Method Workspace carries zero cost — not a freemium tier, not a trial period, not a feature-gated base plan. The full workspace infrastructure is available permanently at no charge, removing the most common barrier to knowledge system adoption: the reluctance to invest time configuring a tool that may eventually paywall the features you depend on.</p>
+          <p class="prose" style="margin-bottom:0.75rem;">Beyond the price point, the architectural advantage that distinguishes this workspace from cloud-hosted alternatives is its <strong style="color:#9FE1CB">local client-side state execution model</strong>. Every data interaction — every note you write, every project you configure, every resource you link, every archive you migrate — is processed and persisted entirely within your browser's local cache profile. No data payload is transmitted to an external server. No telemetry pipeline ingests your workspace activity. No third-party analytics service receives metadata about your file structure, your project names, or your goal timelines.</p>
+
+          <div class="privacy-grid">
+            <div class="privacy-item">
+              <div class="privacy-icon"><i class="ti ti-notebook" aria-hidden="true"></i></div>
+              <div class="privacy-label">Personal journals</div>
+              <p class="privacy-desc">Stay sandboxed in your local browser cache — never transmitted</p>
+            </div>
+            <div class="privacy-item">
+              <div class="privacy-icon"><i class="ti ti-target" aria-hidden="true"></i></div>
+              <div class="privacy-label">Company goals</div>
+              <p class="privacy-desc">Sensitive strategic roadmaps immune to external ingestion</p>
+            </div>
+            <div class="privacy-item">
+              <div class="privacy-icon"><i class="ti ti-link" aria-hidden="true"></i></div>
+              <div class="privacy-label">Private resource links</div>
+              <p class="privacy-desc">URL libraries never exposed to tracking telemetry pipelines</p>
+            </div>
+            <div class="privacy-item">
+              <div class="privacy-icon"><i class="ti ti-road" aria-hidden="true"></i></div>
+              <div class="privacy-label">Lifelong roadmaps</div>
+              <p class="privacy-desc">Multi-decade project histories remain entirely under your control</p>
+            </div>
+          </div>
+          <p class="prose" style="margin-bottom:0;">This local-first execution model is particularly critical for knowledge workers managing sensitive client deliverables, health-related personal projects, confidential financial plans, or proprietary competitive research. The workspace operates as a fully private cognitive extension — a genuine Second Brain that belongs exclusively to you.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <h2 class="section-title">Comprehensive FAQ: high-intent questions answered</h2>
+        <div class="faq-item">
+          <p class="faq-q"><i class="ti ti-help-circle" aria-hidden="true"></i> &nbsp; What is the structural difference between a Project and an Area?</p>
+          <p class="faq-a">A Project is defined by two mandatory attributes: a specific, declarable outcome and a deadline that creates a temporal boundary. When both conditions are met, the work is a Project. An Area, by contrast, is defined by an ongoing standard of performance you are accountable for maintaining indefinitely — it has no finish line. The operational test is simple: can you complete this and declare it done? If yes, it is a Project. If the work simply continues at a quality threshold, it is an Area. Misclassifying Areas as Projects is the single most common failure mode in PARA implementations, as it floods the Projects layer with items that can never be archived, destroying th
+ efficacy of the system.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q"><i class="ti ti-help-circle" aria-hidden="true"></i> &nbsp; How does local browser sandboxing protect my data?</p>
+          <p class="faq-a">Your data in this workspace exists exclusively within the browser's JavaScript runtime memory and localStorage API. No network requests are made, and no data is transmitted to an external server pool.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ─── EXACT FLAT WHITE TEXT FOOTER (SOCIALS REMOVED) ─── -->
+  <footer class="w-full bg-[#050507] border-t border-zinc-950 py-12 relative z-50 text-center">
+    <div class="max-w-[1440px] mx-auto px-6 flex flex-col items-center justify-center gap-6">
+      <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-semibold text-white/90">
+        <a href="/privacy" class="hover:underline transition">Privacy</a>
+        <a href="/terms" class="hover:underline transition">Terms</a>
+        <a href="/disclaimer" class="hover:underline transition">Disclaimer</a>
+        <a href="/about" class="hover:underline transition">About</a>
+        <a href="mailto:affilore4@gmail.com" class="hover:underline transition">Contact</a>
+      </div>
+      <div class="text-xs font-medium text-white/40 tracking-wide mt-2">
+        &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="All-in-One Life Dashboard — a centralized operating system for behavioral tracking, financial telemetry, project serialization, and cognitive journaling. 100% serverless, private, and free forever.">
@@ -1767,11 +2362,11 @@
     }
 
     function openAuthModal() {
-      document.getElementById('authOverlay').classList.add('active');
+      document.getElementById('authModal').style.display = 'flex';
     }
 
     function closeAuthModal() {
-      document.getElementById('authOverlay').classList.remove('active');
+      document.getElementById('authModal').style.display = 'none';
     }
 
     function handleAuth() {
@@ -1788,13 +2383,23 @@
     }
 
     function authenticateWith(provider) {
+      let email = `${provider.toLowerCase()}user@gmail.com`;
+      if (provider === 'Email') {
+        const emailInput = document.getElementById('authEmail');
+        if (emailInput && emailInput.value.trim()) {
+          email = emailInput.value.trim();
+        } else {
+          showToast('Please enter a valid email address.', 'warning');
+          return;
+        }
+      }
       APP_STATE.affilore_session_state = true;
       localStorage.setItem('affilore_session_state', 'true');
-      localStorage.setItem('affilore_user_email', `${provider.toLowerCase()}user@gmail.com`);
+      localStorage.setItem('affilore_user_email', email);
       closeAuthModal();
       updateAuthUI();
       persistState();
-      showToast(`Authenticated via ${provider.charAt(0).toUpperCase() + provider.slice(1)}. Session active.`, 'success');
+      showToast(`Authenticated via ${provider}. Session active.`, 'success');
     }
 
     function updateAuthUI() {
@@ -2277,8 +2882,25 @@
       console.log('═══════════════════════════════════════');
     }
 
+
+    // Expose functions globally for HTML event handlers
+    window.openAuthModal = openAuthModal;
+    window.closeAuthModal = closeAuthModal;
+    window.simulateLogin = authenticateWith;
+    window.toggleHabit = toggleHabit;
+    window.computeFinancials = computeFinancials;
+    window.addLedgerRow = addLedgerRow;
+    window.addProjectRow = addProjectRow;
+    window.saveJournalEntry = saveJournalEntry;
+    window.calculateRules = calculateRules;
+    window.exportDashboard = exportDashboard;
+    window.clearWindow = clearWindow;
+    window.copySystemSetup = copySystemSetup;
+    window.handleAuth = handleAuth;
+
     // Boot
     document.addEventListener('DOMContentLoaded', init);
+  
   </script>
 
 </body>
