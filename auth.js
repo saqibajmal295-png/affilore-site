@@ -70,7 +70,7 @@
     `;
     document.head.appendChild(style);
 
-    const isProductivityPage = window.location.pathname.includes('productivity.html') || window.location.pathname.endsWith('/productivity');
+    const isProductivityPage = window.location.pathname.includes('productivity');
 
     // Run when DOM is ready
     if (document.readyState === 'loading') {
@@ -116,7 +116,7 @@
         let isProductivityLink = false;
         if (href) {
             const cleanHref = href.trim();
-            if (cleanHref === 'productivity.html' || cleanHref === '/productivity.html' || cleanHref === '/productivity' || cleanHref === 'productivity') {
+            if (cleanHref.includes('productivity')) {
                 isProductivityLink = true;
             }
         }
