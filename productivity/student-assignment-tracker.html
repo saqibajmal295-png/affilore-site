@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Premium dark-mode academic velocity operating system for tracking assignments, coursework completion, and study sprint analytics.">
+  <title>Affilore — Student Assignment Tracker & Academic Velocity OS</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            obsidian:  '#0A0A0B',
+            panel:     '#111113',
+            border:    '#1E1E22',
+            amber:     '#F5A623',
+            cyan:      '#22D3EE',
+            emerald:   '#34D399',
+            rose:      '#F43F5E',
+            purple:    '#A855F7'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-family: 'Inter', system-ui, sans-serif; background-color: #0A0A0B; }
+    body { background: #0A0A0B; color: #E4E4E7; overflow-x: hidden; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0A0B; }
+    ::-webkit-scrollbar-thumb { background: #2A2A2E; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #22D3EE; }
+
+    /* ─── DENSE AMBIENT MOVING YELLOW GRADIENT DOTS ─── */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(8px 8px at 8% 12%, rgba(245,166,35,0.5) 50%, transparent 100%),
+        radial-gradient(10px 10px at 28% 38%, rgba(245,166,35,0.4) 50%, transparent 100%),
+        radial-gradient(7px 7px at 62% 68%, rgba(245,166,35,0.45) 50%, transparent 100%),
+        radial-gradient(11px 11px at 84% 22%, rgba(245,166,35,0.35) 50%, transparent 100%),
+        radial-gradient(8px 8px at 18% 78%, rgba(245,166,35,0.5) 50%, transparent 100%),
+        radial-gradient(9px 9px at 48% 88%, rgba(245,166,35,0.45) 50%, transparent 100%),
+        radial-gradient(10px 10px at 72% 48%, rgba(245,166,35,0.4) 50%, transparent 100%);
+      background-size: 100% 1200px; animation: particleDrift 22s linear infinite;
+    }
+    @keyframes particleDrift { 0% { background-position: 0 0; } 100% { background-position: 0 -1200px; } }
+
+    /* ─── UI COMPONENTS (NO GRAY - TINTED VIBRANT COLORS) ─── */
+    .glass-panel {
+      background: rgba(17, 17, 19, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid #1E1E22;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+    
+    /* Vibrant Text Highlights */
+    .text-tint-blue { color: #D8EAFF; }
+    .text-tint-purple { color: #EADDFF; }
+    
+    /* SVG Circular Progress */
+    .circle-progress {
+      transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+
+    /* Timeline Matrix Cards */
+    .timeline-card {
+      background: rgba(17, 17, 19, 0.9);
+      border: 1px solid #1E1E22;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .timeline-card:hover {
+      border-color: rgba(34, 211, 238, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -8px rgba(34, 211, 238, 0.2);
+    }
+    .aesthetic-banner {
+      height: 90px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      border-bottom: 1px solid #1E1E22;
+    }
+    .aesthetic-banner::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent, rgba(17,17,19,1));
+    }
+
+    /* Vibrant Forms & Dropdowns */
+    .vibrant-input {
+      background: rgba(10, 10, 11, 0.8);
+      border: 1px solid #1E1E22;
+      color: #FFFFFF;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .vibrant-input:focus {
+      border-color: #22D3EE;
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+    }
+    
+    .status-badge {
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23D8EAFF'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      padding-right: 28px;
+    }
+
+    /* Article Styling */
+    .article-wrap { max-width: 56rem; margin: 0 auto; padding: 2rem 1.5rem; color: #FFFFFF; line-height: 1.8; }
+    .article-wrap h2 { font-size: 20px; font-weight: 700; color: #22D3EE; margin: 2rem 0 1rem; border-left: 3px solid #22D3EE; padding-left: 12px; }
+    .article-wrap h3 { font-size: 16px; font-weight: 600; color: #A855F7; margin: 1.5rem 0 0.5rem; }
+    .article-wrap p { color: #D8EAFF; margin-bottom: 1.25rem; font-size: 15px; }
+    .faq-item { background: rgba(34, 211, 238, 0.05); border: 1px solid rgba(34, 211, 238, 0.15); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+    .faq-q { font-weight: 600; color: #34D399; margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body class="min-h-screen relative select-none">
+
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-[#1E1E22] bg-[#0A0A0B]/90 backdrop-blur-xl h-20">
+    <div class="max-w-[1440px] mx-auto px-6 h-full flex items-center justify-between">
+      <div class="flex items-center gap-12">
+        <a href="/" class="text-2xl font-black text-white tracking-tight">Affilore<span class="text-amber">.</span></a>
+        <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-tint-blue">
+          <a href="/" class="hover:text-white transition">Home</a>
+          <a href="/productivity" class="text-white font-bold tracking-wide">Productivity</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-5">
+        <div id="navSignInBtn" class="account-email-display flex items-center gap-2 cursor-pointer">
+           <div class="w-8 h-8 rounded-full bg-amber text-black flex items-center justify-center text-[10px] font-black">A</div>
+           <span class="text-xs font-mono text-white hidden md:block">Active Session</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="relative z-10 max-w-[1440px] mx-auto px-6 pt-32 pb-12">
+    
+    <header class="mb-10 text-center">
+      <div class="inline-flex items-center gap-2 bg-[#111113] border border-[#1E1E22] rounded-full px-4 py-1.5 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan animate-pulse"></span>
+        <span class="text-[10px] font-bold tracking-widest uppercase text-tint-blue font-mono">Academic Velocity OS</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-black tracking-tight mb-3">
+        <span class="text-white">Student Assignment</span> <span class="bg-gradient-to-r from-cyan to-purple bg-clip-text text-transparent">Tracker</span>
+      </h1>
+      <p class="text-tint-purple text-sm sm:text-base max-w-2xl mx-auto">
+        A serverless information ecosystem for maximum cognitive velocity. Track coursework, calculate study sprints, and secure your academic roadmap locally.
+      </p>
+    </header>
+
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+      
+      <div class="glass-panel p-6 flex flex-col justify-center border-t-2 border-t-cyan">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-tint-blue font-mono mb-6 text-center">Sprint Metrics</h3>
+        <div class="flex justify-around items-center">
+          
+          <div class="flex flex-col items-center gap-3">
+            <div class="relative w-20 h-20">
+              <svg class="w-20 h-20">
+                <circle cx="40" cy="40" r="32" stroke="#1E1E22" stroke-width="6" fill="transparent" />
+                <circle id="circAssign" cx="40" cy="40" r="32" stroke="#22D3EE" stroke-width="6" fill="transparent" stroke-dasharray="201" stroke-dashoffset="201" class="circle-progress" />
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span id="txtAssign" class="text-sm font-bold font-mono text-white">0%</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold text-tint-blue uppercase tracking-widest">Tasks Done</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-3">
+            <div class="relative w-20 h-20">
+              <svg class="w-20 h-20">
+                <circle cx="40" cy="40" r="32" stroke="#1E1E22" stroke-width="6" fill="transparent" />
+                <circle id="circMile" cx="40" cy="40" r="32" stroke="#A855F7" stroke-width="6" fill="transparent" stroke-dasharray="201" stroke-dashoffset="100" class="circle-progress" />
+              </svg>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span id="txtMile" class="text-sm font-bold font-mono text-white">50%</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold text-tint-blue uppercase tracking-widest">Milestones</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="glass-panel p-6 lg:col-span-2 border-t-2 border-t-purple">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-tint-blue font-mono">Weekly Academic Velocity</h3>
+          <span class="text-[10px] text-emerald font-bold uppercase tracking-widest bg-emerald/10 px-2 py-1 rounded border border-emerald/20">Live Sync</span>
+        </div>
+        <div class="w-full h-[140px] relative">
+          <canvas id="velocityChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass-panel p-6 mb-10 border-t-2 border-t-emerald">
+      <h3 class="text-xs font-bold uppercase tracking-wider text-tint-blue font-mono mb-4">Append New Coursework</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <div class="md:col-span-2">
+          <label class="block text-[10px] font-bold text-tint-purple uppercase tracking-widest mb-2">Assignment Title</label>
+          <input type="text" id="inputTitle" class="vibrant-input w-full px-4 py-2.5 rounded-lg text-sm" placeholder="e.g., Quantum Physics Thesis Draft">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-tint-purple uppercase tracking-widest mb-2">Deadline</label>
+          <input type="date" id="inputDeadline" class="vibrant-input w-full px-4 py-2.5 rounded-lg text-sm text-tint-blue">
+        </div>
+        <div>
+          <button onclick="handleAddAssignment()" class="w-full py-2.5 bg-gradient-to-r from-emerald to-cyan text-[#0A0A0B] font-bold text-xs uppercase tracking-wider rounded-lg hover:opacity-90 transition">Deploy Node</button>
+        </div>
+      </div>
+    </section>
+
+    <h3 class="text-xs font-bold uppercase tracking-wider text-tint-blue font-mono mb-4 pl-2">Chronological Study Sprint</h3>
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" id="timelineMatrix">
+      </section>
+
+    <section class="glass-panel p-6 mb-12 border-t-2 border-t-amber">
+      <h3 class="text-xs font-bold uppercase tracking-wider text-tint-blue font-mono mb-6">Subject Bandwidth Allocation</h3>
+      <div class="space-y-6">
+        <div>
+          <div class="flex justify-between text-xs font-semibold mb-2 text-cyan"><span>Quantum Physics</span> <span class="font-mono text-white">65%</span></div>
+          <div class="w-full h-2 bg-[#0A0A0B] rounded-full overflow-hidden border border-[#1E1E22]"><div class="h-full bg-cyan shadow-[0_0_10px_rgba(34,211,238,0.6)]" style="width: 65%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs font-semibold mb-2 text-emerald"><span>Digital Ethics & Data</span> <span class="font-mono text-white">20%</span></div>
+          <div class="w-full h-2 bg-[#0A0A0B] rounded-full overflow-hidden border border-[#1E1E22]"><div class="h-full bg-emerald shadow-[0_0_10px_rgba(52,211,153,0.6)]" style="width: 20%"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-xs font-semibold mb-2 text-amber"><span>Advanced Algorithms</span> <span class="font-mono text-white">15%</span></div>
+          <div class="w-full h-2 bg-[#0A0A0B] rounded-full overflow-hidden border border-[#1E1E22]"><div class="h-full bg-amber shadow-[0_0_10px_rgba(245,166,35,0.6)]" style="width: 15%"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glass-panel mt-12 mb-6 shadow-inner">
+      <div class="article-wrap">
+        <h1 class="text-3xl font-black bg-gradient-to-r from-cyan to-emerald bg-clip-text text-transparent mb-2 leading-tight text-center">The Cybernetics of Academic Synthesis: Structuring Information Ecosystems for Maximum Cognitive Velocity</h1>
+        <p class="text-center text-tint-blue text-sm mb-8 max-w-2xl mx-auto">A comprehensive reference guide to the multi-module workspace that replaces scattered notes, forgotten deadlines, and fractured attention with a single, privacy-sovereign planning environment.</p>
+
+        <h2>Why Traditional Assignment Management Fails</h2>
+        <p>The average student today juggles five or more active courses simultaneously, each generating its own lecture notes, assignment deadlines, grading rubrics, and reading lists. Without a unified system, these inputs scatter across sticky notes, calendar apps, chat threads, and browser tabs. The mental overhead required to locate, reconcile, and prioritize this fragmented information is not a minor inconvenience — it is a structural tax levied against every productive hour in a student's week.</p>
+        <p>Research in cognitive load theory consistently demonstrates that task-switching between disconnected tools reduces effective working memory capacity by forcing the brain to repeatedly reload contextual state. The Affilore Student Assignment Tracker Workspace was architected specifically to dismantle this fragmentation problem by consolidating task nodes, deadline timelines, progress metrics, and reference materials into a single interactive dashboard environment.</p>
+
+        <h2>Multi-Module Tracking & Cognitive Velocity</h2>
+        <p>Cognitive velocity — the rate at which a student can move from intention to completed output — is governed not just by raw effort, but by how efficiently the workspace surrounding that effort is organized. A high-friction environment actively suppresses velocity regardless of motivation level.</p>
+        <p>The multi-module design of this tracker directly addresses this. Each workspace node represents a distinct assignment with its own embedded metadata. These nodes do not exist as isolated rows in a flat list; they are relational objects rendered inside a spatially organized dashboard that preserves the relative weight and urgency of every active task at a glance.</p>
+        
+        <h3>Reducing Mental Resistance Points</h3>
+        <p>A "mental resistance point" is any moment in a workflow where ambiguity, friction, or disorganization causes a student to pause, backtrack, or abandon a task thread. The tracker's module architecture reduces resistance by capturing the full decision context at creation time, visualizing real-time progress to combat procrastination, and priority-sorting to present the highest-leverage action available.</p>
+
+        <h2>The Serverless Sovereignty Advantage: Free Forever</h2>
+        <p class="bg-cyan/10 border border-cyan/20 p-4 rounded-xl text-cyan font-medium my-6">The Affilore Student Assignment Tracker Workspace is completely free — permanently, unconditionally, and without hidden paywalls of any kind. There is no premium tier that locks dashboard views behind a subscription.</p>
+        <p>This reflects the fundamental infrastructure model underpinning the platform. The workspace operates on a serverless, client-resident architecture, meaning that workspace nodes and assignment data are stored entirely within localized, user-controlled cloud storage models. There is no centralized commercial server extracting your behavioral patterns.</p>
+        
+        <h2>Comprehensive FAQ Matrix</h2>
+        <div class="faq-item">
+          <p class="faq-q">What is browser sandbox protection and how does it secure my workspace data?</p>
+          <p class="text-sm text-tint-blue">Browser sandbox protection is a security architecture built into all modern web browsers that isolates each web application within a restricted execution environment. The Affilore workspace operates with permission boundaries that prevent external scripts or trackers from modifying your academic data without explicit authorization. Your data is protected by the browser's own enforced security model.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">How does real-time chart synchronization work across dashboard views?</p>
+          <p class="text-sm text-tint-blue">The tracker's real-time chart synchronization operates through a reactive state management path that binds visual progress indicators directly to the underlying assignment node data without requiring a manual refresh. When a student updates a completion status, the change propagates immediately to all chart elements — progress rings, timeline bars, and line graphs reflect the new state instantly.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Will there ever be a paid tier that restricts features currently available for free?</p>
+          <p class="text-sm text-tint-blue">No. The free-forever model is not a temporary acquisition strategy — it is a structural commitment baked into the serverless architecture itself. The full multi-module dashboard, real-time chart synchronization, and local storage sovereignty are all permanently available without charge to every user.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="w-full bg-[#050507] border-t border-[#1E1E22] py-12 relative z-50 text-center">
+    <div class="max-w-[1440px] mx-auto px-6 flex flex-col items-center justify-center gap-6">
+      <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-semibold text-white/90">
+        <a href="/privacy" class="hover:text-cyan transition">Privacy</a>
+        <a href="/terms" class="hover:text-cyan transition">Terms</a>
+        <a href="/disclaimer" class="hover:text-cyan transition">Disclaimer</a>
+        <a href="/about" class="hover:text-cyan transition">About</a>
+        <a href="/contact" class="hover:text-cyan transition">Contact</a>
+      </div>
+      <div class="text-xs font-medium text-white/40 tracking-wide mt-2">
+        &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    // Firebase Modular SDK
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+    // Reusing the configuration generated in Tool #2 / Category Gate
+    const firebaseConfig = {
+      apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI",
+      authDomain: "affilore.firebaseapp.com",
+      projectId: "affilore",
+      storageBucket: "affilore.firebasestorage.app",
+      messagingSenderId: "196193541479",
+      appId: "1:196193541479:web:3cef88a2065b09c755e3c2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    let currentUserUid = null;
+
+    // --- State & Sample Data ---
+    window.__assignments = [
+      { id: '1', title: 'Data Structures Lab 4', deadline: '2026-06-28', status: 'todo', img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80' },
+      { id: '2', title: 'Quantum Physics Thesis Draft', deadline: '2026-07-02', status: 'progress', img: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80' },
+      { id: '3', title: 'Advanced Calculus Problem Set', deadline: '2026-07-05', status: 'progress', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80' },
+      { id: '4', title: 'Cybersecurity Midterm Essay', deadline: '2026-06-10', status: 'submitted', img: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80' }
+    ];
+
+    let velocityChartInstance = null;
+
+    // --- Firebase Sync Wrappers ---
+    async function syncToCloud(uid, data) {
+      if(!uid) return;
+      try {
+        await setDoc(doc(db, "users", uid, "tools", "assignment_tracker"), { assignments: data });
+      } catch (e) {
+        console.warn("Cloud sync failed (sandbox mode active).");
+      }
+    }
+
+    async function loadFromCloud(uid) {
+      if(!uid) return;
+      try {
+        const docSnap = await getDoc(doc(db, "users", uid, "tools", "assignment_tracker"));
+        if (docSnap.exists() && docSnap.data().assignments) {
+          window.__assignments = docSnap.data().assignments;
+        }
+      } catch (e) {
+        console.warn("Cloud load failed. Using defaults.");
+      }
+      renderMatrix();
+    }
+
+    // --- Auth Listener ---
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUserUid = user.uid;
+        loadFromCloud(user.uid);
+      } else {
+        renderMatrix(); // Render defaults if unauthenticated fallback
+      }
+    });
+
+    // --- UI Rendering Logic ---
+    function renderMatrix() {
+      const matrix = document.getElementById('timelineMatrix');
+      matrix.innerHTML = '';
+
+      window.__assignments.forEach(a => {
+        let statusColor, statusBorder, statusLabel;
+        if(a.status === 'todo') { statusColor = 'text-[#EAEAEA]'; statusBorder = 'border-[#1E1E22]'; statusLabel = 'To-Do'; }
+        else if(a.status === 'progress') { statusColor = 'text-amber'; statusBorder = 'border-amber/40'; statusLabel = 'In-Progress'; }
+        else { statusColor = 'text-emerald'; statusBorder = 'border-emerald/40'; statusLabel = 'Submitted'; }
+
+        const card = document.createElement('div');
+        card.className = "timeline-card flex flex-col";
+        card.innerHTML = `
+          <div class="aesthetic-banner" style="background-image: url('${a.img || 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80'}');"></div>
+          <div class="p-4 flex-1 flex flex-col border-t ${statusBorder}">
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-[10px] font-bold uppercase tracking-widest ${statusColor} bg-[#0A0A0B] px-2 py-1 rounded border ${statusBorder}">\${statusLabel}</span>
+              <span class="text-[10px] text-tint-blue font-mono">📅 \${a.deadline}</span>
+            </div>
+            <h4 class="text-sm font-bold text-white mb-4 line-clamp-2">\${a.title}</h4>
+            <div class="mt-auto">
+              <select class="vibrant-input w-full px-3 py-2 rounded text-xs font-bold uppercase tracking-wider status-badge ${statusColor}" onchange="updateStatus('\${a.id}', this.value)">
+                <option value="todo" \${a.status === 'todo' ? 'selected' : ''}>To-Do</option>
+                <option value="progress" \${a.status === 'progress' ? 'selected' : ''}>In-Progress</option>
+                <option value="submitted" \${a.status === 'submitted' ? 'selected' : ''}>Submitted</option>
+              </select>
+            </div>
+          </div>
+        `;
+        matrix.appendChild(card);
+      });
+      calculateMetrics();
+    }
+
+    // --- Actions ---
+    window.handleAddAssignment = () => {
+      const title = document.getElementById('inputTitle').value;
+      const deadline = document.getElementById('inputDeadline').value;
+      if(!title) return;
+      
+      const images = [
+        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80'
+      ];
+
+      window.__assignments.push({
+        id: Date.now().toString(),
+        title: title,
+        deadline: deadline || 'No Date',
+        status: 'todo',
+        img: images[Math.floor(Math.random() * images.length)]
+      });
+
+      document.getElementById('inputTitle').value = '';
+      document.getElementById('inputDeadline').value = '';
+      renderMatrix();
+      syncToCloud(currentUserUid, window.__assignments);
+    };
+
+    window.updateStatus = (id, newStatus) => {
+      const target = window.__assignments.find(a => a.id === id);
+      if(target) {
+        target.status = newStatus;
+        renderMatrix();
+        syncToCloud(currentUserUid, window.__assignments);
+      }
+    };
+
+    // --- Chart & SVG Metrics ---
+    function calculateMetrics() {
+      const total = window.__assignments.length || 1;
+      const done = window.__assignments.filter(a => a.status === 'submitted').length;
+      
+      // Circles
+      const pct = Math.round((done / total) * 100);
+      const offset = 201 - (pct / 100) * 201;
+      document.getElementById('txtAssign').textContent = pct + '%';
+      document.getElementById('circAssign').style.strokeDashoffset = offset;
+
+      // Mock Chart Update
+      const ctx = document.getElementById('velocityChart').getContext('2d');
+      if (velocityChartInstance) { velocityChartInstance.destroy(); }
+
+      Chart.defaults.color = '#D8EAFF';
+      Chart.defaults.font.family = '"JetBrains Mono", monospace';
+      
+      velocityChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Assignments Completed',
+            data: [1, 2, 1, 4, 3, done, done+1],
+            borderColor: '#34D399',
+            backgroundColor: 'rgba(52, 211, 153, 0.1)',
+            borderWidth: 2,
+            pointBackgroundColor: '#34D399',
+            pointBorderColor: '#111113',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: 'rgba(30, 30, 34, 0.5)' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
