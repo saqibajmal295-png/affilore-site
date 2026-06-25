@@ -6,13 +6,11 @@
   <title>Affilore Habit OS — Gamified Behavioral Optimization Suite</title>
   <meta name="description" content="Enterprise-grade gamified habit tracking with Pomodoro timer, achievement badges, XP leveling, and client-side data processing."/>
   
-  <!-- Fonts & Core Utilities -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   
-  <!-- Tailwind CSS & Chart.js Engine CDN -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -22,14 +20,14 @@
       theme: {
         extend: {
           colors: {
-            obsidian:    '#050506',
-            panel:       '#0D0D11',
-            borderNode:  '#16161C',
-            amberCore:   '#F5A623',
+            obsidian:  '#050506',
+            panel:     '#0D0D11',
+            borderNode: '#16161C',
+            amberCore: '#F5A623',
             emeraldCore: '#10B981',
-            cyanCore:    '#06B6D4',
-            purpleCore:  '#A855F7',
-            roseCore:    '#F43F5E',
+            cyanCore:  '#06B6D4',
+            purpleCore: '#A855F7',
+            roseCore:  '#F43F5E',
             fuchsiaCore: '#D946EF',
             skyCore:     '#38BDF8',
             limeCore:    '#84CC16',
@@ -51,7 +49,7 @@
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { background-color: #050506; scroll-behavior: smooth; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: #050506; color: #EAEAEA; overflow-x: hidden; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #050506; color: #FFFFFF; overflow-x: hidden; }
 
     /* ─── AMBIENT PARTICLES ─── */
     #ambient-dots-canvas {
@@ -91,7 +89,7 @@
     .box-indigo { background: rgba(30, 27, 75, 0.25); border: 1px solid rgba(99, 102, 241, 0.2); }
 
     /* ─── ANIMATED GRADIENT BORDER ─── */
-    @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+    @style-variable --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
     @keyframes borderRotate { to { --angle: 360deg; } }
     .glow-border {
       position: relative;
@@ -209,17 +207,6 @@
     }
     .fab:hover { transform: translateY(-4px) scale(1.1); box-shadow: 0 12px 40px rgba(245, 166, 35, 0.6); }
 
-    /* ─── MODAL ─── */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
-      z-index: 200; display: none; align-items: center; justify-content: center;
-    }
-    .modal-overlay.show { display: flex; }
-    .modal-box {
-      background: #0D0D11; border: 1px solid #16161C; border-radius: 12px;
-      max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 28px;
-    }
-
     /* ─── SHIMMER ─── */
     @keyframes shimmerBar { 100% { transform: translateX(100%); } }
 
@@ -227,7 +214,7 @@
     .tooltip { position: relative; }
     .tooltip::after {
       content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
-      background: #1A1A2E; color: #eee; font-size: 10px; padding: 4px 8px; border-radius: 4px;
+      background: #1A1A2E; color: #FFFFFF; font-size: 10px; padding: 4px 8px; border-radius: 4px;
       white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s;
     }
     .tooltip:hover::after { opacity: 1; }
@@ -242,19 +229,17 @@
 </head>
 <body class="min-h-screen flex flex-col relative">
 
-  <!-- Background Layers -->
   <div class="mesh-gradient"></div>
   <canvas id="ambient-dots-canvas"></canvas>
   <canvas id="confetti-canvas"></canvas>
 
-  <!-- ══════════════════════ GLOBAL FIXED NAVBAR ══════════════════════ -->
   <nav class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-[#16161C]/50 h-[72px]">
     <div class="max-w-[1440px] mx-auto px-8 h-full flex items-center justify-between">
       <div class="flex items-center gap-10">
         <a href="/" class="text-xl font-black text-white tracking-tight flex items-center font-display">
           Affilore<span class="w-2 h-2 rounded-full bg-gradient-to-r from-amberCore to-orangeCore ml-0.5 mt-1 block animate-pulse"></span>
         </a>
-        <div class="hidden md:flex items-center gap-8 text-sm font-bold text-zinc-400">
+        <div class="hidden md:flex items-center gap-8 text-sm font-bold text-white">
           <a href="/" class="hover:text-white transition">Home</a>
           <a href="/data" class="hover:text-white transition">Data</a>
           <a href="/calculator" class="hover:text-white transition">Calculator</a>
@@ -265,12 +250,10 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <!-- Sound Toggle -->
-        <button id="sound-toggle" class="w-8 h-8 rounded-lg bg-[#0E0E12] border border-[#16161C] flex items-center justify-center text-zinc-400 hover:text-amberCore hover:border-amberCore transition tooltip" data-tip="Toggle Sound">
+        <button id="sound-toggle" class="w-8 h-8 rounded-lg bg-[#0E0E12] border border-[#16161C] flex items-center justify-center text-white hover:text-amberCore hover:border-amberCore transition tooltip" data-tip="Toggle Sound">
           <span class="material-symbols-outlined text-[18px]">volume_up</span>
         </button>
-        <!-- Theme Toggle -->
-        <button id="theme-toggle" class="w-8 h-8 rounded-lg bg-[#0E0E12] border border-[#16161C] flex items-center justify-center text-zinc-400 hover:text-purpleCore hover:border-purpleCore transition tooltip" data-tip="Neon Mode">
+        <button id="theme-toggle" class="w-8 h-8 rounded-lg bg-[#0E0E12] border border-[#16161C] flex items-center justify-center text-white hover:text-purpleCore hover:border-purpleCore transition tooltip" data-tip="Neon Mode">
           <span class="material-symbols-outlined text-[18px]">palette</span>
         </button>
         <div class="flex items-center gap-2 bg-[#0E0E12] border border-[#16161C] rounded-full pl-1 pr-4 py-1">
@@ -281,27 +264,24 @@
     </div>
   </nav>
 
-  <!-- ══════════════════════ MAIN OS SHELL ══════════════════════ -->
   <main class="relative z-10 flex-grow max-w-[1440px] mx-auto w-full px-8 pt-32 pb-12">
     
-    <!-- Header Unit -->
     <header class="mb-10 flex flex-col items-center text-center">
       <h1 class="text-4xl md:text-5xl font-black font-display tracking-tight mb-3">
         <span class="animated-gradient-text">Habit</span> 
         <span class="text-white">to</span> 
         <span class="animated-gradient-text">JSON Progression OS</span>
       </h1>
-      <p class="text-zinc-400 text-xs md:text-sm font-medium max-w-2xl font-sans">
+      <p class="text-white text-xs md:text-sm font-medium max-w-2xl font-sans">
         Enterprise-grade data parsing and smart auto-fixing habit tracking architecture — with Pomodoro focus, achievement badges, mood analytics & more.
       </p>
       
-      <!-- Engine Ribbon Container -->
       <div class="mt-8 flex items-center justify-between w-full max-w-5xl border border-[#16161C] rounded-lg px-4 py-3 glass glow-border">
         <div class="flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-emeraldCore animate-pulse"></span>
-          <span class="text-xs font-mono text-zinc-300">Habit Engine: Operational</span>
+          <span class="text-xs font-mono text-white">Habit Engine: Operational</span>
         </div>
-        <div class="hidden md:flex items-center gap-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+        <div class="hidden md:flex items-center gap-6 text-[10px] font-mono text-white uppercase tracking-widest">
           <span>Zero-network execution</span>
           <span class="text-purpleCore">•</span>
           <span>AES-grade local sandbox</span>
@@ -313,41 +293,39 @@
       </div>
     </header>
 
-    <!-- ─── QUAD + EXTRA METRIC GRID PANEL ─── -->
     <section class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8 max-w-5xl mx-auto">
       <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-amber transition-all duration-300">
         <h3 class="text-3xl font-black text-amberCore font-mono mb-1" id="m-total">0</h3>
-        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Total Habits</span>
+        <span class="text-[10px] text-white uppercase tracking-widest font-mono font-bold">Total Habits</span>
       </div>
       <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-emerald transition-all duration-300">
         <h3 class="text-3xl font-black text-emeraldCore font-mono mb-1" id="m-today">0</h3>
-        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Done Today</span>
+        <span class="text-[10px] text-white uppercase tracking-widest font-mono font-bold">Done Today</span>
       </div>
       <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-rose transition-all duration-300">
         <h3 class="text-3xl font-black text-roseCore font-mono mb-1 streak-fire" id="m-streak">0</h3>
-        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Best Streak</span>
+        <span class="text-[10px] text-white uppercase tracking-widest font-mono font-bold">Best Streak</span>
       </div>
       <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center relative overflow-hidden hover:neon-cyan transition-all duration-300">
         <h3 class="text-2xl font-black text-cyanCore font-mono mb-1" id="m-xp">0 XP</h3>
-        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold" id="m-lvl">Lv. 1 Novice</span>
+        <span class="text-[10px] text-white uppercase tracking-widest font-mono font-bold" id="m-lvl">Lv. 1 Novice</span>
         <div class="absolute bottom-0 left-0 h-1.5 bg-[#1A1A1E] w-full">
           <div id="xp-bar" class="h-full bg-gradient-to-r from-cyanCore via-purpleCore to-roseCore transition-all duration-500 rounded-full" style="width: 0%"></div>
         </div>
       </div>
       <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-purple transition-all duration-300">
         <h3 class="text-3xl font-black text-purpleCore font-mono mb-1" id="m-badges">0</h3>
-        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Badges</span>
+        <span class="text-[10px] text-white uppercase tracking-widest font-mono font-bold">Badges</span>
       </div>
       <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-fuchsia transition-all duration-300">
         <h3 class="text-3xl font-black text-fuchsiaCore font-mono mb-1" id="m-focus">0m</h3>
-        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Focus Time</span>
+        <span class="text-[10px] text-white uppercase tracking-widest font-mono font-bold">Focus Time</span>
       </div>
     </section>
 
-    <!-- ─── MOOD TRACKER BAR ─── -->
     <section class="max-w-5xl mx-auto mb-6">
       <div class="glass border border-[#16161C] rounded-lg p-4 flex items-center gap-4 flex-wrap">
-        <span class="text-[11px] font-bold tracking-widest text-zinc-400 font-mono uppercase">TODAY'S MOOD</span>
+        <span class="text-[11px] font-bold tracking-widest text-white font-mono uppercase">TODAY'S MOOD</span>
         <div class="flex items-center gap-2" id="mood-selector">
           <button class="mood-btn" data-mood="🔥" onclick="HabitEngine.setMood('🔥')">🔥</button>
           <button class="mood-btn" data-mood="😊" onclick="HabitEngine.setMood('😊')">😊</button>
@@ -356,19 +334,17 @@
           <button class="mood-btn" data-mood="😤" onclick="HabitEngine.setMood('😤')">😤</button>
         </div>
         <div class="flex-grow"></div>
-        <!-- Daily Challenge -->
         <div class="flex items-center gap-3 bg-[#0A0A0E] border border-fuchsiaCore/20 rounded-lg px-4 py-2">
           <span class="material-symbols-outlined text-fuchsiaCore text-[18px]">bolt</span>
           <div>
             <div class="text-[10px] font-bold text-fuchsiaCore uppercase tracking-widest">DAILY CHALLENGE</div>
-            <div class="text-xs text-zinc-300 font-medium" id="daily-challenge-text">Loading...</div>
+            <div class="text-xs text-white font-medium" id="daily-challenge-text">Loading...</div>
           </div>
           <button class="text-[10px] font-bold bg-fuchsiaCore/20 text-fuchsiaCore px-3 py-1 rounded hover:bg-fuchsiaCore hover:text-white transition" id="claim-challenge-btn" onclick="HabitEngine.claimDailyChallenge()">+50 XP</button>
         </div>
       </div>
     </section>
 
-    <!-- ─── HORIZONTAL ACTION BAR CONTROLS ─── -->
     <section class="max-w-5xl mx-auto mb-6">
       <div class="flex flex-wrap items-center gap-3 glass border border-[#16161C] p-3 rounded-lg">
         <button class="bg-gradient-to-r from-amberCore to-orangeCore text-black text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amberCore/20 transition flex items-center gap-1.5" onclick="document.getElementById('form-add-habit').classList.toggle('hidden')">
@@ -388,26 +364,24 @@
         </button>
         <input type="file" id="import-file" accept=".json" class="hidden" onchange="HabitEngine.importData(event)">
         <div class="flex-grow"></div>
-        <!-- Search -->
         <div class="flex items-center gap-2 bg-[#050506] border border-[#16161C] rounded-lg px-3 py-1.5">
-          <span class="material-symbols-outlined text-zinc-500 text-[16px]">search</span>
-          <input type="text" id="habit-search" class="bg-transparent border-none text-xs text-white outline-none w-28 placeholder-zinc-600" placeholder="Search habits..." oninput="HabitEngine.filterHabits(this.value)">
+          <span class="material-symbols-outlined text-white text-[16px]">search</span>
+          <input type="text" id="habit-search" class="bg-transparent border-none text-xs text-white outline-none w-28 placeholder-white/50" placeholder="Search habits..." oninput="HabitEngine.filterHabits(this.value)">
         </div>
-        <div class="text-right text-xs font-mono text-zinc-500 uppercase tracking-wider" id="sync-status">AWAITING INPUT</div>
+        <div class="text-right text-xs font-mono text-white uppercase tracking-wider" id="sync-status">AWAITING INPUT</div>
         <button class="border border-roseCore/30 text-roseCore text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:bg-roseCore hover:text-white transition" onclick="HabitEngine.clearWorkspace()">
           <span class="material-symbols-outlined text-[14px] align-middle mr-1">delete_sweep</span>CLEAR
         </button>
       </div>
 
-      <!-- Form Component Layout -->
       <form id="form-add-habit" class="hidden mt-4 glass border border-[#16161C] p-5 rounded-lg flex flex-col gap-4">
         <div class="flex flex-col md:flex-row gap-4">
           <div class="flex-grow w-full">
-            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">Protocol Entry Path</label>
+            <label class="text-[10px] font-bold text-white uppercase tracking-widest mb-1.5 block">Protocol Entry Path</label>
             <input type="text" id="habit-input" class="w-full px-4 py-2.5 bg-[#050506] border border-[#16161C] rounded-lg text-sm text-white focus:border-amberCore focus:ring-1 focus:ring-amberCore/30 transition outline-none" placeholder="e.g. Scrape B2B Lead Pipelines across Western markets" required>
           </div>
           <div class="w-full md:w-56">
-            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">Taxonomy Multiplier</label>
+            <label class="text-[10px] font-bold text-white uppercase tracking-widest mb-1.5 block">Taxonomy Multiplier</label>
             <select id="habit-cat" class="w-full px-4 py-2.5 bg-[#050506] border border-[#16161C] rounded-lg text-sm text-white focus:border-amberCore transition outline-none">
               <option value="health">🫀 Health Baseline (1.0x)</option>
               <option value="biz">💼 Business Architecture (2.5x)</option>
@@ -418,7 +392,7 @@
             </select>
           </div>
           <div class="w-full md:w-44">
-            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">Priority Level</label>
+            <label class="text-[10px] font-bold text-white uppercase tracking-widest mb-1.5 block">Priority Level</label>
             <select id="habit-priority" class="w-full px-4 py-2.5 bg-[#050506] border border-[#16161C] rounded-lg text-sm text-white focus:border-amberCore transition outline-none">
               <option value="medium">🟡 Medium</option>
               <option value="critical">🔴 Critical</option>
@@ -429,7 +403,7 @@
         </div>
         <div class="flex items-center gap-4">
           <div class="flex-grow">
-            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">Notes (optional)</label>
+            <label class="text-[10px] font-bold text-white uppercase tracking-widest mb-1.5 block">Notes (optional)</label>
             <input type="text" id="habit-notes" class="w-full px-4 py-2.5 bg-[#050506] border border-[#16161C] rounded-lg text-sm text-white focus:border-amberCore transition outline-none" placeholder="Add contextual notes...">
           </div>
           <button type="submit" class="bg-gradient-to-r from-amberCore to-orangeCore text-black font-bold text-[11px] uppercase tracking-wider px-8 h-[42px] rounded-lg hover:shadow-lg hover:shadow-amberCore/30 transition mt-5">COMPILE</button>
@@ -437,35 +411,30 @@
       </form>
     </section>
 
-    <!-- ─── TAB NAVIGATION ─── -->
     <section class="max-w-5xl mx-auto mb-6">
       <div class="flex items-center gap-1 border-b border-[#16161C]">
-        <button class="tab-btn active text-[11px] font-bold uppercase tracking-widest text-zinc-400 px-4 py-3 hover:text-white transition" data-tab="workspace" onclick="HabitEngine.switchTab('workspace')">
+        <button class="tab-btn active text-[11px] font-bold uppercase tracking-widest text-white px-4 py-3 hover:text-white transition" data-tab="workspace" onclick="HabitEngine.switchTab('workspace')">
           <span class="material-symbols-outlined text-[14px] align-middle mr-1">dashboard</span>Workspace
         </button>
-        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-zinc-400 px-4 py-3 hover:text-white transition" data-tab="pomodoro" onclick="HabitEngine.switchTab('pomodoro')">
+        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-white px-4 py-3 hover:text-white transition" data-tab="pomodoro" onclick="HabitEngine.switchTab('pomodoro')">
           <span class="material-symbols-outlined text-[14px] align-middle mr-1">timer</span>Pomodoro
         </button>
-        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-zinc-400 px-4 py-3 hover:text-white transition" data-tab="badges" onclick="HabitEngine.switchTab('badges')">
+        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-white px-4 py-3 hover:text-white transition" data-tab="badges" onclick="HabitEngine.switchTab('badges')">
           <span class="material-symbols-outlined text-[14px] align-middle mr-1">military_tech</span>Badges
         </button>
-        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-zinc-400 px-4 py-3 hover:text-white transition" data-tab="stats" onclick="HabitEngine.switchTab('stats')">
+        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-white px-4 py-3 hover:text-white transition" data-tab="stats" onclick="HabitEngine.switchTab('stats')">
           <span class="material-symbols-outlined text-[14px] align-middle mr-1">analytics</span>Analytics
         </button>
       </div>
     </section>
 
-    <!-- ══════════════════════ TAB CONTENT: WORKSPACE ══════════════════════ -->
     <div id="tab-workspace" class="tab-content active">
-      <!-- ─── THE TWO COLUMNS SPLIT WORKSPACE ─── -->
       <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto mb-16">
         
-        <!-- Box 1: Left Input Canvas -->
         <div class="glass border border-[#16161C] rounded-lg flex flex-col min-h-[400px]">
           <div class="px-4 py-3 border-b border-[#16161C] flex items-center justify-between bg-[#131317]/50 rounded-t-lg">
-            <span class="text-[11px] font-bold tracking-widest text-zinc-400 font-mono uppercase">RAW INITIALIZED PROTOCOLS</span>
-            <!-- Category Filter -->
-            <select id="cat-filter" class="bg-transparent border border-[#16161C] text-[10px] font-mono text-zinc-400 px-2 py-1 rounded outline-none" onchange="HabitEngine.filterByCategory(this.value)">
+            <span class="text-[11px] font-bold tracking-widest text-white font-mono uppercase">RAW INITIALIZED PROTOCOLS</span>
+            <select id="cat-filter" class="bg-transparent border border-[#16161C] text-[10px] font-mono text-white px-2 py-1 rounded outline-none" onchange="HabitEngine.filterByCategory(this.value)">
               <option value="all">ALL</option>
               <option value="health">HEALTH</option>
               <option value="biz">BIZ</option>
@@ -476,36 +445,32 @@
             </select>
           </div>
           <div class="p-4 flex-1 overflow-y-auto space-y-3" id="habit-container">
-            <!-- Populated by engine -->
-          </div>
+            </div>
         </div>
 
-        <!-- Box 2: Right Output Forge matrix -->
         <div class="glass border border-[#16161C] rounded-lg flex flex-col min-h-[400px]">
           <div class="px-4 py-3 border-b border-[#16161C] flex items-center justify-between bg-[#131317]/50 rounded-t-lg">
-            <span class="text-[11px] font-bold tracking-widest text-zinc-400 font-mono uppercase">PROCESSED FORGE OUTPUT MATRIX</span>
-            <span class="text-[10px] font-mono text-zinc-600">12-WEEK HEATMAP</span>
+            <span class="text-[11px] font-bold tracking-widest text-white font-mono uppercase">PROCESSED FORGE OUTPUT MATRIX</span>
+            <span class="text-[10px] font-mono text-white">12-WEEK HEATMAP</span>
           </div>
           <div class="p-5 flex flex-col flex-1 gap-6">
-            <!-- Day Labels + Contribution Heatmap -->
             <div>
               <div class="flex gap-1 mb-1.5">
-                <span class="text-[9px] font-mono text-zinc-600 w-6 text-right">Mon</span>
-                <span class="text-[9px] font-mono text-zinc-600 w-6 text-right">Wed</span>
-                <span class="text-[9px] font-mono text-zinc-600 w-6 text-right">Fri</span>
-                <span class="text-[9px] font-mono text-zinc-600 w-6 text-right">Sun</span>
+                <span class="text-[9px] font-mono text-white w-6 text-right">Mon</span>
+                <span class="text-[9px] font-mono text-white w-6 text-right">Wed</span>
+                <span class="text-[9px] font-mono text-white w-6 text-right">Fri</span>
+                <span class="text-[9px] font-mono text-white w-6 text-right">Sun</span>
               </div>
               <div class="matrix-grid" id="heatmap-container"></div>
               <div class="flex items-center gap-2 mt-2 justify-end">
-                <span class="text-[9px] font-mono text-zinc-600">Less</span>
+                <span class="text-[9px] font-mono text-white">Less</span>
                 <div class="w-3 h-3 rounded-sm bg-[#16161C]"></div>
                 <div class="w-3 h-3 rounded-sm" style="background: rgba(99, 102, 241, 0.4);"></div>
                 <div class="w-3 h-3 rounded-sm" style="background: rgba(168, 85, 247, 0.7);"></div>
                 <div class="w-3 h-3 rounded-sm" style="background: linear-gradient(135deg, #A855F7, #06B6D4);"></div>
-                <span class="text-[9px] font-mono text-zinc-600">More</span>
+                <span class="text-[9px] font-mono text-white">More</span>
               </div>
             </div>
-            <!-- Line Chart Integration -->
             <div class="flex-1 w-full relative min-h-[160px] bg-[#050506]/50 border border-[#16161C] rounded-lg p-3">
               <canvas id="progressionChart"></canvas>
             </div>
@@ -514,11 +479,9 @@
       </section>
     </div>
 
-    <!-- ══════════════════════ TAB CONTENT: POMODORO ══════════════════════ -->
     <div id="tab-pomodoro" class="tab-content">
       <section class="max-w-5xl mx-auto mb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Timer Display -->
           <div class="glass border border-[#16161C] rounded-lg p-8 flex flex-col items-center justify-center min-h-[400px] glow-border">
             <div class="relative w-64 h-64 mb-6">
               <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
@@ -535,7 +498,7 @@
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center">
                 <span class="text-5xl font-black font-mono text-white" id="timer-display">25:00</span>
-                <span class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-1" id="timer-label">FOCUS SESSION</span>
+                <span class="text-[10px] font-mono text-white uppercase tracking-widest mt-1" id="timer-label">FOCUS SESSION</span>
               </div>
             </div>
             <div class="flex items-center gap-3">
@@ -551,7 +514,6 @@
             </div>
           </div>
 
-          <!-- Timer Settings -->
           <div class="glass border border-[#16161C] rounded-lg p-6 flex flex-col gap-5">
             <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest">Timer Configuration</h3>
             
@@ -571,20 +533,19 @@
             </div>
 
             <div>
-              <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 block">Custom Duration (minutes)</label>
+              <label class="text-[10px] font-bold text-white uppercase tracking-widest mb-2 block">Custom Duration (minutes)</label>
               <input type="range" id="custom-timer" min="1" max="120" value="25" class="w-full accent-amberCore" oninput="Pomodoro.setPreset(this.value, 'CUSTOM')">
-              <div class="text-xs font-mono text-zinc-400 mt-1"><span id="custom-timer-val">25</span> minutes</div>
+              <div class="text-xs font-mono text-white mt-1"><span id="custom-timer-val">25</span> minutes</div>
             </div>
 
-            <!-- Pomodoro Stats -->
             <div class="grid grid-cols-2 gap-3 mt-auto">
               <div class="bg-[#050506] border border-[#16161C] rounded-lg p-4 text-center">
                 <div class="text-2xl font-black text-amberCore font-mono" id="pomo-sessions">0</div>
-                <div class="text-[9px] text-zinc-500 uppercase tracking-widest font-mono">Sessions Today</div>
+                <div class="text-[9px] text-white uppercase tracking-widest font-mono">Sessions Today</div>
               </div>
               <div class="bg-[#050506] border border-[#16161C] rounded-lg p-4 text-center">
                 <div class="text-2xl font-black text-cyanCore font-mono" id="pomo-total-time">0m</div>
-                <div class="text-[9px] text-zinc-500 uppercase tracking-widest font-mono">Total Focus</div>
+                <div class="text-[9px] text-white uppercase tracking-widest font-mono">Total Focus</div>
               </div>
             </div>
           </div>
@@ -592,41 +553,33 @@
       </section>
     </div>
 
-    <!-- ══════════════════════ TAB CONTENT: BADGES ══════════════════════ -->
     <div id="tab-badges" class="tab-content">
       <section class="max-w-5xl mx-auto mb-16">
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="badges-grid">
-          <!-- Populated by engine -->
-        </div>
+          </div>
       </section>
     </div>
 
-    <!-- ══════════════════════ TAB CONTENT: ANALYTICS ══════════════════════ -->
     <div id="tab-stats" class="tab-content">
       <section class="max-w-5xl mx-auto mb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Weekly Summary -->
           <div class="glass border border-[#16161C] rounded-lg p-6">
             <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest mb-4">Weekly Summary</h3>
             <div class="h-[250px]">
               <canvas id="weeklyChart"></canvas>
             </div>
           </div>
-          <!-- Category Breakdown -->
           <div class="glass border border-[#16161C] rounded-lg p-6">
             <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest mb-4">Category Breakdown</h3>
             <div class="h-[250px]">
               <canvas id="categoryChart"></canvas>
             </div>
           </div>
-          <!-- Mood History -->
           <div class="glass border border-[#16161C] rounded-lg p-6">
             <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest mb-4">Mood History (7 Days)</h3>
             <div class="flex items-end gap-2 h-[180px]" id="mood-history">
-              <!-- Populated by engine -->
-            </div>
+              </div>
           </div>
-          <!-- Completion Rate -->
           <div class="glass border border-[#16161C] rounded-lg p-6 flex flex-col items-center justify-center">
             <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest mb-4">Completion Rate</h3>
             <div class="relative w-40 h-40">
@@ -643,7 +596,7 @@
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center">
                 <span class="text-3xl font-black text-white font-mono" id="completion-pct">0%</span>
-                <span class="text-[9px] text-zinc-500 uppercase tracking-widest">today</span>
+                <span class="text-[9px] text-white uppercase tracking-widest">today</span>
               </div>
             </div>
           </div>
@@ -651,16 +604,13 @@
       </section>
     </div>
 
-    <!-- ─── THE METICULOUSLY STYLED REFERENCE DOCUMENTATION ─── -->
-    <section class="max-w-5xl mx-auto border-t border-[#16161C] pt-12 text-zinc-300 font-sans space-y-8">
+    <section class="max-w-5xl mx-auto border-t border-[#16161C] pt-12 text-white font-sans space-y-8">
       
-      <!-- Gradient Article Headline -->
       <div class="mb-10">
         <h2 class="text-3xl md:text-4xl font-black font-display tracking-tight text-white mb-4">
           The Cybernetics of Knowledge Management: Implementing Strategic Sprints for Maximum Cognitive Throughput
         </h2>
         
-        <!-- Multi-colored Badges Bar -->
         <div class="flex flex-wrap gap-2 mt-4">
           <span class="bg-[#1E1B4B] text-[#A855F7] text-[11px] font-semibold px-3 py-1 rounded-full border border-purpleCore/30">Actionability vectors</span>
           <span class="bg-[#064E3B] text-[#10B981] text-[11px] font-semibold px-3 py-1 rounded-full border border-emeraldCore/30">Cognitive load reduction</span>
@@ -673,100 +623,92 @@
         </div>
       </div>
 
-      <!-- Purple Gated Block -->
       <div class="box-purple rounded-lg p-5">
         <h3 class="text-md font-bold text-purple-300 mb-2 font-display">Can this tool automatically optimize structural tracking pipelines?</h3>
-        <p class="text-sm text-zinc-300 leading-relaxed">
+        <p class="text-sm text-white leading-relaxed">
           Yes! While traditional linear managers treat behavior data streams as simple strings, our system incorporates an isolated <strong>Sovereign State Engine</strong> runtime directly inside your sandbox context. It calculates habit curves dynamically without institutional telemetry exposure.
         </p>
       </div>
 
-      <!-- Rose Feature Block -->
       <div class="box-rose rounded-lg p-5">
         <h3 class="text-md font-bold text-roseCore mb-2 font-display">🔥 Pomodoro Focus Timer — Deep Work Architecture</h3>
-        <p class="text-sm text-zinc-300 leading-relaxed">
+        <p class="text-sm text-white leading-relaxed">
           The integrated Pomodoro timer uses a <strong>gradient-animated circular SVG ring</strong> to visualize focus sessions. Choose from 25-minute focus blocks, 5-minute short breaks, or 15-minute long breaks. Each completed session earns <strong>bonus XP</strong> and contributes to the Focus Time metric, ensuring deep work aligns with your habit velocity graph.
         </p>
       </div>
 
-      <!-- Fuchsia Feature Block -->
       <div class="box-fuchsia rounded-lg p-5">
         <h3 class="text-md font-bold text-fuchsiaCore mb-2 font-display">🏆 Achievement Badge System — Gamification Layer</h3>
-        <p class="text-sm text-zinc-300 leading-relaxed">
+        <p class="text-sm text-white leading-relaxed">
           Unlock <strong>12 unique achievement badges</strong> by hitting specific milestones: create your first habit, complete a 7-day streak, accumulate 500 XP, finish 10 Pomodoro sessions, and more. Each badge features distinct color schemes from our expanded palette — making your progress dashboard a visual showcase of sustained discipline.
         </p>
       </div>
 
-      <!-- Step-by-Step Orange/Amber Row Container -->
       <div class="space-y-4 border border-[#16161C] p-6 rounded-lg bg-[#08080A]">
         <h3 class="text-md font-bold text-[#F5A623] uppercase tracking-wider font-mono">Step-by-step: deploying your tracking workspace from zero</h3>
         
         <div class="flex items-start gap-4">
           <div class="w-6 h-6 rounded-full bg-[#1E1B4B] text-[#A855F7] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</div>
-          <p class="text-sm text-zinc-400"><strong class="text-white">Clear the cognitive tracking inbox.</strong> Before segmenting your habit workflows, perform a total systemic context pass. Dump scattered tasks, identify legacy lists, and clean the operational path to bypass the abstinence violation threshold completely.</p>
+          <p class="text-sm text-white"><strong class="text-white">Clear the cognitive tracking inbox.</strong> Before segmenting your habit workflows, perform a total systemic context pass. Dump scattered tasks, identify legacy lists, and clean the operational path to bypass the abstinence violation threshold completely.</p>
         </div>
         
         <div class="flex items-start gap-4">
           <div class="w-6 h-6 rounded-full bg-[#064E3B] text-[#10B981] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</div>
-          <p class="text-sm text-zinc-400"><strong class="text-white">Map active priority nodes with multipliers.</strong> Assign clear categorical categories. Code modules and business pipelines demand higher baseline multipliers ($3.0\times$ and $2.5\times$) because they track heavy intellectual capital deployments.</p>
+          <p class="text-sm text-white"><strong class="text-white">Map active priority nodes with multipliers.</strong> Assign clear categorical categories. Code modules and business pipelines demand higher baseline multipliers ($3.0\times$ and $2.5\times$) because they track heavy intellectual capital deployments.</p>
         </div>
 
         <div class="flex items-start gap-4">
           <div class="w-6 h-6 rounded-full bg-[#78350F] text-[#F5A623] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</div>
-          <p class="text-sm text-zinc-400"><strong class="text-white">Track consistency velocity via matrix blocks.</strong> Let data compound inside the client matrix grid. The visual loop translates raw numbers into localized heat maps, letting you trace habit half-lives immediately.</p>
+          <p class="text-sm text-white"><strong class="text-white">Track consistency velocity via matrix blocks.</strong> Let data compound inside the client matrix grid. The visual loop translates raw numbers into localized heat maps, letting you trace habit half-lives immediately.</p>
         </div>
 
         <div class="flex items-start gap-4">
           <div class="w-6 h-6 rounded-full bg-[#4C0519] text-[#F43F5E] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</div>
-          <p class="text-sm text-zinc-400"><strong class="text-white">Activate focus sessions with the Pomodoro timer.</strong> Link deep work blocks to specific habits. Each 25-minute session adds 15 XP to your progression graph, compounding your momentum with time-boxed execution cycles.</p>
+          <p class="text-sm text-white"><strong class="text-white">Activate focus sessions with the Pomodoro timer.</strong> Link deep work blocks to specific habits. Each 25-minute session adds 15 XP to your progression graph, compounding your momentum with time-boxed execution cycles.</p>
         </div>
 
         <div class="flex items-start gap-4">
           <div class="w-6 h-6 rounded-full bg-[#3B0764] text-[#D946EF] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">5</div>
-          <p class="text-sm text-zinc-400"><strong class="text-white">Track your mood and unlock achievement badges.</strong> Log your daily mood to correlate emotional state with productivity patterns. As you hit milestones, badges unlock — giving you visual proof of your progress.</p>
+          <p class="text-sm text-white"><strong class="text-white">Track your mood and unlock achievement badges.</strong> Log your daily mood to correlate emotional state with productivity patterns. As you hit milestones, badges unlock — giving you visual proof of your progress.</p>
         </div>
       </div>
 
-      <!-- Emerald Grid Highlight Feature -->
       <div class="box-emerald rounded-lg p-5">
         <h3 class="text-md font-bold text-emeraldCore mb-2 font-display">The Serverless Sovereignty Advantage: Client-Resident Protection</h3>
-        <p class="text-sm text-zinc-300 leading-relaxed">
+        <p class="text-sm text-white leading-relaxed">
           The tool features a <strong>local client-side execution layout</strong>. Every item you initialize, log, or flush operates exclusively inside the browser environment. No telemetry data passes to cloud mining relays, protecting graduate coursework, proprietary code blocks, and operational logs from indexing pipelines.
         </p>
         
-        <!-- Multi-grid mini metrics array inside the block -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
           <div class="bg-[#050506] border border-emeraldCore/20 p-3 rounded text-center">
             <span class="text-xs font-bold text-white block">Personal Protocols</span>
-            <span class="text-[10px] text-zinc-500 font-mono">Isolated Sandbox</span>
+            <span class="text-[10px] text-white font-mono">Isolated Sandbox</span>
           </div>
           <div class="bg-[#050506] border border-emeraldCore/20 p-3 rounded text-center">
             <span class="text-xs font-bold text-white block">Sprints Architecture</span>
-            <span class="text-[10px] text-zinc-500 font-mono">Immune to scraping</span>
+            <span class="text-[10px] text-white font-mono">Immune to scraping</span>
           </div>
           <div class="bg-[#050506] border border-emeraldCore/20 p-3 rounded text-center">
             <span class="text-xs font-bold text-white block">Metric Velocity</span>
-            <span class="text-[10px] text-zinc-500 font-mono">Zero Round-trips</span>
+            <span class="text-[10px] text-white font-mono">Zero Round-trips</span>
           </div>
           <div class="bg-[#050506] border border-emeraldCore/20 p-3 rounded text-center">
             <span class="text-xs font-bold text-white block">Sovereign State</span>
-            <span class="text-[10px] text-zinc-500 font-mono">100% Client Resident</span>
+            <span class="text-[10px] text-white font-mono">100% Client Resident</span>
           </div>
         </div>
       </div>
 
-      <!-- Cyan Technical Breakdown -->
       <div class="box-cyan rounded-lg p-5 border-l-4 border-l-cyanCore">
         <h3 class="text-sm font-bold text-cyanCore font-mono uppercase tracking-wider mb-2">P.A.R.A Framework Integration & Habit Decay Metrics</h3>
-        <p class="text-sm text-zinc-400">
+        <p class="text-sm text-white">
           Under behavioral neuroscience schemas, habits degrade on a precise mathematical half-life decay curve rather than resetting instantly to zero. When a system breaks your streak chain with a destructive indicator for a single-day aberration, it triggers cognitive fatigue vectors. The Habit OS treats your logs as a persistent gradient: allowing adaptive grace periods that cushion structural disruptions and protect tracking performance.
         </p>
       </div>
 
-      <!-- Indigo New Feature Block -->
       <div class="box-indigo rounded-lg p-5 border-l-4 border-l-indigoCore">
         <h3 class="text-sm font-bold text-indigoCore font-mono uppercase tracking-wider mb-2">Export / Import Pipeline — Data Portability</h3>
-        <p class="text-sm text-zinc-400">
+        <p class="text-sm text-white">
           Your data is yours. Export your entire habit state as a structured JSON file, including all habit entries, logs, XP accumulation, streak history, mood records, and badge progress. Import previously exported files to restore your workspace state instantly — perfect for migrating across machines or backing up critical tracking data.
         </p>
       </div>
@@ -775,23 +717,21 @@
 
   </main>
 
-  <!-- ══════════════════════ FLAT MINIMALIST FOOTER ══════════════════════ -->
   <footer class="w-full bg-[#050506] border-t border-[#16161C] py-12 text-center mt-auto relative z-10">
     <div class="max-w-[1440px] mx-auto px-8 flex flex-col items-center justify-center gap-6">
-      <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-bold text-zinc-400">
+      <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-bold text-white">
         <a href="/privacy" class="hover:text-white transition">Privacy</a>
         <a href="/terms" class="hover:text-white transition">Terms</a>
         <a href="/disclaimer" class="hover:text-white transition">Disclaimer</a>
         <a href="/about" class="hover:text-white transition">About</a>
         <a href="/contact" class="hover:text-white transition">Contact</a>
       </div>
-      <div class="text-[11px] font-medium text-zinc-600 tracking-wide font-mono">
+      <div class="text-[11px] font-medium text-white tracking-wide font-mono">
         &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
       </div>
     </div>
   </footer>
 
-  <!-- Floating Action Button -->
   <button class="fab" onclick="document.getElementById('form-add-habit').classList.remove('hidden'); window.scrollTo({top: 0, behavior: 'smooth'});">
     <span class="material-symbols-outlined text-[28px] font-bold">add</span>
   </button>
