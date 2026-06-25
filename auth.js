@@ -322,6 +322,11 @@
     }
 
     function handleAuthSubmit(identifier) {
+        if (identifier === 'Google') {
+            if (!confirm('Do you want to continue to sign up?')) {
+                return;
+            }
+        }
         const content = document.getElementById('auth-modal-content');
         if (!content) return;
 
@@ -393,10 +398,13 @@
             authBtn.parentNode.replaceChild(wrapper, authBtn);
 
             document.getElementById('auth-signout-btn').addEventListener('click', () => {
-                localStorage.removeItem('affilore_session_state');
-                localStorage.removeItem('affilore_session_user');
-                localStorage.removeItem('affilore_user_email');
-                window.location.reload();
+                const email = localStorage.getItem('affilore_user_email') || localStorage.getItem('affilore_session_user') || 'your account';
+                if (confirm(`Are you sure you want to sign out from ${email}?`)) {
+                    localStorage.removeItem('affilore_session_state');
+                    localStorage.removeItem('affilore_session_user');
+                    localStorage.removeItem('affilore_user_email');
+                    window.location.reload();
+                }
             });
         } else {
             authBtn.addEventListener('click', (e) => {

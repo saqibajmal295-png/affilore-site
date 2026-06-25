@@ -628,6 +628,8 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
       if (window.APP_STATE) window.APP_STATE.affilore_session_state = true;
+      localStorage.setItem('affilore_session_state', 'true');
+      localStorage.setItem('affilore_user_email', user.email);
       // User is signed in, load their dashboard
       document.getElementById('navSignInBtn').innerHTML = `<div class="flex items-center gap-2 cursor-pointer" onclick="window.handleSignOut()">
         <img src="${user.photoURL}" class="w-8 h-8 rounded-full border-2 border-amber">
@@ -642,17 +644,35 @@
       
       loadFromCloud(user.uid);
     } else {
-      if (window.APP_STATE) window.APP_STATE.affilore_session_state = false;
-      // User is signed out, show default
-      document.getElementById('navSignInBtn').textContent = 'Sign In';
-      if (window.renderDashboard) {
-        window.renderDashboard(window.DEFAULT_STATE); // Fallback to demo data
+      // Check if there is an active email session (so they stay logged in if using email!)
+      if (localStorage.getItem('affilore_session_state') === 'true') {
+        const email = localStorage.getItem('affilore_user_email');
+        if (email) {
+          if (window.APP_STATE) window.APP_STATE.affilore_session_state = true;
+          document.getElementById('navSignInBtn').innerHTML = `<div class="flex items-center gap-2 cursor-pointer" onclick="window.handleSignOut()">
+            <div class="w-8 h-8 rounded-full border-2 border-amber bg-zinc-800 flex items-center justify-center text-amber font-bold text-sm">${email[0].toUpperCase()}</div>
+            <div class="flex flex-col text-xs"><span class="text-white">${email.split('@')[0]}</span><span class="text-zinc-500 font-mono text-[10px]">${email}</span></div>
+          </div>`;
+          const dropdownEmail = document.querySelector('.account-email-display');
+          if (dropdownEmail) dropdownEmail.textContent = email;
+          loadFromCloud(email);
+        }
+      } else {
+        if (window.APP_STATE) window.APP_STATE.affilore_session_state = false;
+        // User is signed out, show default
+        document.getElementById('navSignInBtn').textContent = 'Sign In';
+        if (window.renderDashboard) {
+          window.renderDashboard(window.DEFAULT_STATE); // Fallback to demo data
+        }
       }
     }
   });
 
   // New Firebase Auth Logic (Global Window Functions)
   window.handleAuth = async () => {
+    if (!confirm("Do you want to continue to sign up?")) {
+      return;
+    }
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
@@ -664,24 +684,30 @@
   };
 
   window.handleSignOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error('Sign Out failed:', error.message);
+    const email = localStorage.getItem('affilore_user_email') || (auth.currentUser ? auth.currentUser.email : 'your account');
+    if (confirm(`Are you sure you want to sign out from ${email}?`)) {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error('Sign Out failed:', error.message);
+      }
+      localStorage.removeItem('affilore_session_state');
+      localStorage.removeItem('affilore_user_email');
+      window.location.reload();
     }
   };
 
   // New Firebase Data Sync
-  window.syncToCloud = async (uid, data) => {
+  window.syncToCloud = async (key, data) => {
     try {
-      await setDoc(doc(db, "users", uid), data);
+      await setDoc(doc(db, "users", key), data);
     } catch (error) {
       console.error("Error saving data:", error.message);
     }
   };
 
-  async function loadFromCloud(uid) {
-    const docRef = doc(db, "users", uid);
+  async function loadFromCloud(key) {
+    const docRef = doc(db, "users", key);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       // Ensure renderDashboard accepts the Firestore state object structure
@@ -696,6 +722,43 @@
       }
     }
   }
+
+  // Support Email login
+  window.simulateLogin = async (provider) => {
+    let email = "";
+    if (provider === 'Email') {
+      const emailInput = document.getElementById('authEmail');
+      if (emailInput && emailInput.value.trim()) {
+        email = emailInput.value.trim();
+      } else {
+        if (window.showToast) window.showToast('Please enter a valid email address.', 'warning');
+        return;
+      }
+    } else if (provider === 'Google') {
+      window.handleAuth();
+      return;
+    } else {
+      email = `${provider.toLowerCase()}user@gmail.com`;
+    }
+    
+    // Set localStorage keys
+    localStorage.setItem('affilore_session_state', 'true');
+    localStorage.setItem('affilore_user_email', email);
+    if (window.APP_STATE) window.APP_STATE.affilore_session_state = true;
+    
+    // Update Nav UI
+    document.getElementById('navSignInBtn').innerHTML = `<div class="flex items-center gap-2 cursor-pointer" onclick="window.handleSignOut()">
+      <div class="w-8 h-8 rounded-full border-2 border-amber bg-zinc-800 flex items-center justify-center text-amber font-bold text-sm">${email[0].toUpperCase()}</div>
+      <div class="flex flex-col text-xs"><span class="text-white">${email.split('@')[0]}</span><span class="text-zinc-500 font-mono text-[10px]">${email}</span></div>
+    </div>`;
+    
+    const dropdownEmail = document.querySelector('.account-email-display');
+    if (dropdownEmail) dropdownEmail.textContent = email;
+    
+    if (window.closeAuthModal) window.closeAuthModal();
+    
+    loadFromCloud(email);
+  };
   </script>
   <!-- ════════════════════ JAVASCRIPT ENGINE ════════════════════ -->
   <script>
@@ -751,8 +814,9 @@
         })
       };
       
-      if (user && window.syncToCloud) {
-        window.syncToCloud(user.uid, state);
+      const key = (user && user.uid) || localStorage.getItem('affilore_user_email');
+      if (key && window.syncToCloud) {
+        window.syncToCloud(key, state);
       } else {
         localStorage.setItem('affilore_dashboard_state', JSON.stringify(state));
       }
