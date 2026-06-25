@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Affilore Habit OS — Gamified Behavioral Optimization Suite</title>
+  <meta name="description" content="Enterprise-grade gamified habit tracking with Pomodoro timer, achievement badges, XP leveling, and client-side data processing."/>
+  
+  <!-- Fonts & Core Utilities -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS & Chart.js Engine CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            obsidian:    '#050506',
+            panel:       '#0D0D11',
+            borderNode:  '#16161C',
+            amberCore:   '#F5A623',
+            emeraldCore: '#10B981',
+            cyanCore:    '#06B6D4',
+            purpleCore:  '#A855F7',
+            roseCore:    '#F43F5E',
+            fuchsiaCore: '#D946EF',
+            skyCore:     '#38BDF8',
+            limeCore:    '#84CC16',
+            orangeCore:  '#F97316',
+            indigoCore:  '#6366F1',
+            tealCore:    '#14B8A6',
+            pinkCore:    '#EC4899',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { background-color: #050506; scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #050506; color: #EAEAEA; overflow-x: hidden; }
+
+    /* ─── AMBIENT PARTICLES ─── */
+    #ambient-dots-canvas {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none; z-index: 1;
+    }
+
+    /* ─── MESH GRADIENT BACKGROUND ─── */
+    .mesh-gradient {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 10%, rgba(245, 166, 35, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 10% 80%, rgba(244, 63, 94, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 40%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #050506; }
+    ::-webkit-scrollbar-thumb { background: #1C1C24; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F5A623; }
+
+    /* ─── GLASSMORPHISM ─── */
+    .glass { background: rgba(13, 13, 17, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .glass-nav { background: rgba(5, 5, 6, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+
+    /* ─── PREMIUM MULTI-COLORED WORKSPACE BOXES ─── */
+    .box-purple { background: rgba(30, 27, 75, 0.25); border: 1px solid rgba(168, 85, 247, 0.2); }
+    .box-emerald { background: rgba(6, 78, 59, 0.25); border: 1px solid rgba(16, 185, 129, 0.2); }
+    .box-amber { background: rgba(120, 53, 4, 0.25); border: 1px solid rgba(245, 166, 35, 0.2); }
+    .box-slate { background: rgba(30, 41, 59, 0.25); border: 1px solid rgba(148, 163, 184, 0.2); }
+    .box-rose { background: rgba(76, 5, 25, 0.25); border: 1px solid rgba(244, 63, 94, 0.2); }
+    .box-cyan { background: rgba(8, 51, 68, 0.25); border: 1px solid rgba(6, 182, 212, 0.2); }
+    .box-fuchsia { background: rgba(74, 4, 78, 0.25); border: 1px solid rgba(217, 70, 239, 0.2); }
+    .box-indigo { background: rgba(30, 27, 75, 0.25); border: 1px solid rgba(99, 102, 241, 0.2); }
+
+    /* ─── ANIMATED GRADIENT BORDER ─── */
+    @property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+    @keyframes borderRotate { to { --angle: 360deg; } }
+    .glow-border {
+      position: relative;
+      border: 1px solid transparent;
+      background-clip: padding-box;
+    }
+    .glow-border::before {
+      content: ''; position: absolute; inset: -1px; z-index: -1; border-radius: inherit;
+      background: conic-gradient(from var(--angle), #F5A623, #A855F7, #06B6D4, #10B981, #F43F5E, #F5A623);
+      animation: borderRotate 4s linear infinite;
+      opacity: 0.3;
+    }
+    .glow-border:hover::before { opacity: 0.7; }
+
+    /* ─── NEON GLOW EFFECTS ─── */
+    .neon-amber { box-shadow: 0 0 15px rgba(245, 166, 35, 0.2), 0 0 30px rgba(245, 166, 35, 0.1); }
+    .neon-cyan { box-shadow: 0 0 15px rgba(6, 182, 212, 0.2), 0 0 30px rgba(6, 182, 212, 0.1); }
+    .neon-purple { box-shadow: 0 0 15px rgba(168, 85, 247, 0.2), 0 0 30px rgba(168, 85, 247, 0.1); }
+    .neon-emerald { box-shadow: 0 0 15px rgba(16, 185, 129, 0.2), 0 0 30px rgba(16, 185, 129, 0.1); }
+    .neon-rose { box-shadow: 0 0 15px rgba(244, 63, 94, 0.2), 0 0 30px rgba(244, 63, 94, 0.1); }
+    .neon-fuchsia { box-shadow: 0 0 15px rgba(217, 70, 239, 0.2), 0 0 30px rgba(217, 70, 239, 0.1); }
+
+    /* Custom Checkbox Node */
+    .custom-cb {
+      appearance: none; width: 22px; height: 22px; border: 2px solid #272732; border-radius: 6px;
+      background: #050506; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .custom-cb:checked { background: linear-gradient(135deg, #10B981, #06B6D4); border-color: transparent; box-shadow: 0 0 12px rgba(16, 185, 129, 0.5); transform: scale(1.1); }
+    .custom-cb:checked::after { content: '✓'; color: #050506; font-weight: 900; font-size: 13px; }
+    .custom-cb:hover:not(:checked) { border-color: #F5A623; box-shadow: 0 0 8px rgba(245, 166, 35, 0.3); }
+
+    /* Heatmap Grid Distribution */
+    .matrix-grid { display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: 3px; overflow-x: auto; }
+    .matrix-cell { width: 12px; height: 12px; border-radius: 2px; background: #16161C; transition: all 0.3s; cursor: pointer; }
+    .matrix-cell:hover { transform: scale(1.6); z-index: 10; }
+    .matrix-cell[data-weight="1"] { background: rgba(99, 102, 241, 0.4); }
+    .matrix-cell[data-weight="2"] { background: rgba(168, 85, 247, 0.7); box-shadow: 0 0 4px rgba(168, 85, 247, 0.3); }
+    .matrix-cell[data-weight="3"] { background: linear-gradient(135deg, #A855F7, #06B6D4); box-shadow: 0 0 8px rgba(168, 85, 247, 0.5); }
+
+    /* ─── POMODORO TIMER ─── */
+    .timer-ring { transition: stroke-dashoffset 0.5s ease; }
+    .timer-ring-bg { stroke: #16161C; }
+
+    /* ─── CONFETTI ─── */
+    #confetti-canvas {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ─── BADGE GLOW ─── */
+    .badge-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .badge-card:hover { transform: translateY(-4px) scale(1.05); }
+    .badge-locked { opacity: 0.3; filter: grayscale(1); }
+
+    /* ─── MOOD BUTTON ─── */
+    .mood-btn {
+      width: 44px; height: 44px; border-radius: 12px; border: 2px solid #16161C;
+      background: #0D0D11; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; cursor: pointer; transition: all 0.3s;
+    }
+    .mood-btn:hover { border-color: #F5A623; transform: scale(1.15); }
+    .mood-btn.active { border-color: #F5A623; background: rgba(245, 166, 35, 0.15); box-shadow: 0 0 12px rgba(245, 166, 35, 0.3); transform: scale(1.1); }
+
+    /* ─── CATEGORY INDICATOR PILLS ─── */
+    .cat-health { color: #10B981; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.25); }
+    .cat-biz { color: #F5A623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.25); }
+    .cat-code { color: #06B6D4; background: rgba(6, 182, 212, 0.12); border: 1px solid rgba(6, 182, 212, 0.25); }
+    .cat-creative { color: #A855F7; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.25); }
+    .cat-fitness { color: #F43F5E; background: rgba(244, 63, 94, 0.12); border: 1px solid rgba(244, 63, 94, 0.25); }
+    .cat-learning { color: #6366F1; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.25); }
+
+    /* ─── PRIORITY INDICATORS ─── */
+    .pri-critical { border-left: 3px solid #F43F5E; }
+    .pri-high { border-left: 3px solid #F97316; }
+    .pri-medium { border-left: 3px solid #F5A623; }
+    .pri-low { border-left: 3px solid #6366F1; }
+
+    /* ─── ANIMATED GRADIENT TEXT ─── */
+    @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    .animated-gradient-text {
+      background: linear-gradient(270deg, #F5A623, #A855F7, #06B6D4, #10B981, #F43F5E, #D946EF);
+      background-size: 300% 300%;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      animation: gradientShift 6s ease infinite;
+    }
+
+    /* ─── PULSE ANIMATIONS ─── */
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 5px rgba(245, 166, 35, 0.2); }
+      50% { box-shadow: 0 0 20px rgba(245, 166, 35, 0.5); }
+    }
+
+    /* ─── TAB SYSTEM ─── */
+    .tab-btn { transition: all 0.3s; position: relative; }
+    .tab-btn.active { color: white; }
+    .tab-btn.active::after {
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, #F5A623, #A855F7);
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ─── FLOATING ACTION BUTTON ─── */
+    .fab {
+      position: fixed; bottom: 32px; right: 32px; z-index: 100;
+      width: 56px; height: 56px; border-radius: 16px;
+      background: linear-gradient(135deg, #F5A623, #F97316);
+      box-shadow: 0 8px 32px rgba(245, 166, 35, 0.4);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.3s;
+      border: none; color: #050506;
+    }
+    .fab:hover { transform: translateY(-4px) scale(1.1); box-shadow: 0 12px 40px rgba(245, 166, 35, 0.6); }
+
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      z-index: 200; display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: #0D0D11; border: 1px solid #16161C; border-radius: 12px;
+      max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 28px;
+    }
+
+    /* ─── SHIMMER ─── */
+    @keyframes shimmerBar { 100% { transform: translateX(100%); } }
+
+    /* ─── TOOLTIP ─── */
+    .tooltip { position: relative; }
+    .tooltip::after {
+      content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
+      background: #1A1A2E; color: #eee; font-size: 10px; padding: 4px 8px; border-radius: 4px;
+      white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .tooltip:hover::after { opacity: 1; }
+
+    /* ─── STREAK FIRE ─── */
+    @keyframes fireFlicker {
+      0%, 100% { text-shadow: 0 0 4px #F5A623, 0 0 11px #F97316, 0 0 19px #F43F5E; }
+      50% { text-shadow: 0 0 8px #F5A623, 0 0 18px #F97316, 0 0 28px #F43F5E; }
+    }
+    .streak-fire { animation: fireFlicker 1.5s ease-in-out infinite; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col relative">
+
+  <!-- Background Layers -->
+  <div class="mesh-gradient"></div>
+  <canvas id="ambient-dots-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- ══════════════════════ GLOBAL FIXED NAVBAR ══════════════════════ -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-[#16161C]/50 h-[72px]">
+    <div class="max-w-[1440px] mx-auto px-8 h-full flex items-center justify-between">
+      <div class="flex items-center gap-10">
+        <a href="/" class="text-xl font-black text-white tracking-tight flex items-center font-display">
+          Affilore<span class="w-2 h-2 rounded-full bg-gradient-to-r from-amberCore to-orangeCore ml-0.5 mt-1 block animate-pulse"></span>
+        </a>
+        <div class="hidden md:flex items-center gap-8 text-sm font-bold text-zinc-400">
+          <a href="/" class="hover:text-white transition">Home</a>
+          <a href="/data" class="hover:text-white transition">Data</a>
+          <a href="/calculator" class="hover:text-white transition">Calculator</a>
+          <a href="/utility" class="hover:text-white transition">Utility</a>
+          <a href="/developer" class="hover:text-white transition">Developer</a>
+          <a href="/seo" class="hover:text-white transition">SEO</a>
+          <a href="/productivity" class="text-amberCore">Productivity</a>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <!-- Sound Toggle -->
+        <button id="sound-toggle" class="w-8 h-8 rounded-lg bg-[#0E0E12] border border-[#16161C] flex items-center justify-center text-zinc-400 hover:text-amberCore hover:border-amberCore transition tooltip" data-tip="Toggle Sound">
+          <span class="material-symbols-outlined text-[18px]">volume_up</span>
+        </button>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="w-8 h-8 rounded-lg bg-[#0E0E12] border border-[#16161C] flex items-center justify-center text-zinc-400 hover:text-purpleCore hover:border-purpleCore transition tooltip" data-tip="Neon Mode">
+          <span class="material-symbols-outlined text-[18px]">palette</span>
+        </button>
+        <div class="flex items-center gap-2 bg-[#0E0E12] border border-[#16161C] rounded-full pl-1 pr-4 py-1">
+           <div class="w-7 h-7 rounded-full bg-gradient-to-br from-amberCore to-orangeCore text-[#050506] flex items-center justify-center text-[11px] font-black">A</div>
+           <span class="text-xs font-bold text-white font-mono">Active Session</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════ MAIN OS SHELL ══════════════════════ -->
+  <main class="relative z-10 flex-grow max-w-[1440px] mx-auto w-full px-8 pt-32 pb-12">
+    
+    <!-- Header Unit -->
+    <header class="mb-10 flex flex-col items-center text-center">
+      <h1 class="text-4xl md:text-5xl font-black font-display tracking-tight mb-3">
+        <span class="animated-gradient-text">Habit</span> 
+        <span class="text-white">to</span> 
+        <span class="animated-gradient-text">JSON Progression OS</span>
+      </h1>
+      <p class="text-zinc-400 text-xs md:text-sm font-medium max-w-2xl font-sans">
+        Enterprise-grade data parsing and smart auto-fixing habit tracking architecture — with Pomodoro focus, achievement badges, mood analytics & more.
+      </p>
+      
+      <!-- Engine Ribbon Container -->
+      <div class="mt-8 flex items-center justify-between w-full max-w-5xl border border-[#16161C] rounded-lg px-4 py-3 glass glow-border">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emeraldCore animate-pulse"></span>
+          <span class="text-xs font-mono text-zinc-300">Habit Engine: Operational</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6 text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+          <span>Zero-network execution</span>
+          <span class="text-purpleCore">•</span>
+          <span>AES-grade local sandbox</span>
+          <span class="text-cyanCore">•</span>
+          <span>Pomodoro integrated</span>
+          <span class="text-roseCore">•</span>
+          <span>Achievement system</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ─── QUAD + EXTRA METRIC GRID PANEL ─── -->
+    <section class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8 max-w-5xl mx-auto">
+      <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-amber transition-all duration-300">
+        <h3 class="text-3xl font-black text-amberCore font-mono mb-1" id="m-total">0</h3>
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Total Habits</span>
+      </div>
+      <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-emerald transition-all duration-300">
+        <h3 class="text-3xl font-black text-emeraldCore font-mono mb-1" id="m-today">0</h3>
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Done Today</span>
+      </div>
+      <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-rose transition-all duration-300">
+        <h3 class="text-3xl font-black text-roseCore font-mono mb-1 streak-fire" id="m-streak">0</h3>
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Best Streak</span>
+      </div>
+      <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center relative overflow-hidden hover:neon-cyan transition-all duration-300">
+        <h3 class="text-2xl font-black text-cyanCore font-mono mb-1" id="m-xp">0 XP</h3>
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold" id="m-lvl">Lv. 1 Novice</span>
+        <div class="absolute bottom-0 left-0 h-1.5 bg-[#1A1A1E] w-full">
+          <div id="xp-bar" class="h-full bg-gradient-to-r from-cyanCore via-purpleCore to-roseCore transition-all duration-500 rounded-full" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-purple transition-all duration-300">
+        <h3 class="text-3xl font-black text-purpleCore font-mono mb-1" id="m-badges">0</h3>
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Badges</span>
+      </div>
+      <div class="glass border border-[#16161C] rounded-lg p-5 flex flex-col items-center justify-center text-center hover:neon-fuchsia transition-all duration-300">
+        <h3 class="text-3xl font-black text-fuchsiaCore font-mono mb-1" id="m-focus">0m</h3>
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest font-mono font-bold">Focus Time</span>
+      </div>
+    </section>
+
+    <!-- ─── MOOD TRACKER BAR ─── -->
+    <section class="max-w-5xl mx-auto mb-6">
+      <div class="glass border border-[#16161C] rounded-lg p-4 flex items-center gap-4 flex-wrap">
+        <span class="text-[11px] font-bold tracking-widest text-zinc-400 font-mono uppercase">TODAY'S MOOD</span>
+        <div class="flex items-center gap-2" id="mood-selector">
+          <button class="mood-btn" data-mood="🔥" onclick="HabitEngine.setMood('🔥')">🔥</button>
+          <button class="mood-btn" data-mood="😊" onclick="HabitEngine.setMood('😊')">😊</button>
+          <button class="mood-btn" data-mood="😐" onclick="HabitEngine.setMood('😐')">😐</button>
+          <button class="mood-btn" data-mood="😴" onclick="HabitEngine.setMood('😴')">😴</button>
+          <button class="mood-btn" data-mood="😤" onclick="HabitEngine.setMood('😤')">😤</button>
+        </div>
+        <div class="flex-grow"></div>
+        <!-- Daily Challenge -->
+        <div class="flex items-center gap-3 bg-[#0A0A0E] border border-fuchsiaCore/20 rounded-lg px-4 py-2">
+          <span class="material-symbols-outlined text-fuchsiaCore text-[18px]">bolt</span>
+          <div>
+            <div class="text-[10px] font-bold text-fuchsiaCore uppercase tracking-widest">DAILY CHALLENGE</div>
+            <div class="text-xs text-zinc-300 font-medium" id="daily-challenge-text">Loading...</div>
+          </div>
+          <button class="text-[10px] font-bold bg-fuchsiaCore/20 text-fuchsiaCore px-3 py-1 rounded hover:bg-fuchsiaCore hover:text-white transition" id="claim-challenge-btn" onclick="HabitEngine.claimDailyChallenge()">+50 XP</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── HORIZONTAL ACTION BAR CONTROLS ─── -->
+    <section class="max-w-5xl mx-auto mb-6">
+      <div class="flex flex-wrap items-center gap-3 glass border border-[#16161C] p-3 rounded-lg">
+        <button class="bg-gradient-to-r from-amberCore to-orangeCore text-black text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-amberCore/20 transition flex items-center gap-1.5" onclick="document.getElementById('form-add-habit').classList.toggle('hidden')">
+          <span class="material-symbols-outlined text-[16px] font-bold">add</span> INITIALIZE PROTOCOL
+        </button>
+        <button class="bg-[#16161C] border border-[#272732] text-white text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:border-amberCore transition" id="sync-cloud-btn">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">cloud_upload</span>PUSH CLOUD SYNC
+        </button>
+        <button class="bg-gradient-to-r from-emeraldCore to-tealCore text-black text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:shadow-lg hover:shadow-emeraldCore/20 transition" onclick="HabitEngine.triggerOptimisticSync()">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">verified</span>RUN COMPLIANCE AUDIT
+        </button>
+        <button class="bg-[#16161C] border border-purpleCore/30 text-purpleCore text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:bg-purpleCore hover:text-white transition" onclick="HabitEngine.exportData()">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">download</span>EXPORT JSON
+        </button>
+        <button class="bg-[#16161C] border border-cyanCore/30 text-cyanCore text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:bg-cyanCore hover:text-white transition" onclick="document.getElementById('import-file').click()">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">upload</span>IMPORT
+        </button>
+        <input type="file" id="import-file" accept=".json" class="hidden" onchange="HabitEngine.importData(event)">
+        <div class="flex-grow"></div>
+        <!-- Search -->
+        <div class="flex items-center gap-2 bg-[#050506] border border-[#16161C] rounded-lg px-3 py-1.5">
+          <span class="material-symbols-outlined text-zinc-500 text-[16px]">search</span>
+          <input type="text" id="habit-search" class="bg-transparent border-none text-xs text-white outline-none w-28 placeholder-zinc-600" placeholder="Search habits..." oninput="HabitEngine.filterHabits(this.value)">
+        </div>
+        <div class="text-right text-xs font-mono text-zinc-500 uppercase tracking-wider" id="sync-status">AWAITING INPUT</div>
+        <button class="border border-roseCore/30 text-roseCore text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:bg-roseCore hover:text-white transition" onclick="HabitEngine.clearWorkspace()">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">delete_sweep</span>CLEAR
+        </button>
+      </div>
+
+      <!-- Form Component Layout -->
+      <form id="form-add-habit" class="hidden mt-4 glass border border-[#16161C] p-5 rounded-lg flex flex-col gap-4">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-grow w-full">
+            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">Protocol Entry Path</label>
+            <input type="text" id="habit-input" class="w-full px-4 py-2.5 bg-[#050506] border border-[#16161C] rounded-lg text-sm text-white focus:border-amberCore focus:ring-1 focus:ring-amberCore/30 transition outline-none" placeholder="e.g. Scrape B2B Lead Pipelines across Western markets" required>
+          </div>
+          <div class="w-full md:w-56">
+            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">Taxonomy Multiplier</label>
+            <select id="habit-cat" class="w-full px-4 py-2.5 bg-[#050506] border border-[#16161C] rounded-lg text-sm text-white focus:border-amberCore transition outline-none">
+              <option value="health">🫀 Health Baseline (1.0x)</option>
+              <option value="biz">💼 Business Architecture (2.5x)</option>
+              <option value="code">⚡ Software Engineering (3.0x)</option>
+              <option value="creative">🎨 Creative & Design (2.0x)</option>
+              <option value="fitness">💪 Fitness & Training (1.5x)</option>
+              <option value="learning">📚 Learning & Growth (2.0x)</option>
+            </select>
+          </div>
+          <div class="w-full md:w-44">
+            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">Priority Level</label>
+            <select id="habit-priority" class="w-full px-4 py-2.5 bg-[#050506] border border-[#16161C] rounded-lg text-sm text-white focus:border-amberCore transition outline-none">
+              <option value="medium">🟡 Medium</option>
+              <option value="critical">🔴 Critical</option>
+              <option value="high">🟠 High</option>
+              <option value="low">🔵 Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="flex-grow">
+            <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">Notes (optional)</label>
+            <input type="text" id="habit-notes" class="w-full px-4 py-2.5 bg-[#050506] border border-[#16161C] rounded-lg text-sm text-white focus:border-amberCore transition outline-none" placeholder="Add contextual notes...">
+          </div>
+          <button type="submit" class="bg-gradient-to-r from-amberCore to-orangeCore text-black font-bold text-[11px] uppercase tracking-wider px-8 h-[42px] rounded-lg hover:shadow-lg hover:shadow-amberCore/30 transition mt-5">COMPILE</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ─── TAB NAVIGATION ─── -->
+    <section class="max-w-5xl mx-auto mb-6">
+      <div class="flex items-center gap-1 border-b border-[#16161C]">
+        <button class="tab-btn active text-[11px] font-bold uppercase tracking-widest text-zinc-400 px-4 py-3 hover:text-white transition" data-tab="workspace" onclick="HabitEngine.switchTab('workspace')">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">dashboard</span>Workspace
+        </button>
+        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-zinc-400 px-4 py-3 hover:text-white transition" data-tab="pomodoro" onclick="HabitEngine.switchTab('pomodoro')">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">timer</span>Pomodoro
+        </button>
+        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-zinc-400 px-4 py-3 hover:text-white transition" data-tab="badges" onclick="HabitEngine.switchTab('badges')">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">military_tech</span>Badges
+        </button>
+        <button class="tab-btn text-[11px] font-bold uppercase tracking-widest text-zinc-400 px-4 py-3 hover:text-white transition" data-tab="stats" onclick="HabitEngine.switchTab('stats')">
+          <span class="material-symbols-outlined text-[14px] align-middle mr-1">analytics</span>Analytics
+        </button>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ TAB CONTENT: WORKSPACE ══════════════════════ -->
+    <div id="tab-workspace" class="tab-content active">
+      <!-- ─── THE TWO COLUMNS SPLIT WORKSPACE ─── -->
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto mb-16">
+        
+        <!-- Box 1: Left Input Canvas -->
+        <div class="glass border border-[#16161C] rounded-lg flex flex-col min-h-[400px]">
+          <div class="px-4 py-3 border-b border-[#16161C] flex items-center justify-between bg-[#131317]/50 rounded-t-lg">
+            <span class="text-[11px] font-bold tracking-widest text-zinc-400 font-mono uppercase">RAW INITIALIZED PROTOCOLS</span>
+            <!-- Category Filter -->
+            <select id="cat-filter" class="bg-transparent border border-[#16161C] text-[10px] font-mono text-zinc-400 px-2 py-1 rounded outline-none" onchange="HabitEngine.filterByCategory(this.value)">
+              <option value="all">ALL</option>
+              <option value="health">HEALTH</option>
+              <option value="biz">BIZ</option>
+              <option value="code">CODE</option>
+              <option value="creative">CREATIVE</option>
+              <option value="fitness">FITNESS</option>
+              <option value="learning">LEARNING</option>
+            </select>
+          </div>
+          <div class="p-4 flex-1 overflow-y-auto space-y-3" id="habit-container">
+            <!-- Populated by engine -->
+          </div>
+        </div>
+
+        <!-- Box 2: Right Output Forge matrix -->
+        <div class="glass border border-[#16161C] rounded-lg flex flex-col min-h-[400px]">
+          <div class="px-4 py-3 border-b border-[#16161C] flex items-center justify-between bg-[#131317]/50 rounded-t-lg">
+            <span class="text-[11px] font-bold tracking-widest text-zinc-400 font-mono uppercase">PROCESSED FORGE OUTPUT MATRIX</span>
+            <span class="text-[10px] font-mono text-zinc-600">12-WEEK HEATMAP</span>
+          </div>
+          <div class="p-5 flex flex-col flex-1 gap-6">
+            <!-- Day Labels + Contribution Heatmap -->
+            <div>
+              <div class="flex gap-1 mb-1.5">
+                <span class="text-[9px] font-mono text-zinc-600 w-6 text-right">Mon</span>
+                <span class="text-[9px] font-mono text-zinc-600 w-6 text-right">Wed</span>
+                <span class="text-[9px] font-mono text-zinc-600 w-6 text-right">Fri</span>
+                <span class="text-[9px] font-mono text-zinc-600 w-6 text-right">Sun</span>
+              </div>
+              <div class="matrix-grid" id="heatmap-container"></div>
+              <div class="flex items-center gap-2 mt-2 justify-end">
+                <span class="text-[9px] font-mono text-zinc-600">Less</span>
+                <div class="w-3 h-3 rounded-sm bg-[#16161C]"></div>
+                <div class="w-3 h-3 rounded-sm" style="background: rgba(99, 102, 241, 0.4);"></div>
+                <div class="w-3 h-3 rounded-sm" style="background: rgba(168, 85, 247, 0.7);"></div>
+                <div class="w-3 h-3 rounded-sm" style="background: linear-gradient(135deg, #A855F7, #06B6D4);"></div>
+                <span class="text-[9px] font-mono text-zinc-600">More</span>
+              </div>
+            </div>
+            <!-- Line Chart Integration -->
+            <div class="flex-1 w-full relative min-h-[160px] bg-[#050506]/50 border border-[#16161C] rounded-lg p-3">
+              <canvas id="progressionChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════════ TAB CONTENT: POMODORO ══════════════════════ -->
+    <div id="tab-pomodoro" class="tab-content">
+      <section class="max-w-5xl mx-auto mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Timer Display -->
+          <div class="glass border border-[#16161C] rounded-lg p-8 flex flex-col items-center justify-center min-h-[400px] glow-border">
+            <div class="relative w-64 h-64 mb-6">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="54" fill="none" stroke="#16161C" stroke-width="6"/>
+                <circle id="timer-ring" cx="60" cy="60" r="54" fill="none" stroke="url(#timerGradient)" stroke-width="6" stroke-linecap="round"
+                  stroke-dasharray="339.292" stroke-dashoffset="0" class="timer-ring"/>
+                <defs>
+                  <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#F5A623"/>
+                    <stop offset="50%" style="stop-color:#A855F7"/>
+                    <stop offset="100%" style="stop-color:#06B6D4"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-5xl font-black font-mono text-white" id="timer-display">25:00</span>
+                <span class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mt-1" id="timer-label">FOCUS SESSION</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <button class="bg-gradient-to-r from-emeraldCore to-cyanCore text-black font-bold text-[11px] uppercase tracking-wider px-6 py-2.5 rounded-lg hover:shadow-lg hover:shadow-emeraldCore/30 transition" onclick="Pomodoro.start()">
+                <span class="material-symbols-outlined text-[14px] align-middle mr-1">play_arrow</span>START
+              </button>
+              <button class="bg-[#16161C] border border-[#272732] text-white font-bold text-[11px] uppercase tracking-wider px-6 py-2.5 rounded-lg hover:border-amberCore transition" onclick="Pomodoro.pause()">
+                <span class="material-symbols-outlined text-[14px] align-middle mr-1">pause</span>PAUSE
+              </button>
+              <button class="bg-[#16161C] border border-roseCore/30 text-roseCore font-bold text-[11px] uppercase tracking-wider px-6 py-2.5 rounded-lg hover:bg-roseCore hover:text-white transition" onclick="Pomodoro.reset()">
+                <span class="material-symbols-outlined text-[14px] align-middle mr-1">stop</span>RESET
+              </button>
+            </div>
+          </div>
+
+          <!-- Timer Settings -->
+          <div class="glass border border-[#16161C] rounded-lg p-6 flex flex-col gap-5">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest">Timer Configuration</h3>
+            
+            <div class="grid grid-cols-3 gap-3">
+              <button class="pomo-preset bg-[#050506] border border-amberCore/30 text-amberCore text-xs font-bold p-3 rounded-lg text-center hover:bg-amberCore hover:text-black transition" onclick="Pomodoro.setPreset(25, 'FOCUS')">
+                <div class="text-2xl font-black font-mono">25</div>
+                <div class="text-[9px] uppercase tracking-widest mt-1">Focus</div>
+              </button>
+              <button class="pomo-preset bg-[#050506] border border-emeraldCore/30 text-emeraldCore text-xs font-bold p-3 rounded-lg text-center hover:bg-emeraldCore hover:text-black transition" onclick="Pomodoro.setPreset(5, 'SHORT BREAK')">
+                <div class="text-2xl font-black font-mono">5</div>
+                <div class="text-[9px] uppercase tracking-widest mt-1">Short Break</div>
+              </button>
+              <button class="pomo-preset bg-[#050506] border border-purpleCore/30 text-purpleCore text-xs font-bold p-3 rounded-lg text-center hover:bg-purpleCore hover:text-black transition" onclick="Pomodoro.setPreset(15, 'LONG BREAK')">
+                <div class="text-2xl font-black font-mono">15</div>
+                <div class="text-[9px] uppercase tracking-widest mt-1">Long Break</div>
+              </button>
+            </div>
+
+            <div>
+              <label class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 block">Custom Duration (minutes)</label>
+              <input type="range" id="custom-timer" min="1" max="120" value="25" class="w-full accent-amberCore" oninput="Pomodoro.setPreset(this.value, 'CUSTOM')">
+              <div class="text-xs font-mono text-zinc-400 mt-1"><span id="custom-timer-val">25</span> minutes</div>
+            </div>
+
+            <!-- Pomodoro Stats -->
+            <div class="grid grid-cols-2 gap-3 mt-auto">
+              <div class="bg-[#050506] border border-[#16161C] rounded-lg p-4 text-center">
+                <div class="text-2xl font-black text-amberCore font-mono" id="pomo-sessions">0</div>
+                <div class="text-[9px] text-zinc-500 uppercase tracking-widest font-mono">Sessions Today</div>
+              </div>
+              <div class="bg-[#050506] border border-[#16161C] rounded-lg p-4 text-center">
+                <div class="text-2xl font-black text-cyanCore font-mono" id="pomo-total-time">0m</div>
+                <div class="text-[9px] text-zinc-500 uppercase tracking-widest font-mono">Total Focus</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════════ TAB CONTENT: BADGES ══════════════════════ -->
+    <div id="tab-badges" class="tab-content">
+      <section class="max-w-5xl mx-auto mb-16">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="badges-grid">
+          <!-- Populated by engine -->
+        </div>
+      </section>
+    </div>
+
+    <!-- ══════════════════════ TAB CONTENT: ANALYTICS ══════════════════════ -->
+    <div id="tab-stats" class="tab-content">
+      <section class="max-w-5xl mx-auto mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Weekly Summary -->
+          <div class="glass border border-[#16161C] rounded-lg p-6">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest mb-4">Weekly Summary</h3>
+            <div class="h-[250px]">
+              <canvas id="weeklyChart"></canvas>
+            </div>
+          </div>
+          <!-- Category Breakdown -->
+          <div class="glass border border-[#16161C] rounded-lg p-6">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest mb-4">Category Breakdown</h3>
+            <div class="h-[250px]">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+          <!-- Mood History -->
+          <div class="glass border border-[#16161C] rounded-lg p-6">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest mb-4">Mood History (7 Days)</h3>
+            <div class="flex items-end gap-2 h-[180px]" id="mood-history">
+              <!-- Populated by engine -->
+            </div>
+          </div>
+          <!-- Completion Rate -->
+          <div class="glass border border-[#16161C] rounded-lg p-6 flex flex-col items-center justify-center">
+            <h3 class="text-sm font-bold text-white font-mono uppercase tracking-widest mb-4">Completion Rate</h3>
+            <div class="relative w-40 h-40">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="54" fill="none" stroke="#16161C" stroke-width="8"/>
+                <circle id="completion-ring" cx="60" cy="60" r="54" fill="none" stroke="url(#completionGrad)" stroke-width="8" stroke-linecap="round"
+                  stroke-dasharray="339.292" stroke-dashoffset="339.292"/>
+                <defs>
+                  <linearGradient id="completionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#10B981"/>
+                    <stop offset="100%" style="stop-color:#06B6D4"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span class="text-3xl font-black text-white font-mono" id="completion-pct">0%</span>
+                <span class="text-[9px] text-zinc-500 uppercase tracking-widest">today</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ─── THE METICULOUSLY STYLED REFERENCE DOCUMENTATION ─── -->
+    <section class="max-w-5xl mx-auto border-t border-[#16161C] pt-12 text-zinc-300 font-sans space-y-8">
+      
+      <!-- Gradient Article Headline -->
+      <div class="mb-10">
+        <h2 class="text-3xl md:text-4xl font-black font-display tracking-tight text-white mb-4">
+          The Cybernetics of Knowledge Management: Implementing Strategic Sprints for Maximum Cognitive Throughput
+        </h2>
+        
+        <!-- Multi-colored Badges Bar -->
+        <div class="flex flex-wrap gap-2 mt-4">
+          <span class="bg-[#1E1B4B] text-[#A855F7] text-[11px] font-semibold px-3 py-1 rounded-full border border-purpleCore/30">Actionability vectors</span>
+          <span class="bg-[#064E3B] text-[#10B981] text-[11px] font-semibold px-3 py-1 rounded-full border border-emeraldCore/30">Cognitive load reduction</span>
+          <span class="bg-[#78350F] text-[#F5A623] text-[11px] font-semibold px-3 py-1 rounded-full border border-amberCore/30">Database relations</span>
+          <span class="bg-[#3C0091] text-[#D0BCFF] text-[11px] font-semibold px-3 py-1 rounded-full border border-purple-400/30">System hygiene review</span>
+          <span class="bg-[#131B2E] text-[#06B6D4] text-[11px] font-semibold px-3 py-1 rounded-full border border-cyanCore/30">Local-first privacy</span>
+          <span class="bg-cyan-900/30 text-cyan-400 text-[11px] font-semibold px-3 py-1 rounded-full border border-cyan-500/20">Free forever</span>
+          <span class="bg-rose-900/30 text-rose-400 text-[11px] font-semibold px-3 py-1 rounded-full border border-rose-500/20">Pomodoro focus</span>
+          <span class="bg-fuchsia-900/30 text-fuchsia-400 text-[11px] font-semibold px-3 py-1 rounded-full border border-fuchsia-500/20">Achievement system</span>
+        </div>
+      </div>
+
+      <!-- Purple Gated Block -->
+      <div class="box-purple rounded-lg p-5">
+        <h3 class="text-md font-bold text-purple-300 mb-2 font-display">Can this tool automatically optimize structural tracking pipelines?</h3>
+        <p class="text-sm text-zinc-300 leading-relaxed">
+          Yes! While traditional linear managers treat behavior data streams as simple strings, our system incorporates an isolated <strong>Sovereign State Engine</strong> runtime directly inside your sandbox context. It calculates habit curves dynamically without institutional telemetry exposure.
+        </p>
+      </div>
+
+      <!-- Rose Feature Block -->
+      <div class="box-rose rounded-lg p-5">
+        <h3 class="text-md font-bold text-roseCore mb-2 font-display">🔥 Pomodoro Focus Timer — Deep Work Architecture</h3>
+        <p class="text-sm text-zinc-300 leading-relaxed">
+          The integrated Pomodoro timer uses a <strong>gradient-animated circular SVG ring</strong> to visualize focus sessions. Choose from 25-minute focus blocks, 5-minute short breaks, or 15-minute long breaks. Each completed session earns <strong>bonus XP</strong> and contributes to the Focus Time metric, ensuring deep work aligns with your habit velocity graph.
+        </p>
+      </div>
+
+      <!-- Fuchsia Feature Block -->
+      <div class="box-fuchsia rounded-lg p-5">
+        <h3 class="text-md font-bold text-fuchsiaCore mb-2 font-display">🏆 Achievement Badge System — Gamification Layer</h3>
+        <p class="text-sm text-zinc-300 leading-relaxed">
+          Unlock <strong>12 unique achievement badges</strong> by hitting specific milestones: create your first habit, complete a 7-day streak, accumulate 500 XP, finish 10 Pomodoro sessions, and more. Each badge features distinct color schemes from our expanded palette — making your progress dashboard a visual showcase of sustained discipline.
+        </p>
+      </div>
+
+      <!-- Step-by-Step Orange/Amber Row Container -->
+      <div class="space-y-4 border border-[#16161C] p-6 rounded-lg bg-[#08080A]">
+        <h3 class="text-md font-bold text-[#F5A623] uppercase tracking-wider font-mono">Step-by-step: deploying your tracking workspace from zero</h3>
+        
+        <div class="flex items-start gap-4">
+          <div class="w-6 h-6 rounded-full bg-[#1E1B4B] text-[#A855F7] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</div>
+          <p class="text-sm text-zinc-400"><strong class="text-white">Clear the cognitive tracking inbox.</strong> Before segmenting your habit workflows, perform a total systemic context pass. Dump scattered tasks, identify legacy lists, and clean the operational path to bypass the abstinence violation threshold completely.</p>
+        </div>
+        
+        <div class="flex items-start gap-4">
+          <div class="w-6 h-6 rounded-full bg-[#064E3B] text-[#10B981] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</div>
+          <p class="text-sm text-zinc-400"><strong class="text-white">Map active priority nodes with multipliers.</strong> Assign clear categorical categories. Code modules and business pipelines demand higher baseline multipliers ($3.0\times$ and $2.5\times$) because they track heavy intellectual capital deployments.</p>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="w-6 h-6 rounded-full bg-[#78350F] text-[#F5A623] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</div>
+          <p class="text-sm text-zinc-400"><strong class="text-white">Track consistency velocity via matrix blocks.</strong> Let data compound inside the client matrix grid. The visual loop translates raw numbers into localized heat maps, letting you trace habit half-lives immediately.</p>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="w-6 h-6 rounded-full bg-[#4C0519] text-[#F43F5E] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</div>
+          <p class="text-sm text-zinc-400"><strong class="text-white">Activate focus sessions with the Pomodoro timer.</strong> Link deep work blocks to specific habits. Each 25-minute session adds 15 XP to your progression graph, compounding your momentum with time-boxed execution cycles.</p>
+        </div>
+
+        <div class="flex items-start gap-4">
+          <div class="w-6 h-6 rounded-full bg-[#3B0764] text-[#D946EF] font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">5</div>
+          <p class="text-sm text-zinc-400"><strong class="text-white">Track your mood and unlock achievement badges.</strong> Log your daily mood to correlate emotional state with productivity patterns. As you hit milestones, badges unlock — giving you visual proof of your progress.</p>
+        </div>
+      </div>
+
+      <!-- Emerald Grid Highlight Feature -->
+      <div class="box-emerald rounded-lg p-5">
+        <h3 class="text-md font-bold text-emeraldCore mb-2 font-display">The Serverless Sovereignty Advantage: Client-Resident Protection</h3>
+        <p class="text-sm text-zinc-300 leading-relaxed">
+          The tool features a <strong>local client-side execution layout</strong>. Every item you initialize, log, or flush operates exclusively inside the browser environment. No telemetry data passes to cloud mining relays, protecting graduate coursework, proprietary code blocks, and operational logs from indexing pipelines.
+        </p>
+        
+        <!-- Multi-grid mini metrics array inside the block -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+          <div class="bg-[#050506] border border-emeraldCore/20 p-3 rounded text-center">
+            <span class="text-xs font-bold text-white block">Personal Protocols</span>
+            <span class="text-[10px] text-zinc-500 font-mono">Isolated Sandbox</span>
+          </div>
+          <div class="bg-[#050506] border border-emeraldCore/20 p-3 rounded text-center">
+            <span class="text-xs font-bold text-white block">Sprints Architecture</span>
+            <span class="text-[10px] text-zinc-500 font-mono">Immune to scraping</span>
+          </div>
+          <div class="bg-[#050506] border border-emeraldCore/20 p-3 rounded text-center">
+            <span class="text-xs font-bold text-white block">Metric Velocity</span>
+            <span class="text-[10px] text-zinc-500 font-mono">Zero Round-trips</span>
+          </div>
+          <div class="bg-[#050506] border border-emeraldCore/20 p-3 rounded text-center">
+            <span class="text-xs font-bold text-white block">Sovereign State</span>
+            <span class="text-[10px] text-zinc-500 font-mono">100% Client Resident</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cyan Technical Breakdown -->
+      <div class="box-cyan rounded-lg p-5 border-l-4 border-l-cyanCore">
+        <h3 class="text-sm font-bold text-cyanCore font-mono uppercase tracking-wider mb-2">P.A.R.A Framework Integration & Habit Decay Metrics</h3>
+        <p class="text-sm text-zinc-400">
+          Under behavioral neuroscience schemas, habits degrade on a precise mathematical half-life decay curve rather than resetting instantly to zero. When a system breaks your streak chain with a destructive indicator for a single-day aberration, it triggers cognitive fatigue vectors. The Habit OS treats your logs as a persistent gradient: allowing adaptive grace periods that cushion structural disruptions and protect tracking performance.
+        </p>
+      </div>
+
+      <!-- Indigo New Feature Block -->
+      <div class="box-indigo rounded-lg p-5 border-l-4 border-l-indigoCore">
+        <h3 class="text-sm font-bold text-indigoCore font-mono uppercase tracking-wider mb-2">Export / Import Pipeline — Data Portability</h3>
+        <p class="text-sm text-zinc-400">
+          Your data is yours. Export your entire habit state as a structured JSON file, including all habit entries, logs, XP accumulation, streak history, mood records, and badge progress. Import previously exported files to restore your workspace state instantly — perfect for migrating across machines or backing up critical tracking data.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════ FLAT MINIMALIST FOOTER ══════════════════════ -->
+  <footer class="w-full bg-[#050506] border-t border-[#16161C] py-12 text-center mt-auto relative z-10">
+    <div class="max-w-[1440px] mx-auto px-8 flex flex-col items-center justify-center gap-6">
+      <div class="flex items-center flex-wrap justify-center gap-8 text-sm font-bold text-zinc-400">
+        <a href="/privacy" class="hover:text-white transition">Privacy</a>
+        <a href="/terms" class="hover:text-white transition">Terms</a>
+        <a href="/disclaimer" class="hover:text-white transition">Disclaimer</a>
+        <a href="/about" class="hover:text-white transition">About</a>
+        <a href="/contact" class="hover:text-white transition">Contact</a>
+      </div>
+      <div class="text-[11px] font-medium text-zinc-600 tracking-wide font-mono">
+        &copy; 2026 Affilore. All rights reserved. Free client-side tools directory.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Action Button -->
+  <button class="fab" onclick="document.getElementById('form-add-habit').classList.remove('hidden'); window.scrollTo({top: 0, behavior: 'smooth'});">
+    <span class="material-symbols-outlined text-[28px] font-bold">add</span>
+  </button>
+
+  <!-- ══════════════════════ OPERATIONAL ENGINE ══════════════════════ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+    const firebaseConfig = { 
+      apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI", 
+      authDomain: "affilore.firebaseapp.com", 
+      projectId: "affilore" 
+    };
+    
+    let db = null, auth = null, currentUid = null;
+    try { 
+      const app = initializeApp(firebaseConfig); 
+      db = getFirestore(app); 
+      auth = getAuth(app); 
+      onAuthStateChanged(auth, u => { if(u){ currentUid = u.uid; HabitEngine.loadCloudState(); } }); 
+    } catch(e){ console.warn("Firebase restricted sandbox execution mode."); }
+
+    // ══════════════════════ BADGE DEFINITIONS ══════════════════════
+    const BADGES = [
+      { id: 'first_habit', icon: '🌱', name: 'First Seed', desc: 'Create your first habit', color: '#10B981', check: s => s.habits.length >= 1 },
+      { id: 'five_habits', icon: '🌿', name: 'Garden Keeper', desc: 'Create 5 habits', color: '#10B981', check: s => s.habits.length >= 5 },
+      { id: 'first_complete', icon: '✅', name: 'First Blood', desc: 'Complete a habit for the first time', color: '#06B6D4', check: s => s.habits.some(h => h.logs.length > 0) },
+      { id: 'streak_3', icon: '🔥', name: 'Flame Starter', desc: 'Achieve a 3-day streak', color: '#F97316', check: s => s.highestStreak >= 3 },
+      { id: 'streak_7', icon: '💥', name: 'Week Warrior', desc: 'Achieve a 7-day streak', color: '#F43F5E', check: s => s.highestStreak >= 7 },
+      { id: 'streak_30', icon: '👑', name: 'Monthly Monarch', desc: 'Achieve a 30-day streak', color: '#F5A623', check: s => s.highestStreak >= 30 },
+      { id: 'xp_100', icon: '⚡', name: 'Spark', desc: 'Accumulate 100 XP', color: '#6366F1', check: s => s.xp >= 100 },
+      { id: 'xp_500', icon: '🌟', name: 'Rising Star', desc: 'Accumulate 500 XP', color: '#A855F7', check: s => s.xp >= 500 },
+      { id: 'xp_2000', icon: '💎', name: 'Diamond Core', desc: 'Accumulate 2000 XP', color: '#06B6D4', check: s => s.xp >= 2000 },
+      { id: 'pomo_1', icon: '🍅', name: 'Tomato Rookie', desc: 'Complete 1 Pomodoro session', color: '#F43F5E', check: s => (s.pomoSessions || 0) >= 1 },
+      { id: 'pomo_10', icon: '🎯', name: 'Focus Master', desc: 'Complete 10 Pomodoro sessions', color: '#D946EF', check: s => (s.pomoSessions || 0) >= 10 },
+      { id: 'mood_7', icon: '📊', name: 'Self Aware', desc: 'Log mood for 7 days', color: '#38BDF8', check: s => Object.keys(s.moodLog || {}).length >= 7 },
+    ];
+
+    // ══════════════════════ DAILY CHALLENGES ══════════════════════
+    const DAILY_CHALLENGES = [
+      "Complete all habits before noon",
+      "Finish 3 Pomodoro sessions today",
+      "Add a new habit to your tracker",
+      "Maintain your streak for another day",
+      "Complete 5 habits in a single day",
+      "Start your day with a focus session",
+      "Log your mood and reflect",
+      "Hit 50 XP in a single day",
+      "Complete a habit from every category",
+      "Extend your longest streak by 1",
+      "Export your progress data as backup",
+      "Complete a 45-minute deep focus session",
+    ];
+
+    // ══════════════════════ CONFETTI ENGINE ══════════════════════
+    const ConfettiEngine = {
+      particles: [],
+      canvas: null,
+      ctx: null,
+      
+      init() {
+        this.canvas = document.getElementById('confetti-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => {
+          this.canvas.width = window.innerWidth;
+          this.canvas.height = window.innerHeight;
+        });
+      },
+
+      burst(x, y) {
+        const colors = ['#F5A623','#A855F7','#06B6D4','#10B981','#F43F5E','#D946EF','#6366F1','#F97316','#EC4899','#38BDF8'];
+        for(let i = 0; i < 60; i++) {
+          this.particles.push({
+            x, y,
+            vx: (Math.random() - 0.5) * 12,
+            vy: (Math.random() - 0.5) * 12 - 4,
+            size: Math.random() * 6 + 2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            life: 1,
+            decay: Math.random() * 0.02 + 0.01,
+            rotation: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 10,
+          });
+        }
+        if(this.particles.length <= 60) this.animate();
+      },
+
+      animate() {
+        if(this.particles.length === 0) return;
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.particles = this.particles.filter(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.15;
+          p.life -= p.decay;
+          p.rotation += p.rotSpeed;
+          if(p.life <= 0) return false;
+          this.ctx.save();
+          this.ctx.translate(p.x, p.y);
+          this.ctx.rotate(p.rotation * Math.PI / 180);
+          this.ctx.globalAlpha = p.life;
+          this.ctx.fillStyle = p.color;
+          this.ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.6);
+          this.ctx.restore();
+          return true;
+        });
+        if(this.particles.length > 0) requestAnimationFrame(() => this.animate());
+        else this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+    };
+
+    // ══════════════════════ POMODORO TIMER ══════════════════════
+    window.Pomodoro = {
+      duration: 25 * 60,
+      remaining: 25 * 60,
+      interval: null,
+      running: false,
+      circumference: 2 * Math.PI * 54,
+
+      setPreset(mins, label) {
+        this.reset();
+        this.duration = mins * 60;
+        this.remaining = this.duration;
+        document.getElementById('timer-label').textContent = label + ' SESSION';
+        document.getElementById('custom-timer').value = mins;
+        document.getElementById('custom-timer-val').textContent = mins;
+        this.updateDisplay();
+      },
+
+      start() {
+        if(this.running) return;
+        this.running = true;
+        this.interval = setInterval(() => {
+          this.remaining--;
+          this.updateDisplay();
+          if(this.remaining <= 0) {
+            this.complete();
+          }
+        }, 1000);
+      },
+
+      pause() {
+        this.running = false;
+        if(this.interval) clearInterval(this.interval);
+      },
+
+      reset() {
+        this.pause();
+        this.remaining = this.duration;
+        this.updateDisplay();
+      },
+
+      complete() {
+        this.pause();
+        this.remaining = 0;
+        this.updateDisplay();
+        // Award XP and track session
+        HabitEngine.state.xp += 15;
+        HabitEngine.state.pomoSessions = (HabitEngine.state.pomoSessions || 0) + 1;
+        HabitEngine.state.totalFocusMinutes = (HabitEngine.state.totalFocusMinutes || 0) + Math.round(this.duration / 60);
+        document.getElementById('pomo-sessions').textContent = HabitEngine.state.pomoSessions || 0;
+        document.getElementById('pomo-total-time').textContent = (HabitEngine.state.totalFocusMinutes || 0) + 'm';
+        document.getElementById('m-focus').textContent = (HabitEngine.state.totalFocusMinutes || 0) + 'm';
+        HabitEngine.saveAndSyncLocal();
+        HabitEngine.checkBadges();
+        // Confetti
+        ConfettiEngine.burst(window.innerWidth / 2, window.innerHeight / 2);
+        // Sound
+        if(HabitEngine.soundEnabled) HabitEngine.playSound(880, 0.3);
+      },
+
+      updateDisplay() {
+        const m = Math.floor(this.remaining / 60);
+        const s = this.remaining % 60;
+        document.getElementById('timer-display').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        // Update ring
+        const progress = 1 - (this.remaining / this.duration);
+        const offset = this.circumference * (1 - progress);
+        document.getElementById('timer-ring').setAttribute('stroke-dashoffset', offset);
+      }
+    };
+
+    // ══════════════════════ MAIN HABIT ENGINE ══════════════════════
+    window.HabitEngine = {
+      state: { 
+        habits: [], xp: 0, highestStreak: 0, 
+        trackingHistory: [0,0,0,0,0,0,0],
+        moodLog: {},
+        pomoSessions: 0,
+        totalFocusMinutes: 0,
+        unlockedBadges: [],
+        challengeClaimedDate: null,
+      },
+      todayStamp: new Date().toISOString().split('T')[0],
+      weightMultipliers: { health: 1.0, biz: 2.5, code: 3.0, creative: 2.0, fitness: 1.5, learning: 2.0 },
+      soundEnabled: true,
+      currentFilter: 'all',
+      searchQuery: '',
+
+      init() {
+        this.renderInterface();
+        this.recalculateXpMetrics();
+        this.hydrateHeatmapGrid();
+        this.initVelocityChart();
+        this.renderBadges();
+        this.generateDailyChallenge();
+        this.initAnalyticsCharts();
+        this.updateCompletionRing();
+        this.restoreMoodState();
+        ConfettiEngine.init();
+        
+        document.getElementById('form-add-habit').addEventListener('submit', e => { e.preventDefault(); this.appendProtocolNode(); });
+        document.getElementById('sync-cloud-btn').addEventListener('click', () => this.executeCloudSync());
+        document.getElementById('sound-toggle').addEventListener('click', () => {
+          this.soundEnabled = !this.soundEnabled;
+          const icon = document.querySelector('#sound-toggle .material-symbols-outlined');
+          icon.textContent = this.soundEnabled ? 'volume_up' : 'volume_off';
+        });
+        document.getElementById('pomo-sessions').textContent = this.state.pomoSessions || 0;
+        document.getElementById('pomo-total-time').textContent = (this.state.totalFocusMinutes || 0) + 'm';
+        document.getElementById('m-focus').textContent = (this.state.totalFocusMinutes || 0) + 'm';
+      },
+
+      playSound(freq, dur) {
+        try {
+          const actx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = actx.createOscillator();
+          const gain = actx.createGain();
+          osc.connect(gain);
+          gain.connect(actx.destination);
+          osc.frequency.value = freq;
+          osc.type = 'sine';
+          gain.gain.setValueAtTime(0.1, actx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+          osc.start(actx.currentTime);
+          osc.stop(actx.currentTime + dur);
+        } catch(e) {}
+      },
+
+      switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + tabName).classList.add('active');
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        if(tabName === 'stats') this.initAnalyticsCharts();
+        if(tabName === 'badges') this.renderBadges();
+      },
+
+      setMood(mood) {
+        this.state.moodLog = this.state.moodLog || {};
+        this.state.moodLog[this.todayStamp] = mood;
+        document.querySelectorAll('.mood-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.mood === mood);
+        });
+        this.saveAndSyncLocal();
+      },
+
+      restoreMoodState() {
+        const todayMood = (this.state.moodLog || {})[this.todayStamp];
+        if(todayMood) {
+          document.querySelectorAll('.mood-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.mood === todayMood);
+          });
+        }
+      },
+
+      generateDailyChallenge() {
+        const dayIndex = new Date().getDate() % DAILY_CHALLENGES.length;
+        document.getElementById('daily-challenge-text').textContent = DAILY_CHALLENGES[dayIndex];
+        if(this.state.challengeClaimedDate === this.todayStamp) {
+          const btn = document.getElementById('claim-challenge-btn');
+          btn.textContent = 'CLAIMED';
+          btn.disabled = true;
+          btn.classList.add('opacity-50');
+        }
+      },
+
+      claimDailyChallenge() {
+        if(this.state.challengeClaimedDate === this.todayStamp) return;
+        this.state.challengeClaimedDate = this.todayStamp;
+        this.state.xp += 50;
+        const btn = document.getElementById('claim-challenge-btn');
+        btn.textContent = 'CLAIMED';
+        btn.disabled = true;
+        btn.classList.add('opacity-50');
+        this.saveAndSyncLocal();
+        ConfettiEngine.burst(window.innerWidth / 2, 200);
+        if(this.soundEnabled) this.playSound(660, 0.2);
+      },
+
+      filterHabits(query) {
+        this.searchQuery = query.toLowerCase();
+        this.renderInterface();
+      },
+
+      filterByCategory(cat) {
+        this.currentFilter = cat;
+        this.renderInterface();
+      },
+
+      appendProtocolNode() {
+        const input = document.getElementById('habit-input');
+        const category = document.getElementById('habit-cat').value;
+        const priority = document.getElementById('habit-priority').value;
+        const notes = document.getElementById('habit-notes').value;
+        if(!input.value.trim()) return;
+
+        this.state.habits.push({
+          id: 'node-' + Date.now().toString(36),
+          text: input.value.trim(),
+          category: category,
+          priority: priority,
+          notes: notes.trim(),
+          logs: [],
+          createdAt: this.todayStamp,
+        });
+
+        input.value = '';
+        document.getElementById('habit-notes').value = '';
+        document.getElementById('form-add-habit').classList.add('hidden');
+        this.saveAndSyncLocal();
+        this.checkBadges();
+        if(this.soundEnabled) this.playSound(440, 0.15);
+      },
+
+      mutateNodeState(id, isChecked) {
+        const node = this.state.habits.find(h => h.id === id);
+        if(!node) return;
+
+        if(isChecked) {
+          if(!node.logs.includes(this.todayStamp)) node.logs.push(this.todayStamp);
+          const baseXP = 10;
+          const calculatedXp = Math.floor(baseXP * (this.weightMultipliers[node.category] || 1.0));
+          this.state.xp += calculatedXp;
+          this.state.trackingHistory[this.state.trackingHistory.length - 1] = this.state.xp;
+          // Confetti burst on completion
+          ConfettiEngine.burst(window.innerWidth / 2, 300);
+          if(this.soundEnabled) this.playSound(523, 0.15);
+        } else {
+          node.logs = node.logs.filter(d => d !== this.todayStamp);
+        }
+
+        this.computeStreakMetrics();
+        this.saveAndSyncLocal();
+        this.mutateHeatmapCell(this.todayStamp, isChecked);
+        this.updateCompletionRing();
+        this.checkBadges();
+        if(window.chartInstanceNode) {
+          window.chartInstanceNode.data.datasets[0].data = this.state.trackingHistory;
+          window.chartInstanceNode.update();
+        }
+      },
+
+      dropProtocolNode(id) {
+        this.state.habits = this.state.habits.filter(h => h.id !== id);
+        this.saveAndSyncLocal();
+        this.updateCompletionRing();
+      },
+
+      clearWorkspace() {
+        if(confirm("Flush all localized tracking parameters? This operation is permanent.")) {
+          this.state = { 
+            habits: [], xp: 0, highestStreak: 0, 
+            trackingHistory: [0,0,0,0,0,0,0],
+            moodLog: {},
+            pomoSessions: 0,
+            totalFocusMinutes: 0,
+            unlockedBadges: [],
+            challengeClaimedDate: null,
+          };
+          this.saveAndSyncLocal();
+          this.updateCompletionRing();
+          if(window.chartInstanceNode) {
+            window.chartInstanceNode.data.datasets[0].data = this.state.trackingHistory;
+            window.chartInstanceNode.update();
+          }
+        }
+      },
+
+      exportData() {
+        const blob = new Blob([JSON.stringify(this.state, null, 2)], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `habit-os-export-${this.todayStamp}.json`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+        document.getElementById('sync-status').textContent = 'EXPORT COMPLETE';
+        setTimeout(() => document.getElementById('sync-status').textContent = 'AWAITING INPUT', 2000);
+      },
+
+      importData(event) {
+        const file = event.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const imported = JSON.parse(e.target.result);
+            this.state = Object.assign(this.state, imported);
+            this.saveAndSyncLocal();
+            this.hydrateHeatmapGrid();
+            this.checkBadges();
+            this.updateCompletionRing();
+            this.restoreMoodState();
+            document.getElementById('sync-status').textContent = 'IMPORT COMPLETE';
+            setTimeout(() => document.getElementById('sync-status').textContent = 'AWAITING INPUT', 2000);
+          } catch(err) {
+            document.getElementById('sync-status').textContent = 'IMPORT ERROR: INVALID JSON';
+            setTimeout(() => document.getElementById('sync-status').textContent = 'AWAITING INPUT', 3000);
+          }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+      },
+
+      computeStreakMetrics() {
+        let maxChain = 0;
+        this.state.habits.forEach(h => {
+          // Calculate consecutive days
+          if(h.logs.length === 0) return;
+          const sorted = [...h.logs].sort();
+          let streak = 1, best = 1;
+          for(let i = 1; i < sorted.length; i++) {
+            const prev = new Date(sorted[i-1]);
+            const curr = new Date(sorted[i]);
+            const diff = (curr - prev) / (1000 * 60 * 60 * 24);
+            if(diff === 1) { streak++; best = Math.max(best, streak); }
+            else if(diff > 1) { streak = 1; }
+          }
+          maxChain = Math.max(maxChain, best);
+        });
+        this.state.highestStreak = maxChain;
+      },
+
+      recalculateXpMetrics() {
+        let level = 1;
+        while(this.state.xp >= Math.floor(100 * Math.pow(1.5, level))) { level++; }
+        const prevBound = Math.floor(100 * Math.pow(1.5, level - 1));
+        const nextBound = Math.floor(100 * Math.pow(1.5, level));
+        const stepProgress = ((this.state.xp - prevBound) / (nextBound - prevBound)) * 100;
+
+        document.getElementById('m-xp').textContent = `${this.state.xp} XP`;
+        document.getElementById('xp-bar').style.width = `${Math.min(100, Math.max(0, stepProgress))}%`;
+        
+        const tierNames = ['Novice','Initiate','Apprentice','Practitioner','Grinder','Strategist','Architect','Commander','Overlord','Ascendant','Paragon','Transcendent','Elite Framework Engineer'];
+        const tierLabel = tierNames[Math.min(level - 1, tierNames.length - 1)];
+        
+        document.getElementById('m-lvl').textContent = `Lv. ${level} ${tierLabel}`;
+        document.getElementById('m-total').textContent = this.state.habits.length;
+        document.getElementById('m-streak').textContent = this.state.highestStreak;
+
+        let itemsDoneToday = 0;
+        this.state.habits.forEach(h => { if(h.logs.includes(this.todayStamp)) itemsDoneToday++; });
+        document.getElementById('m-today').textContent = itemsDoneToday;
+        document.getElementById('m-badges').textContent = (this.state.unlockedBadges || []).length;
+        document.getElementById('m-focus').textContent = (this.state.totalFocusMinutes || 0) + 'm';
+      },
+
+      updateCompletionRing() {
+        const total = this.state.habits.length;
+        let done = 0;
+        this.state.habits.forEach(h => { if(h.logs.includes(this.todayStamp)) done++; });
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        const circumference = 2 * Math.PI * 54;
+        const offset = circumference * (1 - pct / 100);
+        const ring = document.getElementById('completion-ring');
+        if(ring) {
+          ring.setAttribute('stroke-dashoffset', offset);
+        }
+        const pctEl = document.getElementById('completion-pct');
+        if(pctEl) pctEl.textContent = pct + '%';
+      },
+
+      checkBadges() {
+        this.state.unlockedBadges = this.state.unlockedBadges || [];
+        let newBadge = false;
+        BADGES.forEach(badge => {
+          if(!this.state.unlockedBadges.includes(badge.id) && badge.check(this.state)) {
+            this.state.unlockedBadges.push(badge.id);
+            newBadge = true;
+          }
+        });
+        if(newBadge) {
+          this.renderBadges();
+          ConfettiEngine.burst(window.innerWidth / 2, window.innerHeight / 2);
+        }
+        document.getElementById('m-badges').textContent = this.state.unlockedBadges.length;
+      },
+
+      renderBadges() {
+        const grid = document.getElementById('badges-grid');
+        if(!grid) return;
+        grid.innerHTML = '';
+        BADGES.forEach(badge => {
+          const unlocked = (this.state.unlockedBadges || []).includes(badge.id);
+          const card = document.createElement('div');
+          card.className = `badge-card glass border border-[#16161C] rounded-lg p-5 text-center ${unlocked ? '' : 'badge-locked'}`;
+          if(unlocked) card.style.boxShadow = `0 0 20px ${badge.color}33, 0 0 40px ${badge.color}11`;
+          card.innerHTML = `
+            <div class="text-4xl mb-3">${badge.icon}</div>
+            <div class="text-sm font-bold text-white mb-1">${badge.name}</div>
+            <div class="text-[10px] text-zinc-500 font-mono">${badge.desc}</div>
+            ${unlocked ? `<div class="mt-2 text-[9px] font-bold uppercase tracking-widest" style="color: ${badge.color}">UNLOCKED</div>` : '<div class="mt-2 text-[9px] font-bold uppercase tracking-widest text-zinc-600">LOCKED</div>'}
+          `;
+          grid.appendChild(card);
+        });
+      },
+
+      renderInterface() {
+        const canvas = document.getElementById('habit-container');
+        canvas.innerHTML = '';
+        
+        let filtered = this.state.habits;
+        if(this.currentFilter !== 'all') {
+          filtered = filtered.filter(h => h.category === this.currentFilter);
+        }
+        if(this.searchQuery) {
+          filtered = filtered.filter(h => h.text.toLowerCase().includes(this.searchQuery));
+        }
+
+        if(filtered.length === 0) {
+          canvas.innerHTML = `<div class="text-center text-sm text-zinc-600 mt-16 font-mono tracking-wide">
+            ${this.state.habits.length === 0 ? 'Workspace empty. Initialize a protocol layout path above.' : 'No matching habits found.'}
+          </div>`;
+          return;
+        }
+
+        // Sort by priority
+        const priOrder = { critical: 0, high: 1, medium: 2, low: 3 };
+        filtered.sort((a, b) => (priOrder[a.priority] || 2) - (priOrder[b.priority] || 2));
+
+        filtered.forEach(h => {
+          const isDone = h.logs.includes(this.todayStamp);
+          const catLabels = { health: 'HEALTH', biz: 'BIZ', code: 'CODE', creative: 'CREATIVE', fitness: 'FITNESS', learning: 'LEARNING' };
+          const activeBlock = document.createElement('div');
+          activeBlock.className = `flex items-start gap-3 p-3.5 rounded-lg bg-[#050506] border ${isDone ? 'border-emeraldCore/40 neon-emerald' : 'border-[#16161C]'} transition-all duration-300 pri-${h.priority || 'medium'}`;
+          activeBlock.innerHTML = `
+            <input type="checkbox" class="custom-cb mt-0.5" ${isDone ? 'checked' : ''}>
+            <div class="flex-grow min-w-0">
+              <div class="flex items-center gap-2 mb-1 flex-wrap">
+                <span class="text-sm font-medium tracking-wide ${isDone ? 'text-zinc-500 line-through' : 'text-zinc-100'}">${h.text}</span>
+              </div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="cat-${h.category} text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">${catLabels[h.category] || h.category}</span>
+                ${h.notes ? `<span class="text-[9px] text-zinc-500 italic truncate max-w-[200px]">📝 ${h.notes}</span>` : ''}
+                ${h.logs.length > 0 ? `<span class="text-[9px] font-mono text-zinc-600">${h.logs.length}d logged</span>` : ''}
+              </div>
+            </div>
+            <button class="text-zinc-600 hover:text-roseCore text-xs font-mono font-bold transition-colors mt-1 flex-shrink-0" onclick="HabitEngine.dropProtocolNode('${h.id}')">
+              <span class="material-symbols-outlined text-[16px]">close</span>
+            </button>
+          `;
+          activeBlock.querySelector('input').addEventListener('change', e => this.mutateNodeState(h.id, e.target.checked));
+          canvas.appendChild(activeBlock);
+        });
+      },
+
+      hydrateHeatmapGrid() {
+        const block = document.getElementById('heatmap-container');
+        block.innerHTML = '';
+        for(let i = 84; i >= 0; i--) {
+          const calendarInstance = new Date(); calendarInstance.setDate(calendarInstance.getDate() - i);
+          const ISOStringNode = calendarInstance.toISOString().split('T')[0];
+          
+          let counter = 0;
+          this.state.habits.forEach(h => { if(h.logs.includes(ISOStringNode)) counter++; });
+          let dynamicWeight = counter === 0 ? 0 : counter === 1 ? 1 : counter === 2 ? 2 : 3;
+
+          const cell = document.createElement('div');
+          cell.className = 'matrix-cell tooltip';
+          cell.dataset.date = ISOStringNode;
+          cell.dataset.weight = dynamicWeight;
+          cell.dataset.tip = `${ISOStringNode}: ${counter} done`;
+          block.appendChild(cell);
+        }
+      },
+
+      mutateHeatmapCell(dateString, isChecked) {
+        const element = document.querySelector(`.matrix-cell[data-date="${dateString}"]`);
+        if(element) {
+          let oldVal = parseInt(element.dataset.weight) || 0;
+          let updatedVal = isChecked ? Math.min(3, oldVal + 1) : Math.max(0, oldVal - 1);
+          element.dataset.weight = updatedVal;
+        }
+      },
+
+      initVelocityChart() {
+        const layoutNode = document.getElementById('progressionChart').getContext('2d');
+        Chart.defaults.color = '#4B5563';
+        Chart.defaults.font.family = '"JetBrains Mono", monospace';
+        
+        window.chartInstanceNode = new Chart(layoutNode, {
+          type: 'line',
+          data: {
+            labels: ['M1','M2','M3','M4','M5','M6','Current Sprint'],
+            datasets: [{
+              label: "XP Accumulated Progress",
+              data: this.state.trackingHistory,
+              borderColor: function(ctx) {
+                const chart = ctx.chart;
+                const { ctx: c, chartArea } = chart;
+                if(!chartArea) return '#F5A623';
+                const grad = c.createLinearGradient(chartArea.left, 0, chartArea.right, 0);
+                grad.addColorStop(0, '#F5A623');
+                grad.addColorStop(0.5, '#A855F7');
+                grad.addColorStop(1, '#06B6D4');
+                return grad;
+              },
+              backgroundColor: function(ctx) {
+                const chart = ctx.chart;
+                const { ctx: c, chartArea } = chart;
+                if(!chartArea) return 'rgba(245,166,35,0.02)';
+                const grad = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                grad.addColorStop(0, 'rgba(168, 85, 247, 0.15)');
+                grad.addColorStop(1, 'rgba(6, 182, 212, 0.01)');
+                return grad;
+              },
+              tension: 0.4,
+              pointBackgroundColor: "#A855F7",
+              pointBorderColor: "#050506",
+              pointBorderWidth: 2,
+              pointRadius: 4,
+              pointHoverRadius: 7,
+              borderWidth: 3,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { 
+              y: { display: true, grid: { color: "rgba(255,255,255,0.03)" }, ticks: { font: { size: 9 } } }, 
+              x: { grid: { display: false }, ticks: { font: { size: 9 } } } 
+            }
+          }
+        });
+      },
+
+      initAnalyticsCharts() {
+        // Weekly completions chart
+        const weeklyCtx = document.getElementById('weeklyChart');
+        if(!weeklyCtx) return;
+        
+        if(window.weeklyChartInst) window.weeklyChartInst.destroy();
+        
+        const dayLabels = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        const weekData = new Array(7).fill(0);
+        for(let i = 6; i >= 0; i--) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          const ds = d.toISOString().split('T')[0];
+          const dayIdx = d.getDay();
+          this.state.habits.forEach(h => { if(h.logs.includes(ds)) weekData[dayIdx]++; });
+        }
+
+        window.weeklyChartInst = new Chart(weeklyCtx.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: dayLabels,
+            datasets: [{
+              data: weekData,
+              backgroundColor: ['#F43F5E','#F97316','#F5A623','#10B981','#06B6D4','#6366F1','#A855F7'],
+              borderRadius: 6,
+              borderSkipped: false,
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { font: { size: 9 } } }, x: { grid: { display: false }, ticks: { font: { size: 9 } } } }
+          }
+        });
+
+        // Category doughnut chart
+        const catCtx = document.getElementById('categoryChart');
+        if(!catCtx) return;
+        
+        if(window.categoryChartInst) window.categoryChartInst.destroy();
+        
+        const catCounts = {};
+        this.state.habits.forEach(h => { catCounts[h.category] = (catCounts[h.category] || 0) + 1; });
+        const catColors = { health: '#10B981', biz: '#F5A623', code: '#06B6D4', creative: '#A855F7', fitness: '#F43F5E', learning: '#6366F1' };
+
+        window.categoryChartInst = new Chart(catCtx.getContext('2d'), {
+          type: 'doughnut',
+          data: {
+            labels: Object.keys(catCounts).map(k => k.toUpperCase()),
+            datasets: [{
+              data: Object.values(catCounts),
+              backgroundColor: Object.keys(catCounts).map(k => catColors[k] || '#F5A623'),
+              borderWidth: 0,
+              hoverOffset: 8,
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false, cutout: '65%',
+            plugins: { legend: { position: 'bottom', labels: { color: '#9CA3AF', font: { size: 10, family: '"JetBrains Mono", monospace' }, padding: 12 } } }
+          }
+        });
+
+        // Mood history
+        this.renderMoodHistory();
+      },
+
+      renderMoodHistory() {
+        const container = document.getElementById('mood-history');
+        if(!container) return;
+        container.innerHTML = '';
+        const moodValues = { '🔥': 5, '😊': 4, '😐': 3, '😴': 2, '😤': 1 };
+        const barColors = { '🔥': '#F97316', '😊': '#10B981', '😐': '#F5A623', '😴': '#6366F1', '😤': '#F43F5E' };
+        
+        for(let i = 6; i >= 0; i--) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          const ds = d.toISOString().split('T')[0];
+          const mood = (this.state.moodLog || {})[ds];
+          const val = mood ? moodValues[mood] : 0;
+          const color = mood ? barColors[mood] : '#16161C';
+          const dayName = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+          
+          const col = document.createElement('div');
+          col.className = 'flex flex-col items-center gap-1 flex-1';
+          col.innerHTML = `
+            <div class="text-lg">${mood || '—'}</div>
+            <div class="w-full rounded-t-md transition-all" style="height: ${val * 28}px; background: ${color}; min-height: 4px;"></div>
+            <div class="text-[9px] font-mono text-zinc-500">${dayName}</div>
+          `;
+          container.appendChild(col);
+        }
+      },
+
+      saveAndSyncLocal() {
+        this.renderInterface();
+        this.recalculateXpMetrics();
+        if(currentUid && db) {
+          document.getElementById('sync-status').textContent = 'COMMITTING TO MEMORY NODE...';
+          setDoc(doc(db, "users", currentUid, "tools", "habit_tracker"), this.state).then(() => {
+            document.getElementById('sync-status').textContent = 'SYNC SECURE';
+            setTimeout(() => document.getElementById('sync-status').textContent = 'AWAITING INPUT', 2000);
+          }).catch(()=>{});
+        }
+      },
+
+      triggerOptimisticSync() {
+        document.getElementById('sync-status').textContent = 'AUDITING LOCAL RUNTIME ENVIRONMENT...';
+        setTimeout(() => {
+          this.computeStreakMetrics();
+          this.checkBadges();
+          document.getElementById('sync-status').textContent = 'COMPLIANCE CLEAR — ALL SYSTEMS NOMINAL';
+          setTimeout(() => document.getElementById('sync-status').textContent = 'AWAITING INPUT', 2500);
+        }, 1200);
+      },
+
+      async loadCloudState() {
+        if(!currentUid || !db) return;
+        try {
+          const stateSnap = await getDoc(doc(db, "users", currentUid, "tools", "habit_tracker"));
+          if(stateSnap.exists()) {
+            this.state = Object.assign(this.state, stateSnap.data());
+            this.init();
+          }
+        } catch(e){}
+      }
+    };
+
+    // ══════════════════════ MULTI-COLORED AMBIENT PARTICLES ══════════════════════
+    window.addEventListener('DOMContentLoaded', () => { 
+      window.HabitEngine.init(); 
+      
+      const canvas = document.getElementById('ambient-dots-canvas');
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+      
+      const particleColors = [
+        'rgba(245, 166, 35, 0.35)',   // amber
+        'rgba(168, 85, 247, 0.30)',   // purple
+        'rgba(6, 182, 212, 0.30)',    // cyan
+        'rgba(16, 185, 129, 0.25)',   // emerald
+        'rgba(244, 63, 94, 0.25)',    // rose
+        'rgba(217, 70, 239, 0.25)',   // fuchsia
+        'rgba(99, 102, 241, 0.25)',   // indigo
+        'rgba(249, 115, 22, 0.25)',   // orange
+      ];
+
+      const dotsArray = [];
+      for(let i = 0; i < 50; i++) {
+        dotsArray.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2.5 + 0.8,
+          speed: Math.random() * 0.5 + 0.1,
+          color: particleColors[Math.floor(Math.random() * particleColors.length)],
+          drift: (Math.random() - 0.5) * 0.3,
+        });
+      }
+      
+      function renderParticlesDrift() {
+        ctx.clearRect(0,0,w,h);
+        dotsArray.forEach(d => {
+          ctx.beginPath();
+          ctx.fillStyle = d.color;
+          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+          ctx.fill();
+          d.y -= d.speed;
+          d.x += d.drift;
+          if(d.y < -10) { d.y = h + 10; d.x = Math.random() * w; }
+          if(d.x < -10) d.x = w + 10;
+          if(d.x > w + 10) d.x = -10;
+        });
+        requestAnimationFrame(renderParticlesDrift);
+      }
+      renderParticlesDrift();
+      
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+    });
+  </script>
+</body>
+</html>
