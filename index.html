@@ -274,7 +274,7 @@
                         <h3 class="font-headline-lg text-[20px] font-bold mb-2 text-white drop-shadow-[0_0_8px_rgba(234,179,8,0.2)]">All-in-One Life Dashboard</h3>
                         <p class="font-body-sm text-body-sm text-zinc-400 mb-5">A centralized operating system for behavioral tracking, financial telemetry, project serialization, and cognitive journaling. 100% serverless, private, and free forever.</p>
                         <!-- Uniformly Pinned Base Button -->
-                        <a href="/productivity/all-in-one-life-dashboard.html" class="inline-flex justify-center w-full px-6 py-2.5 rounded-full gradient-bg text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(234,179,8,0.6)] mt-auto">
+                        <a href="/productivity/all-in-one-life-dashboard.html" id="launch-life-dashboard" class="inline-flex justify-center w-full px-6 py-2.5 rounded-full gradient-bg text-black font-label-md text-label-md transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(234,179,8,0.6)] mt-auto">
                             Launch Tool
                         </a>
                     </div>
@@ -599,6 +599,20 @@
                 navLinks.classList.toggle('p-4');
                 navLinks.classList.toggle('border-b');
                 navLinks.classList.toggle('border-glass-border');
+            });
+        }
+
+        // Intercept the 'Productivity Tools' Launch Button
+        const launchBtn = document.getElementById('launch-life-dashboard');
+        if (launchBtn) {
+            launchBtn.addEventListener('click', (e) => {
+                if (localStorage.getItem('affilore_session_state') !== 'true') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (window.showAuthModal) {
+                        window.showAuthModal('/productivity/all-in-one-life-dashboard.html');
+                    }
+                }
             });
         }
     </script>

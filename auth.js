@@ -6,7 +6,7 @@
     // Inject custom CSS styling for the authentication overlay
     const style = document.createElement('style');
     style.textContent = `
-        #auth-modal-overlay {
+        #authModal {
             transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
         }
         #auth-modal-box {
@@ -145,10 +145,10 @@
     }
 
     function injectAuthModal() {
-        if (document.getElementById('auth-modal-overlay')) return;
+        if (document.getElementById('authModal')) return;
 
         const overlay = document.createElement('div');
-        overlay.id = 'auth-modal-overlay';
+        overlay.id = 'authModal';
         overlay.className = 'fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-md opacity-0 pointer-events-none';
         
         overlay.innerHTML = `
@@ -225,7 +225,7 @@
 
     function showAuthModal(redirectPath) {
         injectAuthModal();
-        const overlay = document.getElementById('auth-modal-overlay');
+        const overlay = document.getElementById('authModal');
         const box = document.getElementById('auth-modal-box');
         if (!overlay || !box) return;
 
@@ -245,7 +245,7 @@
     }
 
     function hideAuthModal() {
-        const overlay = document.getElementById('auth-modal-overlay');
+        const overlay = document.getElementById('authModal');
         const box = document.getElementById('auth-modal-box');
         if (!overlay || !box) return;
 
@@ -405,4 +405,5 @@
             });
         }
     }
+    window.showAuthModal = showAuthModal;
 })();

@@ -227,7 +227,7 @@
       <h3 class="text-xl font-black text-white mb-1">Access Protected Workspace</h3>
       <p class="text-zinc-500 text-xs max-w-xs mx-auto mb-6">Authorize your localized serverless session cache profile to save Notion setups, habit logs, and macro matrices.</p>
       <div class="space-y-3 mb-6">
-        <button onclick="window.simulateLogin('Google')" class="w-full py-3 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-sm font-semibold text-white flex items-center justify-center gap-3 transition">Continue with Google</button>
+        <button onclick="window.handleAuth()" class="w-full py-3 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-sm font-semibold text-white flex items-center justify-center gap-3 transition">Continue with Google</button>
         <button onclick="window.simulateLogin('GitHub')" class="w-full py-3 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-sm font-semibold text-white flex items-center justify-center gap-3 transition">Continue with GitHub</button>
       </div>
       <div class="flex items-center gap-2 text-zinc-700 text-[10px] uppercase font-mono justify-center mb-4">
@@ -254,7 +254,7 @@
         </div>
       </div>
       <div class="flex items-center gap-5">
-        <button id="navAuthBtn" onclick="window.handleAuth()" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition">Sign In</button>
+        <button id="navSignInBtn" onclick="window.handleAuth()" class="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition">Sign In</button>
         <a href="mailto:affilore4@gmail.com" class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-black bg-[#F5A623] hover:bg-[#E0961B] rounded-full transition shadow-lg">Request a Custom Tool</a>
       </div>
     </div>
@@ -595,8 +595,108 @@
 
   <div class="toast-container" id="toastContainer"></div>
 
-  <script>
-</script>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI",
+    authDomain: "affilore.firebaseapp.com",
+    projectId: "affilore",
+    storageBucket: "affilore.firebasestorage.app",
+    messagingSenderId: "196193541479",
+    appId: "1:196193541479:web:3cef88a2065b09c755e3c2",
+    measurementId: "G-B6DLGHM5D1"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  
+  // Expose functions to the global window scope
+  window.db = db;
+  window.auth = auth;
+  window.signInWithPopup = signInWithPopup;
+  window.GoogleAuthProvider = GoogleAuthProvider;
+  window.getDoc = getDoc;
+  window.doc = doc;
+  window.setDoc = setDoc;
+  window.signOut = signOut;
+
+  // Setup the persistent auth listener on load
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      if (window.APP_STATE) window.APP_STATE.affilore_session_state = true;
+      // User is signed in, load their dashboard
+      document.getElementById('navSignInBtn').innerHTML = `<div class="flex items-center gap-2 cursor-pointer" onclick="window.handleSignOut()">
+        <img src="${user.photoURL}" class="w-8 h-8 rounded-full border-2 border-amber">
+        <div class="flex flex-col text-xs"><span class="text-white">${user.displayName}</span><span class="text-zinc-500 font-mono text-[10px]">${user.email}</span></div>
+      </div>`;
+      // Ensure dynamic email displays in dropdown as requested in earlier turns
+      const dropdownEmail = document.querySelector('.account-email-display');
+      if (dropdownEmail) dropdownEmail.textContent = user.email;
+      
+      // Close the auth modal
+      if (window.closeAuthModal) window.closeAuthModal();
+      
+      loadFromCloud(user.uid);
+    } else {
+      if (window.APP_STATE) window.APP_STATE.affilore_session_state = false;
+      // User is signed out, show default
+      document.getElementById('navSignInBtn').textContent = 'Sign In';
+      if (window.renderDashboard) {
+        window.renderDashboard(window.DEFAULT_STATE); // Fallback to demo data
+      }
+    }
+  });
+
+  // New Firebase Auth Logic (Global Window Functions)
+  window.handleAuth = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // We do not reload or render here; the onAuthStateChanged listener handles it.
+    } catch (error) {
+      console.error('Auth failed:', error.message);
+      // Use site toast mechanism if available
+    }
+  };
+
+  window.handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Sign Out failed:', error.message);
+    }
+  };
+
+  // New Firebase Data Sync
+  window.syncToCloud = async (uid, data) => {
+    try {
+      await setDoc(doc(db, "users", uid), data);
+    } catch (error) {
+      console.error("Error saving data:", error.message);
+    }
+  };
+
+  async function loadFromCloud(uid) {
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      // Ensure renderDashboard accepts the Firestore state object structure
+      if (window.renderDashboard) {
+        window.renderDashboard(docSnap.data());
+      }
+    } else {
+      // Optional: initialize the doc with defaults
+      console.log("No data found, using defaults.");
+      if (window.renderDashboard) {
+        window.renderDashboard(window.DEFAULT_STATE);
+      }
+    }
+  }
+  </script>
   <!-- ════════════════════ JAVASCRIPT ENGINE ════════════════════ -->
   <script>
     /* ═══════════════════════════════════════════════════
@@ -611,6 +711,15 @@
       ledgerRows: 2,
       sessionStart: Date.now()
     };
+    window.APP_STATE = APP_STATE;
+
+    window.DEFAULT_STATE = {
+      projects: [],
+      journalEntries: [],
+      habitStreaks: [0, 0, 0, 0, 0, 0],
+      habits: [false, false, false, false, false, false],
+      ledger: []
+    };
 
     // Restore persistent data
     function loadPersistedState() {
@@ -618,33 +727,107 @@
         const saved = localStorage.getItem('affilore_dashboard_state');
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (parsed.projects) APP_STATE.projects = parsed.projects;
-          if (parsed.journalEntries) APP_STATE.journalEntries = parsed.journalEntries;
-          if (parsed.habitStreaks) APP_STATE.habitStreaks = parsed.habitStreaks;
-          if (parsed.affilore_session_state) {
-            APP_STATE.affilore_session_state = true;
-            updateAuthUI();
-          }
-        }
-        // Also sync with global session state
-        if (localStorage.getItem('affilore_session_state') === 'true') {
-          APP_STATE.affilore_session_state = true;
-          updateAuthUI();
+          renderDashboard(parsed);
+        } else {
+          renderDashboard(window.DEFAULT_STATE);
         }
       } catch (e) { /* silent */ }
     }
 
     function persistState() {
-      try {
-        const data = {
-          projects: APP_STATE.projects,
-          journalEntries: APP_STATE.journalEntries,
-          habitStreaks: APP_STATE.habitStreaks,
-          affilore_session_state: APP_STATE.affilore_session_state
-        };
-        localStorage.setItem('affilore_dashboard_state', JSON.stringify(data));
-      } catch (e) { /* silent */ }
+      const user = window.auth ? window.auth.currentUser : null;
+      const state = {
+        projects: APP_STATE.projects,
+        journalEntries: APP_STATE.journalEntries,
+        habitStreaks: APP_STATE.habitStreaks,
+        habits: APP_STATE.habits,
+        ledger: Array.from(document.querySelectorAll('#ledgerBody tr')).map(tr => {
+          const inputs = tr.querySelectorAll('input');
+          return {
+            label: inputs[0] ? inputs[0].value : '',
+            income: inputs[1] ? inputs[1].value : '',
+            expense: inputs[2] ? inputs[2].value : ''
+          };
+        })
+      };
+      
+      if (user && window.syncToCloud) {
+        window.syncToCloud(user.uid, state);
+      } else {
+        localStorage.setItem('affilore_dashboard_state', JSON.stringify(state));
+      }
     }
+
+    function renderHabits() {
+      const rows = document.querySelectorAll('.habit-row');
+      rows.forEach((row, idx) => {
+        const checked = APP_STATE.habits[idx] || false;
+        const streak = APP_STATE.habitStreaks[idx] || 0;
+        
+        const checkbox = row.querySelector('.habit-checkbox');
+        if (checkbox) checkbox.checked = checked;
+        
+        if (checked) {
+          row.classList.add('completed');
+        } else {
+          row.classList.remove('completed');
+        }
+        
+        const streakEl = row.querySelector('.habit-streak');
+        if (streakEl) streakEl.textContent = `🔥 ${streak}d`;
+      });
+      updateHabitProgress();
+    }
+
+    function renderLedger(ledger) {
+      const tbody = document.getElementById('ledgerBody');
+      tbody.innerHTML = '';
+      if (ledger && ledger.length > 0) {
+        ledger.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><input type="text" class="ledger-input" placeholder="Label" value="${escapeHtml(row.label || '')}" onchange="guardedAction(computeFinancials)"></td>
+            <td><input type="number" class="ledger-input income" placeholder="0.00" value="${row.income || ''}" oninput="guardedAction(computeFinancials)"></td>
+            <td><input type="number" class="ledger-input expense" placeholder="0.00" value="${row.expense || ''}" oninput="guardedAction(computeFinancials)"></td>
+          `;
+          tbody.appendChild(tr);
+        });
+        APP_STATE.ledgerRows = ledger.length;
+      } else {
+        // default 2 empty rows
+        tbody.innerHTML = `
+          <tr>
+            <td><input type="text" class="ledger-input" placeholder="e.g., Freelance" onchange="guardedAction(computeFinancials)"></td>
+            <td><input type="number" class="ledger-input income" placeholder="0.00" oninput="guardedAction(computeFinancials)"></td>
+            <td><input type="number" class="ledger-input expense" placeholder="0.00" oninput="guardedAction(computeFinancials)"></td>
+          </tr>
+          <tr>
+            <td><input type="text" class="ledger-input" placeholder="e.g., Rent" onchange="guardedAction(computeFinancials)"></td>
+            <td><input type="number" class="ledger-input income" placeholder="0.00" oninput="guardedAction(computeFinancials)"></td>
+            <td><input type="number" class="ledger-input expense" placeholder="0.00" oninput="guardedAction(computeFinancials)"></td>
+          </tr>
+        `;
+        APP_STATE.ledgerRows = 2;
+      }
+      computeFinancials();
+    }
+
+    function renderDashboard(state) {
+      if (!state) return;
+      
+      APP_STATE.projects = state.projects || [];
+      APP_STATE.journalEntries = state.journalEntries || [];
+      APP_STATE.habitStreaks = state.habitStreaks || [0, 0, 0, 0, 0, 0];
+      APP_STATE.habits = state.habits || [false, false, false, false, false, false];
+      
+      renderProjects();
+      renderJournalEntries();
+      renderHabits();
+      renderLedger(state.ledger);
+      
+      updateAnalytics();
+    }
+    window.renderDashboard = renderDashboard;
 
     /* ═══════════════════════════════════════════════════
        SESSION AUTH GUARD
@@ -667,53 +850,8 @@
       document.getElementById('authModal').style.display = 'none';
     }
 
-    function handleAuth() {
-      if (APP_STATE.affilore_session_state) {
-        APP_STATE.affilore_session_state = false;
-        localStorage.removeItem('affilore_session_state');
-        localStorage.removeItem('affilore_user_email');
-        updateAuthUI();
-        persistState();
-        showToast('Session terminated. Re-authenticate to continue.', 'info');
-      } else {
-        openAuthModal();
-      }
-    }
-
-    function authenticateWith(provider) {
-      let email = `${provider.toLowerCase()}user@gmail.com`;
-      if (provider === 'Email') {
-        const emailInput = document.getElementById('authEmail');
-        if (emailInput && emailInput.value.trim()) {
-          email = emailInput.value.trim();
-        } else {
-          showToast('Please enter a valid email address.', 'warning');
-          return;
-        }
-      }
-      APP_STATE.affilore_session_state = true;
-      localStorage.setItem('affilore_session_state', 'true');
-      localStorage.setItem('affilore_user_email', email);
-      closeAuthModal();
-      updateAuthUI();
-      persistState();
-      showToast(`Authenticated via ${provider}. Session active.`, 'success');
-    }
-
     function updateAuthUI() {
-      const btn = document.getElementById('navAuthBtn');
-      if (!btn) return;
-      if (APP_STATE.affilore_session_state) {
-        btn.textContent = 'Sign Out';
-        btn.style.background = 'transparent';
-        btn.style.color = '';
-        btn.style.border = '';
-      } else {
-        btn.textContent = 'Sign In';
-        btn.style.background = 'transparent';
-        btn.style.color = '';
-        btn.style.border = '';
-      }
+      // Harmless stub since auth state is handled by the module listener
     }
 
     /* ═══════════════════════════════════════════════════
@@ -815,7 +953,7 @@
       document.getElementById('financeBadge').textContent = `${APP_STATE.ledgerRows} entries`;
     }
 
-    function computeFinancials() {
+    function computeFinancials(shouldPersist = true) {
       const incomeInputs = document.querySelectorAll('#ledgerBody .income');
       const expenseInputs = document.querySelectorAll('#ledgerBody .expense');
 
@@ -846,6 +984,7 @@
       document.getElementById('financeBadge').textContent = `${rows.length} entries`;
 
       updateAnalytics();
+      if (shouldPersist) persistState();
     }
 
     /* ═══════════════════════════════════════════════════
@@ -1185,7 +1324,6 @@
     // Expose functions globally for HTML event handlers
     window.openAuthModal = openAuthModal;
     window.closeAuthModal = closeAuthModal;
-    window.simulateLogin = authenticateWith;
     window.toggleHabit = toggleHabit;
     window.computeFinancials = computeFinancials;
     window.addLedgerRow = addLedgerRow;
@@ -1195,7 +1333,6 @@
     window.exportDashboard = exportDashboard;
     window.clearWindow = clearWindow;
     window.copySystemSetup = copySystemSetup;
-    window.handleAuth = handleAuth;
 
     // Boot
     document.addEventListener('DOMContentLoaded', init);
