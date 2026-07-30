@@ -21,7 +21,7 @@
   var BAR_HEIGHT_MOBILE  = 68;   // px – wraps to two lines on small screens
 
   var SERVICES_URL     = '/services';
-  var CUSTOM_BUILD_URL = 'https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com&su=Custom+Build+Request+%28%24499%2B%29&body=Hi+Affilore+team%2C%0A%0AI%27m+interested+in+a+custom+build.+Here%27s+what+I+need%3A%0A%0A';
+  var CUSTOM_BUILD_URL = 'https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com&su=Custom+Build+Request+%28%24200%2B%29&body=Hi+Affilore+team%2C%0A%0AI%27m+interested+in+a+custom+build.+Here%27s+what+I+need%3A%0A%0A';
   var STRATEGY_CALL_URL = 'https://mail.google.com/mail/?view=cm&fs=1&to=affilore4@gmail.com&su=15-Min+Strategy+Call+Request&body=Hi+Affilore+team%2C%0A%0AI%27d+like+to+book+a+15-minute+strategy+call.+Here%27s+a+brief+overview+of+my+project%3A%0A%0A';
 
   // ── Tool page detection ────────────────────────────────────
@@ -461,7 +461,7 @@
         '<div class="aff-cta-actions">' +
           '<a href="' + CUSTOM_BUILD_URL + '" target="_blank" rel="noopener noreferrer" class="aff-cta-btn-primary">' +
             '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>' +
-            'Get a Custom Build ($499+)' +
+            'Get a Custom Build ($200+)' +
           '</a>' +
           '<a href="' + STRATEGY_CALL_URL + '" target="_blank" rel="noopener noreferrer" class="aff-cta-btn-secondary">' +
             '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
