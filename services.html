@@ -8,10 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
-    <!-- Firebase Analytics and Monitoring Config (Preserved) -->
+    <!-- Firebase Analytics, Monitoring & Firestore Config -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI",
@@ -23,9 +24,16 @@
             measurementId: "G-B6DLGHM5D1"
         };
 
-        // Initialize Firebase Global Metrics Sandbox Instance
+        // Initialize Firebase Global Instance & Firestore
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Make Firestore available globally for form handler
+        window.affiloreDB = db;
+        window.firestoreCollection = collection;
+        window.firestoreAddDoc = addDoc;
+        window.firestoreServerTimestamp = serverTimestamp;
     </script>
 
     <script id="tailwind-config">
@@ -434,7 +442,11 @@
                             <textarea id="details" rows="5" required placeholder="Tell us about the tool or MVP you want to build..." class="w-full bg-[#1e2020] border border-[#333535] rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors resize-none"></textarea>
                         </div>
 
-                        <button type="button" id="submit-btn" class="w-full py-4 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold text-lg transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:scale-[1.02]">
+                        <div id="form-success-msg" class="hidden p-4 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-center font-medium text-sm shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                            Application received! We will contact you within 24 hours.
+                        </div>
+
+                        <button type="button" id="submit-btn" class="w-full py-4 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-bold text-lg transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] hover:scale-[1.02] cursor-pointer">
                             Submit Project Request
                         </button>
                     </form>
@@ -509,7 +521,7 @@
         }
     </script>
 
-    <!-- Mobile Nav Toggle & Form script -->
+    <!-- Mobile Nav Toggle & Firestore Form Submission Script -->
     <script>
         const toggleBtn = document.getElementById('mobile-nav-toggle');
         const navLinks = document.getElementById('main-navigation');
@@ -529,26 +541,83 @@
             });
         }
 
-        // Form Submission Logic (Mailto)
-        document.getElementById('submit-btn').addEventListener('click', function(e) {
-            e.preventDefault();
+        // Firestore Lead Generation Submission Logic
+        const projectForm = document.getElementById('project-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const successMsg = document.getElementById('form-success-msg');
 
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const budget = document.getElementById('budget').value;
-            const details = document.getElementById('details').value.trim();
+        if (projectForm && submitBtn) {
+            submitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (typeof projectForm.requestSubmit === 'function') {
+                    projectForm.requestSubmit();
+                } else {
+                    projectForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                }
+            });
 
-            if (!name || !email || !budget || !details) {
-                alert("Please fill in all fields.");
-                return;
-            }
+            projectForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
 
-            const subject = encodeURIComponent(`New Project Request: ${name}`);
-            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nBudget: ${budget}\n\nProject Details:\n${details}`);
+                const nameInput = document.getElementById('name');
+                const emailInput = document.getElementById('email');
+                const budgetInput = document.getElementById('budget');
+                const detailsInput = document.getElementById('details');
 
-            // Note: Since this is a static site and memory says forms shouldn't use POST, we use mailto:
-            window.location.href = `mailto:affilore4@gmail.com?subject=${subject}&body=${body}`;
-        });
+                const name = nameInput.value.trim();
+                const email = emailInput.value.trim();
+                const budget = budgetInput.value;
+                const details = detailsInput.value.trim();
+
+                if (!name || !email || !budget || !details) {
+                    alert("Please fill in all required fields.");
+                    return;
+                }
+
+                // UI Sending State
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Sending...";
+                if (successMsg) successMsg.classList.add('hidden');
+
+                try {
+                    const db = window.affiloreDB;
+                    const addDoc = window.firestoreAddDoc;
+                    const collection = window.firestoreCollection;
+                    const serverTimestamp = window.firestoreServerTimestamp;
+
+                    if (!db || !addDoc || !collection) {
+                        throw new Error("Firestore database is initializing. Please wait a moment and try again.");
+                    }
+
+                    await addDoc(collection(db, 'sprint_leads'), {
+                        name: name,
+                        email: email,
+                        budget: budget,
+                        details: details,
+                        createdAt: serverTimestamp ? serverTimestamp() : new Date()
+                    });
+
+                    // Clear form fields on success
+                    projectForm.reset();
+
+                    // Restore button state
+                    submitBtn.textContent = "Submit Project Request";
+                    submitBtn.disabled = false;
+
+                    // Display sleek green success message
+                    if (successMsg) {
+                        successMsg.classList.remove('hidden');
+                        successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                } catch (error) {
+                    console.error("Firestore Lead Submission Error:", error);
+                    submitBtn.textContent = originalBtnText;
+                    submitBtn.disabled = false;
+                    alert("Submission failed: " + (error.message || "Please check your network connection and try again."));
+                }
+            });
+        }
     </script>
 </body>
 </html>
