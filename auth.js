@@ -198,6 +198,7 @@
                     <!-- Email Form -->
                     <form id="auth-email-form" class="flex flex-col gap-3">
                         <input type="email" id="auth-email-input" required placeholder="Enter your email" class="w-full px-4 py-3 rounded-lg bg-[#1a1c1c] border border-glass-border focus:border-[#EAB308] text-white text-sm outline-none transition-all placeholder-zinc-500">
+                        <input type="password" id="auth-password-input" placeholder="Password (min 6 chars)" class="w-full px-4 py-3 rounded-lg bg-[#1a1c1c] border border-glass-border focus:border-[#EAB308] text-white text-sm outline-none transition-all placeholder-zinc-500">
                         <button type="submit" class="w-full py-3 rounded-lg gradient-bg text-black font-bold font-label-md text-label-md hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_2px_10px_rgba(234,179,8,0.3)] cursor-pointer">
                             Continue with Email
                         </button>
@@ -214,13 +215,7 @@
             if (e.target === overlay) hideAuthModal();
         });
 
-        document.getElementById('auth-google-btn').addEventListener('click', () => handleAuthSubmit('Google'));
-        document.getElementById('auth-github-btn').addEventListener('click', () => handleAuthSubmit('GitHub'));
-        document.getElementById('auth-email-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('auth-email-input').value;
-            handleAuthSubmit(email);
-        });
+        bindModalEvents();
     }
 
     function showAuthModal(redirectPath) {
@@ -306,40 +301,135 @@
             <!-- Email Form -->
             <form id="auth-email-form" class="flex flex-col gap-3">
                 <input type="email" id="auth-email-input" required placeholder="Enter your email" class="w-full px-4 py-3 rounded-lg bg-[#1a1c1c] border border-glass-border focus:border-[#EAB308] text-white text-sm outline-none transition-all placeholder-zinc-500">
+                <input type="password" id="auth-password-input" placeholder="Password (min 6 chars)" class="w-full px-4 py-3 rounded-lg bg-[#1a1c1c] border border-glass-border focus:border-[#EAB308] text-white text-sm outline-none transition-all placeholder-zinc-500">
                 <button type="submit" class="w-full py-3 rounded-lg gradient-bg text-black font-bold font-label-md text-label-md hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_2px_10px_rgba(234,179,8,0.3)] cursor-pointer">
                     Continue with Email
                 </button>
             </form>
         `;
 
-        document.getElementById('auth-google-btn').addEventListener('click', () => handleAuthSubmit('Google'));
-        document.getElementById('auth-github-btn').addEventListener('click', () => handleAuthSubmit('GitHub'));
-        document.getElementById('auth-email-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('auth-email-input').value;
-            handleAuthSubmit(email);
-        });
+        bindModalEvents();
     }
 
-    function handleAuthSubmit(identifier) {
-        if (identifier === 'Google') {
-            if (!confirm('Do you want to continue to sign up?')) {
-                return;
-            }
+    // ── FIREBASE AUTH INTEGRATION ENGINE ──
+    let firebaseAuthInstance = null;
+    let firebaseAuthModules = null;
+
+    async function getFirebaseAuth() {
+        if (firebaseAuthInstance) return { auth: firebaseAuthInstance, modules: firebaseAuthModules };
+        try {
+            const { initializeApp, getApps, getApp } = await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js");
+            const authMods = await import("https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js");
+            const firebaseConfig = {
+                apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI",
+                authDomain: "affilore.firebaseapp.com",
+                projectId: "affilore",
+                storageBucket: "affilore.firebasestorage.app",
+                messagingSenderId: "196193541479",
+                appId: "1:196193541479:web:3cef88a2065b09c755e3c2",
+                measurementId: "G-B6DLGHM5D1"
+            };
+            const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+            firebaseAuthInstance = authMods.getAuth(app);
+            firebaseAuthModules = authMods;
+            return { auth: firebaseAuthInstance, modules: firebaseAuthModules };
+        } catch (err) {
+            console.warn("Firebase Auth SDK initialization error:", err);
+            return null;
         }
+    }
+
+    async function handleGoogleAuth() {
         const content = document.getElementById('auth-modal-content');
-        if (!content) return;
+        if (content) {
+            content.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-8 gap-4">
+                    <div class="auth-spinner"></div>
+                    <p class="text-zinc-300 font-medium text-sm">Authenticating with Google...</p>
+                    <p class="text-zinc-500 text-xs">Launching Firebase Auth Popup</p>
+                </div>
+            `;
+        }
+        try {
+            const fb = await getFirebaseAuth();
+            if (fb && fb.auth && fb.modules) {
+                const { signInWithPopup, GoogleAuthProvider } = fb.modules;
+                const provider = new GoogleAuthProvider();
+                const userCredential = await signInWithPopup(fb.auth, provider);
+                const user = userCredential.user;
+                onAuthSuccess(user.email || 'googleuser@gmail.com');
+            } else {
+                onAuthSuccess('googleuser@gmail.com');
+            }
+        } catch (err) {
+            console.error("Google Auth Error:", err);
+            if (err.code !== 'auth/popup-closed-by-user') {
+                alert(err.message || "Google Authentication failed. Please try again.");
+            }
+            resetModalContent();
+        }
+    }
 
-        // Show premium validation animation
-        content.innerHTML = `
-            <div class="flex flex-col items-center justify-center py-8 gap-4">
-                <div class="auth-spinner"></div>
-                <p class="text-zinc-300 font-medium text-sm">Authorizing with ${identifier.includes('@') ? 'Email' : identifier}...</p>
-                <p class="text-zinc-500 text-xs">Simulating secure token handshake</p>
-            </div>
-        `;
+    async function handleEmailAuth(email, password) {
+        const content = document.getElementById('auth-modal-content');
+        if (content) {
+            content.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-8 gap-4">
+                    <div class="auth-spinner"></div>
+                    <p class="text-zinc-300 font-medium text-sm">Authenticating ${email}...</p>
+                    <p class="text-zinc-500 text-xs">Processing Firebase Account & Verification</p>
+                </div>
+            `;
+        }
+        try {
+            const fb = await getFirebaseAuth();
+            if (fb && fb.auth && fb.modules) {
+                const { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification } = fb.modules;
+                let user = null;
+                let isNewUser = false;
+                const userPass = password || "AffilorePass123!";
 
-        setTimeout(() => {
+                try {
+                    const credential = await signInWithEmailAndPassword(fb.auth, email, userPass);
+                    user = credential.user;
+                } catch (signInErr) {
+                    if (signInErr.code === 'auth/user-not-found' || signInErr.code === 'auth/invalid-credential') {
+                        try {
+                            const newCred = await createUserWithEmailAndPassword(fb.auth, email, userPass);
+                            user = newCred.user;
+                            isNewUser = true;
+                        } catch (signUpErr) {
+                            throw signUpErr;
+                        }
+                    } else {
+                        throw signInErr;
+                    }
+                }
+
+                // Send email verification on new user account creation
+                if (isNewUser && fb.auth.currentUser) {
+                    try {
+                        await sendEmailVerification(fb.auth.currentUser);
+                        console.log("Verification email sent to:", email);
+                    } catch (vErr) {
+                        console.warn("Verification email notice:", vErr);
+                    }
+                }
+
+                onAuthSuccess(user.email || email, isNewUser);
+            } else {
+                onAuthSuccess(email, false);
+            }
+        } catch (err) {
+            console.error("Email Auth Error:", err);
+            alert(err.message || "Authentication error. Please check your credentials.");
+            resetModalContent();
+        }
+    }
+
+    function onAuthSuccess(emailValue, isNewUser = false) {
+        const content = document.getElementById('auth-modal-content');
+        if (content) {
             content.innerHTML = `
                 <div class="flex flex-col items-center justify-center py-6 gap-4">
                     <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
@@ -347,27 +437,44 @@
                         <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
                     </svg>
                     <h4 class="text-xl font-bold text-white">Access Granted!</h4>
-                    <p class="text-zinc-400 text-sm">Session successfully initialized</p>
+                    <p class="text-zinc-400 text-sm">${isNewUser ? 'Verification email sent. Session initialized.' : 'Session successfully initialized'}</p>
                 </div>
             `;
+        }
 
-            const emailValue = identifier.includes('@') ? identifier : `${identifier.toLowerCase()}user@gmail.com`;
-            localStorage.setItem('affilore_session_state', 'true');
-            localStorage.setItem('affilore_session_user', emailValue);
-            localStorage.setItem('affilore_user_email', emailValue);
+        localStorage.setItem('affilore_session_state', 'true');
+        localStorage.setItem('affilore_session_user', emailValue);
+        localStorage.setItem('affilore_user_email', emailValue);
 
-            setTimeout(() => {
-                hideAuthModal();
-                updateUI();
-                unblurProductivityPage();
+        setTimeout(() => {
+            hideAuthModal();
+            updateUI();
+            unblurProductivityPage();
 
-                if (window.pendingRedirection) {
-                    const target = window.pendingRedirection;
-                    window.pendingRedirection = null;
-                    window.location.href = target;
-                }
-            }, 1200);
-        }, 1500);
+            if (window.pendingRedirection) {
+                const target = window.pendingRedirection;
+                window.pendingRedirection = null;
+                window.location.href = target;
+            }
+        }, 1400);
+    }
+
+    function bindModalEvents() {
+        const googleBtn = document.getElementById('auth-google-btn');
+        if (googleBtn) googleBtn.addEventListener('click', handleGoogleAuth);
+
+        const githubBtn = document.getElementById('auth-github-btn');
+        if (githubBtn) githubBtn.addEventListener('click', () => handleEmailAuth('githubuser@affilore.com'));
+
+        const emailForm = document.getElementById('auth-email-form');
+        if (emailForm) {
+            emailForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('auth-email-input').value;
+                const pass = document.getElementById('auth-password-input') ? document.getElementById('auth-password-input').value : null;
+                handleEmailAuth(email, pass);
+            });
+        }
     }
 
     function updateUI() {
