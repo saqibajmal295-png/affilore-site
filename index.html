@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Affilore | Digital Product Bundles, Notion Planners & Developer Toolkits</title>
-    <meta name="description" content="High-converting digital product bundles, production-ready Notion planners, developer toolkits, and client-side web utilities for creators, engineers, and digital entrepreneurs.">
+    <title>Affilore | Digital Product Storefront, Free Web Utilities & Dev Sprints</title>
+    <meta name="description" content="High-converting digital product bundles, production-ready Notion OS planners, developer toolkits, client-side web utilities, and 48-hour custom development sprint packages.">
     
-    <!-- Gumroad Overlay Script -->
+    <!-- Gumroad Overlay Script Integration -->
     <script src="https://gumroad.com/js/gumroad.js"></script>
 
     <!-- Tailwind CSS with plugins -->
@@ -14,10 +14,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     
-    <!-- Firebase Analytics and Monitoring Config (Preserved) -->
+    <!-- Firebase Analytics, Monitoring & Firestore Config (PRESERVED) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAiP9wPQcPVfIIHfZZcgdGxONKAn-aHYRI",
@@ -31,6 +32,12 @@
 
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        window.affiloreDB = db;
+        window.firestoreCollection = collection;
+        window.firestoreAddDoc = addDoc;
+        window.firestoreServerTimestamp = serverTimestamp;
     </script>
 
     <script id="tailwind-config">
@@ -39,12 +46,12 @@
             theme: {
                 extend: {
                     colors: {
-                        "dark-bg": "#090D16",
-                        "dark-surface": "#0D1117",
-                        "dark-card": "#161B22",
-                        "primary": "#EAB308",
-                        "glass-border": "rgba(255, 255, 255, 0.15)",
-                        "glass-fill": "rgba(255, 255, 255, 0.04)"
+                        "dark-bg": "#080C14",
+                        "dark-surface": "#0D121F",
+                        "dark-card": "#141A29",
+                        "primary-gold": "#EAB308",
+                        "glass-border": "rgba(255, 255, 255, 0.08)",
+                        "glass-fill": "rgba(255, 255, 255, 0.03)"
                     },
                     fontFamily: {
                         "sans": ["Inter", "sans-serif"],
@@ -56,19 +63,19 @@
     </script>
     <style>
         body { 
-            background-color: #090D16; 
-            color: #E6EDF3;
+            background-color: #080C14; 
+            color: #F3F4F6;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden; 
         }
 
-        /* Glassmorphism Styles */
+        /* Glassmorphism Design System */
         .glass-card {
-            background: rgba(22, 27, 34, 0.65);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         }
 
         .glass-card-hover {
@@ -77,34 +84,37 @@
         .glass-card-hover:hover {
             transform: translateY(-4px);
             border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.25);
         }
 
-        /* Animated Radial Dot Grid Pattern */
-        .radial-dot-grid {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-            background-size: 24px 24px;
-            animation: dotPulse 8s ease-in-out infinite alternate;
+        /* Animated Moving Dot Grid Pattern */
+        .moving-dot-grid {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            animation: dotMove 12s linear infinite;
         }
 
-        @keyframes dotPulse {
-            0% { opacity: 0.35; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.015); }
-            100% { opacity: 0.35; transform: scale(1); }
+        @keyframes dotMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 28px 28px; }
         }
 
-        /* Ambient Orbs */
-        .ambient-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            pointer-events: none;
-            opacity: 0.25;
+        /* Gradient Text Utilities */
+        .gradient-text {
+            background: linear-gradient(135deg, #60A5FA 0%, #818CF8 50%, #C084FC 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .orb-blue { background: #3B82F6; }
-        .orb-purple { background: #8B5CF6; }
-        .orb-indigo { background: #6366F1; }
-        .orb-amber { background: #EAB308; }
+
+        .gradient-btn {
+            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 50%, #8B5CF6 100%);
+            transition: all 0.3s ease;
+        }
+        .gradient-btn:hover {
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+            transform: scale(1.02);
+        }
 
         /* Accordion transition */
         .accordion-content {
@@ -117,17 +127,6 @@
             transition: max-height 0.35s ease-in-out;
         }
 
-        /* Gradient Button Glow */
-        .gradient-btn {
-            background: linear-gradient(135deg, #3B82F6 0%, #6366F1 50%, #8B5CF6 100%);
-            transition: all 0.3s ease;
-        }
-        .gradient-btn:hover {
-            box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
-            transform: scale(1.02);
-        }
-
-        /* Gumroad custom button styling override integration */
         a.gumroad-button {
             text-decoration: none !important;
             font-family: inherit !important;
@@ -136,37 +135,39 @@
     <script src="/auth.js" defer></script>
     <script src="/affilore-monetization.js"></script>
 </head>
-<body class="antialiased min-h-screen flex flex-col relative bg-[#090D16] text-[#E6EDF3]">
+<body class="antialiased min-h-screen flex flex-col relative bg-[#080C14] text-[#F3F4F6]">
 
-    <!-- Background Details: Ambient Glow Orbs -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
-        <div class="ambient-orb orb-indigo w-[600px] h-[600px] top-[-200px] left-[-150px]"></div>
-        <div class="ambient-orb orb-purple w-[500px] h-[500px] top-[30%] right-[-150px]"></div>
-        <div class="ambient-orb orb-blue w-[450px] h-[450px] bottom-[-100px] left-[20%]"></div>
+    <!-- Top Announcement Bar -->
+    <div class="bg-gradient-to-r from-indigo-900 via-purple-900 to-slate-900 border-b border-white/10 text-center py-2 px-4 text-xs md:text-sm font-sora font-semibold text-zinc-200 z-50">
+        <span>Need a custom client-side web utility or dashboard built in 48 hours? Packages start at $200</span>
+        <a href="/sprints" class="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 ml-2 underline underline-offset-4">
+            View Sprint Packages &rarr;
+        </a>
     </div>
 
-    <!-- Navigation Bar -->
-    <header class="bg-[#090D16]/80 sticky top-0 w-full border-b border-white/10 backdrop-blur-md z-50">
+    <!-- Sticky Glass Navbar -->
+    <header class="bg-[#080C14]/85 sticky top-0 w-full border-b border-white/10 backdrop-blur-md z-50">
         <div class="flex justify-between items-center px-6 md:px-12 py-4 max-w-7xl mx-auto">
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="flex items-center gap-2.5 transition-opacity hover:opacity-90">
-                    <img src="assets/logo.jpeg" alt="Affilore Logo" width="40" height="40" class="h-10 w-10 object-contain rounded-lg shadow-sm border border-white/10" />
-                    <span class="font-sora font-extrabold text-xl tracking-tight text-white">Affilore</span>
-                </a>
-            </div>
+            <a href="/" class="flex items-center gap-2.5 transition-opacity hover:opacity-90">
+                <img src="assets/logo.jpeg" alt="Affilore Logo" width="40" height="40" class="h-10 w-10 object-contain rounded-lg shadow-sm border border-white/10" />
+                <span class="font-sora font-extrabold text-xl tracking-tight text-white">Affilore</span>
+            </a>
+
             <nav id="main-navigation" class="hidden md:flex gap-8 items-center font-sora text-sm font-medium text-zinc-300">
                 <a class="hover:text-white transition-colors py-1" href="/">Home</a>
-                <a class="hover:text-white transition-colors py-1" href="#product-storefront">Storefront</a>
-                <a class="hover:text-white transition-colors py-1" href="#features">Features</a>
+                <a class="hover:text-white transition-colors py-1" href="/storefront">Storefront</a>
+                <a class="hover:text-white transition-colors py-1" href="/sprints">Sprint Packages</a>
+                <a class="hover:text-white transition-colors py-1" href="/tools">Free Tools</a>
                 <a class="hover:text-white transition-colors py-1" href="#faq">FAQ</a>
-                <a class="hover:text-white transition-colors py-1" href="#free-tools-directory">Free Tools</a>
             </nav>
+
             <div class="hidden md:flex items-center gap-4">
                 <a href="#" id="auth-nav-btn" class="text-sm font-semibold text-zinc-300 hover:text-white transition-colors">Sign In</a>
                 <a class="gumroad-button px-5 py-2 rounded-full gradient-btn text-white font-sora text-xs font-bold uppercase tracking-wider shadow-md hover:scale-105" href="https://gumroad.com/l/YOUR_PRODUCT_ID">
                     Claim Vault
                 </a>
             </div>
+
             <button id="mobile-nav-toggle" aria-label="Toggle Menu" class="md:hidden text-zinc-300 p-2 focus:outline-none">
                 <span class="material-symbols-outlined">menu</span>
             </button>
@@ -177,64 +178,64 @@
         
         <!-- HERO SECTION -->
         <section class="relative py-20 md:py-28 text-center flex flex-col items-center justify-center overflow-hidden rounded-3xl mt-4 px-4">
-            <!-- Animated Radial Dot Grid Layer -->
-            <div class="absolute inset-0 radial-dot-grid rounded-3xl pointer-events-none"></div>
+            <!-- Animated Moving Dot Grid Layer -->
+            <div class="absolute inset-0 moving-dot-grid rounded-3xl pointer-events-none opacity-40"></div>
 
-            <!-- Hero Trust Badge -->
-            <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md mb-8 shadow-inner">
+            <!-- Trust Badge -->
+            <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-md mb-8 shadow-inner">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_#34d399]"></span>
                 <span class="font-sora text-xs font-semibold text-zinc-200 tracking-wide uppercase">Instant Download • 100% Client-Side Safe</span>
             </div>
 
-            <!-- High-Converting Gradient Headline -->
+            <!-- Main Gradient Headline -->
             <h1 class="font-sora text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white max-w-5xl tracking-tight leading-[1.12] mb-6">
                 Stop Building From Scratch.
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 block mt-2">
-                    Digital Product Bundles, Planners & Developer Toolkits
+                <span class="gradient-text block mt-2">
+                    Digital Product Bundles, Planners & Developer Toolkits.
                 </span>
             </h1>
 
             <!-- Subheadline -->
             <p class="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mb-10 font-sans leading-relaxed">
-                Accelerate your growth with production-ready Notion OS workspaces, customizable digital product templates, and high-performance client-side developer code vaults.
+                Accelerate your growth with production-ready Notion OS workspaces, customizable digital product templates, and high-performance web utilities.
             </p>
 
-            <!-- Hero Action Buttons -->
+            <!-- Hero Dual Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md">
-                <a class="gumroad-button px-8 py-4 rounded-xl gradient-btn font-sora font-bold text-base text-white shadow-lg hover:scale-105 flex items-center justify-center gap-2" href="https://gumroad.com/l/YOUR_PRODUCT_ID">
-                    <span class="material-symbols-outlined text-xl">bolt</span>
-                    Claim Vault — $27
+                <a class="px-8 py-4 rounded-xl gradient-btn font-sora font-bold text-base text-white shadow-lg hover:scale-105 flex items-center justify-center gap-2" href="/storefront">
+                    <span class="material-symbols-outlined text-xl">storefront</span>
+                    Explore Storefront
                 </a>
-                <a class="px-8 py-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 font-sora font-semibold text-base text-zinc-200 backdrop-blur-md transition-all hover:scale-105 flex items-center justify-center gap-2" href="#product-storefront">
-                    <span class="material-symbols-outlined text-xl">grid_view</span>
-                    Explore Bundles
+                <a class="px-8 py-4 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 font-sora font-semibold text-base text-zinc-200 backdrop-blur-md transition-all hover:scale-105 flex items-center justify-center gap-2" href="/sprints">
+                    <span class="material-symbols-outlined text-xl">bolt</span>
+                    Custom Dev Packages ($200)
                 </a>
             </div>
 
             <!-- Key Feature Badges -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 w-full max-w-4xl text-left">
-                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5 flex items-center gap-3">
+                <div class="p-4 rounded-xl glass-card flex items-center gap-3">
                     <span class="material-symbols-outlined text-blue-400 text-2xl">download_done</span>
                     <div>
                         <div class="text-xs font-bold text-white uppercase tracking-wider">Instant Access</div>
                         <div class="text-xs text-zinc-400">Automated Delivery</div>
                     </div>
                 </div>
-                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5 flex items-center gap-3">
+                <div class="p-4 rounded-xl glass-card flex items-center gap-3">
                     <span class="material-symbols-outlined text-indigo-400 text-2xl">verified_user</span>
                     <div>
                         <div class="text-xs font-bold text-white uppercase tracking-wider">100% Private</div>
                         <div class="text-xs text-zinc-400">Client-Side Safe</div>
                     </div>
                 </div>
-                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5 flex items-center gap-3">
+                <div class="p-4 rounded-xl glass-card flex items-center gap-3">
                     <span class="material-symbols-outlined text-purple-400 text-2xl">update</span>
                     <div>
                         <div class="text-xs font-bold text-white uppercase tracking-wider">Lifetime Updates</div>
-                        <div class="text-xs text-zinc-400">Free Future Additions</div>
+                        <div class="text-xs text-zinc-400">Free Additions</div>
                     </div>
                 </div>
-                <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5 flex items-center gap-3">
+                <div class="p-4 rounded-xl glass-card flex items-center gap-3">
                     <span class="material-symbols-outlined text-emerald-400 text-2xl">workspace_premium</span>
                     <div>
                         <div class="text-xs font-bold text-white uppercase tracking-wider">Commercial Rights</div>
@@ -244,8 +245,8 @@
             </div>
         </section>
 
-        <!-- PRODUCT STOREFRONT GRID SECTION -->
-        <section class="py-16 md:py-24" id="product-storefront">
+        <!-- STOREFRONT FEATURED PREVIEW SECTION -->
+        <section class="py-16 md:py-24 border-t border-white/10" id="storefront-preview">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
                 <div>
                     <span class="text-xs font-sora font-bold text-indigo-400 uppercase tracking-widest">Digital Marketplace</span>
@@ -253,358 +254,203 @@
                         Featured Digital Product Bundles
                     </h2>
                 </div>
-                <!-- Category Filter Pills -->
-                <div class="flex flex-wrap gap-2" id="category-filters">
-                    <button class="cat-btn active px-4 py-2 rounded-full text-xs font-sora font-semibold bg-indigo-600 text-white shadow-md transition-all" data-category="all">
-                        All Assets
-                    </button>
-                    <button class="cat-btn px-4 py-2 rounded-full text-xs font-sora font-semibold bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10 transition-all" data-category="bundles">
-                        Product Bundles
-                    </button>
-                    <button class="cat-btn px-4 py-2 rounded-full text-xs font-sora font-semibold bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10 transition-all" data-category="planners">
-                        Planners & OS
-                    </button>
-                    <button class="cat-btn px-4 py-2 rounded-full text-xs font-sora font-semibold bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10 transition-all" data-category="developer">
-                        Developer Toolkits
-                    </button>
-                    <button class="cat-btn px-4 py-2 rounded-full text-xs font-sora font-semibold bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10 transition-all" data-category="seo">
-                        SEO & Data
-                    </button>
-                </div>
+                <a href="/storefront" class="inline-flex items-center gap-2 text-sm font-sora font-semibold text-indigo-400 hover:text-indigo-300">
+                    View Complete Storefront &rarr;
+                </a>
             </div>
 
-            <!-- Product Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
-                <!-- Product Card 1: Mega Vault Bundle -->
-                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between border-white/10 relative group" data-cat="bundles">
-                    <div class="absolute top-4 right-4 z-10">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-sora font-extrabold uppercase tracking-wider bg-gradient-to-r from-amber-500 to-yellow-400 text-black shadow-md">
-                            ★ BESTSELLER BUNDLE
-                        </span>
-                    </div>
+            <!-- Product Cards Preview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between relative group">
                     <div class="w-full aspect-video bg-zinc-950 overflow-hidden relative">
                         <img src="/assets/thumbnails/all-in-one-life-dashboard.jpeg" alt="Affilore Ultimate Creator Vault" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0D1117] via-transparent to-transparent"></div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div>
-                            <span class="text-xs font-sora font-semibold text-indigo-400 uppercase tracking-wide">All-in-One Suite</span>
+                            <span class="text-xs font-sora font-semibold text-amber-400 uppercase tracking-wide">★ Bestseller Bundle</span>
                             <h3 class="font-sora text-xl font-bold text-white mt-1 mb-2">Affilore Ultimate Creator Vault</h3>
-                            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                The complete digital arsenal. Unlocks all Notion OS workspaces, developer code toolkits, graphic Canva bundles, and privacy-first web utilities in a single master license.
-                            </p>
-                            <ul class="space-y-2.5 mb-6 text-xs text-zinc-300">
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    15+ Premium Notion Workspaces & OS Templates
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Complete Developer Utility & Code Stack
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Commercial License & Lifetime Future Updates
-                                </li>
-                            </ul>
+                            <p class="text-sm text-zinc-400 mb-6">Complete digital product suite unlocking all Notion OS planners, developer code toolkits, and web utility templates.</p>
                         </div>
                         <div>
                             <div class="flex items-baseline justify-between mb-4 pt-4 border-t border-white/10">
-                                <div>
-                                    <span class="text-xs text-zinc-400">Regular Price: </span>
-                                    <span class="text-xs text-zinc-500 line-through">$149</span>
-                                </div>
-                                <div class="text-2xl font-sora font-extrabold text-white">$27</div>
+                                <span class="text-xs text-zinc-500 line-through">$149</span>
+                                <span class="text-2xl font-sora font-extrabold text-white">$27</span>
                             </div>
                             <a class="gumroad-button inline-flex justify-center items-center gap-2 w-full py-3.5 rounded-xl gradient-btn text-white font-sora font-bold text-sm shadow-lg hover:scale-[1.02] transition-all" href="https://gumroad.com/l/YOUR_PRODUCT_ID">
-                                <span class="material-symbols-outlined text-lg">shopping_cart</span>
                                 Claim Vault — $27
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Product Card 2: Developer Operations Toolkit -->
-                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between border-white/10 relative group" data-cat="developer">
-                    <div class="absolute top-4 right-4 z-10">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-sora font-extrabold uppercase tracking-wider bg-indigo-500 text-white shadow-md">
-                            TOP VALUE TOOLKIT
-                        </span>
-                    </div>
+                <!-- Card 2 -->
+                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between relative group">
                     <div class="w-full aspect-video bg-zinc-950 overflow-hidden relative">
-                        <img src="/assets/thumbnails/json-formatter-validator.jpg" alt="Developer Operations Toolkit" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0D1117] via-transparent to-transparent"></div>
+                        <img src="/assets/thumbnails/json-formatter-validator.jpg" alt="Developer Operations & Security Toolkit" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div>
-                            <span class="text-xs font-sora font-semibold text-purple-400 uppercase tracking-wide">Developer Stack</span>
+                            <span class="text-xs font-sora font-semibold text-indigo-400 uppercase tracking-wide">Developer Stack</span>
                             <h3 class="font-sora text-xl font-bold text-white mt-1 mb-2">DevOps & Security Toolkit</h3>
-                            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                Enterprise-grade offline developer tools: client-side JSON formatters, JWT decoders, Web Crypto password generators, and offline API payload validators.
-                            </p>
-                            <ul class="space-y-2.5 mb-6 text-xs text-zinc-300">
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Zero-Egress Offline Browser Sandbox Engine
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    JWT Security & Payload Inspection Modules
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Production License for Commercial Projects
-                                </li>
-                            </ul>
+                            <p class="text-sm text-zinc-400 mb-6">Enterprise-grade offline developer tools: client-side JSON formatters, JWT decoders, and Web Crypto engines.</p>
                         </div>
                         <div>
                             <div class="flex items-baseline justify-between mb-4 pt-4 border-t border-white/10">
-                                <div>
-                                    <span class="text-xs text-zinc-400">Regular Price: </span>
-                                    <span class="text-xs text-zinc-500 line-through">$199</span>
-                                </div>
-                                <div class="text-2xl font-sora font-extrabold text-white">$37</div>
+                                <span class="text-xs text-zinc-500 line-through">$199</span>
+                                <span class="text-2xl font-sora font-extrabold text-white">$37</span>
                             </div>
                             <a class="gumroad-button inline-flex justify-center items-center gap-2 w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-sora font-bold text-sm shadow-lg hover:scale-[1.02] transition-all" href="https://gumroad.com/l/YOUR_PRODUCT_ID">
-                                <span class="material-symbols-outlined text-lg">bolt</span>
                                 Get Instant Access — $37
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Product Card 3: Second Brain PARA OS Planner -->
-                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between border-white/10 relative group" data-cat="planners">
-                    <div class="absolute top-4 right-4 z-10">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-sora font-extrabold uppercase tracking-wider bg-purple-500 text-white shadow-md">
-                            POPULAR OS
-                        </span>
-                    </div>
+                <!-- Card 3 -->
+                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between relative group">
                     <div class="w-full aspect-video bg-zinc-950 overflow-hidden relative">
-                        <img src="/assets/thumbnails/second-brain-para-template.jpeg" alt="Second Brain PARA Method Workspace" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0D1117] via-transparent to-transparent"></div>
+                        <img src="/assets/thumbnails/second-brain-para-template.jpeg" alt="Second Brain PARA Life OS" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-6 flex-1 flex flex-col justify-between">
                         <div>
-                            <span class="text-xs font-sora font-semibold text-purple-400 uppercase tracking-wide">Notion Planner</span>
+                            <span class="text-xs font-sora font-semibold text-purple-400 uppercase tracking-wide">Notion OS</span>
                             <h3 class="font-sora text-xl font-bold text-white mt-1 mb-2">Second Brain PARA Life OS</h3>
-                            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                Tiago Forte's PARA Method architecture engineered into an interactive Notion OS workspace for goal tracking, project execution, and daily focus.
-                            </p>
-                            <ul class="space-y-2.5 mb-6 text-xs text-zinc-300">
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Projects, Areas, Resources & Archive Databases
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Integrated Gamified Habit & Focus Trackers
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    One-Click Notion & Canva Duplicate Links
-                                </li>
-                            </ul>
+                            <p class="text-sm text-zinc-400 mb-6">Tiago Forte's PARA Method architecture engineered into an interactive dark-mode Notion OS workspace.</p>
                         </div>
                         <div>
                             <div class="flex items-baseline justify-between mb-4 pt-4 border-t border-white/10">
-                                <div>
-                                    <span class="text-xs text-zinc-400">Regular Price: </span>
-                                    <span class="text-xs text-zinc-500 line-through">$69</span>
-                                </div>
-                                <div class="text-2xl font-sora font-extrabold text-white">$19</div>
+                                <span class="text-xs text-zinc-500 line-through">$69</span>
+                                <span class="text-2xl font-sora font-extrabold text-white">$19</span>
                             </div>
                             <a class="gumroad-button inline-flex justify-center items-center gap-2 w-full py-3.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-sora font-bold text-sm shadow-lg hover:scale-[1.02] transition-all" href="https://gumroad.com/l/YOUR_PRODUCT_ID">
-                                <span class="material-symbols-outlined text-lg">shopping_bag</span>
                                 Buy Now — $19
                             </a>
                         </div>
                     </div>
                 </div>
-
-                <!-- Product Card 4: SEO & Data Engineering Suite -->
-                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between border-white/10 relative group" data-cat="seo">
-                    <div class="w-full aspect-video bg-zinc-950 overflow-hidden relative">
-                        <img src="/assets/thumbnails/robots-txt-generator.jpeg" alt="SEO & Data Engineering Suite" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0D1117] via-transparent to-transparent"></div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="text-xs font-sora font-semibold text-cyan-400 uppercase tracking-wide">SEO & Data</span>
-                            <h3 class="font-sora text-xl font-bold text-white mt-1 mb-2">SEO & Data Engineering Suite</h3>
-                            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                Client-side data transformation engines, AI crawler shielding robots.txt builders, CSV-JSON pipelines, and SERP preview markup tools.
-                            </p>
-                            <ul class="space-y-2.5 mb-6 text-xs text-zinc-300">
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    LLM Scraper Defense & Robots.txt Configurator
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    High-Speed CSV / JSON Parser & Formatter
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    OpenGraph Simulator & Schema Validator
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="flex items-baseline justify-between mb-4 pt-4 border-t border-white/10">
-                                <div>
-                                    <span class="text-xs text-zinc-400">Regular Price: </span>
-                                    <span class="text-xs text-zinc-500 line-through">$129</span>
-                                </div>
-                                <div class="text-2xl font-sora font-extrabold text-white">$29</div>
-                            </div>
-                            <a class="gumroad-button inline-flex justify-center items-center gap-2 w-full py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-sora font-bold text-sm shadow-lg hover:scale-[1.02] transition-all" href="https://gumroad.com/l/YOUR_PRODUCT_ID">
-                                <span class="material-symbols-outlined text-lg">bolt</span>
-                                Buy Now — $29
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 5: All-in-One Life & Habit OS -->
-                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between border-white/10 relative group" data-cat="planners">
-                    <div class="w-full aspect-video bg-zinc-950 overflow-hidden relative">
-                        <img src="/assets/thumbnails/habit-tracker-os.jpeg" alt="Habit & Visual Life OS" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0D1117] via-transparent to-transparent"></div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="text-xs font-sora font-semibold text-pink-400 uppercase tracking-wide">Productivity Planner</span>
-                            <h3 class="font-sora text-xl font-bold text-white mt-1 mb-2">Habit & Visual Life OS</h3>
-                            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                Gamified habit tracking with streak analytics, XP leveling engines, Pomodoro sprint timers, and financial velocity dashboards.
-                            </p>
-                            <ul class="space-y-2.5 mb-6 text-xs text-zinc-300">
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Gamified Habit Progression & XP System
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Visual Weekly Priority Matrix & Timer
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Instant One-Click Notion Import
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="flex items-baseline justify-between mb-4 pt-4 border-t border-white/10">
-                                <div>
-                                    <span class="text-xs text-zinc-400">Regular Price: </span>
-                                    <span class="text-xs text-zinc-500 line-through">$49</span>
-                                </div>
-                                <div class="text-2xl font-sora font-extrabold text-white">$15</div>
-                            </div>
-                            <a class="gumroad-button inline-flex justify-center items-center gap-2 w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-sora font-bold text-sm shadow-lg hover:scale-[1.02] transition-all" href="https://gumroad.com/l/YOUR_PRODUCT_ID">
-                                <span class="material-symbols-outlined text-lg">shopping_cart</span>
-                                Buy Now — $15
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Card 6: Free Web Utilities Suite -->
-                <div class="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between border-white/10 relative group" data-cat="developer">
-                    <div class="w-full aspect-video bg-zinc-950 overflow-hidden relative">
-                        <img src="/assets/thumbnails/jwt-decoder.jpeg" alt="Free Client-Side Tools Suite" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-[#0D1117] via-transparent to-transparent"></div>
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="text-xs font-sora font-semibold text-emerald-400 uppercase tracking-wide">Community Access</span>
-                            <h3 class="font-sora text-xl font-bold text-white mt-1 mb-2">Free Web Utilities Suite</h3>
-                            <p class="text-sm text-zinc-400 mb-6 leading-relaxed">
-                                Explore Affilore's catalog of browser-based utilities with zero registration, zero telemetry tracking, and 100% client-side execution.
-                            </p>
-                            <ul class="space-y-2.5 mb-6 text-xs text-zinc-300">
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    10+ Client-Side Interactive Web Tools
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Zero Registration Required
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-emerald-400 text-base">check_circle</span>
-                                    Free Forever for Individuals
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="flex items-baseline justify-between mb-4 pt-4 border-t border-white/10">
-                                <div>
-                                    <span class="text-xs text-zinc-400">Price: </span>
-                                </div>
-                                <div class="text-2xl font-sora font-extrabold text-emerald-400">FREE</div>
-                            </div>
-                            <a class="inline-flex justify-center items-center gap-2 w-full py-3.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-white font-sora font-bold text-sm border border-white/10 hover:scale-[1.02] transition-all" href="#free-tools-directory">
-                                <span class="material-symbols-outlined text-lg">explore</span>
-                                Explore Free Tools
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </section>
 
-        <!-- FEATURES & VALUE BREAKDOWN SECTION -->
-        <section class="py-16 md:py-24 border-t border-white/10" id="features">
+        <!-- SPRINT PACKAGES PREVIEW SECTION -->
+        <section class="py-16 md:py-24 border-t border-white/10" id="sprints-preview">
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-xs font-sora font-bold text-indigo-400 uppercase tracking-widest">Why Choose Affilore</span>
+                <span class="text-xs font-sora font-bold text-amber-400 uppercase tracking-widest">Custom Development Sprints</span>
                 <h2 class="font-sora text-3xl md:text-4xl font-extrabold text-white mt-1">
-                    Engineered for Speed, Privacy & Conversion
+                    Custom Web Utilities & Dashboards in 48 Hours
                 </h2>
                 <p class="text-zinc-400 mt-4 text-base">
-                    Every digital product, template, and code toolkit is built to provide immediate value without complex setup steps.
+                    Need a bespoke Micro-SaaS tool, internal dashboard, or client-side web utility? We deliver production-ready code with zero monthly hosting fees.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="glass-card p-6 rounded-2xl border-white/10">
-                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-5">
-                        <span class="material-symbols-outlined text-2xl">bolt</span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tier 1 -->
+                <div class="glass-card p-8 rounded-2xl flex flex-col justify-between border-white/10">
+                    <div>
+                        <span class="text-xs font-sora font-bold text-blue-400 uppercase tracking-widest">48-Hour Sprint</span>
+                        <h3 class="font-sora text-2xl font-bold text-white mt-1 mb-2">Starter Web Utility</h3>
+                        <div class="text-3xl font-sora font-extrabold text-white my-4">$200</div>
+                        <p class="text-xs text-zinc-400 mb-6">Single-purpose client-side web tool built with zero server egress, custom layout, and responsive mobile breakpoints.</p>
+                        <ul class="space-y-3 text-xs text-zinc-300 mb-8">
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> 48-Hour Rapid Delivery</li>
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> 100% Client-Side Serverless</li>
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> Clean Single-File HTML/JS</li>
+                        </ul>
                     </div>
-                    <h3 class="font-sora text-lg font-bold text-white mb-2">Instant Automated Delivery</h3>
-                    <p class="text-sm text-zinc-400 leading-relaxed">
-                        Access your product files instantly via Gumroad overlay right after purchase, accompanied by direct cloud links.
-                    </p>
+                    <a href="/sprints#book" class="inline-flex justify-center items-center w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-sora font-bold text-sm border border-white/10 transition-all">
+                        Book Starter Sprint
+                    </a>
                 </div>
-                <div class="glass-card p-6 rounded-2xl border-white/10">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-5">
-                        <span class="material-symbols-outlined text-2xl">shield</span>
+
+                <!-- Tier 2 -->
+                <div class="glass-card p-8 rounded-2xl flex flex-col justify-between border-indigo-500/50 shadow-xl relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white font-sora text-[10px] font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">
+                        MOST POPULAR
                     </div>
-                    <h3 class="font-sora text-lg font-bold text-white mb-2">100% Client-Side Private</h3>
-                    <p class="text-sm text-zinc-400 leading-relaxed">
-                        All code toolkits execute strictly within your local browser runtime. Zero remote data logging or third-party egress.
-                    </p>
+                    <div>
+                        <span class="text-xs font-sora font-bold text-indigo-400 uppercase tracking-widest">5-Day Sprint</span>
+                        <h3 class="font-sora text-2xl font-bold text-white mt-1 mb-2">Internal Dashboard OS</h3>
+                        <div class="text-3xl font-sora font-extrabold text-white my-4">$450</div>
+                        <p class="text-xs text-zinc-400 mb-6">Full multi-view interactive browser dashboard with Firestore database integration, telemetry, and dark glassmorphic UI.</p>
+                        <ul class="space-y-3 text-xs text-zinc-300 mb-8">
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> 5-Day Production Delivery</li>
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> Firebase Firestore Database Sync</li>
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> Custom Telemetry & Analytics</li>
+                        </ul>
+                    </div>
+                    <a href="/sprints#book" class="inline-flex justify-center items-center w-full py-3 rounded-xl gradient-btn text-white font-sora font-bold text-sm shadow-lg hover:scale-105 transition-all">
+                        Book Dashboard Sprint
+                    </a>
                 </div>
-                <div class="glass-card p-6 rounded-2xl border-white/10">
-                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-5">
-                        <span class="material-symbols-outlined text-2xl">edit_note</span>
+
+                <!-- Tier 3 -->
+                <div class="glass-card p-8 rounded-2xl flex flex-col justify-between border-white/10">
+                    <div>
+                        <span class="text-xs font-sora font-bold text-purple-400 uppercase tracking-widest">10-Day Sprint</span>
+                        <h3 class="font-sora text-2xl font-bold text-white mt-1 mb-2">Enterprise Micro-SaaS</h3>
+                        <div class="text-3xl font-sora font-extrabold text-white my-4">$950</div>
+                        <p class="text-xs text-zinc-400 mb-6">Complete web app with Auth, Firestore database, custom analytics telemetry, full source code delivery, and deployment.</p>
+                        <ul class="space-y-3 text-xs text-zinc-300 mb-8">
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> 10-Day Full App Build</li>
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> Firebase Auth & Firestore DB</li>
+                            <li class="flex items-center gap-2"><span class="material-symbols-outlined text-emerald-400 text-base">check</span> 100% Full Source Ownership</li>
+                        </ul>
                     </div>
-                    <h3 class="font-sora text-lg font-bold text-white mb-2">Canva & Notion Ready</h3>
-                    <p class="text-sm text-zinc-400 leading-relaxed">
-                        Easily duplicate, customize, and edit planners in Notion or design assets in Canva with one click.
-                    </p>
+                    <a href="/sprints#book" class="inline-flex justify-center items-center w-full py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-sora font-bold text-sm border border-white/10 transition-all">
+                        Book Enterprise Sprint
+                    </a>
                 </div>
-                <div class="glass-card p-6 rounded-2xl border-white/10">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-5">
-                        <span class="material-symbols-outlined text-2xl">verified</span>
+            </div>
+        </section>
+
+        <!-- FREE WEB UTILITIES DIRECTORY SECTION -->
+        <section class="py-16 md:py-24 border-t border-white/10" id="free-tools">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                <div>
+                    <span class="text-xs font-sora font-bold text-emerald-400 uppercase tracking-widest">Free Client-Side Tools</span>
+                    <h2 class="font-sora text-3xl md:text-4xl font-extrabold text-white mt-1">
+                        Open-Access Browser Utilities
+                    </h2>
+                </div>
+                <a href="/tools" class="inline-flex items-center gap-2 text-sm font-sora font-semibold text-emerald-400 hover:text-emerald-300">
+                    Explore All Free Utilities &rarr;
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Tool 1 -->
+                <div class="glass-card glass-card-hover rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-flex px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-white/10 text-zinc-300 mb-3">Productivity</span>
+                        <h3 class="font-sora text-lg font-bold text-white mb-2">All-in-One Life Dashboard</h3>
+                        <p class="text-xs text-zinc-400 mb-4">Behavioral tracking, financial telemetry, and cognitive journaling operating system.</p>
                     </div>
-                    <h3 class="font-sora text-lg font-bold text-white mb-2">Commercial License</h3>
-                    <p class="text-sm text-zinc-400 leading-relaxed">
-                        Use toolkits, Notion OS frameworks, and assets freely across both your personal and commercial client deliverables.
-                    </p>
+                    <a href="/productivity/all-in-one-life-dashboard.html" id="launch-life-dashboard" class="inline-flex justify-center w-full py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
+                        Launch Tool
+                    </a>
+                </div>
+                <!-- Tool 2 -->
+                <div class="glass-card glass-card-hover rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-flex px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-white/10 text-zinc-300 mb-3">Developer</span>
+                        <h3 class="font-sora text-lg font-bold text-white mb-2">JSON Formatter & Validator</h3>
+                        <p class="text-xs text-zinc-400 mb-4">Real-time JSON payload parsing, validation, and auto-fixing in a local sandbox.</p>
+                    </div>
+                    <a href="/developer/json-formatter.html" class="inline-flex justify-center w-full py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
+                        Launch Tool
+                    </a>
+                </div>
+                <!-- Tool 3 -->
+                <div class="glass-card glass-card-hover rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-flex px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-white/10 text-zinc-300 mb-3">Security</span>
+                        <h3 class="font-sora text-lg font-bold text-white mb-2">High-Entropy Password Generator</h3>
+                        <p class="text-xs text-zinc-400 mb-4">Generate cryptographically secure passwords locally utilizing the native Web Crypto API.</p>
+                    </div>
+                    <a href="/utility/password-generator.html" class="inline-flex justify-center w-full py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
+                        Launch Tool
+                    </a>
                 </div>
             </div>
         </section>
@@ -616,232 +462,63 @@
                 <h2 class="font-sora text-3xl md:text-4xl font-extrabold text-white mt-1">
                     Everything You Need to Know
                 </h2>
-                <p class="text-zinc-400 mt-4 text-base">
-                    Quick answers regarding digital file delivery, editing in Notion & Canva, license rights, and security.
-                </p>
             </div>
 
             <div class="max-w-3xl mx-auto space-y-4" id="faq-accordion">
-                
-                <!-- FAQ Item 1 -->
-                <div class="glass-card rounded-2xl border-white/10 overflow-hidden">
+                <div class="glass-card rounded-2xl overflow-hidden">
                     <button class="accordion-trigger w-full p-6 text-left flex justify-between items-center gap-4 focus:outline-none">
-                        <span class="font-sora font-semibold text-white text-base md:text-lg">
-                            How do I receive my digital product bundle after completing purchase?
-                        </span>
-                        <span class="material-symbols-outlined text-indigo-400 text-2xl transform transition-transform duration-300 icon">add</span>
+                        <span class="font-sora font-semibold text-white text-base md:text-lg">How do I receive my digital product bundle after purchasing?</span>
+                        <span class="material-symbols-outlined text-indigo-400 text-2xl icon">add</span>
                     </button>
                     <div class="accordion-content px-6 pb-6 text-sm text-zinc-300 leading-relaxed">
-                        Right after completing your checkout via the Gumroad overlay, you will be redirected to an instant download screen. Additionally, an automated email containing your download links, Notion duplicate links, and Canva templates will be sent to your inbox immediately.
+                        Right after completing your checkout via the Gumroad overlay, you will be redirected to an instant download screen. Additionally, an automated email containing your download links, Notion duplicate links, and Canva templates will be sent immediately.
                     </div>
                 </div>
 
-                <!-- FAQ Item 2 -->
-                <div class="glass-card rounded-2xl border-white/10 overflow-hidden">
+                <div class="glass-card rounded-2xl overflow-hidden">
                     <button class="accordion-trigger w-full p-6 text-left flex justify-between items-center gap-4 focus:outline-none">
-                        <span class="font-sora font-semibold text-white text-base md:text-lg">
-                            Can I customize the templates in Notion or edit designs in Canva?
-                        </span>
-                        <span class="material-symbols-outlined text-indigo-400 text-2xl transform transition-transform duration-300 icon">add</span>
+                        <span class="font-sora font-semibold text-white text-base md:text-lg">Can I customize the templates in Notion or edit designs in Canva?</span>
+                        <span class="material-symbols-outlined text-indigo-400 text-2xl icon">add</span>
                     </button>
                     <div class="accordion-content px-6 pb-6 text-sm text-zinc-300 leading-relaxed">
-                        Yes! All Notion planners and Life OS workspaces include a 1-click duplicate link to import the template directly into your free or paid Notion workspace. Graphic assets and visual templates include direct Canva editing links so you can adjust fonts, colors, and layouts effortlessly.
+                        Yes! All Notion planners include a 1-click duplicate link to import the template directly into your Notion workspace. Visual assets include direct Canva editing links so you can adjust fonts, colors, and layouts effortlessly.
                     </div>
                 </div>
 
-                <!-- FAQ Item 3 -->
-                <div class="glass-card rounded-2xl border-white/10 overflow-hidden">
+                <div class="glass-card rounded-2xl overflow-hidden">
                     <button class="accordion-trigger w-full p-6 text-left flex justify-between items-center gap-4 focus:outline-none">
-                        <span class="font-sora font-semibold text-white text-base md:text-lg">
-                            Are the developer toolkits and web utilities safe to use?
-                        </span>
-                        <span class="material-symbols-outlined text-indigo-400 text-2xl transform transition-transform duration-300 icon">add</span>
+                        <span class="font-sora font-semibold text-white text-base md:text-lg">How do custom 48-hour development sprints work?</span>
+                        <span class="material-symbols-outlined text-indigo-400 text-2xl icon">add</span>
                     </button>
                     <div class="accordion-content px-6 pb-6 text-sm text-zinc-300 leading-relaxed">
-                        Absolutely. All Affilore developer utilities, JSON formatters, JWT decoders, and Web Crypto password generators run 100% client-side in your local browser sandbox. Your tokens, JSON payloads, and password data never leave your browser or hit external servers.
+                        Submit your project requirements through our Sprint Intake Form on the `/sprints` page. Once accepted, we architect your custom client-side web utility or dashboard and deliver production-ready code within 48 hours for $200.
                     </div>
                 </div>
-
-                <!-- FAQ Item 4 -->
-                <div class="glass-card rounded-2xl border-white/10 overflow-hidden">
-                    <button class="accordion-trigger w-full p-6 text-left flex justify-between items-center gap-4 focus:outline-none">
-                        <span class="font-sora font-semibold text-white text-base md:text-lg">
-                            Is this a one-time purchase or a recurring subscription?
-                        </span>
-                        <span class="material-symbols-outlined text-indigo-400 text-2xl transform transition-transform duration-300 icon">add</span>
-                    </button>
-                    <div class="accordion-content px-6 pb-6 text-sm text-zinc-300 leading-relaxed">
-                        All product bundles and developer toolkits on Affilore are a simple, one-time payment. There are zero recurring subscription fees. Buying a bundle gives you lifetime access and all future updates for that product.
-                    </div>
-                </div>
-
-                <!-- FAQ Item 5 -->
-                <div class="glass-card rounded-2xl border-white/10 overflow-hidden">
-                    <button class="accordion-trigger w-full p-6 text-left flex justify-between items-center gap-4 focus:outline-none">
-                        <span class="font-sora font-semibold text-white text-base md:text-lg">
-                            What commercial rights are included with the products?
-                        </span>
-                        <span class="material-symbols-outlined text-indigo-400 text-2xl transform transition-transform duration-300 icon">add</span>
-                    </button>
-                    <div class="accordion-content px-6 pb-6 text-sm text-zinc-300 leading-relaxed">
-                        Every bundle includes a full commercial usage license. You are permitted to use the code toolkits, Notion templates, and visual assets for your own personal projects as well as client work. (Reselling or redistributing raw template files as standalone digital assets is prohibited).
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- FREE WEB UTILITIES SHOWCASE DIRECTORY -->
-        <section class="py-16 md:py-24 border-t border-white/10" id="free-tools-directory">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-                <div>
-                    <span class="text-xs font-sora font-bold text-emerald-400 uppercase tracking-widest">Free Client-Side Tools</span>
-                    <h2 class="font-sora text-3xl md:text-4xl font-extrabold text-white mt-1">
-                        Open-Access Browser Utilities
-                    </h2>
-                </div>
-                <p class="text-sm text-zinc-400 max-w-md">
-                    Zero-latency, 100% private client-side utilities designed for instant developer and productivity tasks.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                
-                <!-- Tool Card 1 -->
-                <div class="glass-card glass-card-hover rounded-xl p-0 flex flex-col h-full justify-between items-stretch overflow-hidden border-white/10">
-                    <div class="w-full aspect-video overflow-hidden bg-zinc-950">
-                        <img src="/assets/thumbnails/all-in-one-life-dashboard.jpeg" alt="All-in-One Life Dashboard" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/10 text-zinc-300 mb-3">Productivity</span>
-                            <h3 class="font-sora text-lg font-bold mb-2 text-white">All-in-One Life Dashboard</h3>
-                            <p class="text-xs text-zinc-400 mb-4">A centralized system for behavioral tracking, financial telemetry, and cognitive journaling. Private and serverless.</p>
-                        </div>
-                        <a href="/productivity/all-in-one-life-dashboard.html" id="launch-life-dashboard" class="inline-flex justify-center w-full px-5 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
-                            Launch Tool
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Tool Card 2 -->
-                <div class="glass-card glass-card-hover rounded-xl p-0 flex flex-col h-full justify-between items-stretch overflow-hidden border-white/10">
-                    <div class="w-full aspect-video overflow-hidden bg-zinc-950">
-                        <img src="/assets/thumbnails/second-brain-para-template.jpeg" alt="Second Brain PARA Method Workspace" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/10 text-zinc-300 mb-3">Productivity</span>
-                            <h3 class="font-sora text-lg font-bold mb-2 text-white">Second Brain PARA Method Workspace</h3>
-                            <p class="text-xs text-zinc-400 mb-4">Manage Tiago Forte's core PARA vectors locally within an interactive serverless browser sandbox.</p>
-                        </div>
-                        <a href="/productivity/second-brain-para-template.html" class="inline-flex justify-center w-full px-5 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
-                            Launch Tool
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Tool Card 3 -->
-                <div class="glass-card glass-card-hover rounded-xl p-0 flex flex-col h-full justify-between items-stretch overflow-hidden border-white/10">
-                    <div class="w-full aspect-video overflow-hidden bg-zinc-950">
-                        <img src="/assets/thumbnails/json-formatter-validator.jpg" alt="JSON Formatter & Validator" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/10 text-zinc-300 mb-3">Developer</span>
-                            <h3 class="font-sora text-lg font-bold mb-2 text-white">JSON Formatter & Validator</h3>
-                            <p class="text-xs text-zinc-400 mb-4">Enterprise-grade data parsing, real-time validation, and smart auto-fixing architecture inside a secure local sandbox.</p>
-                        </div>
-                        <a href="/developer/json-formatter.html" class="inline-flex justify-center w-full px-5 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
-                            Launch Tool
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Tool Card 4 -->
-                <div class="glass-card glass-card-hover rounded-xl p-0 flex flex-col h-full justify-between items-stretch overflow-hidden border-white/10">
-                    <div class="w-full aspect-video overflow-hidden bg-zinc-950">
-                        <img src="/assets/thumbnails/jwt-decoder.jpeg" alt="JWT Decoder & Debugger" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/10 text-zinc-300 mb-3">Developer</span>
-                            <h3 class="font-sora text-lg font-bold mb-2 text-white">JWT Decoder & Debugger</h3>
-                            <p class="text-xs text-zinc-400 mb-4">Decode, inspect, and validate JSON Web Tokens entirely client-side with zero-latency sandbox processing.</p>
-                        </div>
-                        <a href="/developer/jwt-decoder.html" class="inline-flex justify-center w-full px-5 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
-                            Launch Tool
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Tool Card 5 -->
-                <div class="glass-card glass-card-hover rounded-xl p-0 flex flex-col h-full justify-between items-stretch overflow-hidden border-white/10">
-                    <div class="w-full aspect-video overflow-hidden bg-zinc-950">
-                        <img src="/assets/thumbnails/password-generator.jpeg" alt="Password Generator" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/10 text-zinc-300 mb-3">Security</span>
-                            <h3 class="font-sora text-lg font-bold mb-2 text-white">High-Entropy Password Generator</h3>
-                            <p class="text-xs text-zinc-400 mb-4">Generate cryptographically secure passwords locally utilizing the browser Web Crypto API.</p>
-                        </div>
-                        <a href="/utility/password-generator.html" class="inline-flex justify-center w-full px-5 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
-                            Launch Tool
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Tool Card 6 -->
-                <div class="glass-card glass-card-hover rounded-xl p-0 flex flex-col h-full justify-between items-stretch overflow-hidden border-white/10">
-                    <div class="w-full aspect-video overflow-hidden bg-zinc-950">
-                        <img src="/assets/thumbnails/csv-to-json-converter.jpeg" alt="CSV to JSON Converter" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                            <span class="inline-flex px-3 py-1 text-[10px] font-bold tracking-widest uppercase rounded-full bg-white/10 text-zinc-300 mb-3">Data</span>
-                            <h3 class="font-sora text-lg font-bold mb-2 text-white">CSV to JSON Converter</h3>
-                            <p class="text-xs text-zinc-400 mb-4">Transform spreadsheet CSV files into structured JSON objects locally with auto delimiter detection.</p>
-                        </div>
-                        <a href="/data/csv-to-json-converter.html" class="inline-flex justify-center w-full px-5 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-xs uppercase tracking-wider hover:scale-105 transition-all">
-                            Launch Tool
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- CUSTOM TOOL REQUEST CALLOUT BANNER -->
-        <section class="py-16 relative overflow-hidden rounded-3xl glass-card border border-amber-500/30 text-center my-12 px-6">
-            <div class="relative z-10 max-w-2xl mx-auto">
-                <span class="text-xs font-sora font-bold text-amber-400 uppercase tracking-widest">Bespoke Engineering</span>
-                <h2 class="font-sora text-3xl font-extrabold text-white mt-1 mb-4">Need a Custom Utility or Micro SaaS?</h2>
-                <p class="text-zinc-300 mb-8 text-base leading-relaxed">
-                    We architect bespoke Micro-SaaS tools, Notion databases, and client-side web apps tailored to your specific workflow requirements.
-                </p>
-                <a class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-black font-sora font-bold text-sm shadow-lg hover:scale-105 transition-all" href="services.html#contact-form">
-                    <span class="material-symbols-outlined text-xl">mail</span>
-                    Request Custom Build
-                </a>
             </div>
         </section>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="w-full py-8 border-t border-white/10 bg-[#090D16] mt-12">
+    <!-- FOOTER (Preserved GitHub & Socials) -->
+    <footer class="w-full py-8 border-t border-white/10 bg-[#080C14] mt-12">
         <div class="max-w-7xl mx-auto px-6 flex flex-col items-center justify-center text-center gap-6">
             
             <div class="flex flex-wrap justify-center gap-8 items-center text-sm text-zinc-400">
+                <a class="hover:text-white transition-colors" href="/storefront">Storefront</a>
+                <a class="hover:text-white transition-colors" href="/sprints">Sprint Packages</a>
+                <a class="hover:text-white transition-colors" href="/tools">Free Tools</a>
                 <a class="hover:text-white transition-colors" href="/privacy-policy.html">Privacy</a>
                 <a class="hover:text-white transition-colors" href="/terms.html">Terms</a>
                 <a class="hover:text-white transition-colors" href="/about-us.html">About</a>
-                <a class="hover:text-white transition-colors" href="services.html#contact-form">Contact</a>
             </div>
 
-            <!-- Footer Social Links -->
+            <!-- Footer Social Links & GitHub Profile Links (Preserved) -->
             <div class="flex items-center gap-6 text-zinc-400">
+                <a href="https://github.com/saqibajmal295-png/affilore-site" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors" aria-label="GitHub Repository">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                </a>
                 <a href="https://www.tiktok.com/@affilore4" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors" aria-label="TikTok">
                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
                         <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.03 1.6 4.17 1.12 1.25 2.7 1.94 4.38 2.1v3.82c-1.63-.03-3.21-.52-4.57-1.43l-.01 6.94c.05 1.76-.46 3.56-1.5 4.93-1.45 1.94-3.95 2.98-6.35 2.65-2.85-.35-5.26-2.58-5.74-5.39-.62-3.4 1.43-6.84 4.81-7.53.48-.1 1-.14 1.49-.14v3.83c-.92.08-1.85.54-2.38 1.3-.64.9-.66 2.19-.04 3.08.66.98 1.9 1.48 3.08 1.25 1.05-.18 1.91-1.07 2.05-2.14.07-1.37.03-12.83.03-12.83z"/>
@@ -857,59 +534,16 @@
                         <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93 .502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                     </svg>
                 </a>
-                <a href="https://www.instagram.com/affilore_/?hl=en" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition-colors" aria-label="Instagram">
-                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-                    </svg>
-                </a>
             </div>
 
             <p class="text-xs text-zinc-500">
-                &copy; 2026 Affilore. All rights reserved. Premium digital product storefront &amp; client-side tools.
+                &copy; 2026 Affilore. All rights reserved. Powered by Firebase &amp; GitHub.
             </p>
         </div>
     </footer>
 
-    <!-- MOBILE STICKY CTA BAR -->
-    <div id="mobile-sticky-cta" class="fixed bottom-0 left-0 right-0 z-50 p-4 bg-[#090D16]/95 backdrop-blur-xl border-t border-white/10 md:hidden flex items-center justify-between shadow-2xl">
-        <div class="flex flex-col">
-            <span class="text-[11px] font-sora font-extrabold text-indigo-400 uppercase tracking-wider">Affilore Mega Vault</span>
-            <div class="flex items-baseline gap-1.5">
-                <span class="text-xl font-sora font-extrabold text-white">$27</span>
-                <span class="text-xs text-zinc-500 line-through">$149</span>
-            </div>
-        </div>
-        <a class="gumroad-button px-6 py-2.5 rounded-xl gradient-btn text-white font-sora font-bold text-xs uppercase tracking-wider shadow-lg active:scale-95 transition-all" href="https://gumroad.com/l/YOUR_PRODUCT_ID">
-            Buy Now
-        </a>
-    </div>
-
     <!-- JAVASCRIPT CONTROLLERS -->
     <script>
-        // Category Filter Pills Toggle
-        const catButtons = document.querySelectorAll('.cat-btn');
-        const productCards = document.querySelectorAll('[data-cat]');
-
-        catButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                catButtons.forEach(b => {
-                    b.classList.remove('bg-indigo-600', 'text-white', 'shadow-md');
-                    b.classList.add('bg-white/5', 'text-zinc-300', 'hover:bg-white/10');
-                });
-                btn.classList.remove('bg-white/5', 'text-zinc-300', 'hover:bg-white/10');
-                btn.classList.add('bg-indigo-600', 'text-white', 'shadow-md');
-
-                const selectedCat = btn.getAttribute('data-category');
-                productCards.forEach(card => {
-                    if (selectedCat === 'all' || card.getAttribute('data-cat') === selectedCat) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-
         // FAQ Accordion Collapsible Logic
         const faqTriggers = document.querySelectorAll('.accordion-trigger');
         faqTriggers.forEach(trigger => {
@@ -917,7 +551,6 @@
                 const content = trigger.nextElementSibling;
                 const icon = trigger.querySelector('.icon');
 
-                // Close other items
                 document.querySelectorAll('.accordion-content').forEach(c => {
                     if (c !== content) {
                         c.classList.remove('open');
@@ -932,7 +565,6 @@
                     }
                 });
 
-                // Toggle current item
                 content.classList.toggle('open');
                 if (content.classList.contains('open')) {
                     icon.textContent = 'close';
@@ -944,7 +576,7 @@
             });
         });
 
-        // Mobile Navigation Toggle
+        // Mobile Nav Toggle
         const toggleBtn = document.getElementById('mobile-nav-toggle');
         const navLinks = document.getElementById('main-navigation');
         if (toggleBtn && navLinks) {
@@ -956,24 +588,10 @@
                 navLinks.classList.toggle('top-16');
                 navLinks.classList.toggle('left-0');
                 navLinks.classList.toggle('w-full');
-                navLinks.classList.toggle('bg-[#090D16]');
+                navLinks.classList.toggle('bg-[#080C14]');
                 navLinks.classList.toggle('p-6');
                 navLinks.classList.toggle('border-b');
                 navLinks.classList.toggle('border-white/10');
-            });
-        }
-
-        // Intercept Launch Button
-        const launchBtn = document.getElementById('launch-life-dashboard');
-        if (launchBtn) {
-            launchBtn.addEventListener('click', (e) => {
-                if (localStorage.getItem('affilore_session_state') !== 'true') {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (window.showAuthModal) {
-                        window.showAuthModal('/productivity/all-in-one-life-dashboard.html');
-                    }
-                }
             });
         }
     </script>
