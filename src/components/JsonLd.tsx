@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import { Product } from '@/types';
 import { siteConfig } from '@/data/siteConfig';

@@ -1,10 +1,9 @@
-'use strict';
-
 import React from 'react';
 import Link from 'next/link';
 import { siteConfig, AMAZON_ASSOCIATES_DISCLOSURE } from '@/data/siteConfig';
 import { categories } from '@/data/categories';
 import { ShieldCheck, Mail, ArrowRight, ExternalLink } from 'lucide-react';
+import { NewsletterForm } from './NewsletterForm';
 
 export function Footer() {
   return (
@@ -81,23 +80,7 @@ export function Footer() {
             <p className="text-xs text-muted leading-relaxed mb-3">
               Weekly price-drop alerts and lab teardowns. Zero sponsored spam.
             </p>
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-2">
-              <div className="relative">
-                <input
-                  type="email"
-                  placeholder="name@example.com"
-                  className="w-full px-3.5 py-2.5 text-xs bg-surface border border-border-subtle rounded-xl text-white placeholder-muted focus:outline-none focus:border-brand"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-2.5 px-4 text-xs font-semibold rounded-xl bg-brand hover:bg-brand-hover text-black transition-colors flex items-center justify-center gap-1.5"
-              >
-                <span>Subscribe</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </form>
+            <NewsletterForm layout="stacked" />
           </div>
         </div>
 

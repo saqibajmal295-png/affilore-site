@@ -7,6 +7,7 @@ import { siteConfig } from '@/data/siteConfig';
 import { ProductCard } from '@/components/ProductCard';
 import { ComparisonTable } from '@/components/ComparisonTable';
 import { AmazonButton } from '@/components/AmazonButton';
+import { NewsletterForm } from '@/components/NewsletterForm';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -246,23 +247,9 @@ export default function HomePage() {
               We monitor historical price charts on Amazon every 6 hours. Get our monthly teardown digest and flash deal alerts directly in your inbox.
             </p>
 
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto"
-            >
-              <input
-                type="email"
-                placeholder="Enter your email address..."
-                className="w-full sm:flex-1 px-4 py-3 rounded-full bg-surface-lowest border border-border-subtle text-white text-sm placeholder-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-6 py-3 rounded-full text-sm font-semibold bg-brand hover:bg-brand-hover text-black transition-colors shadow-glow-brand-sm whitespace-nowrap"
-              >
-                Join Dispatch
-              </button>
-            </form>
+            <div className="mt-6">
+              <NewsletterForm layout="inline" />
+            </div>
 
             <p className="text-[11px] text-muted-dark pt-2">
               No spam. No sponsored promotions. Unsubscribe at any time with one click.

@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import { ExternalLink, ShoppingCart } from 'lucide-react';
 
