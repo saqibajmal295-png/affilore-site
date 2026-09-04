@@ -25,14 +25,14 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-3 text-xs text-brand font-medium pt-1">
               <ShieldCheck className="w-4 h-4 text-brand" />
-              <span>100% Unsponsored Editorial Rigor &bull; Real Benchmarks</span>
+              <span>In-Depth Comparative Research &bull; Verified Buyer Insights</span>
             </div>
           </div>
 
           {/* Col 2: Buying Guides */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
-              Tested Categories
+              Curated Categories
             </h4>
             <ul className="space-y-2.5 text-sm">
               {categories.map((cat) => (
@@ -56,7 +56,7 @@ export function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link href="/about/" className="text-muted hover:text-brand transition-colors">
-                  Testing Methodology
+                  Research Methodology
                 </Link>
               </li>
               <li>
@@ -66,7 +66,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/contact/" className="text-muted hover:text-brand transition-colors">
-                  Submit Gear for Review
+                  Suggest Products to Feature
                 </Link>
               </li>
             </ul>
@@ -78,7 +78,7 @@ export function Footer() {
               The Affilore Dispatch
             </h4>
             <p className="text-xs text-muted leading-relaxed mb-3">
-              Weekly price-drop alerts and lab teardowns. Zero sponsored spam.
+              Weekly price-drop alerts and curated buyer guides. Zero sponsored spam.
             </p>
             <NewsletterForm layout="stacked" />
           </div>

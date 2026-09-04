@@ -32,7 +32,7 @@ export function Navbar() {
       <aside aria-label="Affiliate Disclosure" className="bg-surface-lowest text-[11px] text-muted py-1.5 px-4 text-center border-b border-border-subtle flex items-center justify-center gap-2">
         <span className="inline-block w-1.5 h-1.5 rounded-full bg-brand" />
         <span>
-          Independent Testing Lab &bull; We may earn an affiliate commission on Amazon purchases at zero extra cost to you.
+          Editorial Buyer’s Guide &bull; We may earn an affiliate commission on Amazon purchases at zero extra cost to you.
         </span>
       </aside>
 
@@ -49,7 +49,7 @@ export function Navbar() {
                 {siteConfig.name}
               </span>
               <span className="text-[9px] uppercase tracking-widest text-muted font-medium -mt-1">
-                Verified Gear
+                Curated Gear
               </span>
             </div>
           </Link>
@@ -81,7 +81,7 @@ export function Navbar() {
               href="/about/"
               className="text-xs font-semibold text-muted hover:text-white uppercase tracking-wider transition-colors"
             >
-              Our Lab
+              About Us
             </Link>
             <Link
               href="/disclosure/"

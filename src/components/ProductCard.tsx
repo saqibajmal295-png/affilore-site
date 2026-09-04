@@ -95,7 +95,7 @@ export function ProductCard({
                 href={reviewLink}
                 className="mt-3 inline-flex items-center text-xs font-semibold text-brand hover:text-brand-hover hover:underline"
               >
-                Read in-depth lab review <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
+                Read in-depth buyer guide <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
               </Link>
             )}
           </div>
@@ -224,7 +224,7 @@ export function ProductCard({
               href={reviewLink}
               className="text-center text-xs text-muted hover:text-white transition-colors py-1"
             >
-              Read full lab review &rarr;
+              Read full review & specs &rarr;
             </Link>
           )}
         </div>

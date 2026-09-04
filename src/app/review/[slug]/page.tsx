@@ -42,8 +42,8 @@ export async function generateMetadata({ params }: ProductReviewPageProps): Prom
     return { title: 'Product Not Found' };
   }
 
-  const title = `${product.title} Review (${product.rating}/5.0) — Lab Benchmark & Verdict`;
-  const description = `${product.summary} Read our independent lab test results, pros and cons, specifications, and the brutal truth before buying.`;
+  const title = `${product.title} Review (${product.rating}/5.0) — Buyer’s Guide & Analysis`;
+  const description = `${product.summary} Read our in-depth research breakdown, verified user insights, specs, and pros and cons before buying.`;
 
   return {
     title,
@@ -167,7 +167,7 @@ export default function ProductReviewPage({ params }: ProductReviewPageProps) {
                 </span>
                 <span className="flex items-center gap-1 text-xs text-muted">
                   <Calendar className="w-3 h-3 text-muted" />
-                  Tested &bull; {product.updatedAt}
+                  Updated &bull; {product.updatedAt}
                 </span>
               </div>
 
@@ -179,7 +179,7 @@ export default function ProductReviewPage({ params }: ProductReviewPageProps) {
               <div className="flex items-center gap-4 mt-3 pb-4 border-b border-border-subtle">
                 <StarRating rating={product.rating} reviewCount={product.reviewCount} size="lg" />
                 <span className="text-xs text-emerald-400 font-semibold bg-emerald-950/40 px-2.5 py-0.5 rounded border border-emerald-500/20">
-                  Verified Lab Score
+                  Customer Satisfaction Score
                 </span>
               </div>
             </div>
@@ -211,7 +211,7 @@ export default function ProductReviewPage({ params }: ProductReviewPageProps) {
                 The Assessment: Pros & Cons
               </h3>
               <p className="text-xs text-muted mb-3">
-                Based on continuous bench testing and durability stress cycles.
+                Synthesized from verified customer reviews and manufacturer engineering data.
               </p>
               <ProsCons pros={product.pros} cons={product.cons} />
             </div>
@@ -281,7 +281,7 @@ export default function ProductReviewPage({ params }: ProductReviewPageProps) {
             <div className="bg-surface-lowest border border-border-brand/40 rounded-2xl p-6 space-y-4">
               <h3 className="text-xl font-serif font-bold text-white flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                Final Lab Verdict
+                Final Editorial Verdict
               </h3>
               <p className="text-sm text-gray-200 leading-relaxed">
                 {product.verdict}

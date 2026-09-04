@@ -109,7 +109,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand/10 text-brand border border-brand/20">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Independent Laboratory Guide &bull; Updated for 2026</span>
+              <span>Editor-Researched Buying Guide &bull; Updated for 2026</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-extrabold text-white leading-tight">
@@ -123,7 +123,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             <div className="pt-2 flex flex-wrap items-center gap-4 text-xs text-gray-400">
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                Tested Across {categoryProducts.length} Premium Contenders
+                Researched Across {categoryProducts.length} Top Contenders
               </span>
               <span className="text-muted-dark">&bull;</span>
               <span>Editorial Author: {siteConfig.editorialBoard}</span>
@@ -196,7 +196,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             Detailed Reviews & Evaluation
           </h2>
           <p className="text-sm text-muted mt-1">
-            Examined under standardized laboratory stress tests for longevity, interface ergonomics, and performance value.
+            Analyzed across manufacturer specifications, thousands of verified owner reviews, and comparative build quality.
           </p>
         </div>
 

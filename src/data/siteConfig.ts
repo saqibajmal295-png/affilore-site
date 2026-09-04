@@ -2,14 +2,14 @@ import { SiteConfig } from '@/types';
 
 export const siteConfig: SiteConfig = {
   name: 'Affilore',
-  tagline: 'Engineered Reviews for Discerning Shoppers',
+  tagline: 'Researched Buyer’s Guides for Discerning Shoppers',
   description:
-    'Unvarnished, data-driven gear testing. We independently purchase, benchmark, and tear down kitchen tech, specialty coffee makers, and smart home appliances.',
+    'In-depth, comparative buyer’s guides and product breakdowns. We research manufacturer specifications, aggregate verified customer reviews, and analyze expert benchmarks for kitchen gear and smart appliances.',
   url: 'https://affilore.com',
   amazonTag: 'affilore-20',
   gaId: 'G-AFFILORE99', // Replace with your real Google Analytics 4 Measurement ID
   supportEmail: 'editorial@affilore.com',
-  editorialBoard: 'Affilore Testing Labs',
+  editorialBoard: 'Affilore Editorial Team',
 };
 
 export const FTC_DISCLOSURE_SHORT =

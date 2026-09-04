@@ -5,18 +5,21 @@ import { siteConfig } from '@/data/siteConfig';
 import {
   ShieldCheck,
   Award,
-  Flame,
+  BookOpen,
   CheckCircle2,
   Users,
   Compass,
   Sparkles,
   ArrowRight,
+  Search,
+  MessageSquareQuote,
+  Scale,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Affilore — Editorial Independence & Testing Standards',
+  title: 'About Affilore — Editorial Independence & Research Standards',
   description:
-    'Learn how Affilore tests kitchen appliances, coffee gear, and smart home tech. Read our independent charter, testing methodology, and team standards.',
+    'Learn how Affilore researches kitchen appliances, coffee gear, and smart home tech. Read our independent charter, research methodology, and editorial standards.',
   alternates: {
     canonical: `${siteConfig.url}/about/`,
   },
@@ -29,13 +32,13 @@ export default function AboutPage() {
       <section className="text-center space-y-4">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand/10 border border-brand/20 text-brand text-xs font-semibold uppercase tracking-wider">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Independent Testing Charter</span>
+          <span>Our Editorial Charter</span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-serif font-extrabold text-white leading-tight">
-          Unvarnished Truth In An Era Of Sponsored Noise.
+          Unvarnished Insight In An Era Of Marketing Noise.
         </h1>
         <p className="text-base sm:text-lg text-muted-light max-w-2xl mx-auto leading-relaxed">
-          Affilore was founded on a simple observation: modern product review sites have become glorified marketing catalogs. We built an editorial testing lab designed to tell you what other sites won’t.
+          Affilore was created to build clear, objective, and deeply researched consumer buying guides. We analyze technical specifications, aggregate verified buyer experiences, and compare performance trade-offs so you can shop with clarity.
         </p>
       </section>
 
@@ -45,11 +48,11 @@ export default function AboutPage() {
           <div className="flex items-center gap-3 text-brand">
             <ShieldCheck className="w-6 h-6" />
             <h2 className="text-xl sm:text-2xl font-serif font-bold text-white">
-              Our Core Credibility Pledge
+              Our Core Editorial Pledge
             </h2>
           </div>
           <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-            We do not accept free hardware from manufacturers in exchange for guaranteed reviews. We purchase test units directly with our own editorial operating budget, just like any consumer would. If an appliance fails during our 60-day stress cycle, we report the failure without pulling punches.
+            We believe buying advice should be transparent, evidence-based, and free of sponsored influence. We research products by cross-referencing verified customer reviews, manufacturer engineering schematics, known failure modes, and authoritative culinary sources. We highlight real-world flaws openly and never accept paid placement or sponsored rankings.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border-subtle text-center">
             <div className="p-4 bg-surface-lowest rounded-2xl border border-border-subtle">
@@ -57,15 +60,15 @@ export default function AboutPage() {
                 100%
               </div>
               <div className="text-xs text-muted mt-1 uppercase tracking-wider">
-                Unsponsored Tests
+                Unsponsored Guides
               </div>
             </div>
             <div className="p-4 bg-surface-lowest rounded-2xl border border-border-subtle">
               <div className="text-2xl sm:text-3xl font-mono font-bold text-emerald-400">
-                300+
+                500+
               </div>
               <div className="text-xs text-muted mt-1 uppercase tracking-wider">
-                Benchmarked Hours
+                Hours of Comparative Research
               </div>
             </div>
             <div className="p-4 bg-surface-lowest rounded-2xl border border-border-subtle">
@@ -73,7 +76,7 @@ export default function AboutPage() {
                 $0
               </div>
               <div className="text-xs text-muted mt-1 uppercase tracking-wider">
-                Paid Ranking Placements
+                Paid Placement Fees
               </div>
             </div>
           </div>
@@ -87,7 +90,7 @@ export default function AboutPage() {
             The Methodology
           </span>
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white">
-            How We Evaluate Every Product
+            How We Research Every Product
           </h2>
         </div>
 
@@ -97,10 +100,10 @@ export default function AboutPage() {
               01
             </div>
             <h3 className="text-lg font-serif font-bold text-white">
-              Anonymous Consumer Purchasing
+              Comprehensive Specification Analysis
             </h3>
             <p className="text-xs sm:text-sm text-muted leading-relaxed">
-              We never alert brands before testing. We buy standard off-the-shelf retail inventory from Amazon to ensure we receive the exact same build quality and component batches as everyday shoppers.
+              We examine official technical documentation, power wattage, material purity (such as virgin cast iron or high-carbon steel), and safety certifications to confirm foundational build quality.
             </p>
           </div>
 
@@ -109,10 +112,10 @@ export default function AboutPage() {
               02
             </div>
             <h3 className="text-lg font-serif font-bold text-white">
-              Empirical Sensor Benchmarking
+              Verified Buyer Feedback Synthesis
             </h3>
             <p className="text-xs sm:text-sm text-muted leading-relaxed">
-              We do not rely on subjective impressions. We use NIST-calibrated thermometers, precision decibel meters, and digital power draw analyzers to verify real thermal consistency and energy consumption.
+              Instead of relying on isolated opinions, we aggregate thousands of verified owner reviews across multiple retail platforms to identify recurring defect patterns, long-term durability issues, and ease of daily cleaning.
             </p>
           </div>
 
@@ -121,10 +124,10 @@ export default function AboutPage() {
               03
             </div>
             <h3 className="text-lg font-serif font-bold text-white">
-              60-Day Real World Stress Cycles
+              Comparative Market Benchmarking
             </h3>
             <p className="text-xs sm:text-sm text-muted leading-relaxed">
-              Most review sites test for an afternoon. We place appliances in real working test kitchens for two full months to monitor gasket degradation, grease accumulation, and app software bugs.
+              We evaluate price-to-performance ratios across competing models in the same category, verifying whether a premium item justifies its cost or if a budget alternative delivers equal utility.
             </p>
           </div>
 
@@ -136,7 +139,7 @@ export default function AboutPage() {
               The Signature "Brutal Truth"
             </h3>
             <p className="text-xs sm:text-sm text-muted leading-relaxed">
-              Every review includes a highlighted callout breaking down the biggest hidden flaw, maintenance headache, or reason you might want to skip the product entirely.
+              Every review includes a highlighted callout breaking down the biggest caveats, maintenance hurdles, or specific reasons a shopper might want to skip the product entirely.
             </p>
           </div>
         </div>
@@ -149,7 +152,7 @@ export default function AboutPage() {
           How Affilore Sustains Itself
         </h3>
         <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-          Affilore is supported by readers. When you click through our Amazon product links and make a purchase, we may receive a small affiliate commission at zero additional cost to you. This structure keeps our site completely ad-free, unencumbered by intrusive popups, and totally independent of brand sponsorships.
+          Affilore is reader-supported. When you click through our Amazon product links and make a purchase, we may receive a small affiliate commission at zero additional cost to you. This model allows our platform to remain completely free of intrusive banner ads, popups, and paid brand rankings.
         </p>
         <Link
           href="/disclosure/"
@@ -165,7 +168,7 @@ export default function AboutPage() {
           href="/"
           className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold bg-brand hover:bg-brand-hover text-black transition-all shadow-glow-brand"
         >
-          <span>Explore Tested Gear</span>
+          <span>Explore Curated Gear</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>

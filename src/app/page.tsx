@@ -53,7 +53,7 @@ export default function HomePage() {
           {/* Eyebrow Pill */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-high border border-brand/30 text-brand text-xs font-semibold uppercase tracking-wider mb-6 shadow-glow-brand-sm">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Independent Culinary & Tech Lab</span>
+            <span>Curated Kitchen & Tech Guides</span>
           </div>
 
           {/* Main Display Headline */}
@@ -63,22 +63,22 @@ export default function HomePage() {
 
           {/* Subtitle / Value Prop */}
           <p className="mt-5 text-base sm:text-lg md:text-xl text-muted-light max-w-2xl mx-auto leading-relaxed">
-            Unbiased, data-driven gear testing. We independently test thermal consistency, decibel levels, and real-world durability so you never regret a purchase.
+            Researched picks based on manufacturer specifications, verified customer reviews, and expert comparative analysis so you can buy with confidence.
           </p>
 
           {/* Trust Badges */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-gray-300">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Verified Testing</span>
+              <span>Verified Buyer Data</span>
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-brand" />
-              <span>100% Independent</span>
+              <span>100% Editorial Choice</span>
             </div>
             <div className="flex items-center gap-2">
               <Award className="w-4 h-4 text-amber-400" />
-              <span>Zero Sponsored Rankings</span>
+              <span>No Paid Placements</span>
             </div>
             <div className="flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-cyan-400" />
@@ -92,7 +92,7 @@ export default function HomePage() {
               href="#featured-picks"
               className="px-7 py-3.5 rounded-full text-sm font-semibold bg-gradient-to-r from-brand to-amber-500 hover:from-amber-500 hover:to-brand text-black shadow-glow-brand transition-all duration-200 transform hover:-translate-y-0.5"
             >
-              Explore Top Tested Picks
+              Explore Top Researched Picks
             </a>
             <Link
               href="/category/best-espresso-coffee-gear/"
@@ -112,7 +112,7 @@ export default function HomePage() {
               Curated Guides
             </span>
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mt-1">
-              Shop By Tested Category
+              Shop By Category
             </h2>
           </div>
           <Link
@@ -157,13 +157,13 @@ export default function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand mb-1">
               <Award className="w-3.5 h-3.5" />
-              <span>Editor Tested & Approved</span>
+              <span>Editor Researched & Curated</span>
             </div>
             <h2 className="text-2xl md:text-4xl font-serif font-bold text-white">
               Featured Product Picks
             </h2>
             <p className="text-sm text-muted mt-2 max-w-xl">
-              Every item below earned our highest laboratory test scores for efficiency, reliability, and value.
+              Every item below was selected based on outstanding customer satisfaction, reliable engineering specs, and proven long-term value.
             </p>
           </div>
         </div>
@@ -201,21 +201,21 @@ export default function HomePage() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-widest text-brand">
-                  Affilore Editorial Standard
+                  Affilore Editorial Methodology
                 </span>
               </div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-white">
-                The Brutal Truth: Why Most Affiliate Review Sites Are Broken
+                The Brutal Truth: Cut Through the Marketing Hype
               </h3>
               <p className="text-sm md:text-base text-gray-300 leading-relaxed max-w-4xl">
-                Most affiliate sites summarize Amazon user reviews without ever touching the hardware. At Affilore, we purchase our own test units with editorial funds. If an espresso maker has a loose gasket or an air fryer smells like burnt plastic on cycle three, we put it in bold print right on the page. We don’t recommend what we wouldn’t keep on our own kitchen counters.
+                We research every product using manufacturer specs, verified buyer feedback, and comparative technical analysis to help you choose with confidence. Rather than highlighting only the flattering marketing copy, we analyze hundreds of real-world buyer experiences and known defect patterns so you know the trade-offs and maintenance headaches before spending a dollar.
               </p>
               <div className="pt-2">
                 <Link
                   href="/about/"
                   className="inline-flex items-center text-xs sm:text-sm font-semibold text-brand hover:text-brand-hover hover:underline"
                 >
-                  Read our full testing charter and standards &rarr;
+                  Read our full research methodology &rarr;
                 </Link>
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ComparisonTable
           products={featuredProducts.slice(0, 5)}
-          title="Quick Benchmark Comparison: Top Kitchen & Coffee Gear"
+          title="Side-by-Side Comparison: Top Kitchen & Coffee Gear"
         />
       </section>
 
@@ -244,7 +244,7 @@ export default function HomePage() {
               Never Pay Full Price For Great Gear.
             </h2>
             <p className="text-sm sm:text-base text-muted leading-relaxed">
-              We monitor historical price charts on Amazon every 6 hours. Get our monthly teardown digest and flash deal alerts directly in your inbox.
+              We monitor historical price charts on Amazon every 6 hours. Get our monthly buyer digest and flash deal alerts directly in your inbox.
             </p>
 
             <div className="mt-6">

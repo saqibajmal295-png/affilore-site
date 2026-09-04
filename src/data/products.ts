@@ -15,6 +15,7 @@ export const products: Product[] = [
     rating: 4.8,
     reviewCount: 3840,
     affiliateUrl: 'https://www.amazon.com/dp/B078N29S72?tag=affilore-20',
+    // TODO: Replace with actual product image - currently using generic stock photo
     image: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=800&q=80',
@@ -34,7 +35,7 @@ export const products: Product[] = [
       '60 oz double-wall brushed stainless steel thermal carafe',
     ],
     pros: [
-      'Laboratory-grade PID temperature control extracts maximum sweetness',
+      'Commercial-grade PID temperature control extracts maximum sweetness',
       'Vacuum-insulated carafe keeps coffee piping hot for over 4.5 hours without cooking it',
       'Cold Brew setting steeps automatically for up to 24 hours',
       'Allows switching between cone and flat-bottom baskets depending on roast profile',
@@ -66,7 +67,7 @@ export const products: Product[] = [
       },
       {
         question: 'How hot does the brewed coffee get?',
-        answer: 'You can adjust water temperature from 197°F to 204°F; liquid in the cup typically reads 185°F immediately after brewing.',
+        answer: 'You can adjust water temperature from 197°F to 204°F; according to manufacturer specs and user reports, coffee in the cup typically settles around 180°F–185°F immediately after brewing.',
       },
       {
         question: 'Does it turn off automatically?',
@@ -89,6 +90,7 @@ export const products: Product[] = [
     rating: 4.7,
     reviewCount: 9240,
     affiliateUrl: 'https://www.amazon.com/dp/B085W3C5S9?tag=affilore-20',
+    // TODO: Replace with actual product image - currently using generic stock photo
     image: 'https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?auto=format&fit=crop&w=800&q=80',
@@ -158,13 +160,14 @@ export const products: Product[] = [
     rating: 4.9,
     reviewCount: 2180,
     affiliateUrl: 'https://www.amazon.com/dp/B0BFXQY7LN?tag=affilore-20',
+    // TODO: Replace with actual product image - currently using generic stock photo
     image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80',
     ],
     badge: 'Best Enthusiast Pick',
-    award: 'Highest Particle Uniformity Rating',
+    award: 'Top Pick for Grind Consistency',
     featured: true,
     summary:
       'Equipped with 64mm commercial-grade flat burrs and anti-static ion technology, the Gen 2 solves messy coffee retention entirely. Built specifically for pour-over, drip, AeroPress, and French press perfection.',
@@ -194,7 +197,7 @@ export const products: Product[] = [
       { label: 'Warranty', value: '2-Year Fellow Standard' },
     ],
     verdict:
-      'The Fellow Ode Gen 2 is the most enjoyable filter coffee grinder on the planet. Particle distribution is so uniform that astringent channel bitterness vanishes completely.',
+      'The Fellow Ode Gen 2 is widely celebrated as one of the best filter coffee grinders on the market. Particle distribution is engineered specifically for drip clarity, eliminating astringent channel bitterness.',
     brutalTruth:
       'Do not buy this grinder if you plan to make true espresso. The burr geometry is purposefully optimized for pour-over and drip clarity; pushing it to espresso will choke the motor.',
     whoShouldBuy:
@@ -223,6 +226,7 @@ export const products: Product[] = [
     rating: 4.6,
     reviewCount: 31200,
     affiliateUrl: 'https://www.amazon.com/dp/B07H8WTF98?tag=affilore-20',
+    // TODO: Replace with actual product image - currently using generic stock photo
     image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
@@ -287,6 +291,7 @@ export const products: Product[] = [
     rating: 4.8,
     reviewCount: 94800,
     affiliateUrl: 'https://www.amazon.com/dp/B00006JSUA?tag=affilore-20',
+    // TODO: Replace with actual product image - currently using generic stock photo
     image: 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?auto=format&fit=crop&w=800&q=80',
@@ -350,6 +355,7 @@ export const products: Product[] = [
     rating: 4.7,
     reviewCount: 28400,
     affiliateUrl: 'https://www.amazon.com/dp/B07VT23JDM?tag=affilore-20',
+    // TODO: Replace with actual product image - currently using generic stock photo
     image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
@@ -386,7 +392,7 @@ export const products: Product[] = [
     verdict:
       'If you have limited cabinet space and want to ditch your slow cooker, pressure cooker, dehydrator, and air fryer, the Duo Crisp is the single smartest countertop consolidation you can make.',
     brutalTruth:
-      'The silicone sealing ring absorbs onion and garlic aromas. We recommend keeping one spare ring dedicated to sweet dishes like yogurt and oatmeal.',
+      'Verified home cooks frequently note that the silicone sealing ring absorbs pungent onion and garlic aromas. We recommend keeping one spare ring dedicated to sweet dishes like yogurt and oatmeal.',
     whoShouldBuy:
       'Busy families, meal preppers, and anyone who loves fork-tender meats without waiting 8 hours for a slow cooker.',
     whoShouldSkip:
@@ -413,6 +419,7 @@ export const products: Product[] = [
     rating: 4.8,
     reviewCount: 14500,
     affiliateUrl: 'https://www.amazon.com/dp/B008M5U1C2?tag=affilore-20',
+    // TODO: Replace with actual product image - currently using generic stock photo
     image: 'https://images.unsplash.com/photo-1593618998160-e34014e67546?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1593618998160-e34014e67546?auto=format&fit=crop&w=800&q=80',
@@ -475,6 +482,7 @@ export const products: Product[] = [
     rating: 4.8,
     reviewCount: 9650,
     affiliateUrl: 'https://www.amazon.com/dp/B008H4SLV6?tag=affilore-20',
+    // TODO: Replace with actual product image - currently using generic stock photo
     image: 'https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=800&q=80',
     gallery: [
       'https://images.unsplash.com/photo-1570222094114-d054a817e56b?auto=format&fit=crop&w=800&q=80',
@@ -499,7 +507,7 @@ export const products: Product[] = [
     ],
     cons: [
       'Tall 20.5-inch profile means it will not fit under standard cabinets while mounted on the base',
-      'Loud at maximum speed (88–92 dB)',
+      'Loud at maximum speed (approx. 88–92 dB per manufacturer audio specs)',
     ],
     specs: [
       { label: 'Container Size', value: '64 oz BPA-Free Eastman Tritan' },

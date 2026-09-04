@@ -3,11 +3,11 @@ import { Category } from '@/types';
 export const categories: Category[] = [
   {
     slug: 'best-espresso-coffee-gear',
-    title: 'Best Espresso & Coffee Gear (2025/2026 Tested)',
+    title: 'Best Espresso & Coffee Gear (2025/2026 Guide)',
     shortTitle: 'Coffee & Espresso',
-    tagline: 'Precision brewers, conical burr grinders, and temperature-controlled kettles tested for extraction uniformity.',
+    tagline: 'Precision brewers, conical burr grinders, and temperature-controlled kettles researched for extraction uniformity.',
     description:
-      'We spent over 300 brewing hours testing water dispersal rates, thermal stability to within ±0.5°F, and micron-level grind consistency to find the absolute best coffee gear for your countertop.',
+      'We analyzed thermal stability datasheets, burr tolerances, water dispersal profiles, and hundreds of verified barista and home-brewer reviews to find the best coffee gear for your countertop.',
     iconName: 'Coffee',
     heroImage: 'https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=1400&q=80',
     featuredProductSlug: 'breville-precision-brewer-thermal',
@@ -53,7 +53,7 @@ export const categories: Category[] = [
     shortTitle: 'Smart Kitchen',
     tagline: 'Wi-Fi air fryers, app-connected precision sous vide, and wireless probes that eliminate guesswork.',
     description:
-      'Connected kitchen tech should save time, not introduce tech headaches. We evaluate real-world Wi-Fi range, sensor accuracy against NIST-calibrated thermometers, and app reliability.',
+      'Connected kitchen tech should save time, not introduce tech headaches. We evaluate real-world connectivity specs, probe tolerance ratings against verified buyer feedback, and companion app reliability.',
     iconName: 'Smartphone',
     heroImage: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1400&q=80',
     featuredProductSlug: 'cosori-smart-air-fryer-toaster-oven',
@@ -99,7 +99,7 @@ export const categories: Category[] = [
     shortTitle: 'Budget Essentials',
     tagline: 'Heirloom-grade cast iron, Japanese steel chef knives, and indestructible silicone tools on a budget.',
     description:
-      'You do not need to spend thousands to stock a chef-worthy kitchen. We stress-tested budget kitchen tools against premium $300 counterparts to find real everyday workhorses.',
+      'You do not need to spend thousands to stock a chef-worthy kitchen. We compared budget kitchen tools against premium $300 counterparts across thousands of long-term owner reviews to find real everyday workhorses.',
     iconName: 'UtensilsCrossed',
     heroImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80',
     featuredProductSlug: 'lodge-pre-seasoned-cast-iron-skillet-12-inch',
@@ -145,7 +145,7 @@ export const categories: Category[] = [
     shortTitle: 'Countertop Gear',
     tagline: 'High-torque blenders, multi-cookers, and compact convection stations evaluated for motor longevity.',
     description:
-      'Countertop real estate is prime kitchen territory. We tested decibel output, motor torque under frozen ingredient load, and ease of teardown cleaning to ensure these appliances earn their spot.',
+      'Countertop real estate is prime kitchen territory. We analyzed motor wattage specs, verified owner reports on tough blending tasks, and ease-of-cleaning ratings to ensure these appliances earn their spot.',
     iconName: 'Flame',
     heroImage: 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?auto=format&fit=crop&w=1400&q=80',
     featuredProductSlug: 'instant-pot-duo-crisp-11-in-1',

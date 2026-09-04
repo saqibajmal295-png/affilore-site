@@ -76,7 +76,7 @@ export default function DisclosurePage() {
             Strict Editorial Independence
           </h3>
           <p className="text-sm text-muted-light">
-            Our editorial evaluations, star ratings, and rankings are strictly governed by our testing protocols and are completely isolated from our commercial affiliate relationships.
+            Our editorial evaluations, star ratings, and rankings are strictly governed by independent editorial research standards and are completely isolated from our commercial affiliate relationships.
           </p>
           <ul className="space-y-2 text-xs sm:text-sm text-gray-300">
             <li className="flex items-start gap-2">
@@ -89,7 +89,7 @@ export default function DisclosurePage() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-brand font-bold">&bull;</span>
-              <span>Our writers and testing engineers do not receive commission bonuses based on which specific products readers purchase.</span>
+              <span>Our writers and research contributors do not receive commission bonuses based on which specific products readers purchase.</span>
             </li>
           </ul>
         </section>
@@ -103,7 +103,7 @@ export default function DisclosurePage() {
             Real-Time Price & Availability Dynamics
           </h3>
           <p className="text-sm text-muted-light">
-            Retail pricing on platforms like Amazon fluctuates dynamically based on supply, seller inventory, and promotional events. While we strive to display accurate pricing indicators, prices and availability are accurate only as of the date/time of testing and are subject to change. Always verify the current final checkout price on Amazon.com.
+            Retail pricing on platforms like Amazon fluctuates dynamically based on supply, seller inventory, and promotional events. While we strive to display accurate pricing indicators, prices and availability are accurate only as of the date/time of review publication and are subject to change. Always verify the current final checkout price on Amazon.com.
           </p>
         </section>
 

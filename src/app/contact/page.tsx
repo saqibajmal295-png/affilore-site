@@ -29,10 +29,10 @@ export default function ContactPage() {
           <span>Direct Editorial Desk</span>
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-extrabold text-white">
-          Get In Touch With Our Lab
+          Get In Touch With Our Editorial Desk
         </h1>
         <p className="text-sm sm:text-base text-muted max-w-xl mx-auto leading-relaxed">
-          Have a product you want us to put through our stress-test protocol? Noticed a price change or have a question for our testing engineers? We read every submission.
+          Have a product you want us to feature in our comparative guides? Noticed a price change or have a question for our research team? We read every submission.
         </p>
       </div>
 
@@ -44,7 +44,7 @@ export default function ContactPage() {
               Editorial Response Times
             </h3>
             <p className="text-xs text-muted leading-relaxed">
-              Our lab testing team responds to reader inquiries within 24–48 business hours.
+              Our editorial research team responds to reader inquiries within 24–48 business hours.
             </p>
             <div className="pt-2 border-t border-border-subtle space-y-3 text-xs">
               <div className="flex items-center gap-2.5 text-gray-300">
@@ -63,7 +63,7 @@ export default function ContactPage() {
               Notice for Brands & PR:
             </h4>
             <p className="text-xs text-muted-dark leading-relaxed">
-              We purchase our own test equipment. Unsolicited free samples sent to our facility will either be benchmarked objectively without promise of coverage, or donated.
+              We maintain complete editorial independence. Unsolicited review pitches or promotional gear will never influence our comparative analysis, rankings, or ratings.
             </p>
           </div>
         </div>
@@ -134,7 +134,7 @@ export default function ContactPage() {
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                     className="w-full px-4 py-3 bg-surface-lowest border border-border-subtle rounded-xl text-white text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
                   >
-                    <option value="gear-suggestion">Suggest Gear for Testing</option>
+                    <option value="gear-suggestion">Suggest Products to Feature</option>
                     <option value="review-question">Question About a Review</option>
                     <option value="price-correction">Report Pricing or Stock Discrepancy</option>
                     <option value="general">General Feedback</option>
