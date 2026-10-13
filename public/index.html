@@ -1,405 +1,713 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Affilore — Smart Affiliate Tools for Global Sellers</title>
-  <meta name="description" content="Affilore gives you powerful micro-tools to boost affiliate conversions, track performance, and grow revenue across US, UK, CA, AU & EU markets.">
-  <meta name="theme-color" content="#4f46e5">
+  <title>Affilore — Replace 8 Overpriced Tools With One Dashboard</title>
+  <meta name="description" content="Affilore is the all-in-one creator suite that replaces your link-in-bio, digital storefront, email tool, analytics, and checkout — for a fraction of the cost.">
+  <meta name="theme-color" content="#090D16">
   <link rel="canonical" href="https://affilore.com">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Affilore — Smart Affiliate Tools for Global Sellers">
-  <meta property="og:description" content="Boost affiliate conversions with powerful micro-tools built for international markets.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://affilore.com">
-
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50:  '#eef2ff',
-              100: '#e0e7ff',
-              200: '#c7d2fe',
-              300: '#a5b4fc',
-              400: '#818cf8',
-              500: '#6366f1',
-              600: '#4f46e5',
-              700: '#4338ca',
-              800: '#3730a3',
-              900: '#312e81',
-            }
-          }
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
         }
       }
     }
   </script>
-
-  <!-- Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-
-    .gradient-hero {
-      background: linear-gradient(135deg, #312e81 0%, #4f46e5 40%, #7c3aed 100%);
-    }
-
-    .card-hover {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
-
-    .pulse-cta {
-      animation: pulse-ring 2.5s ease-in-out infinite;
-    }
-    @keyframes pulse-ring {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.45); }
-      50%       { box-shadow: 0 0 0 14px rgba(99,102,241,0); }
-    }
-
-    .fade-up {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
-    .fade-up.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #090D16; }
+    .bg-radial { background: radial-gradient(ellipse at top, #1E293B 0%, #090D16 70%); }
+    .glass-card { background: rgba(15,23,42,0.6); border: 1px solid rgba(51,65,85,0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .glass-nav { background: rgba(9,13,22,0.8); border-bottom: 1px solid rgba(51,65,85,0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .glow-btn { background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); box-shadow: 0 8px 32px rgba(99,102,241,0.25); }
+    .glow-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 12px 40px rgba(99,102,241,0.35); }
+    .glow-border { border: 1px solid transparent; background-image: linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.6)), linear-gradient(135deg, #6366f1, #a855f7, #ec4899); background-origin: border-box; background-clip: padding-box, border-box; }
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
   </style>
 </head>
+<body class="text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
 
-<body class="bg-white text-gray-900 antialiased">
-
-  <!-- ════════════════════════════════════════
-       NAVBAR
-  ════════════════════════════════════════ -->
-  <header class="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
+  <!-- NAVBAR -->
+  <header class="fixed top-0 inset-x-0 z-50 glass-nav">
     <nav class="max-w-6xl mx-auto flex items-center justify-between px-5 py-3.5">
-      <!-- Logo -->
-      <a href="/" class="flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-brand-600">
-        <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none">
-          <rect width="32" height="32" rx="8" fill="#4f46e5"/>
-          <path d="M10 22L16 10L22 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M12 18H20" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
+      <a href="/" class="flex items-center gap-2.5 text-lg font-extrabold tracking-tight text-white">
+        <div class="w-8 h-8 rounded-lg glow-btn flex items-center justify-center">
+          <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
+        </div>
         Affilore
       </a>
-
-      <!-- Desktop links -->
-      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-        <a href="#features" class="hover:text-brand-600 transition-colors">Features</a>
-        <a href="#pricing" class="hover:text-brand-600 transition-colors">Pricing</a>
-        <a href="#trust" class="hover:text-brand-600 transition-colors">Security</a>
+      <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-400">
+        <a href="/#features" class="hover:text-white transition">Features</a>
+        <a href="/pricing" class="hover:text-white transition">Pricing</a>
       </div>
-
-      <!-- Desktop CTA -->
-      <a href="#pricing"
-         class="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-lg hover:bg-brand-700 transition shadow-sm">
-        Get Started
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-      </a>
-
-      <!-- Mobile hamburger -->
-      <button id="nav-toggle" class="sm:hidden p-2 text-gray-600 hover:text-brand-600 transition" aria-label="Toggle menu">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <div class="flex items-center gap-3">
+        <a href="mailto:contact@affilore.com" class="hidden sm:inline-flex text-sm text-slate-400 hover:text-white transition">Contact</a>
+        <a href="/pricing" class="inline-flex items-center gap-1.5 px-5 py-2 glow-btn text-white text-sm font-semibold rounded-lg transition-all">
+          Get Access
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+      <button id="nav-toggle" class="md:hidden p-2 text-slate-400 hover:text-white" aria-label="Menu">
+        <i data-lucide="menu" class="w-5 h-5"></i>
       </button>
     </nav>
-
-    <!-- Mobile dropdown -->
-    <div id="nav-menu" class="hidden sm:hidden border-t border-gray-100 bg-white px-5 pb-4">
-      <a href="#features" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-brand-600">Features</a>
-      <a href="#pricing" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-brand-600">Pricing</a>
-      <a href="#trust" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-brand-600">Security</a>
-      <a href="#pricing" class="mt-2 block text-center px-4 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-lg hover:bg-brand-700">Get Started</a>
+    <div id="nav-menu" class="hidden md:hidden border-t border-slate-800/50 px-5 pb-4">
+      <a href="/#features" class="block py-2.5 text-sm text-slate-300 hover:text-white">Features</a>
+      <a href="/pricing" class="block py-2.5 text-sm text-slate-300 hover:text-white">Pricing</a>
+      <a href="mailto:contact@affilore.com" class="block py-2.5 text-sm text-slate-300 hover:text-white">Contact</a>
+      <a href="/pricing" class="mt-2 block text-center px-4 py-2.5 glow-btn text-white text-sm font-semibold rounded-lg">Get Access</a>
     </div>
   </header>
 
+  <main class="flex-1">
+    <!-- HERO SECTION -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 px-5 bg-radial overflow-hidden">
+      <div class="max-w-6xl mx-auto text-center relative z-10">
+        
+        <!-- Badge Pill -->
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-xs font-semibold mb-6 fade-up">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span>Next-Gen Digital Creator Suite</span>
+        </div>
 
-  <!-- ════════════════════════════════════════
-       HERO
-  ════════════════════════════════════════ -->
-  <section class="gradient-hero pt-32 pb-20 sm:pt-44 sm:pb-32 px-5 text-center text-white overflow-hidden">
-    <div class="max-w-3xl mx-auto relative">
-      <!-- Badge -->
-      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold uppercase tracking-wider mb-7">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        Available in US · UK · CA · AU · EU
-      </span>
+        <!-- Headline -->
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] max-w-4xl mx-auto fade-up">
+          Replace 8 Overpriced Tools With <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">One Minimalist Dashboard</span>
+        </h1>
 
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
-        Affiliate tools that<br class="hidden sm:block"> actually convert.
-      </h1>
+        <!-- Subtitle -->
+        <p class="mt-6 text-base sm:text-lg md:text-xl text-slate-300/90 max-w-3xl mx-auto leading-relaxed fade-up">
+          Link-in-bio, digital store, AI workflows, analytics, and instant global checkout — unified into one clean interface. Built for creators who refuse to overpay.
+        </p>
 
-      <p class="mt-6 text-lg sm:text-xl text-indigo-100 max-w-2xl mx-auto leading-relaxed">
-        Smart micro-tools built for affiliate marketers selling across global markets. Track, optimize, and grow your revenue — all from one dashboard.
-      </p>
+        <!-- CTAs -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 fade-up">
+          <a href="/pricing" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 glow-btn text-white text-base font-semibold rounded-xl transition-all">
+            Get Access — From $29
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="#features" class="inline-flex items-center gap-1.5 text-sm font-medium text-slate-400 hover:text-white transition py-2 px-4">
+            See what's included ↓
+          </a>
+        </div>
 
-      <!-- Dual CTAs -->
-      <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#pricing"
-           class="pulse-cta w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-brand-700 font-bold rounded-xl hover:bg-indigo-50 transition text-base shadow-xl">
-          Get Started — $29
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-        </a>
-        <a href="#features"
-           class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition text-base">
-          See Features
-        </a>
+        <!-- Mockup Dashboard Frame -->
+        <div class="mt-14 max-w-5xl mx-auto rounded-2xl glass-card glow-border p-4 sm:p-6 shadow-2xl relative text-left fade-up">
+          <!-- Window Controls & Header -->
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800/60 mb-5">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+              <span class="ml-2 text-xs font-mono text-slate-400 hidden sm:inline-block">app.affilore.com/dashboard</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Live Sync
+              </span>
+            </div>
+          </div>
+
+          <!-- Fake Metric Cards -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+            <div class="p-3.5 sm:p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+                <span>Total Revenue</span>
+                <span class="text-emerald-400 font-medium">+24.5%</span>
+              </div>
+              <div class="text-xl sm:text-2xl font-bold text-white">$12,847 Revenue</div>
+              <div class="text-[11px] text-slate-500 mt-1">vs $10,318 last 30d</div>
+            </div>
+
+            <div class="p-3.5 sm:p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+                <span>Unique Traffic</span>
+                <span class="text-emerald-400 font-medium">+18.2%</span>
+              </div>
+              <div class="text-xl sm:text-2xl font-bold text-white">3,241 Clicks</div>
+              <div class="text-[11px] text-slate-500 mt-1">From bio & social links</div>
+            </div>
+
+            <div class="p-3.5 sm:p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+                <span>Checkout Efficiency</span>
+                <span class="text-emerald-400 font-medium">+6.1%</span>
+              </div>
+              <div class="text-xl sm:text-2xl font-bold text-white">68% Conv. Rate</div>
+              <div class="text-[11px] text-slate-500 mt-1">High-intent buyers</div>
+            </div>
+
+            <div class="p-3.5 sm:p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+                <span>Fulfilled Sales</span>
+                <span class="text-emerald-400 font-medium">+14 new</span>
+              </div>
+              <div class="text-xl sm:text-2xl font-bold text-white">142 Orders</div>
+              <div class="text-[11px] text-slate-500 mt-1">Instant delivery active</div>
+            </div>
+          </div>
+
+          <!-- Chart & Live Feed Mockup -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Chart Bar Mockup -->
+            <div class="lg:col-span-2 p-4 sm:p-5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h4 class="text-sm font-semibold text-white">Earnings Breakdown</h4>
+                  <p class="text-xs text-slate-400">Past 7 days performance across storefront & links</p>
+                </div>
+                <div class="flex items-center gap-2 text-xs">
+                  <span class="flex items-center gap-1 text-slate-300">
+                    <span class="w-2.5 h-2.5 rounded-sm bg-indigo-500 inline-block"></span> Digital
+                  </span>
+                  <span class="flex items-center gap-1 text-slate-300">
+                    <span class="w-2.5 h-2.5 rounded-sm bg-pink-500 inline-block"></span> Affiliates
+                  </span>
+                </div>
+              </div>
+
+              <!-- Bar chart columns -->
+              <div class="h-36 sm:h-44 flex items-end justify-between gap-2 pt-4 px-2 border-b border-slate-800/80">
+                <div class="w-full flex flex-col items-center gap-1">
+                  <div class="w-full max-w-[28px] bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-sm" style="height: 48px;"></div>
+                  <span class="text-[10px] text-slate-500">Mon</span>
+                </div>
+                <div class="w-full flex flex-col items-center gap-1">
+                  <div class="w-full max-w-[28px] bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-sm" style="height: 72px;"></div>
+                  <span class="text-[10px] text-slate-500">Tue</span>
+                </div>
+                <div class="w-full flex flex-col items-center gap-1">
+                  <div class="w-full max-w-[28px] bg-gradient-to-t from-pink-600 to-pink-400 rounded-t-sm" style="height: 60px;"></div>
+                  <span class="text-[10px] text-slate-500">Wed</span>
+                </div>
+                <div class="w-full flex flex-col items-center gap-1">
+                  <div class="w-full max-w-[28px] bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-sm" style="height: 96px;"></div>
+                  <span class="text-[10px] text-slate-500">Thu</span>
+                </div>
+                <div class="w-full flex flex-col items-center gap-1">
+                  <div class="w-full max-w-[28px] bg-gradient-to-t from-indigo-600 to-pink-400 rounded-t-sm" style="height: 120px;"></div>
+                  <span class="text-[10px] text-slate-500">Fri</span>
+                </div>
+                <div class="w-full flex flex-col items-center gap-1">
+                  <div class="w-full max-w-[28px] bg-gradient-to-t from-indigo-500 to-purple-400 rounded-t-sm" style="height: 140px;"></div>
+                  <span class="text-[10px] text-slate-500">Sat</span>
+                </div>
+                <div class="w-full flex flex-col items-center gap-1">
+                  <div class="w-full max-w-[28px] bg-gradient-to-t from-indigo-500 to-pink-500 rounded-t-sm" style="height: 160px;"></div>
+                  <span class="text-[10px] text-slate-500">Sun</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity List -->
+            <div class="p-4 sm:p-5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col justify-between">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-semibold text-white">Recent Conversions</h4>
+                <span class="text-[11px] text-indigo-400 font-medium">Real-time</span>
+              </div>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                      <i data-lucide="shopping-bag" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-slate-200">Notion Creator OS</p>
+                      <p class="text-[10px] text-slate-500">Paddle Checkout · US</p>
+                    </div>
+                  </div>
+                  <span class="font-bold text-white">+$49.00</span>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+                      <i data-lucide="link" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-slate-200">Affiliate Referral</p>
+                      <p class="text-[10px] text-slate-500">SaaS Tool · UK</p>
+                    </div>
+                  </div>
+                  <span class="font-bold text-white">+$34.20</span>
+                </div>
+                <div class="flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400">
+                      <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium text-slate-200">AI Prompt Pack</p>
+                      <p class="text-[10px] text-slate-500">Instant Download · DE</p>
+                    </div>
+                  </div>
+                  <span class="font-bold text-white">+$29.00</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                <span>Automatic payout scheduled</span>
+                <span class="text-emerald-400">Paddle Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
+    </section>
 
-      <p class="mt-6 text-xs text-indigo-200/80">One-time payment · No subscription · 30-day money-back guarantee</p>
-    </div>
-  </section>
+    <!-- FEATURES BENTO GRID -->
+    <section id="features" class="py-20 md:py-28 px-5 border-t border-slate-800/40 relative">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-up">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/50 text-slate-300 text-xs font-semibold mb-3">
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-indigo-400"></i>
+            Architected For Peak Performance
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
+            Everything you need. Nothing you don't.
+          </h2>
+          <p class="mt-4 text-slate-400 text-base sm:text-lg">
+            Say goodbye to clunky multi-app glue, broken webhook automations, and recurring monthly charges. Affilore bundles the foundational creator stack into one lightning-fast platform.
+          </p>
+        </div>
 
+        <!-- 4 Card Bento Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-  <!-- ════════════════════════════════════════
-       FEATURES GRID
-  ════════════════════════════════════════ -->
-  <section id="features" class="py-20 sm:py-28 px-5 bg-gray-50/80">
+          <!-- Card 1 (Span 2 cols on lg) -->
+          <div class="lg:col-span-2 glass-card rounded-2xl p-6 sm:p-8 hover:border-slate-700 transition fade-up flex flex-col md:flex-row items-center gap-8">
+            <div class="flex-1">
+              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-5">
+                <i data-lucide="link" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-white tracking-tight">All-in-One Link-in-Bio</h3>
+              <p class="mt-3 text-slate-400 leading-relaxed">
+                Build high-converting, deeply customizable bio landing pages tailored for mobile visitors. Enjoy pixel-perfect custom domains, built-in link analytics, automated UTM tracking, and instant click attribution across every social platform.
+              </p>
+              <ul class="mt-5 space-y-2 text-sm text-slate-300">
+                <li class="flex items-center gap-2">
+                  <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                  <span>Zero-lag mobile load times under 200ms</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                  <span>Custom branding, themes, animated links, and rich embed cards</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                  <span>Integrated lead capture with instant email sync</span>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Visual Accent Mockup for Link-in-bio -->
+            <div class="w-full md:w-80 shrink-0 p-4 rounded-xl bg-slate-900/90 border border-slate-800 shadow-xl">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                  AC
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-white flex items-center gap-1">
+                    @alexcreator
+                    <i data-lucide="badge-check" class="w-3.5 h-3.5 text-indigo-400"></i>
+                  </div>
+                  <div class="text-[11px] text-slate-400">Creator & Digital Architect</div>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <div class="p-2.5 rounded-lg bg-slate-800/70 border border-slate-700/60 flex items-center justify-between text-xs text-white">
+                  <span class="flex items-center gap-2">
+                    <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-pink-400"></i>
+                    Get 50+ Creator Templates
+                  </span>
+                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400"></i>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-800/70 border border-slate-700/60 flex items-center justify-between text-xs text-white">
+                  <span class="flex items-center gap-2">
+                    <i data-lucide="youtube" class="w-3.5 h-3.5 text-red-400"></i>
+                    Latest Video Guide
+                  </span>
+                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-slate-400"></i>
+                </div>
+                <div class="p-2.5 rounded-lg bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-between text-xs text-indigo-200">
+                  <span class="flex items-center gap-2">
+                    <i data-lucide="mail" class="w-3.5 h-3.5 text-indigo-300"></i>
+                    Free Weekly Growth Memo
+                  </span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500 text-white font-bold">Free</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-2 text-center text-[10px] text-slate-500 font-mono">
+                affilore.com/@alexcreator
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 (Digital Store) -->
+          <div class="glass-card rounded-2xl p-6 sm:p-8 hover:border-slate-700 transition fade-up flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-5">
+                <i data-lucide="store" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-white tracking-tight">Automated Digital Store</h3>
+              <p class="mt-3 text-slate-400 leading-relaxed">
+                Sell downloadable products, design assets, PDF playbooks, Notion templates, and software licenses with zero friction. Automatic file delivery with expiring links prevents piracy while delivering an effortless buyer experience.
+              </p>
+            </div>
+            <div class="mt-6 p-4 rounded-xl bg-slate-900/80 border border-slate-800/80">
+              <div class="flex items-center justify-between text-xs mb-2">
+                <span class="font-medium text-slate-300">Zero-Friction Checkout</span>
+                <span class="text-emerald-400 font-mono">Instant Delivery</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-slate-400">
+                <span class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Files: PDF, ZIP, Figma</span>
+                <span class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">License Keys</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 (AI Workflow Tools) -->
+          <div class="glass-card rounded-2xl p-6 sm:p-8 hover:border-slate-700 transition fade-up flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center text-pink-400 mb-5">
+                <i data-lucide="cpu" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-white tracking-tight">AI Workflow Tools</h3>
+              <p class="mt-3 text-slate-400 leading-relaxed">
+                Automate your marketing engine without expensive third-party tools. Draft viral social hooks, write compelling sales copy, generate SEO descriptions for products, and automate engagement workflows right inside your dashboard.
+              </p>
+            </div>
+            <div class="mt-6 p-4 rounded-xl bg-slate-900/80 border border-slate-800/80">
+              <div class="flex items-center justify-between text-xs mb-2">
+                <span class="font-medium text-slate-300">AI Copy & Content Engine</span>
+                <span class="text-pink-400 font-mono">GPT-4o Powered</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-slate-400">
+                <span class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Product Copy</span>
+                <span class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Social Hooks</span>
+                <span class="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">Auto-Replies</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 (Span 2 cols on lg - Global Checkout) -->
+          <div class="lg:col-span-2 glass-card rounded-2xl p-6 sm:p-8 hover:border-slate-700 transition fade-up flex flex-col md:flex-row items-center gap-8">
+            <div class="flex-1">
+              <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-5">
+                <i data-lucide="globe" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-white tracking-tight">Instant Global Checkout</h3>
+              <p class="mt-3 text-slate-400 leading-relaxed">
+                Accept frictionless payments from 200+ countries and territories powered by Paddle as Merchant of Record. Say goodbye to international tax headaches — automatic calculation and remittance of EU VAT, UK VAT, and US Sales Tax are handled completely out of the box.
+              </p>
+              <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700/80 text-slate-300">Global Currencies</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700/80 text-slate-300">Apple Pay & Google Pay</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700/80 text-slate-300">Automated Tax Invoicing</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700/80 text-slate-300">Zero Chargeback Headaches</span>
+              </div>
+            </div>
+            
+            <div class="w-full md:w-80 shrink-0 p-5 rounded-xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-3">
+              <div class="flex items-center justify-between text-xs text-slate-400 pb-2 border-b border-slate-800">
+                <span class="font-medium text-white">Merchant of Record</span>
+                <span class="text-emerald-400">Paddle Verified</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">Global Coverage:</span>
+                <span class="text-slate-200 font-semibold">200+ Countries</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">Sales Tax / VAT:</span>
+                <span class="text-emerald-400 font-semibold">100% Automated</span>
+              </div>
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">Supported Rails:</span>
+                <span class="text-slate-200 font-semibold">Cards, Apple Pay, PayPal</span>
+              </div>
+              <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-500 text-center">
+                Full legal compliance without forming overseas entities
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARISON / SOCIAL PROOF SECTION -->
+    <section class="py-20 md:py-28 px-5 bg-radial border-t border-slate-800/40 relative">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-14 fade-up">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold mb-3">
+            <i data-lucide="calculator" class="w-3.5 h-3.5 text-rose-400"></i>
+            The True Cost of Tool Fatigue
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
+            Stop paying $443/month for scattered tools
+          </h2>
+          <p class="mt-4 text-slate-400 text-base sm:text-lg">
+            SaaS subscriptions quietly bleed your creator earnings each month. Look at what you're actually paying just to keep the lights on versus one unified solution.
+          </p>
+        </div>
+
+        <!-- Comparison Table Container -->
+        <div class="glass-card glow-border rounded-2xl overflow-hidden shadow-2xl fade-up">
+          <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-800/80">
+            
+            <!-- Left Column: Traditional Stack -->
+            <div class="p-6 sm:p-8 bg-slate-950/40">
+              <div class="flex items-center justify-between pb-5 border-b border-slate-800">
+                <div>
+                  <h3 class="text-lg font-bold text-slate-200">Traditional Stack</h3>
+                  <p class="text-xs text-slate-400">8 fragmented subscriptions & logins</p>
+                </div>
+                <span class="px-2.5 py-1 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs font-bold">
+                  $443 / month
+                </span>
+              </div>
+
+              <ul class="mt-6 space-y-3.5 text-sm">
+                <li class="flex items-center justify-between text-slate-300">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                    <span>Link-in-bio (Linktree / Stan)</span>
+                  </div>
+                  <span class="font-mono text-slate-400">$12/mo</span>
+                </li>
+                <li class="flex items-center justify-between text-slate-300">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                    <span>Digital store (Gumroad / Payhip)</span>
+                  </div>
+                  <span class="font-mono text-slate-400">$39/mo</span>
+                </li>
+                <li class="flex items-center justify-between text-slate-300">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                    <span>Email marketing (ConvertKit)</span>
+                  </div>
+                  <span class="font-mono text-slate-400">$49/mo</span>
+                </li>
+                <li class="flex items-center justify-between text-slate-300">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                    <span>Analytics & click tracker</span>
+                  </div>
+                  <span class="font-mono text-slate-400">$29/mo</span>
+                </li>
+                <li class="flex items-center justify-between text-slate-300">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                    <span>Checkout & tax handling</span>
+                  </div>
+                  <span class="font-mono text-slate-400">$99/mo</span>
+                </li>
+                <li class="flex items-center justify-between text-slate-300">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                    <span>AI copy & workflow tools</span>
+                  </div>
+                  <span class="font-mono text-slate-400">$79/mo</span>
+                </li>
+                <li class="flex items-center justify-between text-slate-300">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                    <span>Scheduling & automation apps</span>
+                  </div>
+                  <span class="font-mono text-slate-400">$29/mo</span>
+                </li>
+                <li class="flex items-center justify-between text-slate-300">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0"></i>
+                    <span>Creator CRM & contact storage</span>
+                  </div>
+                  <span class="font-mono text-slate-400">$107/mo</span>
+                </li>
+              </ul>
+
+              <div class="mt-8 pt-5 border-t border-slate-800 flex items-center justify-between">
+                <span class="font-semibold text-slate-400 text-sm">Total Stack Cost:</span>
+                <span class="font-mono text-lg font-bold text-rose-400">$443 / month</span>
+              </div>
+            </div>
+
+            <!-- Right Column: Affilore -->
+            <div class="p-6 sm:p-8 bg-slate-900/60 relative">
+              <div class="flex items-center justify-between pb-5 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-md glow-btn flex items-center justify-center">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-white"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Affilore</h3>
+                    <p class="text-xs text-indigo-300">Everything unified into one dashboard</p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+                  $29 one-time
+                </span>
+              </div>
+
+              <ul class="mt-6 space-y-3.5 text-sm">
+                <li class="flex items-center justify-between text-white font-medium">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>High-converting Link-in-Bio</span>
+                  </div>
+                  <span class="text-xs text-emerald-400 font-semibold">Included</span>
+                </li>
+                <li class="flex items-center justify-between text-white font-medium">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>Instant Digital Store & downloads</span>
+                  </div>
+                  <span class="text-xs text-emerald-400 font-semibold">Included</span>
+                </li>
+                <li class="flex items-center justify-between text-white font-medium">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>Audience capture & email tools</span>
+                  </div>
+                  <span class="text-xs text-emerald-400 font-semibold">Included</span>
+                </li>
+                <li class="flex items-center justify-between text-white font-medium">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>Privacy-focused deep analytics</span>
+                  </div>
+                  <span class="text-xs text-emerald-400 font-semibold">Included</span>
+                </li>
+                <li class="flex items-center justify-between text-white font-medium">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>Global checkout via Paddle (tax handled)</span>
+                  </div>
+                  <span class="text-xs text-emerald-400 font-semibold">Included</span>
+                </li>
+                <li class="flex items-center justify-between text-white font-medium">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>Built-in AI content generation</span>
+                  </div>
+                  <span class="text-xs text-emerald-400 font-semibold">Included</span>
+                </li>
+                <li class="flex items-center justify-between text-white font-medium">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>Automated workflow triggers</span>
+                  </div>
+                  <span class="text-xs text-emerald-400 font-semibold">Included</span>
+                </li>
+                <li class="flex items-center justify-between text-white font-medium">
+                  <div class="flex items-center gap-2.5">
+                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span>Full creator contact management</span>
+                  </div>
+                  <span class="text-xs text-emerald-400 font-semibold">Included</span>
+                </li>
+              </ul>
+
+              <div class="mt-8 pt-5 border-t border-slate-800 flex items-center justify-between">
+                <div>
+                  <span class="font-bold text-white text-sm">Everything above</span>
+                  <p class="text-[11px] text-slate-400">Zero recurring charges</p>
+                </div>
+                <span class="font-mono text-xl font-extrabold text-emerald-400">$29 one-time</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Yearly Savings Highlight Callout -->
+        <div class="mt-8 text-center fade-up">
+          <p class="text-sm sm:text-base font-semibold text-indigo-300">
+            That's $5,316/year you keep in your pocket.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FINAL CTA SECTION -->
+    <section class="py-20 md:py-28 px-5 border-t border-slate-800/40 relative">
+      <div class="max-w-4xl mx-auto text-center fade-up">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+          Ready to simplify everything?
+        </h2>
+        <p class="mt-4 text-slate-400 text-base sm:text-lg max-w-xl mx-auto">
+          Join thousands of creators who switched to Affilore.
+        </p>
+
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/pricing" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 glow-btn text-white text-base font-semibold rounded-xl transition-all">
+            Get Started Now
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+
+        <p class="mt-5 text-xs text-slate-500 flex items-center justify-center gap-2 flex-wrap">
+          <span class="flex items-center gap-1">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+            30-day money-back guarantee
+          </span>
+          <span>·</span>
+          <span class="flex items-center gap-1">
+            <i data-lucide="lock" class="w-4 h-4 text-slate-400"></i>
+            Secure payment via Paddle
+          </span>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/50 py-12 px-5">
     <div class="max-w-6xl mx-auto">
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">Everything you need to grow</h2>
-        <p class="mt-4 text-gray-500 text-lg leading-relaxed">Powerful tools, zero complexity. Get up and running in under 5 minutes.</p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-        <!-- Card 1: Analytics -->
-        <article class="fade-up card-hover bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
-          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-brand-50 text-brand-600 mb-5">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"/>
-            </svg>
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2.5 text-white font-bold">
+          <div class="w-6 h-6 rounded-md glow-btn flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-3 h-3 text-white"></i>
           </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-1.5">Real-Time Analytics</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">Track clicks, conversions, and revenue across all markets with live dashboards that update instantly.</p>
-        </article>
-
-        <!-- Card 2: Geo-targeting -->
-        <article class="fade-up card-hover bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
-          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-5">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A8.966 8.966 0 013 12c0-1.264.26-2.467.729-3.559"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-1.5">Global Geo-Targeting</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">Auto-localize links and offers for US, UK, CA, AU &amp; EU visitors to maximize every click.</p>
-        </article>
-
-        <!-- Card 3: Smart links -->
-        <article class="fade-up card-hover bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
-          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-amber-50 text-amber-600 mb-5">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.07-9.07l-1.757 1.757a4.5 4.5 0 00-6.364 6.364l4.5 4.5a4.5 4.5 0 007.244 1.242"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-1.5">Smart Link Engine</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">Optimized, cloaked affiliate links with built-in A/B testing and intelligent redirect management.</p>
-        </article>
-
-        <!-- Card 4: Fraud protection -->
-        <article class="fade-up card-hover bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
-          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-rose-50 text-rose-600 mb-5">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-1.5">Fraud Protection</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">AI-powered click fraud detection filters bot traffic so you only count — and pay for — real humans.</p>
-        </article>
+          Affilore
+        </div>
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-500">
+          <a href="/pricing" class="hover:text-slate-300 transition">Pricing</a>
+          <a href="/terms" class="hover:text-slate-300 transition">Terms</a>
+          <a href="/privacy" class="hover:text-slate-300 transition">Privacy</a>
+          <a href="/refunds" class="hover:text-slate-300 transition">Refunds</a>
+          <a href="mailto:contact@affilore.com" class="hover:text-slate-300 transition">contact@affilore.com</a>
+        </nav>
       </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════
-       PRICING / PRODUCT
-  ════════════════════════════════════════ -->
-  <section id="pricing" class="py-20 sm:py-28 px-5 bg-white">
-    <div class="max-w-lg mx-auto text-center">
-      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">Simple, transparent pricing</h2>
-      <p class="mt-4 text-gray-500 text-lg">One plan. Everything included. No hidden fees, ever.</p>
-
-      <!-- Card -->
-      <div class="fade-up mt-12 bg-white rounded-3xl border-2 border-brand-500 shadow-2xl p-8 sm:p-10 relative overflow-hidden">
-        <!-- Badge -->
-        <span class="absolute top-0 right-0 bg-brand-600 text-white text-[11px] font-bold uppercase tracking-widest px-5 py-1.5 rounded-bl-2xl">
-          Best Value
-        </span>
-
-        <h3 class="text-xl font-bold text-gray-900 mt-2">Affilore Pro</h3>
-        <p class="mt-1 text-sm text-gray-400">Lifetime access · All features included</p>
-
-        <!-- Price -->
-        <div class="mt-7 flex items-baseline justify-center gap-1.5">
-          <span class="text-6xl font-extrabold tracking-tight text-gray-900">$29</span>
-          <span class="text-lg text-gray-400 font-medium">USD</span>
-        </div>
-        <p class="mt-1.5 text-sm text-gray-400">One-time payment</p>
-
-        <!-- Checklist -->
-        <ul class="mt-9 space-y-3.5 text-left text-sm text-gray-700">
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-            Real-time analytics dashboard
-          </li>
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-            Geo-targeted links (US, UK, CA, AU, EU)
-          </li>
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-            Smart link engine with A/B testing
-          </li>
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-            AI fraud detection &amp; bot filtering
-          </li>
-          <li class="flex items-start gap-3">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-            Lifetime updates &amp; priority support
-          </li>
-        </ul>
-
-        <!-- Buy button -->
-        <button id="paddle-checkout-btn"
-                class="pulse-cta mt-9 w-full py-4 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-bold text-base rounded-xl transition shadow-lg cursor-pointer">
-          Buy Now — $29
-        </button>
-
-        <p class="mt-4 text-xs text-gray-400">30-day money-back guarantee · Instant digital access</p>
+      <div class="mt-8 pt-6 border-t border-slate-800/40 text-center">
+        <p class="text-xs text-slate-600">Payments processed securely via Paddle as Merchant of Record.</p>
+        <p class="text-xs text-slate-600 mt-1">&copy; <script>document.write(new Date().getFullYear())</script> Affilore. All rights reserved.</p>
       </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════
-       TRUST & SECURITY
-  ════════════════════════════════════════ -->
-  <section id="trust" class="py-14 px-5 bg-gray-50 border-y border-gray-100">
-    <div class="max-w-4xl mx-auto text-center">
-      <!-- Lock line -->
-      <div class="flex items-center justify-center gap-2 mb-6">
-        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
-        </svg>
-        <span class="text-sm font-semibold text-gray-700">Secure 256-bit encrypted payment processed via Paddle</span>
-      </div>
-
-      <!-- Payment logos -->
-      <div class="flex flex-wrap items-center justify-center gap-7 sm:gap-10">
-        <!-- Visa -->
-        <div class="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
-          <svg class="h-9" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#1A1F71"/><path d="M19.5 21h-3l1.88-10h3L19.5 21zm12.06-9.73a7.4 7.4 0 00-2.69-.5c-2.96 0-5.04 1.58-5.06 3.83-.02 1.67 1.49 2.6 2.63 3.15 1.17.57 1.56.93 1.56 1.44-.01.78-.94 1.13-1.8 1.13-1.2 0-1.84-.18-2.83-.61l-.39-.19-.42 2.6c.7.32 2 .6 3.35.62 3.15 0 5.19-1.55 5.21-3.96.01-1.32-.79-2.33-2.52-3.16-1.05-.54-1.7-.9-1.69-1.44 0-.48.54-1 1.72-1 .98-.02 1.69.21 2.24.45l.27.13.41-2.49zM37 11h-2.32c-.72 0-1.26.21-1.58.96L29.28 21h3.15l.63-1.74h3.85l.37 1.74H40L37 11zm-3.7 7.52l1.18-3.24.18-.5.34 1.6.69 3.14h-2.88l.49-1zM15.5 11l-2.77 6.82-.3-1.52c-.52-1.76-2.13-3.66-3.93-4.61l2.69 9.3h3.17L18.67 11h-3.17z" fill="#fff"/><path d="M10.5 11H5.55l-.05.28c3.76.96 6.24 3.28 7.27 6.06L11.7 12c-.18-.72-.71-.95-1.2-.97z" fill="#F9A51A"/></svg>
-          <span class="text-[10px] text-gray-400 font-medium">Visa</span>
-        </div>
-
-        <!-- Mastercard -->
-        <div class="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
-          <svg class="h-9" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#252525"/><circle cx="19" cy="16" r="8" fill="#EB001B"/><circle cx="29" cy="16" r="8" fill="#F79E1B"/><path d="M24 10.34A8 8 0 0024 21.66 8 8 0 0024 10.34z" fill="#FF5F00"/></svg>
-          <span class="text-[10px] text-gray-400 font-medium">Mastercard</span>
-        </div>
-
-        <!-- Amex -->
-        <div class="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
-          <svg class="h-9" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#006FCF"/><text x="24" y="18.5" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold" font-family="Inter,system-ui,sans-serif">AMEX</text></svg>
-          <span class="text-[10px] text-gray-400 font-medium">Amex</span>
-        </div>
-
-        <!-- Apple Pay -->
-        <div class="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
-          <svg class="h-9" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#000"/><text x="24" y="18.5" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="600" font-family="Inter,system-ui,sans-serif"> Pay</text></svg>
-          <span class="text-[10px] text-gray-400 font-medium">Apple Pay</span>
-        </div>
-
-        <!-- Money-back badge -->
-        <div class="flex flex-col items-center gap-1.5">
-          <div class="h-9 flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span class="text-xs font-bold whitespace-nowrap">30-Day Money Back</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ════════════════════════════════════════
-       FOOTER
-  ════════════════════════════════════════ -->
-  <footer class="py-12 px-5 bg-gray-900 text-gray-400">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-sm">
-      <!-- Brand -->
-      <a href="/" class="flex items-center gap-2 text-white font-bold text-lg">
-        <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#4f46e5"/><path d="M10 22L16 10L22 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 18H20" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
-        Affilore
-      </a>
-
-      <!-- Links -->
-      <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-        <a href="/privacy" class="hover:text-white transition">Privacy Policy</a>
-        <a href="/terms" class="hover:text-white transition">Terms of Service</a>
-        <a href="/refund" class="hover:text-white transition">Refund Policy</a>
-        <a href="mailto:contact@affilore.com" class="hover:text-white transition">contact@affilore.com</a>
-      </nav>
-
-      <!-- Copyright -->
-      <p class="text-gray-500 text-xs">&copy; <span id="year"></span> Affilore. All rights reserved.</p>
     </div>
   </footer>
 
-
-  <!-- ════════════════════════════════════════
-       JAVASCRIPT
-  ════════════════════════════════════════ -->
+  <!-- BOTTOM SCRIPT -->
   <script>
-    /* --- Year --- */
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    /* --- Mobile menu --- */
+    lucide.createIcons();
     const navToggle = document.getElementById('nav-toggle');
-    const navMenu   = document.getElementById('nav-menu');
-    navToggle.addEventListener('click', () => navMenu.classList.toggle('hidden'));
-    navMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navMenu.classList.add('hidden')));
-
-    /* --- Scroll fade-in --- */
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.12 });
+    const navMenu = document.getElementById('nav-menu');
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', () => navMenu.classList.toggle('hidden'));
+      navMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navMenu.classList.add('hidden')));
+    }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
     document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
-
-    /* --- Smooth scroll --- */
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        const t = document.querySelector(a.getAttribute('href'));
-        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
-
-    /* --- Paddle checkout placeholder --- */
-    document.getElementById('paddle-checkout-btn').addEventListener('click', () => {
-      // Replace with your real Paddle.js integration:
-      // Paddle.Checkout.open({ product: YOUR_PRODUCT_ID });
-      console.log('[Affilore] Paddle checkout triggered');
-      alert('Checkout will open here once Paddle is connected.');
-    });
   </script>
 </body>
 </html>

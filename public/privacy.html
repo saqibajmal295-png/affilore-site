@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Affilore</title>
+  <meta name="description" content="Affilore Privacy Policy. Learn how we collect, use, and protect your personal data. GDPR & CCPA compliant.">
+  <meta name="theme-color" content="#090D16">
+  <link rel="canonical" href="https://affilore.com/privacy">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: #090D16; }
+    .bg-radial { background: radial-gradient(ellipse at top, #1E293B 0%, #090D16 70%); }
+    .glass-card { background: rgba(15,23,42,0.6); border: 1px solid rgba(51,65,85,0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .glass-nav { background: rgba(9,13,22,0.8); border-bottom: 1px solid rgba(51,65,85,0.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .glow-btn { background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); box-shadow: 0 8px 32px rgba(99,102,241,0.25); }
+    .glow-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 12px 40px rgba(99,102,241,0.35); }
+    .glow-border { border: 1px solid transparent; background-image: linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.6)), linear-gradient(135deg, #6366f1, #a855f7, #ec4899); background-origin: border-box; background-clip: padding-box, border-box; }
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="text-slate-100 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-5 py-3.5">
+      <a href="/" class="flex items-center gap-2.5 text-lg font-extrabold tracking-tight text-white">
+        <div class="w-8 h-8 rounded-lg glow-btn flex items-center justify-center">
+          <i data-lucide="sparkles" class="w-4 h-4 text-white"></i>
+        </div>
+        Affilore
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-400">
+        <a href="/#features" class="hover:text-white transition">Features</a>
+        <a href="/pricing" class="hover:text-white transition">Pricing</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="mailto:contact@affilore.com" class="hidden sm:inline-flex text-sm text-slate-400 hover:text-white transition">Contact</a>
+        <a href="/pricing" class="inline-flex items-center gap-1.5 px-5 py-2 glow-btn text-white text-sm font-semibold rounded-lg transition-all">
+          Get Access
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+      <button id="nav-toggle" class="md:hidden p-2 text-slate-400 hover:text-white" aria-label="Menu">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+    </nav>
+    <div id="nav-menu" class="hidden md:hidden border-t border-slate-800/50 px-5 pb-4">
+      <a href="/#features" class="block py-2.5 text-sm text-slate-300 hover:text-white">Features</a>
+      <a href="/pricing" class="block py-2.5 text-sm text-slate-300 hover:text-white">Pricing</a>
+      <a href="mailto:contact@affilore.com" class="block py-2.5 text-sm text-slate-300 hover:text-white">Contact</a>
+      <a href="/pricing" class="mt-2 block text-center px-4 py-2.5 glow-btn text-white text-sm font-semibold rounded-lg">Get Access</a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="bg-radial pt-32 pb-20 px-5 flex-grow">
+    <div class="max-w-3xl mx-auto">
+      <article class="glass-card rounded-2xl p-8 sm:p-12 fade-up">
+        <div class="border-b border-slate-800/60 pb-6 mb-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-3">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            Data Privacy & Trust
+          </div>
+          <h1 class="text-3xl font-extrabold text-white tracking-tight">Privacy Policy</h1>
+          <p class="text-xs text-slate-500 mt-2">Last updated: October 13, 2026</p>
+        </div>
+
+        <div class="text-slate-400 text-sm leading-relaxed space-y-6">
+
+          <!-- 1. Introduction -->
+          <section>
+            <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">1.</span> Introduction
+            </h2>
+            <p>
+              Affilore (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) respects your privacy and is dedicated to safeguarding your personal data. This Privacy Policy details the types of personal data we collect, why and how we collect it, the security procedures implemented to protect it, and your statutory rights regarding that data.
+            </p>
+            <p class="mt-2">
+              This policy applies to all visitors, registered account holders, and commercial users interacting with <a href="https://affilore.com" class="text-indigo-400 hover:text-indigo-300 underline transition">affilore.com</a> and its associated software applications and digital services. By visiting or utilizing Affilore, you acknowledge the privacy practices and operational standards outlined herein.
+            </p>
+          </section>
+
+          <!-- 2. Data We Collect -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">2.</span> Data We Collect
+            </h2>
+            <p>
+              We collect information strictly necessary to provide, optimize, and secure our affiliate marketing intelligence micro-tools. The data collected falls into four specific categories:
+            </p>
+            <ul class="space-y-3 mt-3">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="user" class="w-4 h-4 text-indigo-400 mt-0.5 shrink-0"></i>
+                <div>
+                  <strong class="text-slate-200">Account Information:</strong> When you register an account, obtain a license, or communicate with us, we collect your email address, name (when provided), and unique account credentials.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="activity" class="w-4 h-4 text-indigo-400 mt-0.5 shrink-0"></i>
+                <div>
+                  <strong class="text-slate-200">Usage Data:</strong> We automatically record technical interactions with our platform, such as feature engagement, tools executed, URL structures analyzed, browser brand and version, operating system details, device type, referring URLs, session duration, and timestamps.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="credit-card" class="w-4 h-4 text-indigo-400 mt-0.5 shrink-0"></i>
+                <div>
+                  <strong class="text-slate-200">Payment Data:</strong> All financial payment details are collected and processed exclusively by Paddle.com. We never receive, process, store, or have access to raw credit card numbers, debit card details, or banking credentials.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="mail" class="w-4 h-4 text-indigo-400 mt-0.5 shrink-0"></i>
+                <div>
+                  <strong class="text-slate-200">Communication Data:</strong> Records of inquiries, feature suggestions, technical support emails, or questions sent to our support mailboxes, including your email address and any attachments you choose to transmit.
+                </div>
+              </li>
+            </ul>
+          </section>
+
+          <!-- 3. How We Use Your Data -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">3.</span> How We Use Your Data
+            </h2>
+            <p>
+              We process personal information under valid legal bases—including the performance of contracts, legitimate business interests, and compliance with statutory regulations—for the following objectives:
+            </p>
+            <ul class="list-disc list-inside space-y-1.5 mt-2 pl-1">
+              <li>To deliver, maintain, verify, and improve the Affilore suite of affiliate conversion tools.</li>
+              <li>To fulfill purchase agreements, authenticate customer licenses, and provision access keys via Paddle.</li>
+              <li>To send critical transactional notifications, including order receipts, license confirmations, security updates, and direct customer support replies.</li>
+              <li>To analyze aggregated usage patterns, detect technical bottlenecks, and enhance performance across all supported platforms.</li>
+              <li>To prevent fraudulent activity, safeguard platform integrity, and enforce our terms of service.</li>
+            </ul>
+            <div class="mt-3 p-3.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-200 text-xs flex items-center gap-2">
+              <i data-lucide="lock" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+              <span><strong>Absolute Promise:</strong> We do NOT sell, rent, monetize, or trade your personal data to advertisers, data brokers, or any external third parties under any circumstances.</span>
+            </div>
+          </section>
+
+          <!-- 4. Payment Processing (Paddle) -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">4.</span> Payment Processing (Paddle)
+            </h2>
+            <p>
+              Paddle.com Market Ltd (&ldquo;Paddle&rdquo;) operates as the Merchant of Record for all transactions and payment processing conducted through Affilore. Paddle directly handles customer billing, automated local tax compliance (including VAT and sales tax), multi-currency conversions, and fraud screening.
+            </p>
+            <p class="mt-2">
+              When making a purchase, your payment method is processed via Paddle&rsquo;s PCI-DSS compliant payment gateway over bank-grade encrypted channels. Handling and storage of financial details are governed by <a href="https://paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 underline transition">Paddle&rsquo;s Privacy Policy</a>. Affilore only receives non-sensitive confirmation metadata (e.g., transaction ID, purchase timestamp, tier purchased, and associated customer email) to generate and manage your software license. We never store credit card or payment details on our servers.
+            </p>
+          </section>
+
+          <!-- 5. Cookies & Tracking -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">5.</span> Cookies &amp; Tracking
+            </h2>
+            <p>
+              We adopt a privacy-conscious, minimal approach toward browser tracking:
+            </p>
+            <ul class="list-disc list-inside space-y-1.5 mt-2 pl-1">
+              <li><strong class="text-slate-200">Essential Cookies:</strong> Strictly necessary cookies deployed to facilitate session management, secure navigation, and maintain account state.</li>
+              <li><strong class="text-slate-200">Analytics Cookies:</strong> Optional aggregated analytics (such as Google Analytics) utilized to measure visitor volume, page views, and user flows to understand site usability. IP addresses are anonymized.</li>
+              <li><strong class="text-slate-200">No Advertising Tracking:</strong> We do not deploy third-party advertising cookies, retargeting pixels, cross-site tracking scripts, or behavioral profiling mechanisms.</li>
+            </ul>
+            <p class="mt-2">
+              You can configure your browser to reject all cookies or notify you whenever a cookie is set. If you choose to disable cookies entirely, please be aware that certain authenticated sections of the website may not function as intended.
+            </p>
+          </section>
+
+          <!-- 6. Data Retention -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">6.</span> Data Retention
+            </h2>
+            <p>
+              We retain your account information only for the duration that your account is active, or as long as necessary to fulfill the operational, legal, and financial obligations detailed in this policy.
+            </p>
+            <p class="mt-2">
+              System telemetry and operational analytics are maintained in aggregated, anonymized form to monitor system trends without tying data to any individual identity. You maintain the right to request full deletion of your account and personal data at any time by contacting us at <a href="mailto:contact@affilore.com" class="text-indigo-400 hover:text-indigo-300 underline transition">contact@affilore.com</a>. Upon receipt of a verified deletion request, we will erase your personal records within thirty (30) days, unless ongoing retention is legally mandated.
+            </p>
+          </section>
+
+          <!-- 7. Your Rights (GDPR & CCPA) -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">7.</span> Your Rights (GDPR &amp; CCPA)
+            </h2>
+            <p>
+              Depending on your jurisdiction, you possess specific statutory protections under legal frameworks like the European Union General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA/CPRA):
+            </p>
+            <ul class="space-y-2 mt-3 pl-1">
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                <span><strong class="text-slate-200">Right of Access:</strong> Request a full copy of the personal data we hold about you.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                <span><strong class="text-slate-200">Right to Rectification:</strong> Request the correction or updating of incomplete or inaccurate information.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                <span><strong class="text-slate-200">Right to Erasure (&ldquo;Right to Be Forgotten&rdquo;):</strong> Request the permanent deletion of your personal records.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                <span><strong class="text-slate-200">Right to Restrict Processing:</strong> Limit how we process your personal data under specific conditions.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                <span><strong class="text-slate-200">Right to Data Portability:</strong> Obtain your personal records in a structured, commonly used, machine-readable format.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                <span><strong class="text-slate-200">Right to Object:</strong> Object to processing carried out based on legitimate business interests.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 mt-0.5 shrink-0"></i>
+                <span><strong class="text-slate-200">California Resident Protections (CCPA/CPRA):</strong> California residents have the right to request disclosure of categories and specific pieces of data collected, request deletion, and opt out of data sales (we do not sell data), free from discriminatory pricing or service denial.</span>
+              </li>
+            </ul>
+            <p class="mt-3">
+              To exercise any of these rights, please submit your request to <a href="mailto:contact@affilore.com" class="text-indigo-400 hover:text-indigo-300 underline transition">contact@affilore.com</a>. We respond to all verified privacy requests within 30 days without assessing any fees.
+            </p>
+          </section>
+
+          <!-- 8. Data Security -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">8.</span> Data Security
+            </h2>
+            <p>
+              We implement comprehensive industry-standard technical, administrative, and physical security measures designed to safeguard your personal data against unauthorized disclosure, alteration, loss, or access:
+            </p>
+            <ul class="list-disc list-inside space-y-1.5 mt-2 pl-1">
+              <li>End-to-end TLS/HTTPS encryption across all public network communication.</li>
+              <li>High-security cloud infrastructure hosted via Firebase and Google Cloud Platform with built-in DDoS defense and perimeter firewalls.</li>
+              <li>Strict least-privilege administrative access policies, role-based controls, and mandatory multi-factor authentication for operational personnel.</li>
+              <li>Automated regular infrastructure monitoring and vulnerability patching routines.</li>
+            </ul>
+            <p class="mt-2">
+              While we adhere to recognized security best practices, please note that no method of transmission over the Internet or electronic storage can offer unconditional, 100% security guarantees.
+            </p>
+          </section>
+
+          <!-- 9. Third-Party Services -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">9.</span> Third-Party Services
+            </h2>
+            <p>
+              We rely on trusted third-party service providers to power specific operational facets of Affilore. Each vendor processes data strictly under contract and maintains independent privacy standards:
+            </p>
+            <ul class="space-y-2 mt-3 pl-1">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="server" class="w-4 h-4 text-indigo-400 mt-0.5 shrink-0"></i>
+                <div>
+                  <strong class="text-slate-200">Paddle.com:</strong> Merchant of Record, automated checkout management, payment gateway operations, and international tax compliance.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="cloud" class="w-4 h-4 text-indigo-400 mt-0.5 shrink-0"></i>
+                <div>
+                  <strong class="text-slate-200">Firebase &amp; Google Cloud Platform:</strong> Web hosting, global content distribution network (CDN), serverless application logic, and secure database storage.
+                </div>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="bar-chart-3" class="w-4 h-4 text-indigo-400 mt-0.5 shrink-0"></i>
+                <div>
+                  <strong class="text-slate-200">Google Analytics:</strong> Aggregated, anonymous traffic telemetry to evaluate website functionality and technical responsiveness.
+                </div>
+              </li>
+            </ul>
+            <p class="mt-3">
+              We encourage you to review the privacy documentation of these third parties to understand their individual data practices.
+            </p>
+          </section>
+
+          <!-- 10. Children's Privacy -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">10.</span> Children&rsquo;s Privacy
+            </h2>
+            <p>
+              Affilore is intentionally designed for business operators, affiliate publishers, and individual professionals. Our platform is not intended for use by minors under the age of 16. We do not knowingly collect or solicit personal data from children under 16. If we discover that we have inadvertently gathered personal data from an individual under 16 years of age without verified parental consent, we will promptly purge that information from our active databases. If you believe a minor has supplied us with personal data, please notify us immediately at <a href="mailto:contact@affilore.com" class="text-indigo-400 hover:text-indigo-300 underline transition">contact@affilore.com</a>.
+            </p>
+          </section>
+
+          <!-- 11. Changes to This Policy -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">11.</span> Changes to This Policy
+            </h2>
+            <p>
+              We reserve the right to revise or update this Privacy Policy periodically to reflect new features, updated operational procedures, or evolving legal and regulatory demands.
+            </p>
+            <p class="mt-2">
+              Any modifications will become effective immediately upon being published on this page, and the &ldquo;Last updated&rdquo; timestamp will reflect the revision date. In the event of material or substantial changes affecting your privacy rights, we will provide additional notice through an announcement on our website or direct communication to registered account emails. Your continued use of the Affilore platform following the publication of changes signifies your acceptance of the updated terms.
+            </p>
+          </section>
+
+          <!-- 12. Contact -->
+          <section>
+            <h2 class="text-lg font-bold text-white mt-8 mb-3 flex items-center gap-2">
+              <span class="text-indigo-400">12.</span> Contact
+            </h2>
+            <p>
+              If you have any questions, comments, concerns, or requests regarding this Privacy Policy, your personal data, or our privacy compliance practices, please contact our team through either of the following channels:
+            </p>
+            <div class="mt-4 p-5 rounded-xl glass-card border border-slate-800/80 space-y-2.5">
+              <div class="flex items-center gap-3">
+                <i data-lucide="mail" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                <span>Primary Email: <a href="mailto:contact@affilore.com" class="text-indigo-400 hover:text-indigo-300 underline transition">contact@affilore.com</a></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <i data-lucide="inbox" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                <span>Direct Support: <a href="mailto:affilore4@gmail.com" class="text-indigo-400 hover:text-indigo-300 underline transition">affilore4@gmail.com</a></span>
+              </div>
+              <div class="flex items-center gap-3">
+                <i data-lucide="globe" class="w-4 h-4 text-indigo-400 shrink-0"></i>
+                <span>Website: <a href="https://affilore.com" class="text-indigo-400 hover:text-indigo-300 underline transition">https://affilore.com</a></span>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800/50 py-12 px-5">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2.5 text-white font-bold">
+          <div class="w-6 h-6 rounded-md glow-btn flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-3 h-3 text-white"></i>
+          </div>
+          Affilore
+        </div>
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-500">
+          <a href="/pricing" class="hover:text-slate-300 transition">Pricing</a>
+          <a href="/terms" class="hover:text-slate-300 transition">Terms</a>
+          <a href="/privacy" class="hover:text-slate-300 transition">Privacy</a>
+          <a href="/refunds" class="hover:text-slate-300 transition">Refunds</a>
+          <a href="mailto:contact@affilore.com" class="hover:text-slate-300 transition">contact@affilore.com</a>
+        </nav>
+      </div>
+      <div class="mt-8 pt-6 border-t border-slate-800/40 text-center">
+        <p class="text-xs text-slate-600">Payments processed securely via Paddle as Merchant of Record.</p>
+        <p class="text-xs text-slate-600 mt-1">&copy; <script>document.write(new Date().getFullYear())</script> Affilore. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    lucide.createIcons();
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', () => navMenu.classList.toggle('hidden'));
+      navMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navMenu.classList.add('hidden')));
+    }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
