@@ -6,6 +6,7 @@
   <title>Affilore — Smart Affiliate Tools for Global Sellers</title>
   <meta name="description" content="Affilore gives you powerful micro-tools to boost affiliate conversions, track performance, and grow revenue across US, UK, CA, AU & EU markets.">
   <meta name="theme-color" content="#4f46e5">
+  <link rel="canonical" href="https://affilore.com">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Affilore — Smart Affiliate Tools for Global Sellers">
@@ -13,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://affilore.com">
 
-  <!-- Tailwind CSS via CDN -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -41,17 +42,16 @@
     }
   </script>
 
-  <!-- Inter font -->
+  <!-- Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    /* Minimal custom styles — everything else is Tailwind */
     body { font-family: 'Inter', system-ui, sans-serif; }
 
     .gradient-hero {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #6366f1 100%);
+      background: linear-gradient(135deg, #312e81 0%, #4f46e5 40%, #7c3aed 100%);
     }
 
     .card-hover {
@@ -59,23 +59,23 @@
     }
     .card-hover:hover {
       transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
     }
 
-    .pulse-glow {
-      animation: pulse-glow 2.5s ease-in-out infinite;
+    .pulse-cta {
+      animation: pulse-ring 2.5s ease-in-out infinite;
     }
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
-      50%       { box-shadow: 0 0 0 12px rgba(99, 102, 241, 0); }
+    @keyframes pulse-ring {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.45); }
+      50%       { box-shadow: 0 0 0 14px rgba(99,102,241,0); }
     }
 
-    .fade-in {
+    .fade-up {
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
     }
-    .fade-in.visible {
+    .fade-up.is-visible {
       opacity: 1;
       transform: translateY(0);
     }
@@ -84,251 +84,251 @@
 
 <body class="bg-white text-gray-900 antialiased">
 
-  <!-- ═══════════════════════════════════════════════
-       HEADER / NAV
-  ═══════════════════════════════════════════════ -->
+  <!-- ════════════════════════════════════════
+       NAVBAR
+  ════════════════════════════════════════ -->
   <header class="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
-    <nav class="max-w-6xl mx-auto flex items-center justify-between px-5 py-3">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-5 py-3.5">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 text-xl font-bold text-brand-600 tracking-tight">
-        <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <a href="/" class="flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-brand-600">
+        <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none">
           <rect width="32" height="32" rx="8" fill="#4f46e5"/>
-          <path d="M10 22L16 10L22 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M12 18H20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M10 22L16 10L22 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 18H20" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
         Affilore
       </a>
 
-      <!-- Nav Links (desktop) -->
+      <!-- Desktop links -->
       <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
         <a href="#features" class="hover:text-brand-600 transition-colors">Features</a>
         <a href="#pricing" class="hover:text-brand-600 transition-colors">Pricing</a>
         <a href="#trust" class="hover:text-brand-600 transition-colors">Security</a>
       </div>
 
-      <!-- CTA -->
+      <!-- Desktop CTA -->
       <a href="#pricing"
-         class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 text-white text-sm font-semibold rounded-lg hover:bg-brand-700 transition-colors shadow-sm">
+         class="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-lg hover:bg-brand-700 transition shadow-sm">
         Get Started
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
       </a>
 
-      <!-- Mobile menu button -->
-      <button id="mobile-menu-btn" class="sm:hidden p-2 text-gray-600 hover:text-brand-600" aria-label="Open menu">
+      <!-- Mobile hamburger -->
+      <button id="nav-toggle" class="sm:hidden p-2 text-gray-600 hover:text-brand-600 transition" aria-label="Toggle menu">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
     </nav>
 
     <!-- Mobile dropdown -->
-    <div id="mobile-menu" class="hidden sm:hidden border-t border-gray-100 bg-white px-5 pb-4">
+    <div id="nav-menu" class="hidden sm:hidden border-t border-gray-100 bg-white px-5 pb-4">
       <a href="#features" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-brand-600">Features</a>
       <a href="#pricing" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-brand-600">Pricing</a>
       <a href="#trust" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-brand-600">Security</a>
-      <a href="#pricing" class="mt-2 block text-center px-4 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-lg">Get Started</a>
+      <a href="#pricing" class="mt-2 block text-center px-4 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-lg hover:bg-brand-700">Get Started</a>
     </div>
   </header>
 
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ════════════════════════════════════════
        HERO
-  ═══════════════════════════════════════════════ -->
-  <section class="gradient-hero pt-32 pb-20 sm:pt-40 sm:pb-28 px-5 text-center text-white">
-    <div class="max-w-3xl mx-auto">
-      <!-- Pill badge -->
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur text-xs font-semibold uppercase tracking-wider mb-6">
-        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-        Now Available Worldwide
+  ════════════════════════════════════════ -->
+  <section class="gradient-hero pt-32 pb-20 sm:pt-44 sm:pb-32 px-5 text-center text-white overflow-hidden">
+    <div class="max-w-3xl mx-auto relative">
+      <!-- Badge -->
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur text-xs font-semibold uppercase tracking-wider mb-7">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        Available in US · UK · CA · AU · EU
       </span>
 
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
-        Affiliate tools that <br class="hidden sm:block">actually convert.
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] tracking-tight">
+        Affiliate tools that<br class="hidden sm:block"> actually convert.
       </h1>
 
-      <p class="mt-5 text-lg sm:text-xl text-indigo-100 max-w-xl mx-auto leading-relaxed">
-        Smart micro-tools built for affiliate marketers selling across the US, UK, Canada, Australia &amp; EU. Track, optimize, and grow — all from one dashboard.
+      <p class="mt-6 text-lg sm:text-xl text-indigo-100 max-w-2xl mx-auto leading-relaxed">
+        Smart micro-tools built for affiliate marketers selling across global markets. Track, optimize, and grow your revenue — all from one dashboard.
       </p>
 
-      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <!-- Dual CTAs -->
+      <div class="mt-9 flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="#pricing"
-           class="pulse-glow w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white text-brand-700 font-bold rounded-xl hover:bg-indigo-50 transition-colors text-base shadow-lg">
+           class="pulse-cta w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-brand-700 font-bold rounded-xl hover:bg-indigo-50 transition text-base shadow-xl">
           Get Started — $29
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
         </a>
         <a href="#features"
-           class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 border border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-colors text-base">
+           class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition text-base">
           See Features
         </a>
       </div>
 
-      <p class="mt-5 text-xs text-indigo-200">No subscription. One-time payment. 30-day money-back guarantee.</p>
+      <p class="mt-6 text-xs text-indigo-200/80">One-time payment · No subscription · 30-day money-back guarantee</p>
     </div>
   </section>
 
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ════════════════════════════════════════
        FEATURES GRID
-  ═══════════════════════════════════════════════ -->
-  <section id="features" class="py-20 sm:py-28 px-5 bg-gray-50">
+  ════════════════════════════════════════ -->
+  <section id="features" class="py-20 sm:py-28 px-5 bg-gray-50/80">
     <div class="max-w-6xl mx-auto">
-      <div class="text-center max-w-2xl mx-auto mb-14">
-        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Everything you need to grow</h2>
-        <p class="mt-3 text-gray-500 text-lg">Powerful tools, zero complexity. Get up and running in minutes.</p>
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">Everything you need to grow</h2>
+        <p class="mt-4 text-gray-500 text-lg leading-relaxed">Powerful tools, zero complexity. Get up and running in under 5 minutes.</p>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <!-- Feature 1 -->
-        <article class="fade-in card-hover bg-white rounded-2xl p-6 border border-gray-100">
-          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-brand-50 text-brand-600 mb-4">
+        <!-- Card 1: Analytics -->
+        <article class="fade-up card-hover bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-brand-50 text-brand-600 mb-5">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6"/>
             </svg>
           </div>
-          <h3 class="text-lg font-bold mb-1">Real-Time Analytics</h3>
+          <h3 class="text-lg font-bold text-gray-900 mb-1.5">Real-Time Analytics</h3>
           <p class="text-sm text-gray-500 leading-relaxed">Track clicks, conversions, and revenue across all markets with live dashboards that update instantly.</p>
         </article>
 
-        <!-- Feature 2 -->
-        <article class="fade-in card-hover bg-white rounded-2xl p-6 border border-gray-100">
-          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-4">
+        <!-- Card 2: Geo-targeting -->
+        <article class="fade-up card-hover bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-5">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A8.966 8.966 0 013 12c0-1.264.26-2.467.729-3.559"/>
             </svg>
           </div>
-          <h3 class="text-lg font-bold mb-1">Global Geo-Targeting</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">Automatically localize links and offers for US, UK, CA, AU &amp; EU visitors to maximize conversions.</p>
+          <h3 class="text-lg font-bold text-gray-900 mb-1.5">Global Geo-Targeting</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Auto-localize links and offers for US, UK, CA, AU &amp; EU visitors to maximize every click.</p>
         </article>
 
-        <!-- Feature 3 -->
-        <article class="fade-in card-hover bg-white rounded-2xl p-6 border border-gray-100">
-          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-amber-50 text-amber-600 mb-4">
+        <!-- Card 3: Smart links -->
+        <article class="fade-up card-hover bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-amber-50 text-amber-600 mb-5">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m9.07-9.07l-1.757 1.757a4.5 4.5 0 00-6.364 6.364l4.5 4.5a4.5 4.5 0 007.244 1.242"/>
             </svg>
           </div>
-          <h3 class="text-lg font-bold mb-1">Smart Link Engine</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">Generate optimized, cloaked affiliate links with built-in A/B testing and redirect management.</p>
+          <h3 class="text-lg font-bold text-gray-900 mb-1.5">Smart Link Engine</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Optimized, cloaked affiliate links with built-in A/B testing and intelligent redirect management.</p>
         </article>
 
-        <!-- Feature 4 -->
-        <article class="fade-in card-hover bg-white rounded-2xl p-6 border border-gray-100">
-          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-rose-50 text-rose-600 mb-4">
+        <!-- Card 4: Fraud protection -->
+        <article class="fade-up card-hover bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+          <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-rose-50 text-rose-600 mb-5">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
             </svg>
           </div>
-          <h3 class="text-lg font-bold mb-1">Fraud Protection</h3>
-          <p class="text-sm text-gray-500 leading-relaxed">AI-powered click fraud detection filters bot traffic so you only pay for — and count — real humans.</p>
+          <h3 class="text-lg font-bold text-gray-900 mb-1.5">Fraud Protection</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">AI-powered click fraud detection filters bot traffic so you only count — and pay for — real humans.</p>
         </article>
-
       </div>
     </div>
   </section>
 
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ════════════════════════════════════════
        PRICING / PRODUCT
-  ═══════════════════════════════════════════════ -->
-  <section id="pricing" class="py-20 sm:py-28 px-5">
+  ════════════════════════════════════════ -->
+  <section id="pricing" class="py-20 sm:py-28 px-5 bg-white">
     <div class="max-w-lg mx-auto text-center">
-      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Simple, transparent pricing</h2>
-      <p class="mt-3 text-gray-500 text-lg">One plan. Everything included. No hidden fees.</p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">Simple, transparent pricing</h2>
+      <p class="mt-4 text-gray-500 text-lg">One plan. Everything included. No hidden fees, ever.</p>
 
-      <!-- Pricing Card -->
-      <div class="fade-in mt-10 bg-white rounded-3xl border-2 border-brand-600 shadow-xl p-8 sm:p-10 relative overflow-hidden">
-        <!-- Popular badge -->
-        <span class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-bl-2xl">
+      <!-- Card -->
+      <div class="fade-up mt-12 bg-white rounded-3xl border-2 border-brand-500 shadow-2xl p-8 sm:p-10 relative overflow-hidden">
+        <!-- Badge -->
+        <span class="absolute top-0 right-0 bg-brand-600 text-white text-[11px] font-bold uppercase tracking-widest px-5 py-1.5 rounded-bl-2xl">
           Best Value
         </span>
 
-        <h3 class="text-xl font-bold text-gray-900">Affilore Pro</h3>
-        <p class="mt-1 text-sm text-gray-500">Lifetime access · All features</p>
+        <h3 class="text-xl font-bold text-gray-900 mt-2">Affilore Pro</h3>
+        <p class="mt-1 text-sm text-gray-400">Lifetime access · All features included</p>
 
         <!-- Price -->
-        <div class="mt-6 flex items-baseline justify-center gap-1">
-          <span class="text-5xl font-extrabold text-gray-900">$29</span>
+        <div class="mt-7 flex items-baseline justify-center gap-1.5">
+          <span class="text-6xl font-extrabold tracking-tight text-gray-900">$29</span>
           <span class="text-lg text-gray-400 font-medium">USD</span>
         </div>
-        <p class="mt-1 text-sm text-gray-400">One-time payment</p>
+        <p class="mt-1.5 text-sm text-gray-400">One-time payment</p>
 
-        <!-- Feature checklist -->
-        <ul class="mt-8 space-y-3 text-left text-sm text-gray-700">
-          <li class="flex items-start gap-2.5">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+        <!-- Checklist -->
+        <ul class="mt-9 space-y-3.5 text-left text-sm text-gray-700">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
             Real-time analytics dashboard
           </li>
-          <li class="flex items-start gap-2.5">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
             Geo-targeted links (US, UK, CA, AU, EU)
           </li>
-          <li class="flex items-start gap-2.5">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
             Smart link engine with A/B testing
           </li>
-          <li class="flex items-start gap-2.5">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
             AI fraud detection &amp; bot filtering
           </li>
-          <li class="flex items-start gap-2.5">
-            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-brand-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
             Lifetime updates &amp; priority support
           </li>
         </ul>
 
-        <!-- CTA -->
+        <!-- Buy button -->
         <button id="paddle-checkout-btn"
-                class="pulse-glow mt-8 w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-base rounded-xl transition-colors shadow-lg cursor-pointer">
+                class="pulse-cta mt-9 w-full py-4 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-bold text-base rounded-xl transition shadow-lg cursor-pointer">
           Buy Now — $29
         </button>
 
-        <p class="mt-3 text-xs text-gray-400">30-day money-back guarantee · Instant access</p>
+        <p class="mt-4 text-xs text-gray-400">30-day money-back guarantee · Instant digital access</p>
       </div>
     </div>
   </section>
 
 
-  <!-- ═══════════════════════════════════════════════
-       TRUST & SECURITY BANNER
-  ═══════════════════════════════════════════════ -->
+  <!-- ════════════════════════════════════════
+       TRUST & SECURITY
+  ════════════════════════════════════════ -->
   <section id="trust" class="py-14 px-5 bg-gray-50 border-y border-gray-100">
     <div class="max-w-4xl mx-auto text-center">
-      <!-- Lock icon + copy -->
-      <div class="flex items-center justify-center gap-2 mb-5">
-        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <!-- Lock line -->
+      <div class="flex items-center justify-center gap-2 mb-6">
+        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
         </svg>
         <span class="text-sm font-semibold text-gray-700">Secure 256-bit encrypted payment processed via Paddle</span>
       </div>
 
-      <!-- Trust badges row -->
-      <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+      <!-- Payment logos -->
+      <div class="flex flex-wrap items-center justify-center gap-7 sm:gap-10">
         <!-- Visa -->
-        <div class="flex flex-col items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
-          <svg class="h-8" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#1A1F71"/><path d="M19.5 21h-3l1.88-10h3L19.5 21zm12.06-9.73a7.4 7.4 0 00-2.69-.5c-2.96 0-5.04 1.58-5.06 3.83-.02 1.67 1.49 2.6 2.63 3.15 1.17.57 1.56.93 1.56 1.44-.01.78-.94 1.13-1.8 1.13-1.2 0-1.84-.18-2.83-.61l-.39-.19-.42 2.6c.7.32 2 .6 3.35.62 3.15 0 5.19-1.55 5.21-3.96.01-1.32-.79-2.33-2.52-3.16-1.05-.54-1.7-.9-1.69-1.44 0-.48.54-1 1.72-1 .98-.02 1.69.21 2.24.45l.27.13.41-2.49zM37 11h-2.32c-.72 0-1.26.21-1.58.96L29.28 21h3.15l.63-1.74h3.85l.37 1.74H40L37 11zm-3.7 7.52l1.18-3.24.18-.5.34 1.6.69 3.14h-2.88l.49-1zM15.5 11l-2.77 6.82-.3-1.52c-.52-1.76-2.13-3.66-3.93-4.61l2.69 9.3h3.17L18.67 11h-3.17z" fill="#fff"/><path d="M10.5 11H5.55l-.05.28c3.76.96 6.24 3.28 7.27 6.06L11.7 12c-.18-.72-.71-.95-1.2-.97z" fill="#F9A51A"/></svg>
+        <div class="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+          <svg class="h-9" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#1A1F71"/><path d="M19.5 21h-3l1.88-10h3L19.5 21zm12.06-9.73a7.4 7.4 0 00-2.69-.5c-2.96 0-5.04 1.58-5.06 3.83-.02 1.67 1.49 2.6 2.63 3.15 1.17.57 1.56.93 1.56 1.44-.01.78-.94 1.13-1.8 1.13-1.2 0-1.84-.18-2.83-.61l-.39-.19-.42 2.6c.7.32 2 .6 3.35.62 3.15 0 5.19-1.55 5.21-3.96.01-1.32-.79-2.33-2.52-3.16-1.05-.54-1.7-.9-1.69-1.44 0-.48.54-1 1.72-1 .98-.02 1.69.21 2.24.45l.27.13.41-2.49zM37 11h-2.32c-.72 0-1.26.21-1.58.96L29.28 21h3.15l.63-1.74h3.85l.37 1.74H40L37 11zm-3.7 7.52l1.18-3.24.18-.5.34 1.6.69 3.14h-2.88l.49-1zM15.5 11l-2.77 6.82-.3-1.52c-.52-1.76-2.13-3.66-3.93-4.61l2.69 9.3h3.17L18.67 11h-3.17z" fill="#fff"/><path d="M10.5 11H5.55l-.05.28c3.76.96 6.24 3.28 7.27 6.06L11.7 12c-.18-.72-.71-.95-1.2-.97z" fill="#F9A51A"/></svg>
           <span class="text-[10px] text-gray-400 font-medium">Visa</span>
         </div>
 
         <!-- Mastercard -->
-        <div class="flex flex-col items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
-          <svg class="h-8" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#252525"/><circle cx="19" cy="16" r="8" fill="#EB001B"/><circle cx="29" cy="16" r="8" fill="#F79E1B"/><path d="M24 10.34A8 8 0 0024 21.66 8 8 0 0024 10.34z" fill="#FF5F00"/></svg>
+        <div class="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+          <svg class="h-9" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#252525"/><circle cx="19" cy="16" r="8" fill="#EB001B"/><circle cx="29" cy="16" r="8" fill="#F79E1B"/><path d="M24 10.34A8 8 0 0024 21.66 8 8 0 0024 10.34z" fill="#FF5F00"/></svg>
           <span class="text-[10px] text-gray-400 font-medium">Mastercard</span>
         </div>
 
         <!-- Amex -->
-        <div class="flex flex-col items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
-          <svg class="h-8" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#006FCF"/><text x="24" y="18" text-anchor="middle" fill="white" font-size="7" font-weight="bold" font-family="sans-serif">AMEX</text></svg>
+        <div class="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+          <svg class="h-9" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#006FCF"/><text x="24" y="18.5" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="bold" font-family="Inter,system-ui,sans-serif">AMEX</text></svg>
           <span class="text-[10px] text-gray-400 font-medium">Amex</span>
         </div>
 
         <!-- Apple Pay -->
-        <div class="flex flex-col items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
-          <svg class="h-8" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#000"/><text x="24" y="18" text-anchor="middle" fill="white" font-size="7" font-weight="600" font-family="sans-serif"> Pay</text></svg>
+        <div class="flex flex-col items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+          <svg class="h-9" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#000"/><text x="24" y="18.5" text-anchor="middle" fill="#fff" font-size="7.5" font-weight="600" font-family="Inter,system-ui,sans-serif"> Pay</text></svg>
           <span class="text-[10px] text-gray-400 font-medium">Apple Pay</span>
         </div>
 
         <!-- Money-back badge -->
-        <div class="flex flex-col items-center gap-1">
-          <div class="h-8 flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700">
+        <div class="flex flex-col items-center gap-1.5">
+          <div class="h-9 flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             <span class="text-xs font-bold whitespace-nowrap">30-Day Money Back</span>
           </div>
@@ -338,23 +338,23 @@
   </section>
 
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ════════════════════════════════════════
        FOOTER
-  ═══════════════════════════════════════════════ -->
-  <footer class="py-10 px-5 bg-gray-900 text-gray-400">
+  ════════════════════════════════════════ -->
+  <footer class="py-12 px-5 bg-gray-900 text-gray-400">
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-sm">
       <!-- Brand -->
-      <div class="flex items-center gap-2 text-white font-bold text-lg">
-        <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#4f46e5"/><path d="M10 22L16 10L22 22" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 18H20" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <a href="/" class="flex items-center gap-2 text-white font-bold text-lg">
+        <svg class="w-6 h-6" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#4f46e5"/><path d="M10 22L16 10L22 22" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 18H20" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
         Affilore
-      </div>
+      </a>
 
       <!-- Links -->
       <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-        <a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
-        <a href="/terms" class="hover:text-white transition-colors">Terms of Service</a>
-        <a href="/refund" class="hover:text-white transition-colors">Refund Policy</a>
-        <a href="mailto:contact@affilore.com" class="hover:text-white transition-colors">contact@affilore.com</a>
+        <a href="/privacy" class="hover:text-white transition">Privacy Policy</a>
+        <a href="/terms" class="hover:text-white transition">Terms of Service</a>
+        <a href="/refund" class="hover:text-white transition">Refund Policy</a>
+        <a href="mailto:contact@affilore.com" class="hover:text-white transition">contact@affilore.com</a>
       </nav>
 
       <!-- Copyright -->
@@ -363,62 +363,42 @@
   </footer>
 
 
-  <!-- ═══════════════════════════════════════════════
+  <!-- ════════════════════════════════════════
        JAVASCRIPT
-  ═══════════════════════════════════════════════ -->
+  ════════════════════════════════════════ -->
   <script>
-    // ——— Dynamic year ———
+    /* --- Year --- */
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ——— Mobile menu toggle ———
-    const menuBtn  = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
+    /* --- Mobile menu --- */
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu   = document.getElementById('nav-menu');
+    navToggle.addEventListener('click', () => navMenu.classList.toggle('hidden'));
+    navMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navMenu.classList.add('hidden')));
 
-    menuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
-
-    // Close menu on link click
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-    });
-
-    // ——— Scroll-triggered fade-in ———
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // ——— Paddle checkout button ———
-    document.getElementById('paddle-checkout-btn').addEventListener('click', () => {
-      // TODO: Replace with actual Paddle.js checkout integration
-      // Example:
-      // Paddle.Checkout.open({
-      //   product: YOUR_PRODUCT_ID,
-      //   successCallback: (data) => { window.location.href = '/thank-you'; },
-      // });
-      console.log('[Affilore] Paddle checkout triggered.');
-      alert('Checkout will open here once Paddle is integrated.');
-    });
-
-    // ——— Smooth scroll for anchor links ———
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = document.querySelector(anchor.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+    /* --- Scroll fade-in --- */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
       });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+    /* --- Smooth scroll --- */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    /* --- Paddle checkout placeholder --- */
+    document.getElementById('paddle-checkout-btn').addEventListener('click', () => {
+      // Replace with your real Paddle.js integration:
+      // Paddle.Checkout.open({ product: YOUR_PRODUCT_ID });
+      console.log('[Affilore] Paddle checkout triggered');
+      alert('Checkout will open here once Paddle is connected.');
     });
   </script>
 </body>
